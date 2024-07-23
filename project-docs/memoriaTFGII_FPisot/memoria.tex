@@ -9,6 +9,20 @@
 \usepackage{microtype}
 \usepackage{placeins}
 
+
+% Acrónimos
+\usepackage[acronym]{glossaries}
+\makenoidxglossaries
+
+\newacronym{llm}{LLM}{\textit{Large Language Models}}
+\newacronym{osm}{OSM}{\textit{Open Street Map}}
+\newacronym{ods}{ODS}{\textit{Objetivos de Desarrollo Sostenible}}
+\newacronym{ods11}{ODS11}{\textit{Ciudades y Comunidades Sostenibles}}
+\newacronym{sdg}{SDG}{\textit{Sustainable Development Goals}}
+\newacronym{sc}{Smart City}{\textit{Ciudades Inteligentes}}
+\newacronym{sdg11}{SDG11}{\textit{Sustainable Cities and Communities}}
+
+
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
 \RequirePackage{xtab}
@@ -425,12 +439,21 @@ En Burgos, {\large \today}
 % Abstract en castellano
 \renewcommand*\abstractname{Resumen}
 \begin{abstract}
-En este primer apartado se hace una \textbf{breve} presentación del tema que se aborda en el proyecto.
+  Se busca construir una aplicación móvil con Flutter que proponga rutas turísticas 
+  a seguir, generadas a mediante la utilización de modelos de lenguaje \acrfull{llm} 
+  y LangChain para obtener información detallada que será mostrada al usuario a través 
+  de herramientas opensource como \acrfull{osm}.
+  La aplicación se enfocará en la promoción de rutas no motorizadas, optimizadas para 
+  ciclistas y peatones, que conecten estos lugares de interés. Las rutas serán diseñadas 
+  para maximizar la seguridad y el bienestar de los usuarios, fomentando la movilidad 
+  sostenible en el contexto de ciudades inteligentes \acrfull{sc}. Este enfoque contribuye 
+  a la promoción del Objetivo de Desarrollo Sostenible \acrfull{ods} en concreto el ODS11 (Ciudades 
+  y Comunidades sostenibles).
 \end{abstract}
 
 \renewcommand*\abstractname{Descriptores}
 \begin{abstract}
-Palabras separadas por comas que identifiquen el contenido del proyecto Ej: servidor web, buscador de vuelos, android \ldots
+LLM, LangChain, ODS, ODS11, OSM, Smart City, Flutter, Smart City
 \end{abstract}
 
 \clearpage
