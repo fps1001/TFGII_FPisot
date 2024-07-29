@@ -12,9 +12,9 @@ class GpsAccessScreen extends StatelessWidget {
       body: Center(
         child: BlocBuilder<GpsBloc, GpsState>(builder: (context, state) {
           if (state.isGpsEnabled) {
-            return const _EnableGpsMessage();
-          } else {
             return const _AccessButton();
+          } else {
+            return const _EnableGpsMessage();
           }
         }),
         //_AccessButton(), // Será uno u otro en función del GPS activado o no
@@ -36,8 +36,12 @@ class _AccessButton extends StatelessWidget {
       children: [const Text('Es necesario habilitar el GPS para continuar'),
       MaterialButton(
         child: const Text('Solicitar acceso al GPS'),
+        //TODO: Cambiar estilo al botón.
         onPressed: (){
-        //TODO: Implementar la navegación a la pantalla de configuración de GPS
+        
+          final gpsBloc = BlocProvider.of<GpsBloc>(context);
+          gpsBloc.askGpsAccess();
+
       }),
     ],
       
