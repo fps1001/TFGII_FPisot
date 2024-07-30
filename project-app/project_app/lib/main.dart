@@ -20,7 +20,7 @@ class ProjectApp extends StatelessWidget {
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'EcoTour App',
-        home: GpsAccessScreen()
+        home: LoadingScreen()
     );
   }
 }

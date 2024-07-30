@@ -28,7 +28,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
 
   Future<void> _init() async {
   
-    final gpsInitStatus = await Future.wait(_checkGpsStatus(), _isPermissionGranted()); // Se obtienen los estados del GPS y los permisos
+    final gpsInitStatus = await Future.wait([_checkGpsStatus(), _isPermissionGranted()]); // Se obtienen los estados del GPS y los permisos
 
     //Emitir el nuevo estado
     add(OnGpsAndPermissionEvent(
