@@ -27,16 +27,20 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
   }
 
   Future<void> _init() async {
-    // Aquí se simula la obtención de los estados del GPS y los permisos
-    final isEnable = await _checkGpsStatus(); // Se comprueba el estado del GPS
-    _checkGpsStatus(); // Se comprueba el estado del GPS
+  
+    final gpsInitStatus = await Future.wait(_checkGpsStatus(), _isPermissionGranted()); // Se obtienen los estados del GPS y los permisos
 
     //Emitir el nuevo estado
     add(OnGpsAndPermissionEvent(
-        isGpsEnabled: isEnable,
-        isGpsPermissionGranted: state
-            .isGpsPermissionGranted)); //Mando los dos estados, el permiso del gps será el actual.
+        isGpsEnabled: gpsInitStatus[0], //Mando el estado del GPS
+        isGpsPermissionGranted: gpsInitStatus[1])); //Mando el estado de los permisos
   }
+  
+  Future<bool> _isPermissionGranted() async { // Se comprueba si el permiso de localización está concedido
+    final isGranted = await Permission.location.isGranted;
+    return isGranted;
+  } 
+
 
   Future<bool> _checkGpsStatus() async {
     final isEnable = await Geolocator
