@@ -8,6 +8,24 @@
 \usepackage{lmodern} % scalable font
 \usepackage{microtype}
 \usepackage{placeins}
+\usepackage{biblatex}
+\addbibresource{bibiografiaAnexos.bib}
+
+
+% Acrónimos
+\usepackage[acronym]{glossaries}
+\makenoidxglossaries
+
+\newacronym{llm}{LLM}{\textit{Large Language Models}}
+\newacronym{osm}{OSM}{\textit{Open Street Map}}
+\newacronym{ods}{ODS}{\textit{Objetivos de Desarrollo Sostenible}}
+\newacronym{ods11}{ODS11}{\textit{Ciudades y Comunidades Sostenibles}}
+\newacronym{sdg}{SDG}{\textit{Sustainable Development Goals}}
+\newacronym{sc}{Smart City}{\textit{Ciudades Inteligentes}}
+\newacronym{sdg11}{SDG11}{\textit{Sustainable Cities and Communities}}
+\newacronym{poi}{POI}{\textit{Punto de Interés}}
+
+
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -401,6 +419,7 @@
 \include{./tex/E_Manual_usuario}
 \include{./tex/F_ODS}
 
+\printnoidxglossary[type=\acronymtype]
 
 \bibliographystyle{plain}
 \bibliography{bibliografiaAnexos}
