@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:project_app/widgets/widgets.dart';
 
 class MapView extends StatelessWidget {
   final List<Map<String, dynamic>> markers = [
@@ -33,20 +34,19 @@ class MapView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Map View'),
+        title: const Text('Eco City Tour'),
       ),
       body: Stack(
         children: [
           FlutterMap(
             options: const MapOptions(
               initialCenter:
-                  LatLng(37.7749, -122.4194), // Set the initial map center
-              initialZoom: 13.0, // Set the initial zoom level
+                  LatLng(41.3833, 2.1750), // Set the initial map center
+              initialZoom: 15.0, // Set the initial zoom level
             ),
             children: [
               TileLayer(
-                urlTemplate:
-                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               ),
               MarkerLayer(
                 markers: markers.map((map) {
@@ -55,7 +55,8 @@ class MapView extends StatelessWidget {
                       double.parse(map['coordenadas_gps'].split(',')[0]),
                       double.parse(map['coordenadas_gps'].split(',')[1]),
                     ),
-                    child: Text(map['nombre']),
+                    child: CustomMarker(
+                        nombre: map['nombre'], descripcion: map['descripción']),
                   );
                 }).toList(),
               )
