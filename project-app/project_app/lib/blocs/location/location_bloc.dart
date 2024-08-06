@@ -13,8 +13,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       positionStream; // Suscripción de posición, opcional hasta crear no existe.
 
   LocationBloc() : super(const LocationState()) {
-    on<LocationEvent>((event, emit) {
-      // TODO: implement event handler
+    on<OnNewUserLocationEvent>((event, emit) {
+      emit(state.copyWith(
+          lastKnownLocation: event.newLocation,
+          myLocationHistory: [
+            ...state.myLocationHistory,
+            event.newLocation
+          ] //concatena a los que había la nueva ubicación.
+          )); // emitir el nuevo estado
     });
   }
 
@@ -30,13 +36,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     positionStream = Geolocator.getPositionStream().listen((event) {
       // Crea esta subscription que dará la posición.
       final position = event;
-      print('position: $position');
+      add(OnNewUserLocationEvent(
+          LatLng(position.latitude, position.longitude)));
     });
   }
 
   void stopFollowingUser() {
     positionStream?.cancel();
-    print('stopFollowingUser');
+    //print('stopFollowingUser');
   }
 
   @override
