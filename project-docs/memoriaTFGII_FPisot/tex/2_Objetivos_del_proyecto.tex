@@ -1,17 +1,15 @@
 \capitulo{2}{Objetivos del proyecto}
 
-Este apartado explica de forma precisa y concisa cuáles son los objetivos que se persiguen con la realización del proyecto. Se puede distinguir entre los objetivos marcados por los requisitos del software a construir y los objetivos de carácter técnico que plantea a la hora de llevar a la práctica el proyecto.
-
 \section{Objetivos Funcionales}
 
-Los objetivos funcionales definen qué es lo que debe hacer el software desde la perspectiva del usuario final. Estos objetivos se centran en las funcionalidades y características que debe tener la aplicación para satisfacer las necesidades y expectativas de los usuarios. A continuación se detallan los objetivos funcionales del proyecto:
+Estos objetivos se centran en las funcionalidades y características que debe tener la aplicación para satisfacer las necesidades y expectativas de los usuarios. A continuación se detallan los objetivos funcionales del proyecto:
 
 \begin{itemize}
     \item \textbf{Propuesta de Rutas Turísticas Personalizadas}: La aplicación debe ser capaz de generar rutas turísticas personalizadas basadas en las preferencias del usuario utilizando modelos de lenguaje de gran escala (\acrfull{llm}) y el framework \textbf{LangChain}.
-    \item \textbf{Integración de Puntos de Interés (\acrfull{poi})}: La aplicación debe identificar y conectar diversos puntos de interés, proporcionando información relevante sobre cada uno de ellos.
-    \item \textbf{Visualización de Rutas en Mapa}: La aplicación debe mostrar las rutas sugeridas en un mapa utilizando herramientas open-source como \acrfull{osm}.
+    \item \textbf{Obtener los Puntos de Interés (\acrfull{poi})}: La aplicación debe identificar y conectar diversos puntos de interés, proporcionando información relevante sobre cada uno.
+    \item \textbf{Visualización de Rutas en Mapa}: La aplicación debe mostrar las rutas sugeridas en un mapa utilizando herramientas libres como \acrfull{osm}.
     \item \textbf{Optimización para Ciclistas y Peatones}: La aplicación debe promover la movilidad sostenible sugiriendo rutas optimizadas para ciclistas y peatones.
-    \item \textbf{Interfaz Intuitiva y Amigable}: La aplicación debe tener una interfaz de usuario intuitiva y fácil de usar que permita a los usuarios interactuar con las diferentes funcionalidades de manera eficiente.
+    \item \textbf{Interfaz Intuitiva y Amigable}: El usuario debe interactuar con la aplicación de manera intuitiva, siendo fácil de usar por los usuarios las diferentes funcionalidades.
 \end{itemize}
 
 \section{Objetivos Técnicos}
@@ -19,10 +17,14 @@ Los objetivos funcionales definen qué es lo que debe hacer el software desde la
 Los objetivos técnicos se refieren a los desafíos y metas técnicas que se deben abordar para desarrollar el software. Estos objetivos abarcan aspectos como la arquitectura del sistema, las tecnologías a utilizar y las metodologías de desarrollo. A continuación se detallan los objetivos técnicos del proyecto:
 
 \begin{itemize}
-    \item \textbf{Desarrollo con Flutter}: Utilizar el framework \textbf{Flutter} para el desarrollo de la aplicación móvil, aprovechando su capacidad para crear aplicaciones nativas multiplataforma con una sola base de código.
-    \item \textbf{Implementación de \acrfull{llm} y \textbf{LangChain}}: Integrar modelos de lenguaje de gran escala (\acrshort{llm}) y el framework \textbf{LangChain} para la generación de rutas y procesamiento de información relevante.
-    \item \textbf{Uso de Herramientas Open-Source}: Emplear herramientas y bibliotecas open-source como \acrfull{osm} para la visualización de mapas y rutas.
-    \item \textbf{Optimización de Rendimiento}: Asegurar que la aplicación funcione de manera eficiente en diferentes dispositivos móviles, optimizando el rendimiento y el consumo de recursos.
-    \item \textbf{Seguridad y Privacidad}: Implementar medidas de seguridad adecuadas para proteger los datos de los usuarios y garantizar la privacidad de la información personal.
-    \item \textbf{Pruebas y Validación}: Realizar pruebas exhaustivas de la aplicación para asegurar su correcto funcionamiento, identificando y solucionando posibles errores antes de su lanzamiento.
+    \item \textbf{Implementación de \acrfull{llm} y \textbf{LangChain}}: Integrar modelos de lenguaje a gran escala (\acrshort{llm}) y el framework \textbf{LangChain} para la generación de rutas y procesamiento de información relevante y ser capaz de integrar dicho conocimiento para ser mostrada en la aplicación móvil así como en un prototipo que muestre de manera incremental la mejora obtenida por parte de los modelos usando diferentes técnicas a la hora de interactuar con ellos como puede ser el uso de técnicas \acrfull{rag}, agentes, etc.
+    \item \textbf{Uso de Herramientas Open-Source}: Emplear medios abiertos, libres y gratuitos como \acrfull{osm} para la visualización de mapas y rutas en vez de utilizar servicios que puedan incurrir en gastos para el usuario. 
+\end{itemize}
+
+\section{Objetivos Personales}
+
+\begin{itemize}
+	\item \textbf{Conocimiento avanzado en \acrshort{llm}}: dada la evolución de esta tecnología, los amplios campos en los que se puede utilizar, obtener una base de conocimientos sería un objetivo que me permitiría expandir mi futuro académico y por tanto distinguir mi perfil profesional especializándome en este sector que se encuentra en fuerte expansión.
+	\item \textbf{Creación de aplicación móvil profesional}: de igual manera poner en práctica lo aprendido en varios cursos de \textbf{Dart y Flutter} puede contribuir a que la aplicación de este proyecto sea parte de mi porfolio con aplicaciones que muestren mis habilidades a futuros empleadores.
+	\item \textbf{Consecución del \acrshort{tfg} y conclusión de Grado}: al no haber terminado la Ingeniería Técnica Informática por no haber realizado un Proyecto Fin de Carrera en mi pasado, la consecución de este \acrshort{tfg} sirve para convertirme en ingeniero al ser la última asignatura del Grado y supone la consecución de una carga personal de casi veinte años.
 \end{itemize}
