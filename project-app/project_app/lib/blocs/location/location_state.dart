@@ -1,6 +1,5 @@
 part of 'location_bloc.dart';
 
-@immutable
 class LocationState extends Equatable {
   final bool followingUser; //Determina si se está siguiendo al usuario.
   //TODO

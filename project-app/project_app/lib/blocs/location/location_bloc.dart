@@ -21,5 +21,10 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   }
 
   /// Empieza a emitir los valores de posición del usuario.
-  void startFollowingUser() {}
+  void startFollowingUser() {
+    Geolocator.getPositionStream().listen((event) { // Crea esta subscription que dará la posición.
+      final position = event;
+      print('position: $position');
+    });
+  }
 }

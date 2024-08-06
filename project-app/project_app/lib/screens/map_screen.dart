@@ -16,7 +16,8 @@ class _MapScreenState extends State<MapScreen> {
     super.initState();
 
     final locationBloc = BlocProvider.of<LocationBloc>(context);
-    locationBloc.getCurrentPosition();
+    //locationBloc.getCurrentPosition();
+    locationBloc.startFollowingUser();
   }
 
   @override
