@@ -11,11 +11,13 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  late LocationBloc locationBloc; //late para dejarlo sin inicializarlo.
+
   @override
   void initState() {
     super.initState();
 
-    final locationBloc = BlocProvider.of<LocationBloc>(context);
+    locationBloc = BlocProvider.of<LocationBloc>(context); // Se instancia -> late.
     //locationBloc.getCurrentPosition();
     locationBloc.startFollowingUser();
   }
@@ -23,5 +25,11 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: MapView());
+  }
+
+  @override
+  void dispose() {
+    locationBloc.stopFollowingUser(); // No repito definición de locationBloc
+    super.dispose();
   }
 }
