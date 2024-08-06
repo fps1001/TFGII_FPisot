@@ -9,5 +9,10 @@ sealed class LocationEvent extends Equatable {
 
 class OnNewUserLocationEvent extends LocationEvent {
   final LatLng newLocation;
-  const OnNewUserLocationEvent(this.newLocation); // Lo dejo posicional, porque solo voy a recibir uno.
+  const OnNewUserLocationEvent(
+      this.newLocation); // Lo dejo posicional, porque solo voy a recibir uno.
 }
+
+class OnStartFollowingUser extends LocationEvent {}
+
+class OnStopFollowingUser extends LocationEvent {}
