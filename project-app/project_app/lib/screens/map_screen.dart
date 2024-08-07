@@ -32,9 +32,12 @@ class _MapScreenState extends State<MapScreen> {
             child: Text('Espere por favor...'),
           );
         }
-        return Center(
-          child: Text(
-              '${state.lastKnownLocation!.latitude}, ${state.lastKnownLocation!.longitude}'),
+        return SingleChildScrollView(
+          child: Stack(// Primero más abajo.
+              children: [
+            MapView(initialPosition: state.lastKnownLocation!),
+            // TODO Botones...
+          ]),
         );
       },
     ));

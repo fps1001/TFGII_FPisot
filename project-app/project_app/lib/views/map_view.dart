@@ -4,6 +4,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:project_app/widgets/widgets.dart';
 
 class MapView extends StatelessWidget {
+  final LatLng initialPosition;
+
   final List<Map<String, dynamic>> markers = [
     {
       "nombre": "Parque de Collserola",
@@ -28,40 +30,38 @@ class MapView extends StatelessWidget {
     }
   ];
 
-  MapView({super.key});
+  MapView({super.key, required this.initialPosition});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Eco City Tour'),
-      ),
-      body: Stack(
+    final size = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: size.width,
+      height: size.height,
+      child: FlutterMap(
+        options: MapOptions(
+          initialCenter: initialPosition, // Set the initial map center
+          initialZoom: 15.0, // Set the initial zoom level
+          //TODO myLocationEnabled: true
+        ),
         children: [
-          FlutterMap(
-            options: const MapOptions(
-              initialCenter:
-                  LatLng(41.3833, 2.1750), // Set the initial map center
-              initialZoom: 15.0, // Set the initial zoom level
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              ),
-              MarkerLayer(
-                markers: markers.map((map) {
-                  return Marker(
-                    point: LatLng(
-                      double.parse(map['coordenadas_gps'].split(',')[0]),
-                      double.parse(map['coordenadas_gps'].split(',')[1]),
-                    ),
-                    child: CustomMarker(
-                        nombre: map['nombre'], descripcion: map['descripción']),
-                  );
-                }).toList(),
-              )
-            ],
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           ),
+          MarkerLayer(
+            markers: markers.map((map) {
+              return Marker(
+                point: LatLng(
+                  double.parse(map['coordenadas_gps'].split(',')[0]),
+                  double.parse(map['coordenadas_gps'].split(',')[1]),
+                ),
+                child: CustomMarker(
+                    nombre: map['nombre'], descripcion: map['descripción']),
+              );
+            }).toList(),
+          )
+          //TODO Movimiento de mapa
         ],
       ),
     );
