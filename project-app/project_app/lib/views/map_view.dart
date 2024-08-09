@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:url_launcher/url_launcher.dart'; // Import the url_launcher package
+import 'package:url_launcher/url_launcher.dart';
 
 class MapView extends StatelessWidget {
   final LatLng initialPosition;
+  final LatLng? userLocation; // Nueva propiedad para la ubicación del usuario
 
   final List<Map<String, dynamic>> markers = [
     {
@@ -30,7 +31,7 @@ class MapView extends StatelessWidget {
     }
   ];
 
-  MapView({super.key, required this.initialPosition});
+  MapView({super.key, required this.initialPosition, this.userLocation});
 
   @override
   Widget build(BuildContext context) {
@@ -40,38 +41,50 @@ class MapView extends StatelessWidget {
       width: size.width,
       height: size.height,
       child: FlutterMap(
-          options: MapOptions(
-            initialCenter: initialPosition, // Set the initial map center
-            initialZoom: 15.0, // Set the initial zoom level
+        options: MapOptions(
+          // Centrar en la ubicación del usuario si está disponible
+          initialCenter: userLocation ?? initialPosition,
+          initialZoom: 15.0,
+        ),
+        children: [
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           ),
-          children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            ),
-            MarkerLayer(
-              markers: markers.map((map) {
+          MarkerLayer(
+            markers: [
+              ...markers.map((map) {
                 return Marker(
-                    point: LatLng(
-                      double.parse(map['coordenadas_gps'].split(',')[0]),
-                      double.parse(map['coordenadas_gps'].split(',')[1]),
-                    ),
-                    child: const Icon(
-                      Icons.location_pin,
-                      color: Colors.limeAccent,
-                    ));
-              }).toList(),
-            ),
-            RichAttributionWidget(
-              // Include a stylish prebuilt attribution widget that meets all requirments
-              attributions: [
-                TextSourceAttribution(
-                  'OpenStreetMap contributors',
-                  onTap: () => launchUrl(Uri.parse(
-                      'https://openstreetmap.org/copyright')), // Use the launch function from url_launcher package
+                  point: LatLng(
+                    double.parse(map['coordenadas_gps'].split(',')[0]),
+                    double.parse(map['coordenadas_gps'].split(',')[1]),
+                  ),
+                  child:
+                      const Icon(Icons.location_pin, color: Colors.limeAccent),
+                );
+              }),
+              // Añadir el marcador de la ubicación del usuario
+              if (userLocation != null)
+                Marker(
+                  point: userLocation!,
+                  child: const Icon(
+                    Icons.my_location,
+                    color: Colors.blue,
+                    size: 30,
+                  ),
                 ),
-              ],
-            ),
-          ]),
+            ],
+          ),
+          RichAttributionWidget(
+            attributions: [
+              TextSourceAttribution(
+                'OpenStreetMap contributors',
+                onTap: () =>
+                    launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
