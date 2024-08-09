@@ -9,24 +9,24 @@ class MapView extends StatelessWidget {
 
   final List<Map<String, dynamic>> markers = [
     {
-      "nombre": "Parque de Collserola",
-      "coordenadas_gps": "41.4035, 2.1325",
-      "descripción":
-          "Un parque natural que ofrece vistas panorámicas de la ciudad y es un refugio para la biodiversidad",
+      "nombre": "Casco Histórico de Salamanca",
+      "coordenadas_gps": (40.9709, -5.6681),
+      "breve_descripcion":
+          "El casco histórico de Salamanca es un conjunto de edificios y calles que datan del siglo XIX.",
+      "url": "https://www.salamanca.es/visitar/casco-historico"
+    },
+    {
+      "nombre": "Río Tormes",
+      "coordenadas_gps": (40.9709, -5.6681),
+      "breve_descripcion":
+          "El río Tormes es un afluente del Duero y discurre por el centro de la ciudad.",
       "url": ""
     },
     {
-      "nombre": "Barrio Gótico de Barcelona",
-      "coordenadas_gps": "41.3833, 2.1750",
-      "descripción":
-          "Un barrio histórico y emblemático de la ciudad, conocido por sus calles empedradas, iglesias y monumentos medievales",
-      "url": ""
-    },
-    {
-      "nombre": "Parque de la Ciutadella",
-      "coordenadas_gps": "41.3867, 2.1733",
-      "descripción":
-          "Un parque urbano que fue un antiguo recinto militar y ahora es un espacio verde y recreativo para la ciudadanía",
+      "nombre": "Jardines de San Esteban",
+      "coordenadas_gps": (40.9709, -5.6681),
+      "breve_descripcion":
+          "Los Jardines de San Esteban son un parque público ubicado en el corazón de la ciudad.",
       "url": ""
     }
   ];
