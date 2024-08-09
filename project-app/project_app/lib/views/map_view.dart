@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:project_app/widgets/widgets.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import the url_launcher package
 
 class MapView extends StatelessWidget {
   final LatLng initialPosition;
@@ -40,30 +40,38 @@ class MapView extends StatelessWidget {
       width: size.width,
       height: size.height,
       child: FlutterMap(
-        options: MapOptions(
-          initialCenter: initialPosition, // Set the initial map center
-          initialZoom: 15.0, // Set the initial zoom level
-          //TODO myLocationEnabled: true
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          options: MapOptions(
+            initialCenter: initialPosition, // Set the initial map center
+            initialZoom: 15.0, // Set the initial zoom level
           ),
-          MarkerLayer(
-            markers: markers.map((map) {
-              return Marker(
-                point: LatLng(
-                  double.parse(map['coordenadas_gps'].split(',')[0]),
-                  double.parse(map['coordenadas_gps'].split(',')[1]),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            ),
+            MarkerLayer(
+              markers: markers.map((map) {
+                return Marker(
+                    point: LatLng(
+                      double.parse(map['coordenadas_gps'].split(',')[0]),
+                      double.parse(map['coordenadas_gps'].split(',')[1]),
+                    ),
+                    child: const Icon(
+                      Icons.location_pin,
+                      color: Colors.limeAccent,
+                    ));
+              }).toList(),
+            ),
+            RichAttributionWidget(
+              // Include a stylish prebuilt attribution widget that meets all requirments
+              attributions: [
+                TextSourceAttribution(
+                  'OpenStreetMap contributors',
+                  onTap: () => launchUrl(Uri.parse(
+                      'https://openstreetmap.org/copyright')), // Use the launch function from url_launcher package
                 ),
-                child: CustomMarker(
-                    nombre: map['nombre'], descripcion: map['descripción']),
-              );
-            }).toList(),
-          )
-          //TODO Movimiento de mapa
-        ],
-      ),
+              ],
+            ),
+          ]),
     );
   }
 }
