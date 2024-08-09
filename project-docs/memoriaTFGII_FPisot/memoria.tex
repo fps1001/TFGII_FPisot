@@ -10,8 +10,8 @@
 \usepackage{placeins}
 
 
-\usepackage[backend=biber,style=numeric]{biblatex}
-\addbibresource{bibliografia.bib}
+%\usepackage[backend=biber,style=numeric]{biblatex}
+%\addbibresource{bibliografia.bib}
 %\bibliographystyle{plain}
 %\bibliography{bibliografia}
 
@@ -375,11 +375,11 @@
   }
 \makeatother
 
-\newcommand{\nombre}{Fernando Pisot Serrano} %%% cambio de comando
+\newcommand{\nombre}{Fernando Pisot Serrano}
 
 
 % Datos de portada
-\title{Aplicación móvil para la generación de rutas turísticas sostenibles basadas en OSM y modelos LLM para promoción de ODS11}
+\title{\fontsize{14pt}{16pt}\selectfont Aplicación móvil para la generación de rutas turísticas sostenibles basadas en OSM y modelos LLM para promoción de ODS11}
 \author{\nombre}
 \tutor{Carlos López Nozal}
 \date{\today}
@@ -412,26 +412,6 @@ En Burgos, {\large \today}
 
 \vfill\vfill\vfill
 
-% Author and supervisor
-% \begin{minipage}{0.45\textwidth}
-% \begin{flushleft} %\large
-% Vº. Bº. del Tutor:\\[2cm]
-% D. nombre tutor
-% \end{flushleft}
-% \end{minipage}
-% \hfill
-% \begin{minipage}{0.45\textwidth}
-% \begin{flushleft} %\large
-% Vº. Bº. del co-tutor:\\[2cm]
-% D. nombre co-tutor
-% \end{flushleft}
-% \end{minipage}
-% \hfill
-
-% \vfill
-
-% para casos con solo un tutor comentar lo anterior
-% y descomentar lo siguiente
 \begin{center}
   Vº. Bº. del Tutor:\\[2cm]
   D. \@tutor{}
@@ -503,7 +483,10 @@ LLM, LangChain, SDGs, SDG11, OSM, Smart City, Flutter, Sustainable Tourism, Sust
 \include{./tex/6_Trabajos_relacionados}
 \include{./tex/7_Conclusiones_Lineas_de_trabajo_futuras}
 
+\printnoidxglossary[type=\acronymtype]
 
-\printbibliography[heading=bibintoc]
+\bibliographystyle{plain}
+\bibliography{bibliografia}
+%\printbibliography[heading=bibintoc]
 
 \end{document}
