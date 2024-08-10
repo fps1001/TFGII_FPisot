@@ -8,10 +8,17 @@
 \usepackage{lmodern} % scalable font
 \usepackage{microtype}
 \usepackage{placeins}
-\usepackage{listings}
-%\usepackage{biblatex}
-%\addbibresource{bibiografiaAnexos.bib}
 
+\RequirePackage{booktabs}
+\RequirePackage[table]{xcolor}
+\RequirePackage{xtab}
+\RequirePackage{multirow}
+
+% Links
+\PassOptionsToPackage{hyphens}{url}\usepackage[colorlinks]{hyperref}
+\hypersetup{
+	allcolors = {red}
+}
 
 % Acrónimos
 \usepackage[acronym]{glossaries}
@@ -26,18 +33,6 @@
 \newacronym{sdg11}{SDG11}{\textit{Sustainable Cities and Communities}}
 \newacronym{poi}{POI}{\textit{Punto de Interés}}
 
-
-
-\RequirePackage{booktabs}
-\RequirePackage[table]{xcolor}
-\RequirePackage{xtab}
-\RequirePackage{multirow}
-
-% Links
-\PassOptionsToPackage{hyphens}{url}\usepackage[colorlinks]{hyperref}
-\hypersetup{
-	allcolors = {red}
-}
 
 % Ecuaciones
 \usepackage{amsmath}
@@ -386,7 +381,6 @@
 \cleardoublepage
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -420,7 +414,6 @@
 \include{./tex/E_Manual_usuario}
 \include{./tex/F_ODS}
 
-\printnoidxglossary[type=\acronymtype]
 
 \bibliographystyle{plain}
 \bibliography{bibliografiaAnexos}
