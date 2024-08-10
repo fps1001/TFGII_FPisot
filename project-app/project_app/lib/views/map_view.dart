@@ -53,13 +53,10 @@ class MapView extends StatelessWidget {
           MarkerLayer(
             markers: [
               ...markers.map((map) {
+                final (latitude, longitude) = map['coordenadas_gps'] as (double, double);
                 return Marker(
-                  point: LatLng(
-                    double.parse(map['coordenadas_gps'].split(',')[0]),
-                    double.parse(map['coordenadas_gps'].split(',')[1]),
-                  ),
-                  child:
-                      const Icon(Icons.location_pin, color: Colors.limeAccent),
+                  point: LatLng(latitude, longitude),
+                  child: const Icon(Icons.location_pin, color: Colors.blueAccent),
                 );
               }),
               // Añadir el marcador de la ubicación del usuario
