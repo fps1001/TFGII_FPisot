@@ -3,30 +3,63 @@
 A continuación, se comparan aplicaciones de referencia o similares usadas por usuarios que puedan ser objetivos.
 
 \subsection{Tripadvisor}
+Tripadvisor permite a los usuarios planificar y organizar sus viajes, con recomendaciones basadas en reseñas y experiencias de otros viajeros.
+
 \subsection{Wanderlog}
+Wanderlog es una aplicación para la planificación de viajes que simplifica la creación de itinerarios, permitiendo agregar lugares de interés fácilmente.
+
 \subsection{Visit A City}
+Visit A City ofrece itinerarios prediseñados para destinos turísticos, permitiendo a los usuarios explorar lugares recomendados según su tiempo disponible.
+
 \subsection{Tiqets - Museos y Atracciones}
+Tiqets es una aplicación que permite comprar entradas para museos y atracciones, ofreciendo guías digitales para planificar visitas.
+
 
 \subsection{Chatbot - https://github.com/jrg1013/chatbot}
 Trabajo Fin de Carrera de José María Redondo Guerra que tuvo como tutores a José Ignacio Santos Martín y Carlos López Nozal.
 
-Este trabajo fue desarrollado usando \acrfull{llm}.
+Este trabajo fue desarrollado usando \acrfull{llm} para la generación de un chat con un sistema \acrshort{rag} para obtener la información de las normas de los \acrshort{tfg} y así mejorar sus respuestas.
 
 \subsection{Visualización de las actividades socioculturales en Castilla y León CULTURALCyL}
 Trabajo Fin de Carrera de Yanela Lozano Pérez con tutores José Ignacio Santos, Virginia Ahedo y Silvia Díaz.
-Esta aplicación mostraba información de eventos culturales.
+Esta aplicación mostraba información de eventos culturales para lo cual usaba una aplicación móvil con servicios API.
+Es especialmente interesante como ejemplo de una aplicación móvil con una fuerte característica de usabilidad, ya que se centra en la visualización de mucha información que debe recibir el usuario de manera clara y sencilla.
+
+\newpage
 
 \begin{table}[h!]
 	\centering
-	\begin{tabular}{|l|c|c|c|c|c|}
-		\hline
-		Aplicación & Versión de pago & Recomendaciones tienen en cuenta factores de sostenibilidad & Modificación dinámica de rutas & Intereses de terceros pueden afectar a los resultados & Fuente de datos \\ \hline
-		Mi aplicación & No & Sí & Sí & No & LLM(RAG-Agents) \\ \hline
-		Tripadvisor & Sí & No & Sí & Sí & Propia \\ \hline
-		Wanderlog & Sí/No & Sí/No & GoogleMaps & Sí/No & Usuarios \\ \hline
-		Visit A City & Sí/No & Sí/No & Sí/No & Sí/No & Usuarios \\ \hline
-		Tiqets & Sí/No & Sí/No & Sí/No & Sí/No & Descripción \\ \hline
+	\renewcommand{\arraystretch}{1.5} % Controla el espaciado entre las líneas
+	\begin{tabular}{cc}
+	\hline
+	\href{https://play.google.com/store/apps/details?id=com.tripadvisor.tripadvisor}{\textbf{Tripadvisor}} & \href{https://play.google.com/store/apps/details?id=com.wanderlog.wanderlog}{\textbf{Wanderlog}} \\
+	\includegraphics[width=0.32\textwidth]{img/tripadvisor.png} & \includegraphics[width=0.34\textwidth]{img/wanderlog.png} \\
+	\hline
+	\href{https://play.google.com/store/apps/details?id=com.visitacity}{\textbf{Visit A City}} & \href{https://play.google.com/store/apps/details?id=com.tiqets.tiqetsapp}{\textbf{Tiqets - Museos y Atracciones}} \\
+	\includegraphics[width=0.35\textwidth]{img/visit_a_city.png} & \includegraphics[width=0.31\textwidth]{img/tiquets.png} \\
+	\hline
 	\end{tabular}
-	\caption{Comparación de aplicaciones similares}
-	\label{tabla:comparativa}
-\end{table}
+	\caption{Aplicaciones Similares}
+	\label{fig:apps_similares}
+	\end{table}
+
+\newpage
+
+\begin{table}[h]
+	\centering
+	\renewcommand{\arraystretch}{1.5} % Controla el espaciado entre las líneas
+	\rowcolors{2}{gray!20}{white} % Alterna colores de fondo en las filas
+	\begin{tabular}{m{3.8cm} c c c c} % Usamos 'm{<width>}' para centrar verticalmente
+	\toprule
+	\textbf{Aplicación} & \textbf{Tripadvisor} & \textbf{Wanderlog} & \textbf{Visit A City} & \textbf{Tiquets} \\
+	\midrule
+	Versión de pago & Sí & Sí/No & Sí/No & Sí/No \\
+	Recomendaciones tienen en cuenta factores de sostenibilidad & No & Sí/No & Sí/No & Sí/No \\
+	Modificación dinámica de rutas & Sí & GoogleMaps & Sí/No & Sí/No \\
+	Intereses de terceros pueden afectar a los resultados & Sí & Sí/No & Sí/No & Sí/No \\
+	Fuente de datos & Propia & Usuarios & Usuarios & Descripción \\
+	\bottomrule
+	\end{tabular}
+	\caption{Comparación de aplicaciones similares} % Mueve la leyenda debajo de la tabla
+	\label{herramientasportipodeuso}
+	\end{table}
