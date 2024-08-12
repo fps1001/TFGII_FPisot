@@ -3,16 +3,17 @@
 A continuación, se comparan aplicaciones de referencia o similares usadas por usuarios que puedan ser objetivos.
 
 \subsection{Tripadvisor}
-Tripadvisor permite a los usuarios planificar y organizar sus viajes, con recomendaciones basadas en reseñas y experiencias de otros viajeros.
+Tripadvisor permite a los usuarios planificar y organizar sus viajes, con recomendaciones basadas en reseñas y experiencias de otros viajeros. Se puede planificar un viaje personalizado indicando fechas pero prioriza los tours de pago, lo que hace difícil seleccionar rutas saludables gratuitas. Además establecimientos pueden promocionar en la plataforma para mejorar su visibilidad lo que interfiere con la objetividad cuando se busca un lugar a visitar.
 
 \subsection{Wanderlog}
-Wanderlog es una aplicación para la planificación de viajes que simplifica la creación de itinerarios, permitiendo agregar lugares de interés fácilmente.
+Wanderlog es una aplicación para la planificación de viajes que simplifica la creación de itinerarios, permitiendo agregar lugares de interés fácilmente. La aplicación tiene infinidad de funcionalidades. Tiene una versión Pro con asistente IA pagando 5 euros al mes. Gratuitamente se pueden enviar 5 mensajes, pero carece de contexto el chat. En la imagen se muestra como da lugares de visita de Salamanca por defecto (que se podría obtener de cualquier LLM usando un prompting sencillo) y luego como cambia y no tiene en contexto la respuesta anterior:
+\imagen{wanderlog_ia}{Chatbot de Wanderlog}{.5}
 
 \subsection{Visit A City}
-Visit A City ofrece itinerarios prediseñados para destinos turísticos, permitiendo a los usuarios explorar lugares recomendados según su tiempo disponible.
+Visit A City ofrece itinerarios prediseñados para destinos turísticos, permitiendo a los usuarios explorar lugares recomendados según su tiempo disponible. Aunque el uso de la aplicación es gratis, las rutas son todas comerciales y por tanto de pago, aunque existen lo que la aplicación llama planes que son itinerarios generados por usuarios que son gratuitos. Las rutas usan también aplicaciones de terceros.
 
 \subsection{Tiqets - Museos y Atracciones}
-Tiqets es una aplicación que permite comprar entradas para museos y atracciones, ofreciendo guías digitales para planificar visitas.
+Tiqets es una aplicación que permite comprar entradas para museos y atracciones, ofreciendo guías digitales para planificar visitas. Sólo muestra información de museos, la gestión de mapas es fija, no se puede modificar el zoom y para rutas usa una aplicación por defecto del dispositivo en el que se ejecuta.
 
 
 \subsection{Chatbot - https://github.com/jrg1013/chatbot}
@@ -49,15 +50,15 @@ Es especialmente interesante como ejemplo de una aplicación móvil con una fuer
 	\centering
 	\renewcommand{\arraystretch}{1.5} % Controla el espaciado entre las líneas
 	\rowcolors{2}{gray!20}{white} % Alterna colores de fondo en las filas
-	\begin{tabular}{m{3.8cm} c c c c} % Usamos 'm{<width>}' para centrar verticalmente
+	\begin{tabular}{m{4.5cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2.5cm}} % Usamos 'm{<width>}' para centrar verticalmente y ajustamos los anchos
 	\toprule
-	\textbf{Aplicación} & \textbf{Tripadvisor} & \textbf{Wanderlog} & \textbf{Visit A City} & \textbf{Tiquets} \\
+	\textbf{Característica} & \textbf{Tripadvisor} & \textbf{Wanderlog} & \textbf{Visit A City} & \textbf{Tiquets} & \textbf{\textit{Eco City Tour}} \\
 	\midrule
-	Versión de pago & Sí & Sí/No & Sí/No & Sí/No \\
-	Recomendaciones tienen en cuenta factores de sostenibilidad & No & Sí/No & Sí/No & Sí/No \\
-	Modificación dinámica de rutas & Sí & GoogleMaps & Sí/No & Sí/No \\
-	Intereses de terceros pueden afectar a los resultados & Sí & Sí/No & Sí/No & Sí/No \\
-	Fuente de datos & Propia & Usuarios & Usuarios & Descripción \\
+	Versión de pago & Sí & Sí & No & No & No\\
+	Recomendaciones tienen en cuenta factores de sostenibilidad & No & No & No & No & Sí\\
+	Modificación dinámica de rutas & Sí & No & No & No & Sí\\
+	Intereses de terceros pueden afectar a los resultados & Sí & Sí & No & No & No \\
+	Fuente de datos & Propia & Usuarios - LLM & Usuarios & Propia & LLM\\
 	\bottomrule
 	\end{tabular}
 	\caption{Comparación de aplicaciones similares} % Mueve la leyenda debajo de la tabla
