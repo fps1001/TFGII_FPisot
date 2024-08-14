@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class MapView extends StatelessWidget {
@@ -37,51 +38,6 @@ class MapView extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return SizedBox(
-      width: size.width,
-      height: size.height,
-      child: FlutterMap(
-        options: MapOptions(
-          // Centrar en la ubicación del usuario si está disponible
-          initialCenter: userLocation ?? initialPosition,
-          initialZoom: 15.0,
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          ),
-          MarkerLayer(
-            markers: [
-              ...markers.map((map) {
-                final (latitude, longitude) = map['coordenadas_gps'] as (double, double);
-                return Marker(
-                  point: LatLng(latitude, longitude),
-                  child: const Icon(Icons.location_pin, color: Colors.blueAccent),
-                );
-              }),
-              // Añadir el marcador de la ubicación del usuario
-              if (userLocation != null)
-                Marker(
-                  point: userLocation!,
-                  child: const Icon(
-                    Icons.my_location,
-                    color: Colors.blue,
-                    size: 30,
-                  ),
-                ),
-            ],
-          ),
-          RichAttributionWidget(
-            attributions: [
-              TextSourceAttribution(
-                'OpenStreetMap contributors',
-                onTap: () =>
-                    launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+    return const Placeholder();
   }
 }

@@ -23,6 +23,8 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+def googleApiKey = localProperties.getProperty("googleApiKey") // Cargar la API Key desde local.properties
+
 android {
     namespace = "com.example.project_app"
     compileSdk = flutter.compileSdkVersion
@@ -42,6 +44,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+
+        // Agrega la clave API a los placeholders del manifiesto
+        manifestPlaceholders = [googleApiKey: googleApiKey]
     }
 
     buildTypes {
