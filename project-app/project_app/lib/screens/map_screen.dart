@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/views/views.dart';
 
@@ -30,18 +31,13 @@ class _MapScreenState extends State<MapScreen> {
               child: Text('Espere por favor...'),
             );
           }
-          return SingleChildScrollView(
-            child: Stack(
-              children: [
-                MapView(
-                  initialPosition: state.lastKnownLocation!,
-                  // Pasa la ubicación del usuario
-                  userLocation: state.lastKnownLocation,
-                ),
-                // TODO: Agregar botones adicionales si es necesario
-              ],
-            ),
-          );
+          const CameraPosition initialCameraPosition = CameraPosition(
+              bearing: 192.8334901395799,
+              // TODO target debería ser el state.lastKnownLocation!
+              target: LatLng(37.43296265331129, -122.08832357078792),
+              zoom: 15);
+
+          return const GoogleMap(initialCameraPosition: initialCameraPosition);
         },
       ),
     );
