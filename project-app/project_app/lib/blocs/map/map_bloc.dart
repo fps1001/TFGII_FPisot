@@ -29,4 +29,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       emit(state.copyWith(isMapInitialized: true));
     }
   }
+
+  void moveCamera (LatLng latLng){
+    _mapController!.animateCamera(CameraUpdate.newLatLng(latLng));
+  }
 }
