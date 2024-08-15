@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:url_launcher/url_launcher.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapView extends StatelessWidget {
   final LatLng initialPosition;
-  final LatLng? userLocation; // Nueva propiedad para la ubicación del usuario
 
   final List<Map<String, dynamic>> markers = [
     {
@@ -32,12 +29,34 @@ class MapView extends StatelessWidget {
     }
   ];
 
-  MapView({super.key, required this.initialPosition, this.userLocation});
+  MapView({super.key, 
+  required this.initialPosition});
 
   @override
   Widget build(BuildContext context) {
+    // Obtenemos el tamaño de la pantalla
     final size = MediaQuery.of(context).size;
 
-    return const Placeholder();
+
+    //final CameraPosition initialCameraPosition = CameraPosition(        target: state            .lastKnownLocation!,         zoom: 15);
+    final CameraPosition initialCameraPosition = CameraPosition(        
+      target: initialPosition,
+      zoom: 15
+    );
+    return SizedBox(
+      width: size.width,
+      height: size.height,
+      child: GoogleMap(
+        initialCameraPosition: initialCameraPosition,
+        compassEnabled: true,
+        myLocationButtonEnabled: true,
+        myLocationEnabled: true,
+        zoomControlsEnabled: true,
+        zoomGesturesEnabled: true,
+
+        //TODO: markers: 
+        //TODO: rutas
+      )
+    );
   }
 }
