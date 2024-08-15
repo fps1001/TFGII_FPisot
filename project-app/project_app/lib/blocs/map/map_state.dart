@@ -7,7 +7,9 @@ class MapState extends Equatable {
   const MapState({this.isMapInitialized = false, this.followUser = false});
 
   MapState copyWith({
+    // Indica si el mapa se puede usar.
     bool? isMapInitialized,
+    // Indica si el mapa sigue al usuario.
     bool? followUser,
   }) =>
       MapState(

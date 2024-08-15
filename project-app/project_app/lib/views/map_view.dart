@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../blocs/blocs.dart';
+
 
 class MapView extends StatelessWidget {
   final LatLng initialPosition;
@@ -37,6 +40,8 @@ class MapView extends StatelessWidget {
     // Obtenemos el tamaño de la pantalla
     final size = MediaQuery.of(context).size;
 
+    final mapBloc = BlocProvider.of<MapBloc>(context);
+
 
     //final CameraPosition initialCameraPosition = CameraPosition(        target: state            .lastKnownLocation!,         zoom: 15);
     final CameraPosition initialCameraPosition = CameraPosition(        
@@ -53,6 +58,8 @@ class MapView extends StatelessWidget {
         myLocationEnabled: true,
         zoomControlsEnabled: true,
         zoomGesturesEnabled: true,
+        // vamos a lanzar un evento cuando el mapa se haya creado para obtener el controlador del mapa.
+        onMapCreated: ( controller ) => mapBloc.add(OnMapInitializedEvent(controller)),
 
         //TODO: markers: 
         //TODO: rutas
