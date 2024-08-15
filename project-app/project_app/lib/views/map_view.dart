@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../blocs/blocs.dart';
+import '../themes/themes.dart';
 
 
 class MapView extends StatelessWidget {
@@ -42,12 +45,11 @@ class MapView extends StatelessWidget {
 
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
-
-    //final CameraPosition initialCameraPosition = CameraPosition(        target: state            .lastKnownLocation!,         zoom: 15);
     final CameraPosition initialCameraPosition = CameraPosition(        
       target: initialPosition,
       zoom: 15
     );
+
     return SizedBox(
       width: size.width,
       height: size.height,
@@ -60,7 +62,7 @@ class MapView extends StatelessWidget {
         zoomGesturesEnabled: true,
         // vamos a lanzar un evento cuando el mapa se haya creado para obtener el controlador del mapa.
         onMapCreated: ( controller ) => mapBloc.add(OnMapInitializedEvent(controller)),
-
+        style: jsonEncode(appleMapEsqueMapTheme),
         //TODO: markers: 
         //TODO: rutas
       )
