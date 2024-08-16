@@ -4,22 +4,38 @@ class MapState extends Equatable {
   final bool isMapInitialized;
   final bool isFollowingUser;
 
+  /*Polilíneas de rutas
+   Son así:
+   'nombre_ruta': {
+      id: polylineId Google,
+      points: [lat,lng], [2312][213213],
+      width: 5,
+      color: Colors.red,
+   }
+  */
+  
+  final Map<String, Polyline> polylines;
+
   const MapState({
     this.isMapInitialized = false, 
-    this.isFollowingUser = true
-  });
+    this.isFollowingUser = true,
+    Map<String, Polyline>? polylines,
+  }): polylines = polylines ?? const {};
 
   MapState copyWith({
     // Indica si el mapa se puede usar.
     bool? isMapInitialized,
     // Indica si el mapa sigue al usuario.
     bool? isFollowingUser,
+    // Polilíneas de rutas
+    Map<String, Polyline>? polylines,
   }) =>
       MapState(
         isMapInitialized: isMapInitialized ?? this.isMapInitialized,
         isFollowingUser: isFollowingUser ?? this.isFollowingUser,
+        polylines: polylines ?? this.polylines,
       );
 
   @override
-  List<Object> get props => [isMapInitialized, isFollowingUser];
+  List<Object> get props => [isMapInitialized, isFollowingUser, polylines];
 }

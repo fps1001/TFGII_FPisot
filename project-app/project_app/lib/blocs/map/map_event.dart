@@ -23,3 +23,9 @@ class OnMapInitializedEvent extends MapEvent {
 class OnStopFollowingUserEvent extends MapEvent {}
 
 class OnStartFollowingUserEvent extends MapEvent {}
+
+//Historial de locationBloc de movimientos de usuario
+class OnUpdateUserPolylinesEvent extends MapEvent {
+  final List<LatLng> userLocations;
+  const OnUpdateUserPolylinesEvent(this.userLocations);
+}

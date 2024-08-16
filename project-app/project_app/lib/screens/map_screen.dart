@@ -26,21 +26,28 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<LocationBloc, LocationState>(
-        builder: (context, state) {
+        builder: (context, locationState) {
           // Si llega a este punto la ubicación es conocida (null-safety)
-          if (state.lastKnownLocation == null) {
+          if (locationState.lastKnownLocation == null) {
             return const Center(
               child: Text('Espere por favor...'),
             );
           }
-          
 
-          return SingleChildScrollView(
-            child: Stack(
-              children: [ MapView(initialPosition: state.lastKnownLocation!,
-              ),],
-              //TODO: Botones...
-            ),
+          return BlocBuilder<MapBloc, MapState>(
+            builder: (context, mapState) {
+              return SingleChildScrollView(
+                child: Stack(
+                  children: [
+                    MapView(
+                      initialPosition: locationState.lastKnownLocation!,
+                      polylines: mapState.polylines.values.toSet(),
+                    ),
+                  ],
+                  //TODO: Botones...
+                ),
+              );
+            },
           );
         },
       ),
@@ -48,8 +55,8 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-         BtnFollowUser(),
-         BtnCurrentLocation(),
+          BtnFollowUser(),
+          BtnCurrentLocation(),
         ],
       ),
     );

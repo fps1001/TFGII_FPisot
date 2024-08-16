@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
 
@@ -19,9 +20,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OnStartFollowingUserEvent>( _onStartFollowingUser );
     // Cuando recibo un evento de tipo OnStopFollowingUserEvent emite un nuevo estado.
     on<OnStopFollowingUserEvent>((event, emit) => emit(state.copyWith(isFollowingUser: false)));
+    // Cuando recibo un evento de tipo OnUpdateUserPolylinesEvent emite un nuevo estado.  
+    on<OnUpdateUserPolylinesEvent>( _onPolylineNewPoint );
 
     // Suscripción al bloc de localización.
     locationBloc.stream.listen((locationState) {
+      // Llama al evento de añadir una polilínea al recorrido de usuario.
+      if ( locationState.lastKnownLocation != null ) {
+        add(OnUpdateUserPolylinesEvent(locationState.myLocationHistory));
+      }
+
+
       // Saber si hay que mover la cámara.
       if (!state.isFollowingUser) return;
       if (locationState.lastKnownLocation == null) return;
@@ -53,4 +62,21 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       moveCamera(locationBloc.state.lastKnownLocation!);
   }
 
+  // Función para añadir un punto a una polilínea.
+  void _onPolylineNewPoint(OnUpdateUserPolylinesEvent event, Emitter<MapState> emit) {
+    // Se crea la nueva polilínea y se añade a las que ya había.
+    final polylines = Map<String, Polyline>.from(state.polylines);
+    final polyline = Polyline(
+      polylineId: PolylineId('user'),
+      points: event.userLocations,
+      width: 5,
+      color: Colors.blue,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap,
+    );
+    // crea una copia del estado actual y se añade la nueva polilínea.
+    polylines['user'] = polyline;
+    // Emite el nuevo estado.
+    emit(state.copyWith(polylines: polylines));
+  }
 }
