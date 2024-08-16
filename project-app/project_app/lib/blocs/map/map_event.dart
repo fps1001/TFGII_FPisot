@@ -18,3 +18,8 @@ class OnMapInitializedEvent extends MapEvent {
   List<Object> get props => [mapController];
 
 }
+
+// Cambia el estado de seguir al usuario.
+class OnStopFollowingUserEvent extends MapEvent {}
+
+class OnStartFollowingUserEvent extends MapEvent {}

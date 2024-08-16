@@ -53,18 +53,23 @@ class MapView extends StatelessWidget {
     return SizedBox(
       width: size.width,
       height: size.height,
-      child: GoogleMap(
-        initialCameraPosition: initialCameraPosition,
-        compassEnabled: true,
-        myLocationButtonEnabled: false,
-        myLocationEnabled: true,
-        zoomControlsEnabled: false,
-        zoomGesturesEnabled: true,
-        // vamos a lanzar un evento cuando el mapa se haya creado para obtener el controlador del mapa.
-        onMapCreated: ( controller ) => mapBloc.add(OnMapInitializedEvent(controller)),
-        style: jsonEncode(appleMapEsqueMapTheme),
-        //TODO: markers: 
-        //TODO: rutas
+      //Se añade un listener para saber si el mapa se ha movido y lanzar un evento. 
+      child: Listener(
+        // Deja de seguir al usuario al mover el mapa.
+        onPointerMove: (event) => mapBloc.add(OnStopFollowingUserEvent()),
+        child: GoogleMap(
+          initialCameraPosition: initialCameraPosition,
+          compassEnabled: true,
+          myLocationButtonEnabled: false,
+          myLocationEnabled: true,
+          zoomControlsEnabled: false,
+          zoomGesturesEnabled: true,
+          // vamos a lanzar un evento cuando el mapa se haya creado para obtener el controlador del mapa.
+          onMapCreated: ( controller ) => mapBloc.add(OnMapInitializedEvent(controller)),
+          style: jsonEncode(appleMapEsqueMapTheme),
+          //TODO: markers: 
+          //TODO: rutas
+        ),
       )
     );
   }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,11 +15,15 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     // Cuando recibo un evento de tipo OnMapInitializedEvent emite un nuevo estado.
     on<OnMapInitializedEvent>(_onInitMap);
+    // Cuando recibo un evento de tipo OnStartFollowingUserEvent emite un nuevo estado.
+    on<OnStartFollowingUserEvent>( _onStartFollowingUser );
+    // Cuando recibo un evento de tipo OnStopFollowingUserEvent emite un nuevo estado.
+    on<OnStopFollowingUserEvent>((event, emit) => emit(state.copyWith(isFollowingUser: false)));
 
     // Suscripción al bloc de localización.
     locationBloc.stream.listen((locationState) {
       // Saber si hay que mover la cámara.
-      if (!state.followUser) return;
+      if (!state.isFollowingUser) return;
       if (locationState.lastKnownLocation == null) return;
       
       moveCamera(locationState.lastKnownLocation!);
@@ -43,4 +45,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   void moveCamera(LatLng latLng) {
     _mapController!.animateCamera(CameraUpdate.newLatLng(latLng));
   }
+
+  //Función para que al tocar el botón se centre en el usuario sin esperar al cambio de localización.
+  void _onStartFollowingUser(OnStartFollowingUserEvent event, Emitter<MapState> emit) {
+    emit(state.copyWith(isFollowingUser: true));
+    if (locationBloc.state.lastKnownLocation == null) return;
+      moveCamera(locationBloc.state.lastKnownLocation!);
+  }
+
 }
