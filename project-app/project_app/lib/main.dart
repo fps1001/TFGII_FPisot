@@ -10,7 +10,7 @@ void main() {
     providers: [
       BlocProvider(create: (context) => GpsBloc()), // Gestión de permiso de localización y GPS activo.
       BlocProvider(create: (context) => LocationBloc()), // Gestión de localización de usuario.
-      BlocProvider(create: (context) => MapBloc()), // Gestión de controlador de mapa.
+      BlocProvider(create: (context) => MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))), // Gestión de controlador de mapa.
     ],
     child: const ProjectApp(),
   ));

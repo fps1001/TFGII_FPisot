@@ -4,7 +4,10 @@ class MapState extends Equatable {
   final bool isMapInitialized;
   final bool followUser;
 
-  const MapState({this.isMapInitialized = false, this.followUser = false});
+  const MapState({
+    this.isMapInitialized = false, 
+    this.followUser = true
+  });
 
   MapState copyWith({
     // Indica si el mapa se puede usar.
