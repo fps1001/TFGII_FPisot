@@ -16,23 +16,26 @@ class MapState extends Equatable {
   */
 
   final Map<String, Polyline> polylines;
+  // De igual manera funcionan los marcadores
+  final Map<String, Marker> markers;
 
   const MapState( {
     this.isMapInitialized = false,
     this.isFollowingUser = true,
     this.showUserRoute = false,
     Map<String, Polyline>? polylines,
-  }) : polylines = polylines ?? const {};
+    Map<String, Marker>? markers,
+  }) : polylines = polylines ?? const {},
+       markers = markers ?? const {};
+  
 
   MapState copyWith({
-    // Indica si el mapa se puede usar.
+    // Copiamos el estado actual del mapa.
     bool? isMapInitialized,
-    // Indica si el mapa sigue al usuario.
     bool? isFollowingUser,
-    // Indica si se muestra la ruta del usuario.
     bool? showUserRoute,
-    // Polilíneas de rutas
     Map<String, Polyline>? polylines,
+    Map<String, Marker>? markers,
     
   }) =>
       MapState(
@@ -40,9 +43,10 @@ class MapState extends Equatable {
         isFollowingUser: isFollowingUser ?? this.isFollowingUser,
         showUserRoute: showUserRoute ?? this.showUserRoute,
         polylines: polylines ?? this.polylines,
+        markers : markers ?? this.markers,
         
       );
 
   @override
-  List<Object> get props => [isMapInitialized, isFollowingUser, showUserRoute, polylines];
+  List<Object> get props => [isMapInitialized, isFollowingUser, showUserRoute, polylines, markers];
 }

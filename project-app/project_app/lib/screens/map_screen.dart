@@ -50,6 +50,7 @@ class _MapScreenState extends State<MapScreen> {
                       initialPosition: locationState.lastKnownLocation!,
                       polylines: mapState.polylines.values.toSet(),
                     ),
+                    const CustomSearchBar(),
                   ],
                 ),
               );

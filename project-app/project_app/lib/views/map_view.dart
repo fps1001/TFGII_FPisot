@@ -11,29 +11,51 @@ class MapView extends StatelessWidget {
   final LatLng initialPosition;
   final Set<Polyline> polylines;
 
-  final List<Map<String, dynamic>> markers = [
-    {
-      "nombre": "Casco Histórico de Salamanca",
-      "coordenadas_gps": (40.9709, -5.6681),
-      "breve_descripcion":
-          "El casco histórico de Salamanca es un conjunto de edificios y calles que datan del siglo XIX.",
-      "url": "https://www.salamanca.es/visitar/casco-historico"
-    },
-    {
-      "nombre": "Río Tormes",
-      "coordenadas_gps": (40.9709, -5.6681),
-      "breve_descripcion":
-          "El río Tormes es un afluente del Duero y discurre por el centro de la ciudad.",
-      "url": ""
-    },
-    {
-      "nombre": "Jardines de San Esteban",
-      "coordenadas_gps": (40.9709, -5.6681),
-      "breve_descripcion":
-          "Los Jardines de San Esteban son un parque público ubicado en el corazón de la ciudad.",
-      "url": ""
-    }
-  ];
+final List<Map<String, Marker>> markers = [
+  {
+    "nombre": Marker(
+      markerId: MarkerId("Casco Histórico de Salamanca"),
+      position: LatLng(40.9709, -5.6681),
+      infoWindow: InfoWindow(
+        title: "Casco Histórico de Salamanca",
+        snippet:
+            "El casco histórico de Salamanca es un conjunto de edificios y calles que datan del siglo XIX.",
+      ),
+      onTap: () {
+        // Acción cuando se toca el marcador
+      },
+    ),
+  },
+  {
+    "nombre": Marker(
+      markerId: MarkerId("Río Tormes"),
+      position: LatLng(40.9709, -5.6681),
+      infoWindow: InfoWindow(
+        title: "Río Tormes",
+        snippet:
+            "El río Tormes es un afluente del Duero y discurre por el centro de la ciudad.",
+      ),
+      onTap: () {
+        // Acción cuando se toca el marcador
+      },
+    ),
+  },
+  {
+    "nombre": Marker(
+      markerId: MarkerId("Jardines de San Esteban"),
+      position: LatLng(40.9709, -5.6681),
+      infoWindow: InfoWindow(
+        title: "Jardines de San Esteban",
+        snippet:
+            "Los Jardines de San Esteban son un parque público ubicado en el corazón de la ciudad.",
+      ),
+      onTap: () {
+        // Acción cuando se toca el marcador
+      },
+    ),
+  },
+];
+
 
   MapView({
     super.key, 
@@ -70,7 +92,7 @@ class MapView extends StatelessWidget {
             style: jsonEncode(appleMapEsqueMapTheme),
 
             polylines: polylines,
-            //TODO: markers:
+            markers: markers.map((map) => map.values.first).toSet(),
           ),
         ));
   }
