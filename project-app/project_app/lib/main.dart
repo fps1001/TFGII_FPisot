@@ -23,7 +23,7 @@ class ProjectApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'EcoTour App',
+        title: 'Eco-City Tour',
         home: LoadingScreen());
   }
 }

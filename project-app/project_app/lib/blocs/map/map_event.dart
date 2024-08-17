@@ -29,3 +29,6 @@ class OnUpdateUserPolylinesEvent extends MapEvent {
   final List<LatLng> userLocations;
   const OnUpdateUserPolylinesEvent(this.userLocations);
 }
+
+//Muestra la ruta del usuario o la oculta.
+class OnToggleShowUserRouteEvent extends MapEvent {}

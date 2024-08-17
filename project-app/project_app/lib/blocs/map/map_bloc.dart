@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   GoogleMapController? _mapController;
   // Añado bloc de localización
   final LocationBloc locationBloc;
+  StreamSubscription<LocationState>? locationSubscription;
+
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     // Cuando recibo un evento de tipo OnMapInitializedEvent emite un nuevo estado.
@@ -22,9 +26,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OnStopFollowingUserEvent>((event, emit) => emit(state.copyWith(isFollowingUser: false)));
     // Cuando recibo un evento de tipo OnUpdateUserPolylinesEvent emite un nuevo estado.  
     on<OnUpdateUserPolylinesEvent>( _onPolylineNewPoint );
+    // Cuando recibo un evento de tipo OnToggleShowUserRouteEvent emite un nuevo estado.
+    on<OnToggleShowUserRouteEvent>((event, emit) => emit(state.copyWith(showUserRoute: !state.showUserRoute)));
 
     // Suscripción al bloc de localización.
-    locationBloc.stream.listen((locationState) {
+    locationSubscription = locationBloc.stream.listen((locationState) {
       // Llama al evento de añadir una polilínea al recorrido de usuario.
       if ( locationState.lastKnownLocation != null ) {
         add(OnUpdateUserPolylinesEvent(locationState.myLocationHistory));
@@ -78,5 +84,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     polylines['user'] = polyline;
     // Emite el nuevo estado.
     emit(state.copyWith(polylines: polylines));
+  }
+
+  @override
+  Future<void> close() {
+    locationSubscription?.cancel();
+    return super.close();
   }
 }
