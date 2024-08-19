@@ -4,7 +4,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
 
 import 'package:project_app/views/views.dart';
-import 'package:project_app/widgets/btn_toggle_user_route.dart';
 import 'package:project_app/widgets/widgets.dart';
 
 class MapScreen extends StatefulWidget {
@@ -59,7 +58,7 @@ class _MapScreenState extends State<MapScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Column(
+      floatingActionButton: const Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           BtnToggleUserRoute(),
