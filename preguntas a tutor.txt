@@ -1,6 +1,4 @@
-La manera correcta de documentar el código?
+Extensión de la documentación. (javadoc?)
 
-Debo conseguir la multiplataforma?
-
-Qué herramientas debo describir en el tema 4 de la memoria:
-LangChain
+Qué herramientas debo describir en el tema 4 de la memoria acerca de las herramientas usadas:
+He añadido LangChain.
