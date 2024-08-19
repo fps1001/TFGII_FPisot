@@ -2,3 +2,5 @@ La manera correcta de documentar el código?
 
 Debo conseguir la multiplataforma?
 
+Qué herramientas debo describir en el tema 4 de la memoria:
+LangChain
