@@ -50,6 +50,7 @@ class _MapScreenState extends State<MapScreen> {
                       polylines: mapState.polylines.values.toSet(),
                     ),
                     const CustomSearchBar(),
+                    const ManualMarker(),
                   ],
                 ),
               );
