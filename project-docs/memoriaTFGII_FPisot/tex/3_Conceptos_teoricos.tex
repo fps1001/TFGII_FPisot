@@ -40,27 +40,35 @@ Cuando la información del modelo tiene que ser muy precisa se recurre a esta t�
 De esta manera también se realiza una separación de abstracción que facilita la modularidad del código: se puede cambiar de origen en los datos, es decir, elegir otro modelo \acrshort{llm}, pero la salida del mismo siempre debe cumplir con estos requisitos desde el punto de vista de la programación. Es el mismo caso de abstracción usada en otros lenguajes de programación donde existe un repositorio y una fuente de datos. El programa se nutre de uno dejando el otro para acceder a datos de manera más concreta, donde el cambio de uno deja inalterado el funcionamiento del programa.
 
 \section{Retrieval-Augmented Generation (RAG)}
-Generación Aumentada por Recuperación es una técnica usada los modelos de inteligencia artificial en la cual se obtiene información para nutrir a un modelo de gran escala que ya ha sido entrenado, de esta manera amplía su conocimiento y es capaz de generar una respuesta más precisa, actualizada y completa. Para ello, selecciona la información más afín de los datos aportados que se le han facilitado con la información requerida por la entrada del modelo. Veamos cómo lo consigue:
+Generación Aumentada por Recuperación es una técnica usada en modelos de inteligencia artificial en la cual se obtiene información para nutrir a un modelo de gran escala que ya ha sido entrenado, de esta manera amplía su conocimiento y es capaz de generar una respuesta más precisa, actualizada y completa. 
+El problema que subyace en los modelos tradicionales es que una vez alimentados con un conjunto de datos, sufren de un aislamiento del mundo que los rodea.
+
+Para prevenir este problema se nutre de información que el usuario facilita siguiendo los siguientes pasos:
 \begin{enumerate}
-	\item \textbf{Vectorización}: también llamada embeddings: consiste en transformar la información facilitada y representarla en vectores de n dimensiones.
-	\item segundo item.
+	\item \textbf{Splitter/tokenización}: la información proporcionada se mide en tokens y cada modelo tiene una cantidad que puede usar como contexto, además del coste que algunos modelos pueden cobrar al usuario por token, es por ello que transformar una cadena de texto inicial que ocupa más espacio del estrictamente necesario en una cadena separada en pequeños trozos de información que además usa ciertos tokens especiales para mayor comprensión es una tarea previa a la recuperación de información.
+
+	\item \textbf{Embeddings}: consiste en transformar la información facilitada y representarla en vectores de n dimensiones. Para ellos se usa comúnmente otro modelo entrenado para transformar la información en vectores.
+	
+	\imagen{langflow_rag_embeddings}{Preparación de la información de un RAG mostrada en la herramienta Langflow}{1}
+	
+	\item \textbf{RAG}: con la información ampliada ya vectorizada en una base de datos, el usuario genera una entrada o prompt al modelo, el \acrshort{llm} entonces selecciona la información más afín de los datos aportados para generar así un prompt ampliado o mejorado que será pasado al modelo para un procesamiento de información habitual, consiguiendo así un mejor resultado.
+	
+	\imagen{langflow_rag_retrieval}{RAG mostrado en la herramienta Langflow usando https://astra.datastax.com }{1}
 \end{enumerate}
 
 \subsubsection{Uso de RAGs en la aplicación de este TFG}
-
+La utilidad de los \acrfull{rag} en aplicaciones es muy amplia. La más habitual se usa para conseguir un chatbot de empresas que sirvan como atención al cliente. 
+En nuestro caso se alimenta a la base de datos con embeddings la información actualizada de la web usando agentes que serán explicados a continuación, esta información funciona como una entrada de datos de un sistema RAG para la mayor comprensión del mundo que le rodea al modelo. De esta manera y con un juego de prompts \textbf{se obtienen los mejores resultados posibles} que serán después tratados por la aplicación móvil para mostrar dicha información al usuario.
 
 
 \section{Agentes}
 \label{sec:agentes}
-Pese a que los LLM como se ha visto en su descripción son herramientas muy poderosas que han cambiado la visión del mundo en todos sus campos productivos, sufren de una limitación: el momento en el que terminan su entrenamiento los modelos y son puestos en marcha para el público supone una brecha de entrada de conocimiento del mundo que le rodea y por tanto si una pieza vital de información es requerida en dicho periodo de tiempo, el modelo puede alucinar o no dar con una salida satisfactoria. Para cubrir este hueco de información surgen los Agentes.
-Estos elementos pueden ser vistos como aplicaciones que alimentarán al modelo con un conjunto de herramientas tales como motores de búsqueda, bases de datos, páginas web, etc. Una vez provisto con esta información el modelo es capaz de razonar acerca de las acciones que debe cumplir para obtener el mejor resultado.
+La información que alimenta a los RAG puede ser un archivo de texto con información general de un tema sin embargo hay veces en los que la información no está físicamente en un archivo y se tiene que obtener a través de agentes.
+Estas múltiples herramientas pueden ser vistas como aplicaciones que alimentarán al modelo con un conjunto de herramientas tales como motores de búsqueda, bases de datos, páginas web, etc. Una vez provisto con esta información el modelo es capaz de razonar acerca de las acciones que debe cumplir para obtener el mejor resultado.
+\subsubsection{Uso de Agentes en este TFG}
+Se utilizan varios con el fin de obtener a través de la web información actualizada de los puntos de interés de los lugares que se van a visitar.
 
 
-\section{Imágenes}
-
-Se pueden incluir imágenes con los comandos standard de \LaTeX, pero esta plantilla dispone de comandos propios como por ejemplo el siguiente:
-
-\imagen{escudoInfor}{Autómata para una expresión vacía}{.5}
 
 Las referencias se incluyen en el texto usando cite~\cite{wiki:latex}. Para citar webs, artículos o libros~\cite{koza92}, si se desean citar más de uno en el mismo lugar~\cite{bortolot2005, koza92}.
 
