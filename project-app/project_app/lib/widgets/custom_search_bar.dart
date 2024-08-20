@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/delegates/delegates.dart';
+import 'package:project_app/models/models.dart';
 
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({super.key});
+
+  // Función que determinará si mostrar el marcador manual en función del SearchBloc
+  void onSearchResults(BuildContext context, SearchResult result) {
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+    if (result.manual == true) {
+      // Lanza el evento que cambiará el estado.
+      searchBloc.add(OnActivateManualMarkerEvent());
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +33,7 @@ class CustomSearchBar extends StatelessWidget {
             // si el objeto no vuelve no hay que hacer nada.
             if (result == null) return;
 
-            print(result);
+            onSearchResults(context, result);
           },
           child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),

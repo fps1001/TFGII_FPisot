@@ -8,9 +8,19 @@ void main() {
   runApp(MultiBlocProvider(
     // En vez de hacer runApp se añade un multiblocprovider para gestionar los blocs de la app.
     providers: [
-      BlocProvider(create: (context) => GpsBloc()), // Gestión de permiso de localización y GPS activo.
-      BlocProvider(create: (context) => LocationBloc()), // Gestión de localización de usuario.
-      BlocProvider(create: (context) => MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))), // Gestión de controlador de mapa.
+      BlocProvider(
+          create: (context) =>
+              GpsBloc()), // Gestión de permiso de localización y GPS activo.
+      BlocProvider(
+          create: (context) =>
+              LocationBloc()), // Gestión de localización de usuario.
+      BlocProvider(
+          create: (context) => MapBloc(
+              locationBloc: BlocProvider.of<LocationBloc>(
+                  context))), // Gestión de controlador de mapa.
+      BlocProvider(
+          create: (context) =>
+              SearchBloc()), // Indica si se quiere hacer una busqueda manual o no.
     ],
     child: const ProjectApp(),
   ));
