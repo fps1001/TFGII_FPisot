@@ -1,7 +1,16 @@
-Extensión de la documentación. (javadoc?)
+Hasta que punto hay que documentar la programación.
 
 Qué herramientas debo describir en el tema 4 de la memoria acerca de las herramientas usadas:
 He añadido LangChain.
+Pero he udado:
+LangFlow, Figma, VSCode y sus extensiones incluidas ChatBot...
+
+
+En la estructura de directorios debo explicar para que sirve cada carpeta dentro del lib? o los blocs?
+
+Prototipo en LangFlow? en vez del cuaderno jupyter?
+
+
 
 Artículo que habla de la masificación turística y cómo los visitantes aplauden la idea de una app que les avise de la afluencia.
 https://elpais.com/espana/catalunya/2024-08-20/en-el-corazon-del-turismo-masivo-de-barcelona-que-el-park-guell-este-lleno-demuestra-que-hay-que-verlo.html

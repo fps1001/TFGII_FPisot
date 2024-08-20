@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,6 +9,21 @@ import 'package:project_app/models/models.dart';
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        return state.displayManualMarker
+            ? const SizedBox()
+            : FadeInDown(
+                duration: const Duration(milliseconds: 300),
+                child: _CustomSearchBarBody());
+      },
+    );
+  }
+}
+
+class _CustomSearchBarBody extends StatelessWidget {
   // Función que determinará si mostrar el marcador manual en función del SearchBloc
   void onSearchResults(BuildContext context, SearchResult result) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
@@ -33,6 +49,7 @@ class CustomSearchBar extends StatelessWidget {
             // si el objeto no vuelve no hay que hacer nada.
             if (result == null) return;
 
+            // ignore: use_build_context_synchronously
             onSearchResults(context, result);
           },
           child: Container(
