@@ -14,9 +14,9 @@ class MapView extends StatelessWidget {
 final List<Map<String, Marker>> markers = [
   {
     "nombre": Marker(
-      markerId: MarkerId("Casco Histórico de Salamanca"),
-      position: LatLng(40.9709, -5.6681),
-      infoWindow: InfoWindow(
+      markerId: const MarkerId("Casco Histórico de Salamanca"),
+      position: const LatLng(40.9709, -5.6681),
+      infoWindow: const InfoWindow(
         title: "Casco Histórico de Salamanca",
         snippet:
             "El casco histórico de Salamanca es un conjunto de edificios y calles que datan del siglo XIX.",
@@ -28,9 +28,9 @@ final List<Map<String, Marker>> markers = [
   },
   {
     "nombre": Marker(
-      markerId: MarkerId("Río Tormes"),
-      position: LatLng(40.9709, -5.6681),
-      infoWindow: InfoWindow(
+      markerId: const MarkerId("Río Tormes"),
+      position: const LatLng(40.9709, -5.6681),
+      infoWindow: const InfoWindow(
         title: "Río Tormes",
         snippet:
             "El río Tormes es un afluente del Duero y discurre por el centro de la ciudad.",
@@ -42,9 +42,9 @@ final List<Map<String, Marker>> markers = [
   },
   {
     "nombre": Marker(
-      markerId: MarkerId("Jardines de San Esteban"),
-      position: LatLng(40.9709, -5.6681),
-      infoWindow: InfoWindow(
+      markerId: const MarkerId("Jardines de San Esteban"),
+      position: const LatLng(40.9709, -5.6681),
+      infoWindow: const InfoWindow(
         title: "Jardines de San Esteban",
         snippet:
             "Los Jardines de San Esteban son un parque público ubicado en el corazón de la ciudad.",
@@ -93,6 +93,9 @@ final List<Map<String, Marker>> markers = [
 
             polylines: polylines,
             markers: markers.map((map) => map.values.first).toSet(),
+            // Se utiliza para no generar tantas peticiones al mover el mapa.
+            onCameraMove: (position) => mapBloc.mapCenter = position.target,
+
           ),
         ));
   }

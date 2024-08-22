@@ -29,6 +29,12 @@ class _ManualMarkerBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    // Importamos searchbloc para confirmar destino y generar ruta
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+    // importamos el bloc de la localización para saber posición de usuario.
+    final locationBloc = BlocProvider.of<LocationBloc>(context);
+    // Importamos mapBloc para obtener el valor central del mapa
+    final mapBloc = BlocProvider.of<MapBloc>(context);
 
     return SizedBox(
       width: size.width,
@@ -65,8 +71,17 @@ class _ManualMarkerBody extends StatelessWidget {
                   height: 50,
                   // Bordes redondeados
                   shape: const StadiumBorder(),
-                  onPressed: () {
-                    // TODO confirmar ubicación.
+                  onPressed: () async{
+                    // TODO: LOADING
+                    // start: posición del usuario o primer punto de la ruta:
+                    final start = locationBloc.state.lastKnownLocation;
+                    // si no hay ubicación cancela.
+                    if (start == null) return;
+                    // end: valor central del mapa desde el mapbloc
+                    final end = mapBloc.mapCenter;
+                    if (end == null) return;
+
+                    await searchBloc.getCoorsStartToEnd(start, end);
                   },
                   child: const Text(
                     'Confirmar destino',

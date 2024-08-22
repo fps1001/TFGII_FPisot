@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/blocs/blocs.dart';
 
 import 'package:project_app/screens/screens.dart';
+import 'package:project_app/services/services.dart';
 
 void main() {
   runApp(MultiBlocProvider(
@@ -19,8 +20,10 @@ void main() {
               locationBloc: BlocProvider.of<LocationBloc>(
                   context))), // Gestión de controlador de mapa.
       BlocProvider(
-          create: (context) =>
-              SearchBloc()), // Indica si se quiere hacer una busqueda manual o no.
+          create: (context) => SearchBloc(
+              // Instancia un trafficService que necesita para rutas.
+              trafficService:
+                  TrafficService())), // Indica si se quiere hacer una busqueda manual o no.
     ],
     child: const ProjectApp(),
   ));
