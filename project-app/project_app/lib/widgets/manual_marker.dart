@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +15,7 @@ class ManualMarker extends StatelessWidget {
         return state.displayManualMarker
             ? const _ManualMarkerBody()
             // Sizebox vacío por eficiencia en vez de contenedor (no puede ser constante).
-            : SizedBox();
+            : const SizedBox();
       },
     );
   }
@@ -45,12 +43,12 @@ class _ManualMarkerBody extends StatelessWidget {
           const Positioned(
             top: 70,
             left: 20,
-            child: _Btn_back(),
+            child: _BtnBack(),
           ),
           Center(
             // Va a centrar el marcador en la pantalla con el widget transform.
             child: Transform.translate(
-              offset: Offset(0, -22),
+              offset: const Offset(0, -22),
               child: BounceInDown(
                 from: 100,
                 child: const Icon(Icons.location_on_rounded, size: 60),
@@ -71,7 +69,7 @@ class _ManualMarkerBody extends StatelessWidget {
                   height: 50,
                   // Bordes redondeados
                   shape: const StadiumBorder(),
-                  onPressed: () async{
+                  onPressed: () async {
                     // TODO: LOADING
                     // start: posición del usuario o primer punto de la ruta:
                     final start = locationBloc.state.lastKnownLocation;
@@ -96,8 +94,8 @@ class _ManualMarkerBody extends StatelessWidget {
   }
 }
 
-class _Btn_back extends StatelessWidget {
-  const _Btn_back();
+class _BtnBack extends StatelessWidget {
+  const _BtnBack();
 
   @override
   Widget build(BuildContext context) {

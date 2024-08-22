@@ -13,6 +13,8 @@ class TrafficService {
     final url = '$_baseTrafficUrl/driving/$coorsString';
 
     // TODO Configurar para mandar tokens y completar petición.
+  // Uso interceptores de Dio: intercepta cada petición que va a salir de http: 
+
     final resp = await _dioTraffic.get(url);
 
     return resp.data;

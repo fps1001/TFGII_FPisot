@@ -24,6 +24,7 @@ if (flutterVersionName == null) {
 }
 
 def googleApiKey = localProperties.getProperty("googleApiKey") // Cargar la API Key desde local.properties
+def mapboxApiKey = localProperties.getProperty("mapboxApiKey")
 
 android {
     namespace = "com.example.project_app"
@@ -46,7 +47,10 @@ android {
         versionName = flutterVersionName
 
         // Agrega la clave API a los placeholders del manifiesto
-        manifestPlaceholders = [googleApiKey: googleApiKey]
+        manifestPlaceholders = [
+            googleApiKey: googleApiKey, 
+            mapboxApiKey: mapboxApiKey
+        ]
     }
 
     buildTypes {
