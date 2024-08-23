@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
+import 'package:project_app/models/models.dart';
 
 part 'map_event.dart';
 part 'map_state.dart';
@@ -28,6 +29,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         (event, emit) => emit(state.copyWith(isFollowingUser: false)));
     // Cuando recibo un evento de tipo OnUpdateUserPolylinesEvent emite un nuevo estado.
     on<OnUpdateUserPolylinesEvent>(_onPolylineNewPoint);
+    // Cuando recibo una nueva polilínea a dibujar emite un nuevo estado al que le pasa la nueva polilínea.
+    on<OnDisplayPolylinesEvent>(
+        (event, emit) => emit(state.copyWith(polylines: event.polylines)));
+
     // Cuando recibo un evento de tipo OnToggleShowUserRouteEvent emite un nuevo estado.
     on<OnToggleShowUserRouteEvent>((event, emit) =>
         emit(state.copyWith(showUserRoute: !state.showUserRoute)));
@@ -56,6 +61,25 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       //_mapController!.setMapStyle(jsonEncode(retroMapTheme));
       emit(state.copyWith(isMapInitialized: true));
     }
+  }
+
+  // Metodo que recibe una polilínea y la emite en un nuevo evento.
+  void drawRoutePolyline(RouteDestination destination) async {
+    final myRoute = Polyline(
+      polylineId: const PolylineId('route'),
+      color: Colors.teal,
+      width: 5,
+      points: destination.points,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap,
+    );
+
+    // Transformación de ruta para evento:
+    // polilineas actuales. hay que copiarlas
+    final currentPolylines = Map<String, Polyline>.from(state.polylines);
+    currentPolylines['route'] = myRoute;
+
+    add(OnDisplayPolylinesEvent(currentPolylines));
   }
 
   void moveCamera(LatLng latLng) {

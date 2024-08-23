@@ -1,12 +1,11 @@
 part of 'map_bloc.dart';
 
-abstract class MapEvent extends Equatable{
+abstract class MapEvent extends Equatable {
   const MapEvent();
 
   @override
   List<Object> get props => [];
 }
-
 
 // Recibe el controlador del mapa cuando se crea.
 class OnMapInitializedEvent extends MapEvent {
@@ -16,7 +15,6 @@ class OnMapInitializedEvent extends MapEvent {
 
   @override
   List<Object> get props => [mapController];
-
 }
 
 // Cambia el estado de seguir al usuario.
@@ -32,3 +30,11 @@ class OnUpdateUserPolylinesEvent extends MapEvent {
 
 //Muestra la ruta del usuario o la oculta.
 class OnToggleShowUserRouteEvent extends MapEvent {}
+
+// Muestra una polilínea nueva:
+class OnDisplayPolylinesEvent extends MapEvent {
+  // Debe recibir lo mismo que user polylinesEvent pero con nuevo modelo:
+  final Map<String, Polyline> polylines;
+
+  const OnDisplayPolylinesEvent(this.polylines);
+}
