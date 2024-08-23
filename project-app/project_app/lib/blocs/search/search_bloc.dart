@@ -20,6 +20,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   // Se llamará cuando confirme destino
   // En el futuro será al activar o desactivar marcadores o al indicar una destino
   Future getCoorsStartToEnd(LatLng start, LatLng end) async {
+    // resp es de tipo del modelo del servicio: TrafficResponse
     final resp = await trafficService.getCoorsStartToEnd(start, end);
+
+    return resp;
   }
 }
