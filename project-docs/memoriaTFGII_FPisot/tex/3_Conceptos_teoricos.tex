@@ -18,12 +18,14 @@ En la sección de prototipos de este trabajo se observa como se va construyendo 
 \subsubsection{Zero-shot y Few-shot learning}
 \textbf{Zero-shot} se trata de una técnica en la que el usuario no facilita al modelo ningún ejemplo de cómo realizar una tarea. El \acrshort{llm} por tanto interpreta basado en el contexto y su propio entrenamiento lo que se ha requerido y responde acorde a estos datos. Esta técnica se usa cuando lo que se prioriza es la rapidez del modelo frente a la precisión de la salida aportada. Cuando se requiere un trabajo de aproximación mayor una técnica que siempre mejora la conversación con el modelo es la técnica \textbf{few-shot learning}: se facilita en el prompt al modelo unos ejemplos de lo que se quiere obtener. Para comprenderlo mejor veamos el siguiente ejemplo de prompt: 
 \begin{verbatim}
-	Clasifica los siguientes comentarios como Positivos, Negativos o Neutros:
+	Clasifica los siguientes comentarios como Positivos, 
+	Negativos o Neutros:
 	
 	1. "El producto llegó a tiempo y en perfectas condiciones."
 	Clasificación: Positivo
 	
-	2. "El artículo no cumplió con mis expectativas, estoy decepcionado."
+	2. "El artículo no cumplió con mis expectativas, 
+	estoy decepcionado."
 	Clasificación: Negativo
 	
 	3. "La atención al cliente fue aceptable, pero podría mejorar."

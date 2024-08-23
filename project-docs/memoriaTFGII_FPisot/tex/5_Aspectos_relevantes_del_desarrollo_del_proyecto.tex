@@ -21,10 +21,17 @@ A la hora de obtener información que procesar por el método \acrshort{rag} se 
 
 \section{Elección de servicios Google sobre tecnología OSM}
 \label{sec:google_over_osm}
-Desde un comienzo el proyecto quería que usara código abierto pues comprendo que su filosofía se alinéa mejor con los valores aprendidos en la Universidad donde se promociona el uso de herramientas que no supongan un coste para el alumno, se fomenta la  se fomenta la colaboración y una forma de trabajar en la que la potencia esté en la colaboración entre usuarios.
+Desde un comienzo el proyecto quería que usara\textbf{ código abierto} pues comprendo que su filosofía se alinea mejor con los valores aprendidos en la Universidad donde se promociona el uso de herramientas que no supongan un coste para el alumno, se fomenta su uso evitando la posible discriminación económica y una forma de trabajar colaborativa.
 
 De manera renuente decidí cambiar los servicios necesarios para la visualización y gestión de marcadores y rutas a los establecidos por Google. Los motivos que propiciaron este gran cambio fueron los siguientes:
-- Soporte de un gigante tecnológico: las herramientas de código abierto aunque tienen un gran seguimiento por la comunidad no pueden competir con la documentación, ejemplos de desarrolladores, tecnología de uso, etc. de una potencia como Google.
-- Flutter forma parte de Google: lo que supone una integración nativa que hace que el funcionamiento y robustez de las herramientas usadas 
-- Versiones de herramientas de terceros con mínimo soporte: 
-\subsection{Aclaraciones en cuanto al coste de los servicios Google}
+\begin{itemize}
+	\item \textbf{Soporte de un gigante tecnológico}: las herramientas de código abierto aunque algunas tienen un gran seguimiento por la comunidad no pueden competir con la documentación, ejemplos de desarrolladores, tecnología de uso, etc. de una potencia como Google.
+	\item \textbf{Integración}: Flutter forma parte de Google, lo que supone una integración nativa que hace de su funcionamiento y robustez una de las herramientas usadas.
+	\item Versiones de complementos creadas por terceros con mínimo soporte: cuando se buscaba una solución de rutas como \textbf{OSRM: Open Street Route Map}, las peticiones GET había que procesarlas y mapearlas manualmente o usar paquetes de terceros que ya lo habían diseñado, sin embargo estos paquetes aunque faciliten el trabajo suponen también un riesgo ya que son más susceptibles a dejar de funcionar con los cambios de versiones o con la falta de mantenimiento por parte de sus desarrolladores. Un escenario difícil de contemplar si hablamos de interceptores, una clase nativa del paquete \textbf{dio} un \textbf{"flutter favorite"} (así marca Flutter en pub.dev los paquetes favoritos) con soporte nativo que es la manera en que se ha decidido trabajar desde soluciones Google.
+\end{itemize} 
+
+
+\section{Elección de servicios Geocoding MapBox sobre servicios Google}
+Los servicios de geocoding son herramientas que permiten convertir direcciones físicas (como "Calle Mayor, Ciudad, País") en coordenadas geográficas (latitud y longitud), y viceversa. Esto es esencial para aplicaciones que requieren localización geográfica precisa, como mapas interactivos, planificación de rutas, análisis espacial, o cualquier función que dependa de ubicaciones específicas y los puntos de interés alrededor de una ubicación. Estos servicios en Google se llaman: "Google Places" y el uso de sus tokens o API's suponen un coste desde el momento 0. A diferencia del resto de servicios éstos se empiezan a cobrar hasta los 1000 usos al mes. 
+Para una versión inicial de la aplicación de este \acrshort{tfg} se decidió usar MapBox, una empresa de mapas con un soporte igual de bueno que Google pero que no incurre gastos en volúmenes de trabajo bajos o moderados. 
+En etapas de desarrollo posteriores o con una aplicación ya establecida y con un uso elevado de peticiones siempre se puede cambiar a Google Places ya que la implementación como pasaba con el resto de servicios es nativa y por tanto muy sencilla de llevar a cabo, si se quiere conseguir unificación de servicios y costes. Desde el punto de vista de la programación solo cambia la manera de acceder a los datos pues las coordenadas se presentan primero con longitud y después con latitud, es decir, de manera inversa a los servicios Google. La modularidad del código realizado y el tratamiento de interceptores hace que un futuro cambio de servicios y peticiones GET sean facilmente implementados.
