@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:project_app/blocs/blocs.dart';
+import 'package:project_app/helpers/helpers.dart';
 
 class ManualMarker extends StatelessWidget {
   const ManualMarker({super.key});
@@ -70,7 +71,6 @@ class _ManualMarkerBody extends StatelessWidget {
                   // Bordes redondeados
                   shape: const StadiumBorder(),
                   onPressed: () async {
-                    // TODO: LOADING
                     // start: posición del usuario o primer punto de la ruta:
                     final start = locationBloc.state.lastKnownLocation;
                     // si no hay ubicación cancela.
@@ -79,10 +79,18 @@ class _ManualMarkerBody extends StatelessWidget {
                     final end = mapBloc.mapCenter;
                     if (end == null) return;
 
+                    // Mensaje de carga:
+                    showLoadingMessage(context);
+
                     final destination =
                         await searchBloc.getCoorsStartToEnd(start, end);
                     // Se llama a pintar nueva polilínea:
-                    mapBloc.drawRoutePolyline(destination);
+                    await mapBloc.drawRoutePolyline(destination);
+
+                    // Quitamos barra
+                    searchBloc.add(OnDisactivateManualMarkerEvent());
+                    // Cierra la ventana de carga.
+                    Navigator.pop(context);
                   },
                   child: const Text(
                     'Confirmar destino',

@@ -64,7 +64,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   // Metodo que recibe una polilínea y la emite en un nuevo evento.
-  void drawRoutePolyline(RouteDestination destination) async {
+  Future drawRoutePolyline(RouteDestination destination) async {
     final myRoute = Polyline(
       polylineId: const PolylineId('route'),
       color: Colors.teal,
