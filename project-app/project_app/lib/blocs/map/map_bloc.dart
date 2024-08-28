@@ -83,7 +83,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void moveCamera(LatLng latLng) {
-    _mapController!.animateCamera(CameraUpdate.newLatLng(latLng));
+    final cameraUpdate = CameraUpdate.newLatLng(latLng);
+    _mapController?.animateCamera(cameraUpdate);
   }
 
   //Función para que al tocar el botón se centre en el usuario sin esperar al cambio de localización.
