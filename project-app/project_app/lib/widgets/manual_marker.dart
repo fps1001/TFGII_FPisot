@@ -23,7 +23,7 @@ class ManualMarker extends StatelessWidget {
 }
 
 class _ManualMarkerBody extends StatelessWidget {
-  const _ManualMarkerBody({super.key});
+  const _ManualMarkerBody();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _ManualMarkerBody extends StatelessWidget {
 
     return SizedBox(
       width: size.width,
-      height: 150,
+      height: size.height,
       // Widget de animación de caida de marcador.
       child: Stack(
         children: [

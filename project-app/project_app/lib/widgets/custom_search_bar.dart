@@ -43,17 +43,19 @@ class _CustomSearchBarBody extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 30),
         width: double.infinity,
         child: GestureDetector(
-          onTap: () async {
-            final result = await showSearch(
-                context: context, delegate: SearchDestinationDelegate());
-            // si el objeto no vuelve no hay que hacer nada.
-            if (result == null) return;
+            onTap: () async {
+              final result = await showSearch(
+                  context: context, delegate: SearchDestinationDelegate());
+              // si el objeto no vuelve no hay que hacer nada.
+              if (result == null) return;
 
-            // ignore: use_build_context_synchronously
-            onSearchResults(context, result);
-          },
-          child: Container(
+              // ignore: use_build_context_synchronously
+              onSearchResults(context, result);
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+              child: const Text('¿Dónde quieres ir?',
+                  style: TextStyle(color: Colors.black87)),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(100),
@@ -63,11 +65,7 @@ class _CustomSearchBarBody extends StatelessWidget {
                         blurRadius: 5,
                         offset: Offset(0, 5))
                   ]),
-              child: const Text(
-                '¿Qué lugar quieres visitar?',
-                style: TextStyle(color: Colors.black87),
-              )),
-        ),
+            )),
       ),
     );
   }
