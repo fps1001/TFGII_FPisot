@@ -5,22 +5,21 @@ import 'package:project_app/services/services.dart';
 
 class TrafficService {
   final Dio _dioTraffic;
-  final Dio _dioPlaces;
+  //final Dio _dioPlaces;
 
-  final String _baseTrafficUrl =
-      'https://api.mapbox.com/directions/v5/mapbox/walking/';
-  final String _basePlacesUrl =
-      'https://api.mapbox.com/search/searchbox/v1/suggest';
+  final String _baseTrafficUrl = 'https://api.mapbox.com/directions/v5/mapbox';
+  //final String _basePlacesUrl =       'https://api.mapbox.com/search/searchbox/v1/suggest';
 
   TrafficService()
-      : _dioTraffic = Dio()..interceptors.add(TrafficInterceptor()),
-        _dioPlaces = Dio()..interceptors.add(PlacesInterceptor());
+      : _dioTraffic = Dio()..interceptors.add(TrafficInterceptor());
+  // _dioPlaces = Dio()..interceptors.add(PlacesInterceptor());
 
   Future<TrafficResponse> getCoorsStartToEnd(LatLng start, LatLng end) async {
+    // Añadimos lo que si varía de la petición (el resto se gestiona en el interceptor)
+    // Habría que cambiar el orden de lat-long si fuese servicio de google.
     final coorsString =
         '${start.longitude},${start.latitude};${end.longitude},${end.latitude}';
-    final url = '$_baseTrafficUrl/driving/$coorsString';
-    print(url);
+    final url = '$_baseTrafficUrl/walking/$coorsString';
     // TODO Configurar para mandar tokens y completar petición.
     // Uso interceptores de Dio: intercepta cada petición que va a salir de http:
 
@@ -32,17 +31,18 @@ class TrafficService {
     return data;
   }
 
+  // MapBox Places
   Future getResultByQuery(LatLng proximity, String query) async {
     if (query.isEmpty) return [];
 
-    final url = '$_basePlacesUrl?q=';
+    //final url = '$_basePlacesUrl?q=';
 
-    final resp = await _dioTraffic.get(url, queryParameters: {
-      'proximity': '${proximity.longitude},${proximity.latitude}'
-    });
+    //final resp = await _dioTraffic.get(url, queryParameters: {
+    //'proximity': '${proximity.longitude},${proximity.latitude}'
+    //});
     // De la respuesta hay que obtener el modelo.
 
-    final placesResponse = PlacesResponse.fromJson(resp.data);
+    //final placesResponse = PlacesResponse.fromJson(resp.data);
 
     return;
     // placesResponse.features; // Lugares => Features

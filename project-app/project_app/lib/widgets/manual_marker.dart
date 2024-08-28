@@ -79,8 +79,8 @@ class _ManualMarkerBody extends StatelessWidget {
                     final end = mapBloc.mapCenter;
                     if (end == null) return;
 
-                    // Mensaje de carga:
-                    showLoadingMessage(context);
+                    //TODO Mensaje de carga:
+                    //showLoadingMessage(context);
 
                     final destination =
                         await searchBloc.getCoorsStartToEnd(start, end);

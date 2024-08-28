@@ -12,9 +12,6 @@ class OnMapInitializedEvent extends MapEvent {
   final GoogleMapController mapController;
 
   const OnMapInitializedEvent(this.mapController);
-
-  @override
-  List<Object> get props => [mapController];
 }
 
 // Cambia el estado de seguir al usuario.

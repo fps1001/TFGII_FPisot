@@ -79,7 +79,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines['route'] = myRoute;
 
-    add(OnDisplayPolylinesEvent(currentPolylines));
+    //add(OnDisplayPolylinesEvent(currentPolylines));
+    emit(state.copyWith(polylines: currentPolylines));
   }
 
   void moveCamera(LatLng latLng) {
