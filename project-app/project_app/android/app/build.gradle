@@ -23,8 +23,21 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
-def googleApiKey = localProperties.getProperty("googleApiKey") // Cargar la API Key desde local.properties
-def mapboxApiKey = localProperties.getProperty("mapboxApiKey")
+def getEnvVariable(String name) {
+    Properties properties = new Properties()
+def envFile = file("${rootProject.projectDir}/../.env")
+    if (envFile.exists()) {
+        envFile.withInputStream { stream ->
+            properties.load(stream)
+        }
+    } else {
+        println "Warning: .env file not found at ${envFile.path}"
+    }
+    return properties[name]
+}
+
+
+
 
 android {
     namespace = "com.example.project_app"
@@ -47,9 +60,9 @@ android {
         versionName = flutterVersionName
 
         // Agrega la clave API a los placeholders del manifiesto
-        manifestPlaceholders = [
-            googleApiKey: googleApiKey, 
-            mapboxApiKey: mapboxApiKey
+ manifestPlaceholders = [
+            googleApiKey: getEnvVariable("GOOGLE_API_KEY") ?: "",
+            mapboxApiKey: getEnvVariable("MAPBOX_API_KEY") ?: ""
         ]
     }
 

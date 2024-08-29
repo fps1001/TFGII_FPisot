@@ -13,14 +13,10 @@
         android:icon="@mipmap/ic_launcher">
 
         <!-- Meta-data for Google Maps API Key -->
-        <meta-data 
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${googleApiKey}" />
+<meta-data 
+    android:name="com.google.android.geo.API_KEY"
+    android:value="${googleApiKey}" />
 
-        <!-- Meta-data for Mapbox API Key -->
-        <meta-data 
-            android:name="com.mapbox.token"
-            android:value="${mapboxApiKey}" />
 
         <activity
             android:name=".MainActivity"

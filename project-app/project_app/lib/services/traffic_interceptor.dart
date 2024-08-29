@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-// No funciona con variable de entorno.
-const accessToken = String.fromEnvironment('MAPBOX_ACCESS_TOKEN');
-//const accessToken =     '';
+String accessToken = dotenv.env['MAPBOX_API_KEY'] ?? '';
 
 class TrafficInterceptor extends Interceptor {
   @override

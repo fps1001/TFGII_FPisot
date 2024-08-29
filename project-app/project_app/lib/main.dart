@@ -1,11 +1,21 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:project_app/blocs/blocs.dart';
 
 import 'package:project_app/screens/screens.dart';
 import 'package:project_app/services/services.dart';
 
-void main() {
+void main() async {
+  try {
+    await dotenv.load(fileName: '.env');
+  } catch (e) {
+    if (kDebugMode) {
+      print("Error específico: $e");
+    }
+  }
+
   runApp(MultiBlocProvider(
     // En vez de hacer runApp se añade un multiblocprovider para gestionar los blocs de la app.
     providers: [
