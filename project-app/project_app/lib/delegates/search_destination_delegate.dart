@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/models/models.dart';
 
 /// [SearchDestinationDelegate] es una clase que extiende [SearchDelegate]
@@ -43,7 +45,16 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   /// Este método construye los resultados de la búsqueda basados en la consulta del usuario.
   @override
   Widget buildResults(BuildContext context) {
-    return const Text('buildResults');
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+    // La proximidad la voy a obtener del bloc location: lastknownlocation.
+    final proximity =
+        BlocProvider.of<LocationBloc>(context).state.lastKnownLocation!;
+
+    searchBloc.getPlacesByQuery(proximity, query);
+
+    return BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
+      return const Text('Aquí irán los resultados.');
+    });
   }
 
   /// Este método construye las sugerencias de búsqueda mientras el usuario escribe.

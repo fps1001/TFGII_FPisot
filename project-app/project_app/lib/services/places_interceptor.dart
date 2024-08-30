@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-const placesAccessToken = String.fromEnvironment('MAPBOX_ACCESS_TOKEN');
+String placesAccessToken = dotenv.env['MAPBOX_API_KEY'] ?? '';
 
 class PlacesInterceptor extends Interceptor {
   @override

@@ -38,6 +38,7 @@ class Feature {
   final String id;
   final String type;
   final List<String> placeType;
+  final int relevance;
   final Properties properties;
   final String textEs;
   final Language? languageEs;
@@ -56,6 +57,7 @@ class Feature {
     required this.id,
     required this.type,
     required this.placeType,
+    required this.relevance,
     required this.properties,
     required this.textEs,
     this.languageEs,
@@ -79,6 +81,7 @@ class Feature {
         id: json["id"],
         type: json["type"],
         placeType: List<String>.from(json["place_type"].map((x) => x)),
+        relevance: json["relevance"],
         properties: Properties.fromJson(json["properties"]),
         textEs: json["text_es"],
         languageEs: languageValues.map[json["language_es"]]!,
@@ -101,6 +104,7 @@ class Feature {
         "id": id,
         "type": type,
         "place_type": List<dynamic>.from(placeType.map((x) => x)),
+        "relevance": relevance,
         "properties": properties.toJson(),
         "text_es": textEs,
         "language_es": languageValues.reverse[languageEs],

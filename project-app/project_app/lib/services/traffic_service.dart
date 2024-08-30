@@ -39,19 +39,30 @@ class TrafficService {
     }
   }
 
-  //Devuelve el listado de sitios de las busquedas, pasandole la coordenada que funcionará de proximidad de petición.
+  // Devuelve el listado de sitios de las búsquedas, pasándole la coordenada que funcionará como proximidad de la petición.
   Future<List<Feature>> getResultsByQuery(
       LatLng proximity, String query) async {
     if (query.isEmpty) {
       return [];
     }
+
     final url = '$_basePlacesUrl/$query.json';
 
-    final resp = await _dioPlaces.get(url, queryParameters: {
-      'proximity': '${proximity.longitude}, ${proximity.latitude}'
-    });
+    try {
+      final resp = await _dioPlaces.get(url, queryParameters: {
+        'proximity': '${proximity.longitude},${proximity.latitude}',
+      });
 
-    final placesResponse = PlacesResponse.fromJson(resp.data);
-    return placesResponse.features; // lugares en mapbox se llaman Features.
+      if (resp.data == null || resp.data['features'] == null) {
+        throw AppException("No places found in response", url: url);
+      }
+
+      final placesResponse = PlacesResponse.fromJson(resp.data);
+      return placesResponse.features;
+    } on DioException catch (e) {
+      throw DioExceptions.handleDioError(e, url: url);
+    } catch (e) {
+      throw AppException("An unknown error occurred", url: url);
+    }
   }
 }
