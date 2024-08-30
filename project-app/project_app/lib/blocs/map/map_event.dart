@@ -32,6 +32,6 @@ class OnToggleShowUserRouteEvent extends MapEvent {}
 class OnDisplayPolylinesEvent extends MapEvent {
   // Debe recibir lo mismo que user polylinesEvent pero con nuevo modelo:
   final Map<String, Polyline> polylines;
-
+  // Constructor.
   const OnDisplayPolylinesEvent(this.polylines);
 }

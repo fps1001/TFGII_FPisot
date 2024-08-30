@@ -68,7 +68,7 @@ class _ManualMarkerBody extends StatelessWidget {
                   color: Colors.black,
                   elevation: 0,
                   height: 50,
-                  // Bordes redondeados
+// Bordes redondeados
                   shape: const StadiumBorder(),
                   onPressed: () async {
                     // start: posición del usuario o primer punto de la ruta:
@@ -79,18 +79,19 @@ class _ManualMarkerBody extends StatelessWidget {
                     final end = mapBloc.mapCenter;
                     if (end == null) return;
 
-                    //TODO Mensaje de carga:
-                    //showLoadingMessage(context);
-
-                    final destination =
-                        await searchBloc.getCoorsStartToEnd(start, end);
-                    // Se llama a pintar nueva polilínea:
-                    await mapBloc.drawRoutePolyline(destination);
+                    //Mensaje de carga:
+                    showLoadingMessage(context);
 
                     // Quitamos barra
                     searchBloc.add(OnDisactivateManualMarkerEvent());
                     // Cierra la ventana de carga.
                     Navigator.pop(context);
+
+                    // Calcula la polilínea a mostrar por el mapbloc
+                    final destination =
+                        await searchBloc.getCoorsStartToEnd(start, end);
+                    // Se llama a pintar nueva polilínea:
+                    await mapBloc.drawRoutePolyline(destination);
                   },
                   child: const Text(
                     'Confirmar destino',

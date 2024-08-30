@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-final placesAccessToken = const String.fromEnvironment('MAPBOX_ACCESS_TOKEN');
+const placesAccessToken = String.fromEnvironment('MAPBOX_ACCESS_TOKEN');
 
 class PlacesInterceptor extends Interceptor {
   @override
