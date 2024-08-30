@@ -1,309 +1,249 @@
-// ignore_for_file: constant_identifier_names
-
 import 'dart:convert';
 
 class PlacesResponse {
-    final List<Suggestion> suggestions;
-    final String attribution;
-    final String responseId;
-    final String url;
+  final String type;
+  final List<String> query;
+  final List<Feature> features;
+  final String attribution;
 
-    PlacesResponse({
-        required this.suggestions,
-        required this.attribution,
-        required this.responseId,
-        required this.url,
-    });
+  PlacesResponse({
+    required this.type,
+    required this.query,
+    required this.features,
+    required this.attribution,
+  });
 
-    factory PlacesResponse.fromRawJson(String str) => PlacesResponse.fromJson(json.decode(str));
+  factory PlacesResponse.fromRawJson(String str) =>
+      PlacesResponse.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory PlacesResponse.fromJson(Map<String, dynamic> json) => PlacesResponse(
-        suggestions: List<Suggestion>.from(json["suggestions"].map((x) => Suggestion.fromJson(x))),
+  factory PlacesResponse.fromJson(Map<String, dynamic> json) => PlacesResponse(
+        type: json["type"],
+        query: List<String>.from(json["query"].map((x) => x)),
+        features: List<Feature>.from(
+            json["features"].map((x) => Feature.fromJson(x))),
         attribution: json["attribution"],
-        responseId: json["response_id"],
-        url: json["url"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
-        "suggestions": List<dynamic>.from(suggestions.map((x) => x.toJson())),
+  Map<String, dynamic> toJson() => {
+        "type": type,
+        "query": List<dynamic>.from(query.map((x) => x)),
+        "features": List<dynamic>.from(features.map((x) => x.toJson())),
         "attribution": attribution,
-        "response_id": responseId,
-        "url": url,
-    };
+      };
 }
 
-class Suggestion {
-    final String name;
-    final String mapboxId;
-    final String featureType;
-    final String address;
-    final String fullAddress;
-    final String placeFormatted;
-    final Context context;
-    final String language;
-    final String maki;
-    final List<String> poiCategory;
-    final List<String> poiCategoryIds;
-    final ExternalIds externalIds;
-    final Metadata metadata;
-    final int distance;
-    final String operationalStatus;
+class Feature {
+  final String id;
+  final String type;
+  final List<String> placeType;
+  final Properties properties;
+  final String textEs;
+  final Language? languageEs;
+  final String placeNameEs;
+  final String text;
+  final Language? language;
+  final String placeName;
+  final List<double>? bbox;
+  final List<double> center;
+  final Geometry geometry;
+  final List<Context> context;
+  final String? matchingText;
+  final String? matchingPlaceName;
 
-    Suggestion({
-        required this.name,
-        required this.mapboxId,
-        required this.featureType,
-        required this.address,
-        required this.fullAddress,
-        required this.placeFormatted,
-        required this.context,
-        required this.language,
-        required this.maki,
-        required this.poiCategory,
-        required this.poiCategoryIds,
-        required this.externalIds,
-        required this.metadata,
-        required this.distance,
-        required this.operationalStatus,
-    });
+  Feature({
+    required this.id,
+    required this.type,
+    required this.placeType,
+    required this.properties,
+    required this.textEs,
+    this.languageEs,
+    required this.placeNameEs,
+    required this.text,
+    this.language,
+    required this.placeName,
+    this.bbox,
+    required this.center,
+    required this.geometry,
+    required this.context,
+    this.matchingText,
+    this.matchingPlaceName,
+  });
 
-    factory Suggestion.fromRawJson(String str) => Suggestion.fromJson(json.decode(str));
+  factory Feature.fromRawJson(String str) => Feature.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory Suggestion.fromJson(Map<String, dynamic> json) => Suggestion(
-        name: json["name"],
-        mapboxId: json["mapbox_id"],
-        featureType: json["feature_type"],
-        address: json["address"],
-        fullAddress: json["full_address"],
-        placeFormatted: json["place_formatted"],
-        context: Context.fromJson(json["context"]),
-        language: json["language"],
-        maki: json["maki"],
-        poiCategory: List<String>.from(json["poi_category"].map((x) => x)),
-        poiCategoryIds: List<String>.from(json["poi_category_ids"].map((x) => x)),
-        externalIds: ExternalIds.fromJson(json["external_ids"]),
-        metadata: Metadata.fromJson(json["metadata"]),
-        distance: json["distance"],
-        operationalStatus: json["operational_status"],
-    );
+  factory Feature.fromJson(Map<String, dynamic> json) => Feature(
+        id: json["id"],
+        type: json["type"],
+        placeType: List<String>.from(json["place_type"].map((x) => x)),
+        properties: Properties.fromJson(json["properties"]),
+        textEs: json["text_es"],
+        languageEs: languageValues.map[json["language_es"]]!,
+        placeNameEs: json["place_name_es"],
+        text: json["text"],
+        language: languageValues.map[json["language"]]!,
+        placeName: json["place_name"],
+        bbox: json["bbox"] == null
+            ? []
+            : List<double>.from(json["bbox"]!.map((x) => x?.toDouble())),
+        center: List<double>.from(json["center"].map((x) => x?.toDouble())),
+        geometry: Geometry.fromJson(json["geometry"]),
+        context:
+            List<Context>.from(json["context"].map((x) => Context.fromJson(x))),
+        matchingText: json["matching_text"],
+        matchingPlaceName: json["matching_place_name"],
+      );
 
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "mapbox_id": mapboxId,
-        "feature_type": featureType,
-        "address": address,
-        "full_address": fullAddress,
-        "place_formatted": placeFormatted,
-        "context": context.toJson(),
-        "language": language,
-        "maki": maki,
-        "poi_category": List<dynamic>.from(poiCategory.map((x) => x)),
-        "poi_category_ids": List<dynamic>.from(poiCategoryIds.map((x) => x)),
-        "external_ids": externalIds.toJson(),
-        "metadata": metadata.toJson(),
-        "distance": distance,
-        "operational_status": operationalStatus,
-    };
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "type": type,
+        "place_type": List<dynamic>.from(placeType.map((x) => x)),
+        "properties": properties.toJson(),
+        "text_es": textEs,
+        "language_es": languageValues.reverse[languageEs],
+        "place_name_es": placeNameEs,
+        "text": text,
+        "language": languageValues.reverse[language],
+        "place_name": placeName,
+        "bbox": bbox == null ? [] : List<dynamic>.from(bbox!.map((x) => x)),
+        "center": List<dynamic>.from(center.map((x) => x)),
+        "geometry": geometry.toJson(),
+        "context": List<dynamic>.from(context.map((x) => x.toJson())),
+        "matching_text": matchingText,
+        "matching_place_name": matchingPlaceName,
+      };
 }
 
 class Context {
-    final Country country;
-    final Place postcode;
-    final Place place;
-    final Address? address;
-    final Street street;
+  final String id;
+  final String mapboxId;
+  final String? wikidata;
+  final String? shortCode;
+  final String textEs;
+  final Language? languageEs;
+  final String text;
+  final Language? language;
 
-    Context({
-        required this.country,
-        required this.postcode,
-        required this.place,
-        this.address,
-        required this.street,
-    });
+  Context({
+    required this.id,
+    required this.mapboxId,
+    this.wikidata,
+    this.shortCode,
+    required this.textEs,
+    this.languageEs,
+    required this.text,
+    this.language,
+  });
 
-    factory Context.fromRawJson(String str) => Context.fromJson(json.decode(str));
+  factory Context.fromRawJson(String str) => Context.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory Context.fromJson(Map<String, dynamic> json) => Context(
-        country: Country.fromJson(json["country"]),
-        postcode: Place.fromJson(json["postcode"]),
-        place: Place.fromJson(json["place"]),
-        address: json["address"] == null ? null : Address.fromJson(json["address"]),
-        street: Street.fromJson(json["street"]),
-    );
+  factory Context.fromJson(Map<String, dynamic> json) => Context(
+        id: json["id"],
+        mapboxId: json["mapbox_id"],
+        wikidata: json["wikidata"],
+        shortCode: json["short_code"],
+        textEs: json["text_es"],
+        languageEs: languageValues.map[json["language_es"]]!,
+        text: json["text"],
+        language: languageValues.map[json["language"]]!,
+      );
 
-    Map<String, dynamic> toJson() => {
-        "country": country.toJson(),
-        "postcode": postcode.toJson(),
-        "place": place.toJson(),
-        "address": address?.toJson(),
-        "street": street.toJson(),
-    };
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "mapbox_id": mapboxId,
+        "wikidata": wikidata,
+        "short_code": shortCode,
+        "text_es": textEs,
+        "language_es": languageValues.reverse[languageEs],
+        "text": text,
+        "language": languageValues.reverse[language],
+      };
 }
 
-class Address {
-    final String name;
-    final String addressNumber;
-    final String streetName;
+enum Language { ES }
 
-    Address({
-        required this.name,
-        required this.addressNumber,
-        required this.streetName,
-    });
+final languageValues = EnumValues({"es": Language.ES});
 
-    factory Address.fromRawJson(String str) => Address.fromJson(json.decode(str));
+class Geometry {
+  final String type;
+  final List<double> coordinates;
 
-    String toRawJson() => json.encode(toJson());
+  Geometry({
+    required this.type,
+    required this.coordinates,
+  });
 
-    factory Address.fromJson(Map<String, dynamic> json) => Address(
-        name: json["name"],
-        addressNumber: json["address_number"],
-        streetName: json["street_name"],
-    );
+  factory Geometry.fromRawJson(String str) =>
+      Geometry.fromJson(json.decode(str));
 
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "address_number": addressNumber,
-        "street_name": streetName,
-    };
+  String toRawJson() => json.encode(toJson());
+
+  factory Geometry.fromJson(Map<String, dynamic> json) => Geometry(
+        type: json["type"],
+        coordinates:
+            List<double>.from(json["coordinates"].map((x) => x?.toDouble())),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "type": type,
+        "coordinates": List<dynamic>.from(coordinates.map((x) => x)),
+      };
 }
 
-class Country {
-    final String name;
-    final String countryCode;
-    final String countryCodeAlpha3;
+class Properties {
+  final String? mapboxId;
+  final String? wikidata;
+  final String? foursquare;
+  final bool? landmark;
+  final String? address;
+  final String? category;
 
-    Country({
-        required this.name,
-        required this.countryCode,
-        required this.countryCodeAlpha3,
-    });
+  Properties({
+    this.mapboxId,
+    this.wikidata,
+    this.foursquare,
+    this.landmark,
+    this.address,
+    this.category,
+  });
 
-    factory Country.fromRawJson(String str) => Country.fromJson(json.decode(str));
+  factory Properties.fromRawJson(String str) =>
+      Properties.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory Country.fromJson(Map<String, dynamic> json) => Country(
-        name: json["name"],
-        countryCode: json["country_code"],
-        countryCodeAlpha3: json["country_code_alpha_3"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "country_code": countryCode,
-        "country_code_alpha_3": countryCodeAlpha3,
-    };
-}
-
-class Place {
-    final Id id;
-    final String name;
-
-    Place({
-        required this.id,
-        required this.name,
-    });
-
-    factory Place.fromRawJson(String str) => Place.fromJson(json.decode(str));
-
-    String toRawJson() => json.encode(toJson());
-
-    factory Place.fromJson(Map<String, dynamic> json) => Place(
-        id: idValues.map[json["id"]]!,
-        name: json["name"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "id": idValues.reverse[id],
-        "name": name,
-    };
-}
-
-enum Id {
-    D_X_JU_OM1_IE_H_BS_YZP_BD_S9_J_UMC,
-    D_X_JU_OM1_IE_H_BS_YZP_BOWV1_UMC,
-    D_X_JU_OM1_IE_H_BS_YZP_BOWVP_UMC
-}
-
-final idValues = EnumValues({
-    "dXJuOm1ieHBsYzpBdS9JUmc": Id.D_X_JU_OM1_IE_H_BS_YZP_BD_S9_J_UMC,
-    "dXJuOm1ieHBsYzpBOWV1Umc": Id.D_X_JU_OM1_IE_H_BS_YZP_BOWV1_UMC,
-    "dXJuOm1ieHBsYzpBOWVPUmc": Id.D_X_JU_OM1_IE_H_BS_YZP_BOWVP_UMC
-});
-
-class Street {
-    final String name;
-
-    Street({
-        required this.name,
-    });
-
-    factory Street.fromRawJson(String str) => Street.fromJson(json.decode(str));
-
-    String toRawJson() => json.encode(toJson());
-
-    factory Street.fromJson(Map<String, dynamic> json) => Street(
-        name: json["name"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "name": name,
-    };
-}
-
-class ExternalIds {
-    final String? safegraph;
-    final String? foursquare;
-
-    ExternalIds({
-        this.safegraph,
-        this.foursquare,
-    });
-
-    factory ExternalIds.fromRawJson(String str) => ExternalIds.fromJson(json.decode(str));
-
-    String toRawJson() => json.encode(toJson());
-
-    factory ExternalIds.fromJson(Map<String, dynamic> json) => ExternalIds(
-        safegraph: json["safegraph"],
+  factory Properties.fromJson(Map<String, dynamic> json) => Properties(
+        mapboxId: json["mapbox_id"],
+        wikidata: json["wikidata"],
         foursquare: json["foursquare"],
-    );
+        landmark: json["landmark"],
+        address: json["address"],
+        category: json["category"],
+      );
 
-    Map<String, dynamic> toJson() => {
-        "safegraph": safegraph,
+  Map<String, dynamic> toJson() => {
+        "mapbox_id": mapboxId,
+        "wikidata": wikidata,
         "foursquare": foursquare,
-    };
-}
-
-class Metadata {
-    Metadata();
-
-    factory Metadata.fromRawJson(String str) => Metadata.fromJson(json.decode(str));
-
-    String toRawJson() => json.encode(toJson());
-
-    factory Metadata.fromJson(Map<String, dynamic> json) => Metadata(
-    );
-
-    Map<String, dynamic> toJson() => {
-    };
+        "landmark": landmark,
+        "address": address,
+        "category": category,
+      };
 }
 
 class EnumValues<T> {
-    Map<String, T> map;
-    late Map<T, String> reverseMap;
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
 
-    EnumValues(this.map);
+  EnumValues(this.map);
 
-    Map<T, String> get reverse {
-            reverseMap = map.map((k, v) => MapEntry(v, k));
-            return reverseMap;
-    }
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }

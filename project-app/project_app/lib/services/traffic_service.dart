@@ -6,9 +6,15 @@ import 'package:project_app/services/services.dart';
 
 class TrafficService {
   final Dio _dioTraffic;
-  final String _baseTrafficUrl = 'https://api.mapbox.com/directions/v5/mapbox';
+  final Dio _dioPlaces;
 
-  TrafficService() : _dioTraffic = Dio()..interceptors.add(TrafficInterceptor());
+  final String _baseTrafficUrl = 'https://api.mapbox.com/directions/v5/mapbox';
+  final String _basePlacesUrl =
+      'https://api.mapbox.com/geocoding/v5/mapbox.places';
+
+  TrafficService()
+      : _dioTraffic = Dio()..interceptors.add(TrafficInterceptor()),
+        _dioPlaces = Dio()..interceptors.add(PlacesInterceptor());
 
   Future<TrafficResponse> getCoorsStartToEnd(LatLng start, LatLng end) async {
     final coorsString =
@@ -18,7 +24,9 @@ class TrafficService {
     try {
       final resp = await _dioTraffic.get(url);
 
-      if (resp.data == null || resp.data['routes'] == null || resp.data['routes'].isEmpty) {
+      if (resp.data == null ||
+          resp.data['routes'] == null ||
+          resp.data['routes'].isEmpty) {
         throw AppException("No routes found in response", url: url);
       }
 
@@ -29,5 +37,21 @@ class TrafficService {
     } catch (e) {
       throw AppException("An unknown error occurred", url: url);
     }
+  }
+
+  //Devuelve el listado de sitios de las busquedas, pasandole la coordenada que funcionará de proximidad de petición.
+  Future<List<Feature>> getResultsByQuery(
+      LatLng proximity, String query) async {
+    if (query.isEmpty) {
+      return [];
+    }
+    final url = '$_basePlacesUrl/$query.json';
+
+    final resp = await _dioPlaces.get(url, queryParameters: {
+      'proximity': '${proximity.longitude}, ${proximity.latitude}'
+    });
+
+    final placesResponse = PlacesResponse.fromJson(resp.data);
+    return placesResponse.features; // lugares en mapbox se llaman Features.
   }
 }
