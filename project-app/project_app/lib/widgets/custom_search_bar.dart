@@ -24,13 +24,21 @@ class CustomSearchBar extends StatelessWidget {
 }
 
 class _CustomSearchBarBody extends StatelessWidget {
-  // Función que determinará si mostrar el marcador manual en función del SearchBloc
-  void onSearchResults(BuildContext context, SearchResult result) {
+  // Función que determinará si mostrar el marcador manual en función del SearchBloc o mostrar polilínea de resultado.
+  void onSearchResults(BuildContext context, SearchResult result) async {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
+    final mapBloc = BlocProvider.of<MapBloc>(context);
+    final start =   BlocProvider.of<LocationBloc>(context).state.lastKnownLocation;
     if (result.manual == true) {
       // Lanza el evento que cambiará el estado.
       searchBloc.add(OnActivateManualMarkerEvent());
       return;
+    }
+    if (result.position != null && start != null) {
+      // Calcula la polilínea a mostrar por el mapbloc
+      final destination = await searchBloc.getCoorsStartToEnd(start, result.position!);
+      // Se llama a pintar nueva polilínea:
+      await mapBloc.drawRoutePolyline(destination);
     }
   }
 

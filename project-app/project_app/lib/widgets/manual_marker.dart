@@ -83,8 +83,7 @@ class _ManualMarkerBody extends StatelessWidget {
                     showLoadingMessage(context);
 
                     // Calcula la polilínea a mostrar por el mapbloc
-                    final destination =
-                        await searchBloc.getCoorsStartToEnd(start, end);
+                    final destination = await searchBloc.getCoorsStartToEnd(start, end);
 
                     // Se llama a pintar nueva polilínea:
                     await mapBloc.drawRoutePolyline(destination);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/models/models.dart';
 
@@ -66,10 +67,16 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
             subtitle: Text(place.placeName,
                 style: const TextStyle(color: Colors.black)),
             onTap: () {
-              // TODO - Implementar lógica para seleccionar un lugar (mandar las coordenadas...)
-              // Usuario ha seleccionado un lugar
-              //final result = SearchResult(cancel: false, manual: false, place: place);
-              //close(context, result);
+              final result = SearchResult(
+              cancel: false, 
+              manual: false,
+              // Hay que tener en cuenta que va Lng y después Lat por ser así MapBox
+              position: LatLng(place.center[1], place.center[0]),
+              destinationName: place.text,
+              description: place.placeName
+              );
+            close(context, result);
+
             },
           );
         },
@@ -90,6 +97,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
             // Usuario está buscando...
             final result = SearchResult(cancel: false, manual: true);
             close(context, result);
+            
           },
         )
       ],
