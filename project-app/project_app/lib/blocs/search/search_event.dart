@@ -16,3 +16,9 @@ class OnNewPlacesFoundEvent extends SearchEvent {
   OnNewPlacesFoundEvent({required this.places});
 
 }
+// Evento que añade un lugar al historial.
+class OnAddToHistoryEvent extends SearchEvent {
+  // place será el lugar a añadir al historial. será required.
+  final Feature place;
+  OnAddToHistoryEvent({required this.place});
+}

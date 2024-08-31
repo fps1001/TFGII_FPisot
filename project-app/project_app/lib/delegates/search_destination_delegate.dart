@@ -48,8 +48,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   Widget buildResults(BuildContext context) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     // La proximidad la voy a obtener del bloc location: lastknownlocation.
-    final proximity =
-        BlocProvider.of<LocationBloc>(context).state.lastKnownLocation!;
+    final proximity = BlocProvider.of<LocationBloc>(context).state.lastKnownLocation!;
 
     searchBloc.getPlacesByQuery(proximity, query);
 
@@ -75,6 +74,9 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
               destinationName: place.text,
               description: place.placeName
               );
+
+              // Antes de cerrar se añade el lugar al historial.
+              searchBloc.add(OnAddToHistoryEvent(place: place));
             close(context, result);
 
             },
@@ -87,6 +89,9 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   /// Este método construye las sugerencias de búsqueda mientras el usuario escribe.
   @override
   Widget buildSuggestions(BuildContext context) {
+
+    final history = BlocProvider.of<SearchBloc>(context).state.history;
+
     return ListView(
       children: [
         ListTile(
@@ -99,7 +104,25 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
             close(context, result);
             
           },
-        )
+        ),
+        ...history.map((place) => ListTile(
+              leading: const Icon(Icons.history, color: Colors.black),
+              title: Text(place.text, style: const TextStyle(color: Colors.black)),
+              subtitle: Text(place.placeName,
+                  style: const TextStyle(color: Colors.black)),
+              onTap: () {
+                final result = SearchResult(
+                  cancel: false, 
+                  manual: false,
+                  // Hay que tener en cuenta que va Lng y después Lat por ser así MapBox
+                  position: LatLng(place.center[1], place.center[0]),
+                  destinationName: place.text,
+                  description: place.placeName
+                );
+                close(context, result);
+              },
+            ))
+
       ],
     );
   }

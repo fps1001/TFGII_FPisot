@@ -14,17 +14,19 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final TrafficService trafficService;
-
+  // Manejadores de eventos a continuación
   SearchBloc({required this.trafficService}) : super(const SearchState()) {
     on<OnActivateManualMarkerEvent>(
         (event, emit) => emit(state.copyWith(displayManualMarker: true)));
     on<OnDisactivateManualMarkerEvent>(
         (event, emit) => emit(state.copyWith(displayManualMarker: false)));
     // añado el evento OnNewPlacesFoundEvent que recibe una lista de lugares
-    on<OnNewPlacesFoundEvent>((event, emit) =>
-        emit(state.copyWith(places: event.places)));
-    }
-  
+    on<OnNewPlacesFoundEvent>(
+        (event, emit) => emit(state.copyWith(places: event.places)));
+    // añado el evento OnAddToHistoryEvent que añade un lugar al historial.
+    on<OnAddToHistoryEvent>((event, emit) =>
+        emit(state.copyWith(history: [event.place, ...state.history])));
+  }
 
   Future<RouteDestination> getCoorsStartToEnd(LatLng start, LatLng end) async {
     final resp = await trafficService.getCoorsStartToEnd(start, end);
