@@ -8,6 +8,8 @@ import 'package:project_app/screens/screens.dart';
 import 'package:project_app/services/services.dart';
 
 void main() async {
+
+  Bloc.observer = MyBlocObserver();
   try {
     await dotenv.load(fileName: '.env');
   } catch (e) {

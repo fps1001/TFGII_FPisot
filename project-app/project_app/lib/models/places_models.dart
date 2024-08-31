@@ -40,9 +40,9 @@ class Feature {
   final List<String> placeType;
   final int relevance;
   final Properties properties;
-  final String textEs;
+  final String? textEs;
   final Language? languageEs;
-  final String placeNameEs;
+  final String? placeNameEs;
   final String text;
   final Language? language;
   final String placeName;
@@ -84,10 +84,10 @@ class Feature {
         relevance: json["relevance"],
         properties: Properties.fromJson(json["properties"]),
         textEs: json["text_es"],
-        languageEs: languageValues.map[json["language_es"]]!,
+        languageEs: languageValues.map[json["language_es"]],
         placeNameEs: json["place_name_es"],
         text: json["text"],
-        language: languageValues.map[json["language"]]!,
+        language: languageValues.map[json["language"]],
         placeName: json["place_name"],
         bbox: json["bbox"] == null
             ? []
@@ -126,7 +126,7 @@ class Context {
   final String mapboxId;
   final String? wikidata;
   final String? shortCode;
-  final String textEs;
+  final String? textEs;
   final Language? languageEs;
   final String text;
   final Language? language;
@@ -152,9 +152,9 @@ class Context {
         wikidata: json["wikidata"],
         shortCode: json["short_code"],
         textEs: json["text_es"],
-        languageEs: languageValues.map[json["language_es"]]!,
+        languageEs: languageValues.map[json["language_es"]],
         text: json["text"],
-        language: languageValues.map[json["language"]]!,
+        language: languageValues.map[json["language"]],
       );
 
   Map<String, dynamic> toJson() => {
