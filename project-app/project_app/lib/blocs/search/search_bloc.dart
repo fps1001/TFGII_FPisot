@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,7 +20,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         (event, emit) => emit(state.copyWith(displayManualMarker: true)));
     on<OnDisactivateManualMarkerEvent>(
         (event, emit) => emit(state.copyWith(displayManualMarker: false)));
-  }
+    // añado el evento OnNewPlacesFoundEvent que recibe una lista de lugares
+    on<OnNewPlacesFoundEvent>((event, emit) =>
+        emit(state.copyWith(places: event.places)));
+    }
+  
 
   Future<RouteDestination> getCoorsStartToEnd(LatLng start, LatLng end) async {
     final resp = await trafficService.getCoorsStartToEnd(start, end);
@@ -42,8 +48,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future getPlacesByQuery(LatLng proximity, String query) async {
-    final resp = trafficService.getResultsByQuery(proximity, query);
+    // añado await para esperar la respuesta de la petición.
+    final newPlaces = await trafficService.getResultsByQuery(proximity, query);
 
-    //TODO: almacenar el state.
+    add(OnNewPlacesFoundEvent(places: newPlaces));
   }
 }

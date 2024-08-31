@@ -53,7 +53,27 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
     searchBloc.getPlacesByQuery(proximity, query);
 
     return BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
-      return const Text('Aquí irán los resultados.');
+      final places = state.places;
+
+      return ListView.separated(
+        itemCount: places.length,
+        separatorBuilder: (context, index) => const Divider(),
+        itemBuilder: (context, index) {
+          final place = places[index];
+          return ListTile(
+            leading: const Icon(Icons.place_outlined, color: Colors.black),
+            title: Text(place.text, style: const TextStyle(color: Colors.black)),
+            subtitle: Text(place.placeName,
+                style: const TextStyle(color: Colors.black)),
+            onTap: () {
+              // TODO - Implementar lógica para seleccionar un lugar (mandar las coordenadas...)
+              // Usuario ha seleccionado un lugar
+              //final result = SearchResult(cancel: false, manual: false, place: place);
+              //close(context, result);
+            },
+          );
+        },
+      );
     });
   }
 
