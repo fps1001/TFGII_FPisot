@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
+import 'package:project_app/helpers/custom_image_marker.dart';
 import 'package:project_app/models/models.dart';
 
 part 'map_event.dart';
@@ -115,9 +116,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     // Redondeo a dos decimales la duración.
     double tripDuration = (destination.duration / 60).floorToDouble();
     
+    // Marcador personalizado.
+    final startMarkerIcon = await getCustomMarker();
+    final endMarkerIcon = await getNetworkImageMarker();
+
     // Marcadores de inicio y final.
     final startMarker = Marker(markerId: MarkerId('start'),
         position: destination.points.first,
+        icon: startMarkerIcon,
         infoWindow: InfoWindow(
           title: 'Inicio',
           snippet: 'Kms: $kms, duración: $tripDuration',
@@ -125,6 +131,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         );
     final finalMarker = Marker(markerId: MarkerId('final'),
         position: destination.points.last,
+        icon: endMarkerIcon,
         infoWindow: InfoWindow(
           title: destination.endPlace.text,
           snippet: destination.endPlace.placeName,)  
