@@ -10,6 +10,7 @@ import 'package:project_app/services/services.dart';
 void main() async {
   //TODO resolver caso de no tener internet para que no se quede buscando...
   //TODO añadir dialog para cuando el usuario escoge un lugar de la lista
+  //TODO quitar botones de guiado de google maps y brujula, o al menos colocarlos en otro sitio...
   Bloc.observer = MyBlocObserver();
   try {
     await dotenv.load(fileName: '.env');
