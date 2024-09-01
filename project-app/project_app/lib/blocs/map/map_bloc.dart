@@ -30,8 +30,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     // Cuando recibo un evento de tipo OnUpdateUserPolylinesEvent emite un nuevo estado.
     on<OnUpdateUserPolylinesEvent>(_onPolylineNewPoint);
     // Cuando recibo una nueva polilínea a dibujar emite un nuevo estado al que le pasa la nueva polilínea.
-    on<OnDisplayPolylinesEvent>(
-        (event, emit) => emit(state.copyWith(polylines: event.polylines)));
+    on<OnDisplayPolylinesEvent>((event, emit) => emit(
+        state.copyWith(polylines: event.polylines, markers: event.markers)));
 
     // Cuando recibo un evento de tipo OnToggleShowUserRouteEvent emite un nuevo estado.
     on<OnToggleShowUserRouteEvent>((event, emit) =>
@@ -97,6 +97,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   // Metodo que recibe una polilínea y la emite en un nuevo evento.
   Future drawRoutePolyline(RouteDestination destination) async {
+    // Instancio la polilínea y el marcador de inicio.
     final myRoute = Polyline(
       polylineId: const PolylineId('route'),
       color: Colors.teal,
@@ -106,13 +107,23 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       endCap: Cap.roundCap,
     );
 
-    // Transformación de ruta para evento:
-    // polilineas actuales. hay que copiarlas
-    final currentPolylines = Map<String, Polyline>.from(state.polylines);
-    currentPolylines['route'] = myRoute;
+    // Marcadores de inicio y final.
+    final startMarker = Marker(markerId: MarkerId('start'),
+        position: destination.points.first,
+        );
+    final finalMarker = Marker(markerId: MarkerId('final'),
+        position: destination.points.last,
+        );
 
-    //add(OnDisplayPolylinesEvent(currentPolylines));
-    emit(state.copyWith(polylines: currentPolylines));
+    // Tranformo en un mapa las polilíneas y marcadores actuales.
+    final currentPolylines = Map<String, Polyline>.from(state.polylines);
+    final currentMarkers = Map<String, Marker>.from(state.markers);
+
+    currentPolylines['route'] = myRoute;
+    currentMarkers['start'] = startMarker;
+    currentMarkers['final'] = finalMarker;
+
+    add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
   }
 
   @override

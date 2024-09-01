@@ -28,10 +28,11 @@ class OnUpdateUserPolylinesEvent extends MapEvent {
 //Muestra la ruta del usuario o la oculta.
 class OnToggleShowUserRouteEvent extends MapEvent {}
 
-// Muestra una polilínea nueva:
+// Muestra una polilínea o un marcador nuevo
 class OnDisplayPolylinesEvent extends MapEvent {
   // Debe recibir lo mismo que user polylinesEvent pero con nuevo modelo:
   final Map<String, Polyline> polylines;
+  final Map<String, Marker> markers;
   // Constructor.
-  const OnDisplayPolylinesEvent(this.polylines);
+  const OnDisplayPolylinesEvent(this.polylines, this.markers);
 }
