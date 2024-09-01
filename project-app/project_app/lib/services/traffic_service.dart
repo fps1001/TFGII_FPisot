@@ -51,6 +51,7 @@ class TrafficService {
     try {
       final resp = await _dioPlaces.get(url, queryParameters: {
         'proximity': '${proximity.longitude},${proximity.latitude}',
+        'limit': 5
       });
 
       if (resp.data == null || resp.data['features'] == null) {
@@ -59,6 +60,27 @@ class TrafficService {
 
       final placesResponse = PlacesResponse.fromJson(resp.data);
       return placesResponse.features;
+    } on DioException catch (e) {
+      throw DioExceptions.handleDioError(e, url: url);
+    } catch (e) {
+      throw AppException("An unknown error occurred", url: url);
+    }
+  }
+
+  // Reverse geocoding: devuelve la dirección de una coordenada.
+  Future<Feature> getPlaceByCoords(LatLng coords) async {
+    final url = '$_basePlacesUrl/${coords.longitude},${coords.latitude}.json';
+
+    try {
+      final resp = await _dioPlaces.get(url, queryParameters: {'limit': 1});
+
+      if (resp.data == null || resp.data['features'] == null) {
+        throw AppException("No places found in response", url: url);
+      }
+
+      final placesResponse = PlacesResponse.fromJson(resp.data);
+      return placesResponse.features.first;
+      //TODO ver lo que pasa si apunta al mar por ejemplo
     } on DioException catch (e) {
       throw DioExceptions.handleDioError(e, url: url);
     } catch (e) {

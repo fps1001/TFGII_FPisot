@@ -107,12 +107,27 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       endCap: Cap.roundCap,
     );
 
+    // Redondeo a dos decimales la distancia.
+    double kms = destination.distance / 1000;
+    kms = (kms * 100).floorToDouble();
+    kms /= 100;
+
+    // Redondeo a dos decimales la duración.
+    double tripDuration = (destination.duration / 60).floorToDouble();
+    
     // Marcadores de inicio y final.
     final startMarker = Marker(markerId: MarkerId('start'),
         position: destination.points.first,
+        infoWindow: InfoWindow(
+          title: 'Inicio',
+          snippet: 'Kms: $kms, duración: $tripDuration',
+        )
         );
     final finalMarker = Marker(markerId: MarkerId('final'),
         position: destination.points.last,
+        infoWindow: InfoWindow(
+          title: destination.endPlace.text,
+          snippet: destination.endPlace.placeName,)  
         );
 
     // Tranformo en un mapa las polilíneas y marcadores actuales.
@@ -124,6 +139,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentMarkers['final'] = finalMarker;
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
+
+    // Espero 300ms para mostrar la ventana de información del marcador inicial.
+    await Future.delayed(const Duration(milliseconds: 300));
+    _mapController?.showMarkerInfoWindow(MarkerId('start'));
   }
 
   @override

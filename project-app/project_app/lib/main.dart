@@ -8,7 +8,8 @@ import 'package:project_app/screens/screens.dart';
 import 'package:project_app/services/services.dart';
 
 void main() async {
-
+  //TODO resolver caso de no tener internet para que no se quede buscando...
+  //TODO añadir dialog para cuando el usuario escoge un lugar de la lista
   Bloc.observer = MyBlocObserver();
   try {
     await dotenv.load(fileName: '.env');
