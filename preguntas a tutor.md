@@ -21,34 +21,10 @@
 
 #### 1. Documentación
 
-- **Herramientas a Describir en el Tema 4 de la Memoria:**
-  - **Ya Añadida**: LangChain.
-  - **Usadas**: LangFlow, Figma, VSCode (incluyendo extensiones como ChatBot).
-  
-- **Estructura de Directorios:**
-  - **Duda**: ¿Debo explicar para qué sirve cada carpeta dentro del `lib`? ¿Y los `blocs`?
-
-- **Tareas**:
-  - Modificación de cambios indicados por @clopezno.
-  - Definición de herramientas según indicaciones de @clopezno.
-  - Trabajo en los casos de uso.
-  - Seguir las instrucciones proporcionadas por @clopezno.
 
 #### 2. Prototipos y LLM
 
-- **Prototipo en LangFlow**: Añadido.
-  
-- **Tareas**:
-  - Terminar RAG con agentes en LangFlow.
-  - Terminar RAG con agentes en Jupyter Notebook.
-  - Realizar modificaciones y desarrollos según indicaciones de @clopezno.
-
 #### 3. Desarrollo de la Aplicación
-
-- **Dudas**:
-  - Hasta qué punto se debe documentar la programación.
-  - Problemas con el emulador.
-  - Definir funcionalidades e ir trabajando en ellas.
 
 - **Tareas**:
   - **TODO**: Resolver `toggle button` si se decide que es útil.
@@ -60,4 +36,3 @@
 
 #### 4. Definición de Nuevos Milestones
 
-- **Milestone Propuesto**: Integrar la aplicación con un nuevo servicio que tome datos de un servidor local LLM (Ollama).

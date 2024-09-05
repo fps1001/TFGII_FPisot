@@ -9,7 +9,10 @@
 .history
 .svn/
 migrate_working_dir/
+# Excepciones añadidas FPS.
 *.env 
+.vscode
+.idea
 
 # IntelliJ related
 *.iml
