@@ -80,7 +80,7 @@ class _ManualMarkerBody extends StatelessWidget {
                     if (end == null) return;
 
                     //Mensaje de carga:
-                    showLoadingMessage(context);
+                    LoadingMessageHelper.showLoadingMessage(context);
 
                     // Calcula la polilínea a mostrar por el mapbloc
                     final destination = await searchBloc.getCoorsStartToEnd(start, end);

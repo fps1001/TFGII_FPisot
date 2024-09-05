@@ -8,12 +8,25 @@ import 'package:project_app/screens/screens.dart';
 import 'package:project_app/services/services.dart';
 
 void main() async {
+  //Resources:
+  // Iconos google:
+  //https://fonts.google.com/icons?icon.set=Material+Icons&icon.style=Rounded&icon.platform=flutter&selected=Material+Icons+Round:mode:&icon.query=draw
+  //Icono de la app:
+  //https://pub.dev/packages/flutter_launcher_icons
+
   //TODO resolver caso de no tener internet para que no se quede buscando...
+  
   //TODO añadir dialog para cuando el usuario escoge un lugar de la lista
-  //TODO quitar botones de guiado de google maps y brujula, o al menos colocarlos en otro sitio...
+  
   //TODO decidir si usar customPaint para inicio y final de ruta con duración y km. de ruta...
+  
   //TODO decidir theme de aplicación y si debe ser variable
-  //TODO Resolver toggle button si se decide que es útil.
+
+  //TODO añadir icono de la app
+
+  //TODO probar a cargar un modelo en local
+
+  //TODO probar la optimización de rutas
 
   Bloc.observer = MyBlocObserver();
   try {

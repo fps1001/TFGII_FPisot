@@ -40,14 +40,14 @@ class _MapScreenState extends State<MapScreen> {
               // Cálculo si hay que mostrar la ruta de usuario.
               Map<String, Polyline> polylines = Map.from(mapState.polylines);
               if (!mapState.showUserRoute) {
-                polylines.removeWhere((key, value) => key == 'user');
+                polylines.removeWhere((key, value) => key == 'myRoute');
               }
               return SingleChildScrollView(
                 child: Stack(
                   children: [
                     MapView(
                       initialPosition: locationState.lastKnownLocation!,
-                      polylines: mapState.polylines.values.toSet(),
+                      polylines: polylines.values.toSet(),
                       markers: mapState.markers.values.toSet(),
                     ),
                     const CustomSearchBar(),

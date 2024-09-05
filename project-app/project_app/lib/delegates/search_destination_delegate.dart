@@ -27,7 +27,8 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
       IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
-            query = '';
+            final result = SearchResult(cancel: true);
+            close(context, result);
           }),
     ];
   }

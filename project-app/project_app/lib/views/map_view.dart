@@ -39,11 +39,13 @@ class MapView extends StatelessWidget {
           onPointerMove: (event) => mapBloc.add(OnStopFollowingUserEvent()),
           child: GoogleMap(
             initialCameraPosition: initialCameraPosition,
-            compassEnabled: true,
+            compassEnabled: false,
             myLocationButtonEnabled: false,
             myLocationEnabled: true,
             zoomControlsEnabled: false,
             zoomGesturesEnabled: true,
+            mapToolbarEnabled: false,
+
             // vamos a lanzar un evento cuando el mapa se haya creado para obtener el controlador del mapa.
             onMapCreated: (controller) =>
                 mapBloc.add(OnMapInitializedEvent(controller)),
