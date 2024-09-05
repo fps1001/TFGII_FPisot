@@ -27,18 +27,24 @@
 \usepackage[acronym]{glossaries}
 \makenoidxglossaries
 
-\newacronym{llm}{LLM}{\textit{Large Language Models}}
+\newacronym{llm}{LLM}{\textit{Modelos de Lenguaje a Gran Escala}}
 \newacronym{ods}{ODS}{\textit{Objetivos de Desarrollo Sostenible}}
 \newacronym{rag}{RAG}{\textit{Retrieval Augmented Generation}}
-\newacronym{ods11}{ODS11}{\textit{Ciudades y Comunidades Sostenibles}}
+
 \newacronym{sdg}{SDG}{\textit{Sustainable Development Goals}}
 \newacronym{sc}{Smart City}{\textit{Ciudades Inteligentes}}
 \newacronym{sdg11}{SDG11}{\textit{Sustainable Cities and Communities}}
 \newacronym{poi}{POI}{\textit{Puntos de Interés}}
 \newacronym{tfg}{TFG}{\textit{Trabajo de Fin de Grado}}
 \newacronym{nlp}{NLP}{\textit{Procesamiento del Lenguaje Natural}}
+\newacronym{gis}{GIS}{\textit{Sistemas de Información Geográfica}}
 
-\newacronym{poie}{POI}{\textit{Point of Interest}}
+
+% Acrónimos en inglés
+\newacronym{llme}{LLM}{\textit{Large Language Models}}
+\newacronym{sig}{SIG}{\textit{Geographic Information Systems}}
+\newacronym{poie}{POI}{\textit{Points of Interest}}
+
 
 
 % Ecuaciones
@@ -377,7 +383,7 @@
 
 
 % Datos de portada
-\title{\fontsize{14pt}{16pt}\selectfont Aplicación móvil para la generación de rutas turísticas sostenibles basadas en modelos LLM para promoción de ODS11}
+\title{\fontsize{14pt}{16pt}\selectfont Eco City Tours: Aplicación móvil para la generación de rutas turísticas sostenibles propuestas por modelos de lenguaje a gran escala}
 \author{\nombre}
 \tutor{Carlos López Nozal}
 \date{\today}
@@ -400,7 +406,7 @@
 
 \noindent Expone:
 
-\noindent Que el alumno D. \nombre, con DNI 70873328R, ha realizado el Trabajo final de Grado en Ingeniería Informática titulado título de TFG. 
+\noindent Que el alumno D. \nombre, con DNI 70873328R, ha realizado el Trabajo final de Grado en Ingeniería Informática. 
 
 \noindent Y que dicho trabajo ha sido realizado por el alumno bajo la dirección del que suscribe, en virtud de lo cual se autoriza su presentación y defensa.
 
@@ -412,7 +418,7 @@ En Burgos, {\large \today}
 
 \begin{center}
   Vº. Bº. del Tutor:\\[2cm]
-  D. \@tutor{}
+  D. Carlos López Nozal \@tutor{}
   \end{center}
 
 
@@ -426,18 +432,16 @@ En Burgos, {\large \today}
 % Abstract en castellano
 \renewcommand*\abstractname{Resumen}
 \begin{abstract}
-Se busca construir una aplicación móvil con Flutter que proponga al usuario rutas turísticas, generadas mediante la utilización de modelos de lenguaje de gran escala \acrfull{llm} y el framework \textbf{LangChain}. La ruta turística conectará estos lugares que llamaremos \acrfull{poi} de manera dinámica.
+Eco City Tours es una aplicación móvil \textbf{desarrollada con Flutter} que propone al usuario rutas turísticas sostenibles. La aplicación se enfoca en la promoción de rutas no motorizadas, optimizadas para ciclistas y peatones, que conectan lugares de interés con el objetivo de fomentar la movilidad sostenible. Las rutas se generan con tecnologías usando \acrfull{gis}. Los \acrfull{poi} se enriquecen con información detallada sobre lugares turísticos mediante inteligencia artificial consultando en lenguaje natural a \acrfull{llm}.
 
-La aplicación se enfocará en las preferencias del usuario y promocionará rutas optimizadas para ciclistas y peatones, que conecten estos \acrshort{poi} de manera que se fomente la \textbf{movilidad sostenible} en el lugar a visitar.
-
-Esta aplicación se alinea con el concepto de \acrshort{sc}, promoviendo activamente los \acrfull{ods}, con un enfoque particular en el \acrfull{ods11}.
+Esta aplicación se alinea con el concepto de \acrshort{sc}, promoviendo activamente los \acrfull{ods}, con un enfoque particular en el ODS11 (Ciudades y Comunidades Sostenibles).
 
 
 \end{abstract}
 
 \renewcommand*\abstractname{Descriptores}
 \begin{abstract}
-LLM, LangChain, ODS, ODS11, Smart City, Flutter, Turismo Sostenible, Movilidad Sostenible
+Movilidad Sostenible, LLM, ODS, Smart City, Flutter.
 \end{abstract}
 
 \clearpage
@@ -445,17 +449,16 @@ LLM, LangChain, ODS, ODS11, Smart City, Flutter, Turismo Sostenible, Movilidad S
 % Abstract en inglés
 \renewcommand*\abstractname{Abstract}
 \begin{abstract}
-The goal is to build a mobile application with Flutter that suggests tourist routes to users, generated using large language models \acrfull{llm} and the \textbf{LangChain} framework. The tourist route will connect various locations, referred to as \acrshort{poie} in a dynamic way.
-
-The application will focus on user preferences and promote routes optimized for cyclists and pedestrians, connecting these \acrshort{poie} in a way that fosters \textbf{sustainable mobility} in the destination.
-
-This application aligns with the concept of \acrshort{sc}, actively promoting the \acrfull{ods}, with a particular focus on \acrfull{ods11}.
+	Eco City Tours is a mobile application \textbf{developed with Flutter} that suggests tourist routes to users. The application focuses on promoting non-motorized routes, optimized for cyclists and pedestrians, connecting points of interest with the goal of fostering sustainable mobility. The routes are generated using technologies based on \acrfull{sig}. The \acrfull{poie} are enriched with detailed information about tourist spots through artificial intelligence, consulting \acrfull{llme} via natural language queries.
+	
+	This application aligns with the concept of \acrshort{sc}, actively promoting the \acrfull{sdg}, with a particular focus on the SDG11 (Sustainable Cities and Communities).
 \end{abstract}
 
 \renewcommand*\abstractname{Keywords}
 \begin{abstract}
-LLM, LangChain, SDGs, SDG11, Smart City, Flutter, Sustainable Tourism, Sustainable Mobility
+	Sustainable Mobility, LLM, SDGs, Smart City, Flutter.
 \end{abstract}
+
 
 
 \clearpage
