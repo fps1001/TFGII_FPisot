@@ -2,29 +2,30 @@
 
 \section{Objetivos funcionales}
 
-Estos objetivos se centran en las funcionalidades y características que debe tener la aplicación para satisfacer las necesidades y expectativas de los usuarios. A continuación se detallan los objetivos funcionales del proyecto:
+Estos objetivos se centran en las funcionalidades y características que debe tener la aplicación Eco City Tours para satisfacer las necesidades y expectativas de los usuarios. A continuación se detallan los objetivos funcionales del proyecto:
 
 \begin{itemize}
-    \item \textbf{Propuesta de rutas turísticas personalizadas}: La aplicación debe ser capaz de generar rutas turísticas personalizadas basadas en las preferencias del usuario utilizando \acrfull{llm}. Para llevarlo a cabo, el usuario facilitará al modelo sus preferencias, por ejemplo, si prefiere hacer la ruta a pie o en bicicleta, etc.
-    \item \textbf{Obtener los \acrfull{poi}}: La aplicación debe identificar y conectar diversos puntos de interés, proporcionando información relevante sobre cada uno.
-    \item \textbf{Visualización de rutas en mapa}: La aplicación debe mostrar las rutas sugeridas en un mapa utilizando herramientas de gestión de información geográfica.
-    \item \textbf{Optimización para ciclistas y peatones}: La aplicación debe promover la movilidad sostenible sugiriendo rutas optimizadas para ciclistas y peatones.
-    \item \textbf{Interfaz Intuitiva y Amigable}: El usuario debe interactuar con la aplicación de manera intuitiva, siendo fácil de usar por los usuarios las diferentes funcionalidades.
+    \item \textbf{Propuesta de rutas turísticas personalizadas}: La aplicación debe ser capaz de generar rutas turísticas personalizadas basadas en las preferencias del visitante utilizando \acrfull{llm}. Para llevarlo a cabo, el usuario facilitará al modelo sus preferencias, por ejemplo, si prefiere hacer la ruta a pie o en bicicleta, etc.
+    \item \textbf{Obtener los \acrfull{pdi}}: A través de la interacción con el modelo, la aplicación le indicará que debe priorizar un \acrshort{pdi} sobre otro en función de criterios sostenibles como la deslocalización del turismo y preferencias de usuario como puedan ser duración de la visita o medio de transporte ecológico a elegir.
+    \item \textbf{Visualización de rutas en mapa}: La aplicación debe mostrar las rutas sugeridas en un mapa utilizando herramientas \acrfull{gis}.
+    \item \textbf{Optimización para ciclistas y peatones}: la aplicación usará un servicio de navegación de calidad que debe ser capaz de calcular rutas seguras para peatones y priorizar carriles bicis sobre carreteras compartidas con vehículos motorizados.
+
 \end{itemize}
 
-\section{Objetivos técnicos}
+\section{Objetivos no funcionales}
 
-Los objetivos técnicos se refieren a los desafíos y metas técnicas que se deben abordar para desarrollar el software. Estos objetivos abarcan aspectos como la arquitectura del sistema, las tecnologías a utilizar y las metodologías de desarrollo. A continuación se detallan los objetivos técnicos del proyecto:
+Los objetivos no funcionales se refieren a los desafíos y metas que se deben abordar para desarrollar el software. Estos objetivos abarcan aspectos como la arquitectura del sistema, las tecnologías a utilizar y las metodologías de desarrollo. A continuación se detallan los objetivos no funcionales del proyecto:
 
 \begin{itemize}
-    \item \textbf{Implementación de \acrfull{llm} y \textbf{LangChain}}: Integrar modelos de lenguaje a gran escala (\acrshort{llm}) y el framework \textbf{LangChain} para la generación de rutas y procesamiento de información relevante y ser capaz de integrar dicho conocimiento para ser mostrada en la aplicación móvil así como en un prototipo que muestre de manera incremental la mejora obtenida por parte de los modelos usando diferentes técnicas a la hora de interactuar con ellos como puede ser el uso de técnicas \acrfull{rag}, agentes, etc.
-    \item \textbf{Uso de Herramientas Open-Source}: se priorizará para el desarrollo de la aplicación programas, paquetes o librerías que sean de código abierto siempre que sea posible y no incurra en un detrimento de la calidad del producto final.
+    \item \textbf{Integración de inteligencia artificial usando modelos de procesamiento del lenguaje natural con tecnología LangChain}: usar estos medios para la generación de rutas y procesamiento de información relevante y ser capaz de integrar dicho conocimiento para ser mostrada en la aplicación móvil. Evaluar resultados de las consultas usando técnicas de ingeniería del prompt para interactuar contra el modelo \acrshort{llm} y comprobar el resultado de técnicas tales como: \acrfull{rag}, few-shot , \acrfull{cod}, etc. 
+    \item \textbf{Uso de Herramientas Open-Source}: se priorizará para el desarrollo de la aplicación programas, paquetes, servicios o librerías que sean de código abierto, siempre que sea posible y no repercuta en la calidad del producto final. Se priorizará en todo caso una solución que no incurra en gasto alguno para el desarrollador o al usuario final por su uso. De esta manera se intenta fomentar el \acrshort{ods} 4: \textit{Educación de calidad} que busca garantizar una educación inclusiva, equitativa y de calidad y promover oportunidades de aprendizaje para todos.
+    \item \textbf{Usabilidad}: la interacción del usuario con la aplicación debe ser intuitiva y sencilla, permitiendo un rápido aprendizaje de todas sus funcionalidades. El diseño de la interfaz debe estar orientado a ofrecer una experiencia de uso fluida.
 \end{itemize}
 
 \section{Objetivos Personales}
 
 \begin{itemize}
 	\item \textbf{Conocimiento avanzado en \acrshort{llm}}: dada la rápida evolución, los amplios campos en los que se puede utilizar, etc. obtener una base de conocimientos destacable en este área sería un objetivo que me permitiría expandir mi futuro académico y por tanto distinguir mi perfil profesional especializándome en este sector en fuerte expansión.
-	\item \textbf{Creación de aplicación móvil profesional}: de igual manera poner en práctica lo aprendido en varios cursos de \textbf{Dart y Flutter} puede contribuir a que la aplicación de este proyecto sea parte de mi porfolio con aplicaciones que muestren mis habilidades a futuros empleadores.
-	\item \textbf{Finalización del \acrshort{tfg} y Grado}: tras no haber completado la Ingeniería Técnica Informática en su momento por no haber realizado el Proyecto Fin de Carrera, la realización de este \acrshort{tfg} marca la culminación de mi formación como ingeniero y supone el cierre de una carga personal.
+	\item \textbf{Desarrollo de aplicación móvil profesional}: poner en práctica lo aprendido en varios cursos de autoformación online de \textbf{Dart y Flutter.} La aplicación de este proyecto puede ser parte de mi porfolio con aplicaciones que muestren mis habilidades a futuros empleadores.
+	\item \textbf{Finalización del \acrshort{tfg} y Grado}: tras no haber completado la Ingeniería Técnica Informática en su momento por no haber realizado el Proyecto Fin de Carrera, la realización de este \acrshort{tfg} marca la culminación de mi formación académica como ingeniero.
 \end{itemize}
