@@ -61,4 +61,36 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     add(OnNewPlacesFoundEvent(places: newPlaces));
   }
+
+Future<RouteDestination> getOptimizedRoute(List<List<LatLng>> points) async {
+    final resp = await trafficService.getCoorsStartToEnd(points);
+
+    // Información del destino
+    final endPlace = await trafficService.getPlaceByCoords(end);
+
+    // Información de la ruta
+    final distance = resp.routes[0].distance;
+    final duration = resp.routes[0].duration;
+    final geometry = resp.routes[0].geometry;
+
+    if (geometry.isEmpty) {
+      throw AppException("No geometry found for route");
+    }
+
+    final points = decodePolyline(geometry, accuracyExponent: 6);
+
+    final latLngList = points
+        .map((coor) => LatLng(coor[0].toDouble(), coor[1].toDouble()))
+        .toList();
+
+    return RouteDestination(
+        points: latLngList, 
+        duration: duration, 
+        distance: distance,
+        endPlace: endPlace);
+  }
+
+
+
+
 }
