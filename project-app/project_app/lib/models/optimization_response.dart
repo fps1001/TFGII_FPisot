@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'models.dart'; 
 
-import 'models.dart';
 
 class OptimizationResponse {
     final String code;
@@ -69,8 +69,8 @@ class Trip {
         "distance": distance,
     };
 }
-
-/* class Leg {
+/*
+class Leg {
     final List<dynamic> steps;
     final String summary;
     final double weight;
@@ -104,7 +104,7 @@ class Trip {
         "duration": duration,
         "distance": distance,
     };
-} 
+}
 
 class Waypoint {
     final double distance;

@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/exceptions/exceptions.dart';
 import 'package:project_app/models/models.dart';
-import 'package:project_app/services/services.dart';
+
+
 
 class OptimizationService {
   final Dio _dioOptimization;
@@ -18,7 +19,7 @@ class OptimizationService {
     final url = '$_baseOptimizationUrl/$coorsString';
 
     try {
-      final resp = await _dioOptimization.get(url);
+      final resp = await _dioOptimization.get(url,  queryParameters: {'geometries': 'polyline6'});
 
       if (resp.data == null ||
           resp.data['routes'] == null ||

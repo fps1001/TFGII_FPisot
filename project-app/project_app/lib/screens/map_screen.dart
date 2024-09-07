@@ -66,6 +66,7 @@ class _MapScreenState extends State<MapScreen> {
           BtnToggleUserRoute(),
           BtnFollowUser(),
           BtnCurrentLocation(),
+          BtnTest(),
         ],
       ),
     );
