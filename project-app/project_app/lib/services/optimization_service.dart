@@ -13,13 +13,18 @@ class OptimizationService {
 
   OptimizationService() : _dioOptimization = Dio();
 
-  Future<OptimizationResponse> getOptimazedRoute(List<LatLng> points) async {
+  Future<OptimizationResponse> getOptimizedRoute(List<LatLng> points) async {
     final coorsString =
         points.map((point) => '${point.longitude},${point.latitude}').join(';');
     final url = '$_baseOptimizationUrl/$coorsString';
 
     try {
-      final resp = await _dioOptimization.get(url,  queryParameters: {'geometries': 'polyline6'});
+      final resp = await _dioOptimization.get(url,  
+      queryParameters: {
+        'geometries': 'polyline6', 
+        'source' : 'first',
+        'destination' : 'any',
+        });
 
       if (resp.data == null ||
           resp.data['routes'] == null ||
