@@ -3,21 +3,36 @@
 En este capítulo se llevará a cabo una descripción de los conceptos necesarios para comprender el funcionamiento de la aplicación desarrollada.
 
 \section{Conceptos acerca de los Sistemas de Información Geográfica (SIG)}
-	\subsection{Navigation service}
-	\subsection{Places service y geocoding}
-	\section{Conceptos acerca de los Objetivos de Desarrollo Sostenible}
+	\subsection{Introducción}
+	Un Sistema de Información Geográfica también visto como \acrshort{gis} por sus siglas en inglés, es una herramienta que permite trabajar con información georreferenciada, es decir, los datos vienen acompañados de una posición geográfica. Estas herramientas estás especialmente diseñadas para trabajar con este tipo de datos lo que permite no solo operaciones \acrfull{crud} habituales de una base de datos convencional sino que permite análisis de la información referentes a su ubicación o características topográficas.
+	
+	\subsection{Servicios GIS usados en el proyecto}
+	Estos sistemas o herramientas con referencias geográficas son comúnmente utilizadas a modo de servicios cuando se desarrolla una nueva aplicación con algún componente de información geográfica. Los proveedores de estos servicios facilitan los datos  georreferenciados según las peticiones realizadas por el usuario. En el caso de Eco City Tours, una aplicación con una fuerte relación con los \acrshort{sig} encontramos los siguientes servicios utilizados:
+	\begin{itemize}
+		\item \textbf{Servicio de mapas}: con Google como proveedor se usa este servicio para proveer a la aplicación de un mapa para mostrar de fondo así como marcadores y polilíneas de rutas.
+		
+		\item \textbf{Geocodificación}: sirve para obtener las coordenadas GPS de un lugar o conseguir el nombre de un lugar próximo a unas coordenadas dadas (inverse geocoding). Se ha utilizado este servicio con el proveedor MapBox.
+		
+			
+		\item \textbf{Servicio de navegación y de Optimización de rutas}: el servicio de navegación nos proporciona una ruta entre dos puntos en el mapa y el servicio de optimización permite generar una ruta que sea la más óptima entre n puntos de interés en el mapa. El proveedor de este servicio fue MapBox que permite solucionar este problema de optimización popularmente conocido como \textit{el Problema del viajante} tanto por tiempo como por distancia según se indique en la petición al servicio.
+		
+	\end{itemize}
+	
+\section{Conceptos acerca de los Objetivos de Desarrollo Sostenible}
 	\subsection{Introducción y contexto histórico}
-
+	Según explica la página web de la \acrfull{onu} ~\cite{un_sustainable_development} ''El 25 de septiembre de 2015, los líderes mundiales adoptaron un conjunto de objetivos globales para erradicar la pobreza, proteger el planeta y asegurar la prosperidad para todos como parte de una nueva agenda de desarrollo sostenible. Cada objetivo tiene metas específicas que deben alcanzarse en los próximos 15 años.''	
+	\imagen{odss}{Objetivos de Desarrollo Sostenible}{1}
+	
 
 \section{Conceptos acerca de los modelos de lenguaje a gran escala (LLM)}
 
-Empezamos por el concepto más general para luego ir acercándonos a la parte más concreta del desarrollo de la aplicación. Los modelos de lenguaje a gran escala es un tipo de inteligencia artificial que ha sido entrenada para comprender \acrfull{nlp} que es la manera en que se comunican las personas. Estas inteligencias artificiales son entrenadas entonces con ingentes cantidades de datos que los hacen capaces de comprender peticiones, responder a las mismas en los mismos términos de lenguaje generando una especie de comunicación entre el usuario y la máquina.
+Empezamos por el concepto más general para luego ir acercándonos a la parte más concreta utilizada en el desarrollo de los prototipos asociados a la aplicación. Los modelos de lenguaje a gran escala es un tipo de inteligencia artificial que ha sido entrenada para comprender \acrfull{nlp} que es la manera en que se comunican las personas. Estas inteligencias artificiales son entrenadas entonces con ingentes cantidades de datos que los hacen capaces de comprender peticiones, responder a las mismas en los mismos términos de lenguaje generando una especie de comunicación entre el usuario y la máquina.
 
 
 
 \subsection{Uso de LLMs en la aplicación de este TFG}
 
-En este trabajo el uso de los modelos de gran escala han sido usados para obtener los \acrfull{pdi}, basado en un juego de conversaciones con la inteligencia artificial el usuario determina basandose en el conocimiento del modelo qué lugares debería visitar a la hora de hacer turismo sostenible.
+En este trabajo el uso de los modelos de gran escala han sido usados para obtener los \acrfull{pdi}, basado en un juego de conversaciones con la inteligencia artificial el usuario determina basándose en el conocimiento del modelo qué lugares debería visitar a la hora de hacer turismo sostenible.
 En la sección de prototipos de este trabajo se observa como se va construyendo una comunicación con diferentes modelos: desde una conversación básica con resultados mediocres o incluso alucinados, hasta construcciones que tienen en cuenta estructuras de datos que serán construidas como respuesta del modelo al usuario. La aplicación se beneficia de todo ello y genera una respuesta acorde al código que se quiere obtener en la aplicación móvil.
 \subsection{Técnicas usadas en los prototipos}
 \subsubsection{Zero-shot y Few-shot learning}
@@ -76,3 +91,24 @@ Estas múltiples herramientas pueden ser vistas como aplicaciones que alimentar�
 Se utilizan varios con el fin de obtener a través de la web información actualizada de los puntos de interés de los lugares que se van a visitar.
 
 \section{Conceptos acerca de la Agilidad y el método SCRUM}
+\textbf{La metodología ágil} es un enfoque de gestión de proyectos que se centra en la flexibilidad, la colaboración y la entrega continua de valor al cliente. La agilidad se basa en la idea de ciclos de trabajo cortos e iterativos denominados \textbf{sprints}, donde se produce software funcional al final de cada iteración.
+
+El Manifiesto Ágil (2001) establece cuatro valores fundamentales:
+\begin{itemize}
+\item Individuos e interacciones sobre procesos y herramientas.
+\item Software funcional sobre documentación exhaustiva.
+\item Colaboración con el cliente sobre negociación de contratos.
+\item Respuesta ante el cambio sobre seguir un plan.
+\end{itemize}
+
+\textbf{SCRUM} es un marco de trabajo ágil que facilita la auto-organización del equipo, promueve la transparencia y mejora la capacidad de adaptación del proyecto.
+
+Este enfoque fue particularmente valioso en el desarrollo de Eco City Tours, iterando rápidamente sobre las funcionalidades de la aplicación, hacer pruebas de usuario con prototipos funcionales y ajustar el desarrollo a las necesidades que surgían durante el proceso usando elementos tales como:
+
+\begin{itemize}
+	\item \textbf{Planificación de Sprint}: consiste en la creación y asignación de tareas que se realizarán durante el período de tiempo en que consiste el sprint. A cada tarea se le asigna unos puntos de historia que reflejan el tiempo planificado para realizar dicha tarea. También se planifican etiquetas e hitos para los que las diferentes tareas ayudan a lograr.
+	\item \textbf{Sprint review y sprint retrospective}: después de cada sprint y con la ayuda del tutor del \acrshort{tfg} se evalua el trabajo realizado durante el sprint, se 
+	
+\end{itemize}
+
+El uso de la metodología ágil y el marco SCRUM fue esencial para el éxito del desarrollo de Eco City Tours. La agilidad permitió una colaboración constante y una entrega continua de valor, mientras que SCRUM proporcionó la estructura necesaria para gestionar eficazmente el trabajo, resolver problemas y optimizar el proceso de desarrollo en cada iteración.
