@@ -1,16 +1,19 @@
 // Version: 1.0
+
 import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 void main() async {
+  await dotenv.load();
   String geminiApi = dotenv.env['GEMINI_API_KEY'] ?? '';
 
-  if (geminiApi == '') {
-    print('No \$API_KEY environment variable');
+  if (geminiApi.isEmpty) {
+    print('No \$GEMINI_API_KEY environment variable');
     exit(1);
   }
+
   //* DEFINICIÓN DEL MODELO
   final model = GenerativeModel(
     model: 'gemini-1.5-flash',
@@ -55,22 +58,33 @@ void main() async {
 
   final chat = model.startChat(history: [
     Content.multi([
-      TextPart('Dime tres puntos de interés que deba visitar en Salamanca'),
+      TextPart('Genera una lista de 1 puntos de interés en Salamanca, incluyendo para cada uno: nombre, descripción breve, coordenadas GPS, una URL para más información y una URL de una imagen representativa. Organiza la información en formato JSON, con un array de objetos, donde cada objeto representa un punto de interés.'),
     ]),
     Content.model([
       TextPart('```json\n{"gps": [40.9647, -5.6695], "name": "Plaza Mayor", "description": "La Plaza Mayor de Salamanca es uno de los lugares más emblemáticos de la ciudad, un espacio público que ha sido testigo de la historia de la ciudad desde el siglo XVIII. Es un buen ejemplo de arquitectura barroca, y está rodeada de edificios con balcones que dan a la plaza.  Es un lugar perfecto para pasear, disfrutar de la gastronomía local y  observar el ambiente  de la ciudad. ", "url": "https://www.salamanca.es/es/turismo/plaza-mayor", "url_img": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Plaza_Mayor_de_Salamanca_%282015%29.jpg/1280px-Plaza_Mayor_de_Salamanca_%282015%29.jpg"\n} \n```'),
     ]),
   ]);
-  final message = 'INSERT_INPUT_HERE';
+  //* CONSTRUCCIÓN DE PETICIÓN
+  // Definimos las variables de ciudad y número de POIs
+  final String ciudad = 'Salamanca';
+  final int n_poi = 3;
+
+
+
+  final message = '''Genera una lista de $n_poi puntos de interés en $ciudad, incluyendo para cada uno: nombre, descripción breve, coordenadas GPS, una URL para más información y una URL de una imagen representativa. Organiza la información en formato JSON, con un array de objetos, donde cada objeto representa un punto de interés.''';
   final content = Content.text(message);
   
-  //* IMPRESIÓN DE LA RESPUESTA
+  //* VALIDACIÓN E IMPRESIÓN DE RESPUESTA
   final response = await chat.sendMessage(content);
-  print(response.text);
+  
+  print('Response: ${response.text}');
+  
+
+
 
 //Contamos los tokens para controlar el uso de la API
-final tokenCount = await model.countTokens([Content.text(message)]);
-print('Token count: ${tokenCount.totalTokens}');
+//final tokenCount = await model.countTokens([Content.text(message)]);
+//print('Token count: ${tokenCount.totalTokens}');
 
 }
 
