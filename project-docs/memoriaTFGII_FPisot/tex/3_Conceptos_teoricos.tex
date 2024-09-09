@@ -5,6 +5,10 @@ En este capítulo se llevará a cabo una descripción de los conceptos necesario
 \section{Conceptos acerca de los Sistemas de Información Geográfica (SIG)}
 	\subsection{Introducción}
 	Un Sistema de Información Geográfica también visto como \acrshort{gis} por sus siglas en inglés, es una herramienta que permite trabajar con información georreferenciada, es decir, los datos vienen acompañados de una posición geográfica. Estas herramientas estás especialmente diseñadas para trabajar con este tipo de datos lo que permite no solo operaciones \acrfull{crud} habituales de una base de datos convencional sino que permite análisis de la información referentes a su ubicación o características topográficas.
+	Además de estos análisis espaciales, permite una mejor visualización de los datos a través de mapas, esto ayuda a comunicar de una forma clara los datos que de otra manera serían complejos de entender.
+	Son herramientas versátiles en múltiples campos no solo en la informática o en la geología: permiten monitorizar en tiempo real dispositivos desplegados en un territorio, predecir ciertos modelos como en meteorología o permite tomar decisiones de manera informada a un experto en materias como: satélites, drones, optimizaciones de rutas, expansión urbana, cambio climático...
+	
+	\todo{EXTENSIÓN DE ESTE TEMA?? NO SÉ QUÉ MÁS TRATAR}
 	
 	\subsection{Servicios GIS usados en el proyecto}
 	Estos sistemas o herramientas con referencias geográficas son comúnmente utilizadas a modo de servicios cuando se desarrolla una nueva aplicación con algún componente de información geográfica. Los proveedores de estos servicios facilitan los datos  georreferenciados según las peticiones realizadas por el usuario. En el caso de Eco City Tours, una aplicación con una fuerte relación con los \acrshort{sig} encontramos los siguientes servicios utilizados:
@@ -13,16 +17,55 @@ En este capítulo se llevará a cabo una descripción de los conceptos necesario
 		
 		\item \textbf{Geocodificación}: sirve para obtener las coordenadas GPS de un lugar o conseguir el nombre de un lugar próximo a unas coordenadas dadas (inverse geocoding). Se ha utilizado este servicio con el proveedor MapBox.
 		
-			
 		\item \textbf{Servicio de navegación y de Optimización de rutas}: el servicio de navegación nos proporciona una ruta entre dos puntos en el mapa y el servicio de optimización permite generar una ruta que sea la más óptima entre n puntos de interés en el mapa. El proveedor de este servicio fue MapBox que permite solucionar este problema de optimización popularmente conocido como \textit{el Problema del viajante} tanto por tiempo como por distancia según se indique en la petición al servicio.
 		
 	\end{itemize}
 	
 \section{Conceptos acerca de los Objetivos de Desarrollo Sostenible}
 	\subsection{Introducción y contexto histórico}
-	Según explica la página web de la \acrfull{onu} ~\cite{un_sustainable_development} ''El 25 de septiembre de 2015, los líderes mundiales adoptaron un conjunto de objetivos globales para erradicar la pobreza, proteger el planeta y asegurar la prosperidad para todos como parte de una nueva agenda de desarrollo sostenible. Cada objetivo tiene metas específicas que deben alcanzarse en los próximos 15 años.''	
+	Los Objetivos de Desarrollo Sostenible (ODS) son una serie de 17 objetivos globales adoptados por la Asamblea General de la Organización de las Naciones Unidas (ONU) el 25 de septiembre de 2015, como parte de la Agenda 2030 para el Desarrollo Sostenible. Estos objetivos constituyen una hoja de ruta para abordar los mayores desafíos a los que se enfrenta la humanidad, incluyendo la pobreza, la desigualdad, la justicia social, la degradación ambiental y el cambio climático. Según la ONU ~\cite{un_sustainable_development}, "El 25 de septiembre de 2015, los líderes mundiales adoptaron un conjunto de objetivos globales para erradicar la pobreza, proteger el planeta y asegurar la prosperidad para todos como parte de una nueva agenda de desarrollo sostenible. Cada objetivo tiene metas específicas que deben alcanzarse en los próximos 15 años".		
 	\imagen{odss}{Objetivos de Desarrollo Sostenible}{1}
+	Los ODS suceden a los Objetivos de Desarrollo del Milenio (ODM), que fueron formulados en el año 2000 y finalizados en 2015. A diferencia de los ODM, que se enfocaban principalmente en los países en desarrollo, los ODS son universales y están diseñados para ser aplicados por todos los países, sin importar su nivel de desarrollo. Los ODS buscan un equilibrio entre los tres pilares del desarrollo sostenible: económico, social y ambiental, y se caracterizan por un enfoque holístico e integrador que reconoce las interrelaciones entre estos ámbitos.
 	
+	\subsection{Principios rectores de los ODS}
+	
+	Los ODS están basados en principios clave para asegurar su impacto global y efectivo:
+	
+	Universalidad: Los ODS son aplicables a todos los países del mundo. No se trata únicamente de desafíos para los países en desarrollo, sino que incluyen a todas las naciones en la tarea de construir un futuro más sostenible.
+	
+	Integración: Los ODS están profundamente interrelacionados. Los avances en uno de los objetivos pueden influir positivamente en el logro de otros. Por ejemplo, la acción climática (ODS 13) está directamente relacionada con la lucha contra la pobreza (ODS 1) y la salud y bienestar (ODS 3).
+	
+	Inclusividad: Nadie debe quedarse atrás. Los ODS buscan reducir las desigualdades no solo entre países, sino también dentro de ellos, garantizando que los más vulnerables reciban apoyo y recursos.
+	
+	\subsection{Los 17 Objetivos de Desarrollo Sostenible}
+	
+	Los 17 ODS son un conjunto integral que abarca desafíos globales que afectan a la humanidad y el planeta. Cada objetivo se desglosa en metas específicas y medibles. A continuación, se presentan algunos de los objetivos más relevantes para el contexto del desarrollo urbano y la sostenibilidad:
+	
+	ODS 11: Ciudades y comunidades sostenibles: Busca hacer que las ciudades y los asentamientos humanos sean inclusivos, seguros, resilientes y sostenibles. Dado que más del 55\% de la población mundial vive en áreas urbanas, este objetivo es crucial para mejorar la calidad de vida y reducir el impacto ambiental en las ciudades. Incluye metas como el acceso a una vivienda adecuada y asequible, el transporte sostenible, la planificación urbana inclusiva y la reducción del impacto ambiental urbano.
+	
+	ODS 13: Acción por el clima: Llama a tomar medidas urgentes para combatir el cambio climático y sus impactos, incluyendo la mitigación de emisiones de gases de efecto invernadero y la adaptación a los efectos adversos del cambio climático. Este objetivo está alineado con los compromisos internacionales, como el Acuerdo de París de 2015.
+	
+	ODS 7: Energía asequible y no contaminante: Promueve el acceso universal a energía moderna, asequible, confiable y sostenible, lo que implica la expansión de las energías renovables y la mejora en la eficiencia energética. Este objetivo es clave para reducir las emisiones de carbono y combatir el cambio climático.
+	
+	ODS 9: Industria, innovación e infraestructura: Fomenta el desarrollo de infraestructuras resilientes, la promoción de la industrialización inclusiva y sostenible, y el impulso de la innovación. Las tecnologías emergentes y la digitalización juegan un papel importante en este objetivo.
+	
+	\subsection{Relevancia para aplicaciones tecnológicas y urbanas}
+	
+	En el contexto del desarrollo de aplicaciones tecnológicas, como Eco City Tours, los ODS proporcionan un marco para evaluar y mejorar el impacto positivo de las tecnologías en las ciudades y comunidades. La creación de herramientas tecnológicas que promuevan el transporte sostenible, reduzcan las emisiones de carbono, y mejoren la calidad de vida urbana se alinea directamente con los objetivos de desarrollo sostenible. Por ejemplo, aplicaciones de rutas sostenibles como Eco City Tours contribuyen directamente al ODS 11, promoviendo alternativas de transporte no motorizado (peatonal y ciclismo), ayudando a reducir las emisiones de carbono, y mejorando la accesibilidad y conectividad dentro de las ciudades.
+	
+	\subsection{ODS y tecnología GIS en la planificación urbana}
+	
+	El uso de tecnologías como los Sistemas de Información Geográfica (GIS) desempeña un papel crucial en la implementación y seguimiento de los ODS, especialmente en el ámbito urbano. Los GIS permiten:
+	
+	Monitoreo del desarrollo urbano: Ayudan a analizar cómo crecen las ciudades y qué impacto tienen en el medio ambiente, lo cual es vital para cumplir con las metas de ciudades sostenibles.
+	
+	Optimización de rutas sostenibles: Facilitan la creación de rutas para peatones y ciclistas que minimicen el uso de vehículos motorizados, contribuyendo a la reducción de emisiones de gases de efecto invernadero.
+	
+	Evaluación de riesgos ambientales: Permiten identificar áreas vulnerables a riesgos naturales, como inundaciones o deslizamientos de tierra, y planificar medidas de adaptación al cambio climático.
+	
+	\subsection{Conclusión}
+	
+	La Agenda 2030 y los ODS proporcionan un marco integral para el desarrollo sostenible global, y su integración en proyectos tecnológicos y urbanos es clave para alcanzar un futuro más sostenible e inclusivo. Herramientas como los GIS y el desarrollo de aplicaciones enfocadas en la sostenibilidad, como Eco City Tours, pueden jugar un papel crucial en el logro de estos objetivos, especialmente en la creación de ciudades más sostenibles, resilientes y eficientes.
 
 \section{Conceptos acerca de los modelos de lenguaje a gran escala (LLM)}
 
