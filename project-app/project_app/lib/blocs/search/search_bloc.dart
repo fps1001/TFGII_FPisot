@@ -13,9 +13,9 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final TrafficService trafficService;
-  final OptimizationService? optimizationService;
+  final OptimizationService optimizationService;
   // Manejadores de eventos a continuación
-  SearchBloc({required this.trafficService, this.optimizationService}) : super(const SearchState()) {
+  SearchBloc({required this.trafficService, required this.optimizationService}) : super(const SearchState()) {
     on<OnActivateManualMarkerEvent>(
         (event, emit) => emit(state.copyWith(displayManualMarker: true)));
     on<OnDisactivateManualMarkerEvent>(
@@ -65,7 +65,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
 Future<RouteDestination> getOptimizedRoute(List<LatLng> waypoints) async {
   // Obtener la respuesta de la optimización de la ruta
-  final resp = await optimizationService!.getOptimizedRoute(waypoints);
+  final resp = await optimizationService.getOptimizedRoute(waypoints);
 
   if (resp.trips.isEmpty) {
     throw AppException("No trips found in the optimization response");

@@ -54,7 +54,9 @@ void main() async {
           create: (context) => SearchBloc(
               // Instancia un trafficService que necesita para rutas.
               trafficService:
-                  TrafficService())), // Indica si se quiere hacer una busqueda manual o no.
+                  TrafficService(), 
+              optimizationService: 
+                  OptimizationService())), // Indica si se quiere hacer una busqueda manual o no.
     ],
     child: const ProjectApp(),
   ));

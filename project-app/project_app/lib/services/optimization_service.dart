@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/exceptions/exceptions.dart';
 import 'package:project_app/models/models.dart';
@@ -9,7 +10,7 @@ class OptimizationService {
   final Dio _dioOptimization;
 
   final String _baseOptimizationUrl =
-      'https://api.mapbox.com/optimized-trips/v1/{mapbox/walking}';
+      'https://api.mapbox.com/optimized-trips/v1/mapbox/walking';
 
   OptimizationService() : _dioOptimization = Dio();
 
@@ -19,16 +20,19 @@ class OptimizationService {
     final url = '$_baseOptimizationUrl/$coorsString';
 
     try {
+      String accessToken = dotenv.env['MAPBOX_API_KEY'] ?? '';
       final resp = await _dioOptimization.get(url,  
       queryParameters: {
         'geometries': 'polyline6', 
+        //TODO habrá que asegurarse que el primer punto sea lastknownlocation
         'source' : 'first',
         'destination' : 'any',
+        'access_token': accessToken,
         });
 
       if (resp.data == null ||
-          resp.data['routes'] == null ||
-          resp.data['routes'].isEmpty) {
+          resp.data['trips'] == null ||
+          resp.data['trips'].isEmpty) {
         throw AppException("No routes found in response", url: url);
       }
 

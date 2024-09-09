@@ -50,12 +50,15 @@ void main() async {
               SchemaType.string,
             ),
           },
+          //* Campos requeridos
           requiredProperties: ['gps', 'name'],
         ),
     ),
+    //* Role prompting: Se define el rol del modelo
     systemInstruction: Content.system('Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo'),
   );
 
+  //* Se le añade contexto al modelo dandole así también un ejemplo de lo que se espera de él: few-shot learning
   final chat = model.startChat(history: [
     Content.multi([
       TextPart('Genera una lista de 1 puntos de interés en Salamanca, incluyendo para cada uno: nombre, descripción breve, coordenadas GPS, una URL para más información y una URL de una imagen representativa. Organiza la información en formato JSON, con un array de objetos, donde cada objeto representa un punto de interés.'),
@@ -66,6 +69,8 @@ void main() async {
   ]);
   //* CONSTRUCCIÓN DE PETICIÓN
   // Definimos las variables de ciudad y número de POIs
+  //TODO Se obtendrán estas variables a través del bloc correspondiente, por ahora se definen de forma estática
+  //TODO Las variables se modificarán en el menú de carga de la aplicación, pendiente de crear.
   final String ciudad = 'Salamanca';
   final int n_poi = 3;
 
