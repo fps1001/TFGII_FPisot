@@ -1,9 +1,105 @@
 \capitulo{4}{Técnicas y herramientas}
 
-Esta parte de la memoria tiene como objetivo presentar las técnicas metodológicas y las herramientas de desarrollo que se han utilizado para llevar a cabo el proyecto. Si se han estudiado diferentes alternativas de metodologías, herramientas, bibliotecas se puede hacer un resumen de los aspectos más destacados de cada alternativa, incluyendo comparativas entre las distintas opciones y una justificación de las elecciones realizadas. 
-No se pretende que este apartado se convierta en un capítulo de un libro dedicado a cada una de las alternativas, sino comentar los aspectos más destacados de cada opción, con un repaso somero a los fundamentos esenciales y referencias bibliográficas para que el lector pueda ampliar su conocimiento sobre el tema.
+El siguiente capítulo presenta las técnicas y herramientas usadas a lo largo del desarrollo de la aplicación Eco City Tours. Se detallarán los aspectos más destacados de cada una de ellas, justificando el porqué de su utilización sobre otras alternativas si las hubiera. Se ha seguido una división en función de su 
 
 
-\section{LangChain}
-En el último año LangChain se ha establecido como uno de los marcos de trabajo más populares del mercado. Esta herramienta multiusos aúna aplicaciones tan necesarias para el mundo de los \acrfull{llm} como pueden ser base de datos de vectores, memoria, prompts, herramientas, agentes como ya hemos visto en la sección \ref{sec:agentes} y cadenas de pensamiento (de así su nombre chain). En el prototipo de prompting de este \acrshort{tfg} se puede ver el anidamiento de componentes como son estas cadenas para obtener la mejor entrada posible al modelo y obtener la mejor salida posible, estas cadenas pueden unir componentes como prompts, retrievers, processors, tools o incluso otras cadenas para procesos más complejos.
-Con todo ello LangChain supone una manera de combinar el poder de los \acrshort{llm} con la lógica de cualquier aplicación.
+\section{Desarrollo relacionado con LLM}
+	\subsection{LM Studio}
+	LM Studio es una aplicación enfocada en el despliegue de modelos de lenguaje. Su principal objetivo es facilitar la experimentación con \acrlong{llm} ofreciendo un entorno completo y que integra funcionalidades en el procesamiento de lenguaje natural.
+	Estas son algunas de las más destacadas:
+	
+	
+	\begin{itemize}
+		
+		\item \textbf{Búsqueda y despliegue de modelos en local}: a través de un buscador intuitivo, los usuarios pueden seleccionar, descargar y desplegar cualquier modelo disponible en plataformas como Hugging Face, facilitando su uso local.
+		
+		\item \textbf{Servidor local de un el modelo}: LM Studio permite crear un servidor local que gestione peticiones de información. Esto es especialmente útil para automatizar procesos que requieran el procesamiento de lenguaje o la gestión de grandes volúmenes de datos.
+		
+		\item \textbf{Entrenamiento y ajuste de modelo}: LM Studio simplifica el proceso de fine-tuning o ajuste fino, que consiste en optimizar un modelo pre-entrenado mediante conjuntos de datos específicos y tareas concretas para mejorar su rendimiento. Gracias a su interfaz gráfica, esta tarea se vuelve más accesible para los desarrolladores, eliminando gran parte de la complejidad técnica.
+		
+		\item \textbf{Optimización y monitorización}: permite observar el rendimiento de los modelos analizando su consumo de GPU, memoria o CPU así como su tiempo de respuesta, lo que permite realizar al usuario ajustes con el fin de mejorar el rendimiento del sistema.
+		
+	\end{itemize}
+	En un punto inicial del desarrollo se usaba Ollama para experimentar, sin embargo
+	La experimentación con diferentes modelos a la hora de decidir cual usar para Eco City Tours fue mucho más rápida y eficiente con esta herramienta.
+	
+	\subsection{LangChain}
+	En el último año LangChain se ha establecido como uno de los marcos de trabajo más populares del mercado. Esta herramienta multiusos aúna aplicaciones tan necesarias para el mundo de los \acrfull{llm} como pueden ser base de datos de vectores, memoria, prompts, herramientas, agentes como ya hemos visto en la sección \ref{sec:agentes} y cadenas de pensamiento (de así su nombre chain). En el prototipo de prompting de este \acrshort{tfg} se puede ver el anidamiento de componentes como son estas cadenas para obtener la mejor entrada posible al modelo y obtener la mejor salida posible, estas cadenas pueden unir componentes como prompts, retrievers, processors, tools o incluso otras cadenas para procesos más complejos.
+	Con todo ello LangChain supone una manera de combinar el poder de los \acrshort{llm} con la lógica de cualquier aplicación.
+	
+	\subsection{LangFlow}
+	LangFlow es una herramienta de código abierto que proporciona una \acrfull{gui}, permitiendo la interacción con \acrlong{llm} (Modelos de Lenguaje a Gran Escala) sin necesidad de escribir código. Los usuarios pueden configurar componentes y módulos de forma visual, conectándolos entre sí como si se tratara de un diagrama de flujo, facilitando la creación de aplicaciones complejas de procesamiento de lenguaje.
+	
+	La aplicación se puede instalar localmente, donde se ejecuta como un servicio en un puerto específico del localhost, permitiendo interactuar con la interfaz a través de un navegador web, como si fuera una aplicación web estándar.
+	\begin{itemize}
+		
+		\item \textbf{Integración con múltiples LLM y herramientas de terceros}: existe una gran variedad de modelos con los que se puede interactuar con solo configurar sus claves API, pero también herramientas como agentes o tokenizadores, lo que amplía las posibilidades de personalización y experimentación.
+		
+		\item \textbf{Herramienta de exportación e importación}: la plataforma permite exportar el flujo de trabajo generado a un archivo JSON, lo que facilita la portabilidad del proyecto.
+		
+		\item \textbf{Prototipos iniciales}: se puede encontrar en el arranque de la aplicación proyectos por defecto que facilitan el desarrollo. Por ejemplo, si se quiere conseguir un sistema RAG, se puede partir de una plantilla ya creada que permite ahorrar tiempo a la hora de personalizar un prototipo personal.
+	
+	\end{itemize}
+	En resumen, la principal característica que hace a esta herramienta tan potente es que favorece la experimentación y configuración personal de los elementos que componen un prototipo que usa interacciones con modelos \acrshort{llm}. Esto la convierte en una herramienta ideal para desarrolladores que están empezando a explorar el mundo de los \acrshort{llm}, ya que su enfoque visual ofrece una ventaja significativa frente a alternativas más técnicas, como los cuadernos Jupyter. Además, en el futuro próximo se presenta como una herramienta docente donde presentar a los alumnos los \acrlong{llm} llevando su utilización a campos como el tratamiento de la información, machine-learning o automatización de procesos.
+
+\section{Desarrollo aplicación móvil}
+Se utilizó el framework Flutter para desarrollar Eco City Tours. El desarrollo de la aplicación se realizó usando Visual Studio Code. 
+	
+	\subsection{Bloc como gestor de estados}
+	Una parte fundamental de una aplicación móvil reactiva, es un gestor de estados. Su función es automatizar el cambio de vistas cuando un elemento de la interfaz cambia de valor. Existen varios gestores para Flutter tales como: Provider, Cubits, GetX, etc. Bloc sin embargo es Flutter favorite lo que indica que es un paquete que se considera 
+	
+	\subsection{Extensiones de Visual Studio Code más destacadas}
+		\begin{itemize}
+		
+		\item \textbf{ChatBot}: .
+		
+		\item \textbf{}: .
+		
+		\item \textbf{}:.
+		
+	\end{itemize}
+		
+
+\section{Gestión de proyectos}
+	\subsection{GitHub}
+	GitHub es una plataforma en la nube para el alojamiento y gestión de código fuente, que se basa en el sistema de control de versiones Git. A lo largo de la carrera de Ingeniería Informática, ha sido utilizada en diversas asignaturas, lo que la convierte en una herramienta fundamental para el desarrollo de proyectos. En el contexto de este \acrshort{tfg}, GitHub ha sido esencial para centralizar y gestionar el código generado en varios \acrshort{ide}, permitiendo un control de versiones eficiente, la conservación del trabajo y una colaboración estructurada en la nube. Algunas de sus características principales usadas en el desarrollo de Eco City Tours fueron las siguientes: 
+	
+	\begin{itemize}
+		
+		\item \textbf{Control de versiones con Git}: gracias a los commits realizados a lo largo del desarrollo se permite comprobar la evolución de un proyecto así como volver a estados del trabajo gestionados en sus ramas. Otras herramientas como pull-requests permiten solicitar cambios al código facilitando un uso colaborativo durante la gestión del proyecto.
+		
+		\item \textbf{Integración con herramientas de terceros}: GitHub se integra fácilmente con una amplia variedad de herramientas de desarrollo, como servicios de CI/CD, plataformas de despliegue y gestores de proyectos como Zube, lo que permite automatizar tareas y mejorar el flujo de trabajo.
+		
+		\item \textbf{Documentación y wikis}: GitHub permite mantener documentación clara y estructurada directamente en el repositorio, facilitando la creación de archivos README para proporcionar información detallada sobre el proyecto.
+		
+	\end{itemize}
+	Al trabajar desde diferentes equipos GitHub fue especialmente útil en el desarrollo del proyecto: se utilizó la integración de Visual Studio Code con Github para los cambios en la programación de la aplicación y los prototipos en cuadernos jupyter y se usó la extensión Git Graph para comprobar el funcionamiento y navegación a través de los commits cuando fue necesario. Para realizar commits en los cambios de la documentación se usó GitHub Desktop una vez realizados los cambios con la \acrshort{ide} TeXstudio.
+		\imagen{git_graph}{Uso de GitHub con la extensión de VSCode Git Graph}{1}
+	
+	\subsection{Zube}
+	Zube es una plataforma de gestión de proyectos con un enfoque colaborativo durante el seguimiento del desarrollo del mismo. Las características principales que lo hacen la herramienta usada son:
+	\begin{itemize}
+		
+		\item Versión gratuita: Zube ofrece un plan gratuito que cubre las necesidades básicas de gestión de proyectos autogestionados.
+		
+		\item Conexión con GitHub: su integración con el repositorio del proyecto para su seguimiento es una condición indispensable. Además, La sincronización es inmediata lo que produce por ejemplo que al crear una tarea, inmediatamente esté disponible para su gestión desde Zube.
+		
+		\item Tableros Kanban: se facilita la visualización del flujo de trabajo. Las tarjetas de tareas pueden moverse fácilmente entre columnas como "Pendiente", "En progreso" y "Completado", lo que permite un seguimiento claro y eficaz del estado de cada tarea..
+		
+		\item Herramientas gráficas para control de los sprints: otra manera de consultar el flujo de trabajo durante los sprints con gráficos burndown, burnup, throughput o de velocidad.
+	 
+	\end{itemize}
+	
+	El uso de esta aplicación fue vital a lo largo del proyecto, ya que se utilizó principalmente para el control de sprints y sus tareas en el panel Kanban y la asignación con puntos de historia. La integración con GitHub permitió un flujo de trabajo eficiente, manteniendo el código fuente y la gestión de tareas en perfecta sincronización, lo que favoreció un desarrollo ágil y organizado. 
+	
+	\subsection{TeXstudio}
+	Para la elaboración de la documentación de este \acrshort{tfg}, se ha optado por utilizar TeXstudio, un \acrfull{ide} especializado en la edición de textos en LaTeX. Esta herramienta facilita la redacción de trabajos académicos y científicos mediante características como el resaltado de sintaxis, corrección ortográfica y semántica en tiempo real, y la posibilidad de compilar el documento durante su edición, lo que permite visualizar el resultado final en formato PDF de manera inmediata.
+	
+	TeXstudio es una herramienta multiplataforma, y se seleccionó por encima de otras alternativas debido a su facilidad de uso, interfaz intuitiva, y la consola de errores integrada, que simplifica la detección de fallos en la secuencia de comandos LaTeX.
+	
+	Una de las características más destacadas es la funcionalidad de \textbf{compilación automática al editar}, la cual permite previsualizar continuamente el documento mientras se trabaja, lo que mejora la productividad al ofrecer un resultado inmediato sobre los cambios realizados.
+	
+	
+	
+	
+
