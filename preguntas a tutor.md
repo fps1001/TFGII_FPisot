@@ -27,10 +27,10 @@
 #### 3. Desarrollo de la Aplicación
 
 - **Tareas**:
-  - **TODO**: Resolver `toggle button` si se decide que es útil.
+  
   - **TODO**: Resolver el caso de no tener internet para que la app no se quede buscando indefinidamente.
   - **TODO**: Añadir un diálogo para cuando el usuario escoge un lugar de la lista.
-  - **TODO**: Quitar los botones de guiado de Google Maps y brújula, o al menos recolocarlos.
+  
   - **TODO**: Decidir si usar `customPaint` para el inicio y final de ruta con duración y km de la ruta.
   - **TODO**: Decidir el tema de la aplicación y si debe ser variable.
 
