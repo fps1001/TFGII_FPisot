@@ -43,19 +43,34 @@ El siguiente capítulo presenta las técnicas y herramientas usadas a lo largo d
 	En resumen, la principal característica que hace a esta herramienta tan potente es que favorece la experimentación y configuración personal de los elementos que componen un prototipo que usa interacciones con modelos \acrshort{llm}. Esto la convierte en una herramienta ideal para desarrolladores que están empezando a explorar el mundo de los \acrshort{llm}, ya que su enfoque visual ofrece una ventaja significativa frente a alternativas más técnicas, como los cuadernos Jupyter. Además, en el futuro próximo se presenta como una herramienta docente donde presentar a los alumnos los \acrlong{llm} llevando su utilización a campos como el tratamiento de la información, machine-learning o automatización de procesos.
 
 \section{Desarrollo aplicación móvil}
-Se utilizó el framework Flutter para desarrollar Eco City Tours. El desarrollo de la aplicación se realizó usando Visual Studio Code. 
+Se utilizó el framework Flutter para desarrollar Eco City Tours. El entorno de desarrollo elegido fue Visual Studio Code, que ofrece una amplia gama de extensiones y herramientas que facilitan el proceso de desarrollo.
 	
 	\subsection{Bloc como gestor de estados}
-	Una parte fundamental de una aplicación móvil reactiva, es un gestor de estados. Su función es automatizar el cambio de vistas cuando un elemento de la interfaz cambia de valor. Existen varios gestores para Flutter tales como: Provider, Cubits, GetX, etc. Bloc sin embargo es Flutter favorite lo que indica que es un paquete que se considera 
+	Un aspecto fundamental en una aplicación móvil reactiva es la gestión del estado, cuyo propósito es automatizar la actualización de las vistas cuando los valores de la lógica de control cambian. Flutter ofrece diversos gestores de estado, como \textit{Provider, Cubit, GetX}, entre otros. Sin embargo, Bloc destaca como un paquete \textbf{Flutter Favorite}, lo que lo sitúa como una opción preferida debido a su soporte activo, calidad de código, seguridad y frecuencia de actualizaciones.
+	
+	Entre todos los gestores aprendidos durante mi formación, Bloc resultó ser una opción muy robusta. Una vez comprendida su sintaxis, se aprecia su facilidad de uso y la modularidad de sus elementos, que se estructuran en eventos, estados y definiciones de blocs.
+	\begin{itemize}
+		
+		\item \textbf{Gestión clara del estado}: Bloc proporciona una manera estructurada de gestionar los diferentes estados de la aplicación. Cada cambio de estado es manejado a través de eventos, lo que permite una clara separación entre la lógica de negocio y la presentación visual.
+		
+		\item \textbf{Escalabilidad y mantenibilidad}: con las extensiones de Visual Studio Code, es posible generar nuevos blocs fácilmente, lo que facilita la creación de nuevas funcionalidades sin añadir complejidad innecesaria al código. Cada nueva funcionalidad de la aplicación puede estar controlada por un bloc independiente, lo que resulta en un código escalable y altamente mantenible.
+				
+		\item \textbf{Reutilización de lógica}: Uno de los beneficios clave de Bloc es que la lógica de negocio se puede reutilizar fácilmente en diferentes partes de la aplicación. Esto facilita la implementación de componentes que comparten comportamientos similares sin duplicar código, simplemente creando Widgets como BlocProvider o MultiBlocProvider como se hace al nivel más alto de una aplicación como se puede ver en el siguiente árbol de Widgets:
+		
+		\imagen{widget_tree}{Árbol de widgets de Eco City Tours durante su desarrollo}{0.8}
+		
+				
+	\end{itemize}
 	
 	\subsection{Extensiones de Visual Studio Code más destacadas}
+		Se citan a continuación brevemente algunas de las extensiones que facilitaron el desarrollo de la aplicación aumentando la producción:
 		\begin{itemize}
 		
-		\item \textbf{ChatBot}: .
+		\item \textbf{ChatBot}: con un perfil de estudiante de GitHub hay asociados una serie de privilegios entre los que destacan el uso gratuito de esta herramienta que permite tener autocompletado de código y comentarios o un chat con la IA que facilita la depuración de código. 
 		
-		\item \textbf{}: .
+		\item \textbf{Pubspec Assist}: las dependencias de librerías incluidas en el archivo pub\_spec.yaml son automáticamente instaladas, ordenadas y gestionadas en definitiva por este asistente que ahorra múltiples comandos en consola mejorando la rápidez a la hora de programar.
 		
-		\item \textbf{}:.
+		\item \textbf{Snippets}: de manera análoga los snippets de flutter permiten programar rápidamente estructuras del código repetitiva. Por dar un ejemplo si se escribe stlessw y se pulsa tabulador el código de un Stateless Widget aparece escrito en pantalla. De igual manera se pueden personalizar atajos que aumenten la producción del tiempo de desarrollo.
 		
 	\end{itemize}
 		
