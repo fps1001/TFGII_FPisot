@@ -94,7 +94,7 @@ Future<RouteDestination> getOptimizedRoute(List<LatLng> waypoints) async {
     totalDistance += trip.distance;
     totalDuration += trip.duration;
   }
-
+  // Constuimos un RouteDestination que se puede pintar con los datos de los Trips:
   final endPlace = await trafficService.getPlaceByCoords(waypoints.last);
   // Retornar la ruta optimizada completa con todos los trips
   return RouteDestination(

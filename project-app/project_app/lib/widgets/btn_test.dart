@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:project_app/models/models.dart';
+import 'package:project_app/services/services.dart';
 
 import '../blocs/blocs.dart';
 
@@ -11,13 +13,16 @@ class BtnTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Coordenadas de prueba para Salamanca, España (centro)
+    /*
     final List<LatLng> salamancaCoordinates = [
       LatLng(40.964165, -5.663774), // Plaza Mayor
       LatLng(40.962903, -5.666918), // Catedral de Salamanca
       LatLng(40.965479, -5.668760), // Casa de las Conchas
       LatLng(40.963776, -5.669952), // Universidad de Salamanca
     ];
-    // Para obtener la polilínea optimizada de puntos.
+    */
+
+
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     // Para pintar línea
     final mapBloc = BlocProvider.of<MapBloc>(context);
@@ -42,6 +47,16 @@ class BtnTest extends StatelessWidget {
 
               //Mensaje de carga:
               //LoadingMessageHelper.showLoadingMessage(context);
+              //* Llamada a la API de Gemini
+              final List<PointOfInterest> pois = await GeminiService.fetchGeminiData();
+
+              // Convertir la lista de PointOfInterest a una lista de LatLng
+              final List<LatLng> salamancaCoordinates = pois.map((poi) => poi.gps).toList();
+
+              if (salamancaCoordinates.isEmpty) {
+                print('No coordinates found.');
+                return;
+              }
 
               // Calcula la polilínea a mostrar por el mapbloc
               final destination = await searchBloc.getOptimizedRoute(salamancaCoordinates);

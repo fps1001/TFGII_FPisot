@@ -22,12 +22,7 @@ void main() async {
   
   //TODO decidir theme de aplicación y si debe ser variable
 
-  //TODO añadir icono de la app
-
-  //TODO probar a cargar un modelo en local
-
-  //TODO probar la optimización de rutas
-
+  
   Bloc.observer = MyBlocObserver();
   try {
     await dotenv.load(fileName: '.env');
