@@ -31,37 +31,26 @@ class GeminiService {
       responseMimeType: 'application/json',
         
         responseSchema: Schema(
-          SchemaType.object,
-          enumValues: [],
-          properties: {
-            "gps": Schema(
-              SchemaType.array,
-              items: Schema(
-                SchemaType.number,
-              ),
-            ),
-            "name": Schema(
-              SchemaType.string,
-            ),
-            "description": Schema(
-              SchemaType.string,
-            ),
-            "url": Schema(
-              SchemaType.string,
-            ),
-            "url_img": Schema(
-              SchemaType.string,
-            ),
-          },
-          //* Campos requeridos
-          requiredProperties: ['gps', 'name'],
+          SchemaType.array, // Cambiamos a array porque esperamos múltiples POIs
+          items: Schema(
+            SchemaType.object,
+            properties: {
+              "gps": Schema(SchemaType.array, items: Schema(SchemaType.number)),
+              "name": Schema(SchemaType.string),
+              "description": Schema(SchemaType.string),
+              "url": Schema(SchemaType.string),
+              "url_img": Schema(SchemaType.string),
+            },
+            requiredProperties: ['gps', 'name'],
+          ),
         ),
-    ),
-    //* Role prompting: Se define el rol del modelo
-    systemInstruction: Content.system('Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo'),
+      ),
+      //* Role prompting: Se define el rol del modelo
+      systemInstruction: Content.system('Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo'),
   );
 
   //* Se le añade contexto al modelo dandole así también un ejemplo de lo que se espera de él: few-shot learning
+  /*
   final chat = model.startChat(history: [
     Content.multi([
       TextPart('Genera una lista de 1 puntos de interés en Salamanca, incluyendo para cada uno: nombre, descripción breve, coordenadas GPS, una URL para más información y una URL de una imagen representativa. Organiza la información en formato JSON, con un array de objetos, donde cada objeto representa un punto de interés.'),
@@ -70,6 +59,7 @@ class GeminiService {
       TextPart('```json\n{"gps": [40.9647, -5.6695], "name": "Plaza Mayor", "description": "La Plaza Mayor de Salamanca es uno de los lugares más emblemáticos de la ciudad, un espacio público que ha sido testigo de la historia de la ciudad desde el siglo XVIII. Es un buen ejemplo de arquitectura barroca, y está rodeada de edificios con balcones que dan a la plaza.  Es un lugar perfecto para pasear, disfrutar de la gastronomía local y  observar el ambiente  de la ciudad. ", "url": "https://www.salamanca.es/es/turismo/plaza-mayor", "url_img": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Plaza_Mayor_de_Salamanca_%282015%29.jpg/1280px-Plaza_Mayor_de_Salamanca_%282015%29.jpg"\n} \n```'),
     ]),
   ]);
+  */
   //* CONSTRUCCIÓN DE PETICIÓN
   // Definimos las variables de ciudad y número de POIs
   //TODO Se obtendrán estas variables a través del bloc correspondiente, por ahora se definen de forma estática
@@ -77,9 +67,24 @@ class GeminiService {
   final String ciudad = 'Salamanca';
   final int n_poi = 3;
 
+  final chat = model.startChat();
 
+  final message = '''Genera un array de $n_poi objetos JSON, cada uno representando un punto de interés turístico diferente en $ciudad. Cada objeto debe incluir:
+* nombre (string)
+* descripción (string)
+* coordenadas (array de dos números: latitud y longitud)
+* url (string)
+* url_img (string)
 
-  final message = '''Genera una lista de $n_poi puntos de interés en $ciudad, incluyendo para cada uno: nombre, descripción breve, coordenadas GPS, una URL para más información y una URL de una imagen representativa. Organiza la información en formato JSON, con un array de objetos, donde cada objeto representa un punto de interés.''';
+**Ejemplo de objeto JSON:**
+```json
+{
+    "nombre": "Plaza Mayor",
+    "descripcion": "La Plaza Mayor de Salamanca...",
+    "coordenadas": [40.9647, -5.6695],
+    "url": "[https://www.salamanca.es/es/turismo/plaza-mayor](https://www.salamanca.es/es/turismo/plaza-mayor)",
+    "url_img": "[se quitó una URL no válida]"
+}''';
   final content = Content.text(message);
   
   //* VALIDACIÓN E IMPRESIÓN DE RESPUESTA
@@ -91,48 +96,29 @@ class GeminiService {
     }
 
 // Parsear la respuesta JSON para crear la lista de PointOfInterest
-  List<PointOfInterest> pointsOfInterest = [];
+    List<PointOfInterest> pointsOfInterest = [];
 
-  try {
-      // Decodificar el JSON como un Map, ya que la estructura esperada no es una lista
-      Map<String, dynamic> jsonResponse = json.decode(response.text!); // Decodificar el JSON
+    try {
+      // Decodificar el JSON como una lista de mapas
+      List<dynamic> jsonResponse = json.decode(response.text!); // Decodificar el JSON como lista
 
-      // Verifica si hay un campo que contenga los puntos de interés como lista
-      if (jsonResponse.containsKey('pointsOfInterest')) {
-        List<dynamic> poisJson = jsonResponse['pointsOfInterest'];
-
-        pointsOfInterest = poisJson.map((poiJson) {
-          // Extraer las coordenadas GPS
-          List<dynamic> gps = poiJson['gps'];
-          LatLng gpsPoint = LatLng(gps[0].toDouble(), gps[1].toDouble());
-
-          return PointOfInterest(
-            gps: gpsPoint,
-            name: poiJson['name'] ?? '',
-            description: poiJson['description'],
-            url: poiJson['url'],
-            imageUrl: poiJson['url_img'],
-          );
-        }).toList();
-      } else {
-        // Si no hay un campo 'pointsOfInterest', extraer el único POI del JSON directamente
-        //! CREO QUE ES EL CASO PORQUE GEMINI DEVUELVE UN SOLO POI
-        //! TODO: FALLA LA SINTAXIS DE OPTIMIZACIÓN AL ENVIAR SOLO UN PAR DE COORDENADAS
-        //* creo que hay que realizar una modificación en la petición para que devuelva un array de objetos y en caso de que sea solo uno hacer la validación.
-        List<dynamic> gps = jsonResponse['gps'];
+      // Mapear los datos del JSON a una lista de objetos PointOfInterest
+      pointsOfInterest = jsonResponse.map((poiJson) {
+        List<dynamic> gps = poiJson['gps'];
         LatLng gpsPoint = LatLng(gps[0].toDouble(), gps[1].toDouble());
 
-        pointsOfInterest.add(PointOfInterest(
+        return PointOfInterest(
           gps: gpsPoint,
-          name: jsonResponse['name'] ?? '',
-          description: jsonResponse['description'],
-          url: jsonResponse['url'],
-          imageUrl: jsonResponse['url_img'],
-        ));
-      }
+          name: poiJson['name'] ?? '',
+          description: poiJson['description'],
+          url: poiJson['url'],
+          imageUrl: poiJson['url_img'],
+        );
+      }).toList();
     } catch (e) {
       print('Error parsing response: $e');
     }
+
 
     return pointsOfInterest;
   }
