@@ -97,8 +97,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   // Metodo que recibe una polilínea y la emite en un nuevo evento.
-  Future drawRoutePolyline(RouteDestination destination) async {
-    // Instancio la polilínea y el marcador de inicio.
+  // Ahora con POI's opcionales.
+  Future<void> drawRoutePolyline(RouteDestination destination, [List<PointOfInterest>? pois]) async {
     final myRoute = Polyline(
       polylineId: const PolylineId('route'),
       color: Colors.teal,
@@ -108,36 +108,52 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       endCap: Cap.roundCap,
     );
 
-    // Redondeo a dos decimales la distancia.
     double kms = destination.distance / 1000;
     kms = (kms * 100).floorToDouble();
     kms /= 100;
 
-    // Redondeo a dos decimales la duración.
     double tripDuration = (destination.duration / 60).floorToDouble();
-    
-    // Marcador personalizado.
+
     final startMarkerIcon = await getCustomMarker();
     final endMarkerIcon = await getNetworkImageMarker();
 
-    // Marcadores de inicio y final.
-    final startMarker = Marker(markerId: MarkerId('start'),
-        position: destination.points.first,
-        icon: startMarkerIcon,
-        infoWindow: InfoWindow(
-          title: 'Inicio',
-          snippet: 'Kms: $kms, duración: $tripDuration',
-        )
-        );
-    final finalMarker = Marker(markerId: MarkerId('final'),
-        position: destination.points.last,
-        icon: endMarkerIcon,
-        infoWindow: InfoWindow(
-          title: destination.endPlace.text,
-          snippet: destination.endPlace.placeName,)  
-        );
+    final startMarker = Marker(
+      markerId: const MarkerId('start'),
+      position: destination.points.first,
+      icon: startMarkerIcon,
+      infoWindow: InfoWindow(
+        title: 'Inicio',
+        snippet: 'Kms: $kms, duración: $tripDuration',
+      ),
+    );
 
-    // Tranformo en un mapa las polilíneas y marcadores actuales.
+    final finalMarker = Marker(
+      markerId: const MarkerId('final'),
+      position: destination.points.last,
+      icon: endMarkerIcon,
+      infoWindow: InfoWindow(
+        title: destination.endPlace.text,
+        snippet: destination.endPlace.placeName,
+      ),
+    );
+
+    // Marcadores de puntos de interés
+    Map<String, Marker> poiMarkers = {};
+    if (pois != null) {
+      for (var poi in pois) {
+        final poiMarker = Marker(
+          markerId: MarkerId(poi.name),
+          position: poi.gps,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure), // Por ahora un marcador básico
+          infoWindow: InfoWindow(
+            title: poi.name,
+            snippet: poi.description ?? 'Sin descripción',
+          ),
+        );
+        poiMarkers[poi.name] = poiMarker;
+      }
+    }
+
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     final currentMarkers = Map<String, Marker>.from(state.markers);
 
@@ -145,11 +161,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentMarkers['start'] = startMarker;
     currentMarkers['final'] = finalMarker;
 
+    // Agregar los marcadores de POIs
+    currentMarkers.addAll(poiMarkers);
+
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
 
-    // Espero 300ms para mostrar la ventana de información del marcador inicial.
     await Future.delayed(const Duration(milliseconds: 300));
-    _mapController?.showMarkerInfoWindow(MarkerId('start'));
+    _mapController?.showMarkerInfoWindow(const MarkerId('start'));
   }
 
   @override

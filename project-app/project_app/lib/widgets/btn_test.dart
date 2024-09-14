@@ -78,7 +78,7 @@ class BtnTest extends StatelessWidget {
                 await searchBloc.getOptimizedRoute(salamancaCoordinates);
 
             // Pintar la nueva polilínea en el mapa
-            await mapBloc.drawRoutePolyline(destination);
+            await mapBloc.drawRoutePolyline(destination, allPOIs);
           },
         ),
       ),

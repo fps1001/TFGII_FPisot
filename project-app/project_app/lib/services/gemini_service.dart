@@ -83,7 +83,7 @@ class GeminiService {
     "descripcion": "La Plaza Mayor de Salamanca...",
     "coordenadas": [40.9647, -5.6695],
     "url": "[https://www.salamanca.es/es/turismo/plaza-mayor](https://www.salamanca.es/es/turismo/plaza-mayor)",
-    "url_img": "[se quitó una URL no válida]"
+    "url_img": "[https://es.wikipedia.org/wiki/Archivo:Salamanca_-_Plaza_Mayor_(13347610863)_edited.jpg](Plaza Mayor)"
 }''';
   final content = Content.text(message);
   
