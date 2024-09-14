@@ -5,15 +5,6 @@ class MapState extends Equatable {
   final bool isFollowingUser;
   final bool showUserRoute;
 
-  /*Polilíneas de rutas
-   Son así:
-   'nombre_ruta': {
-      id: polylineId Google,
-      points: [lat,lng], [2312][213213],
-      width: 5,
-      color: Colors.red,
-   }
-  */
 
   final Map<String, Polyline> polylines;
   // De igual manera funcionan los marcadores

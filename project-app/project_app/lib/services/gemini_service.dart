@@ -118,13 +118,6 @@ class GeminiService {
     } catch (e) {
       print('Error parsing response: $e');
     }
-
-
     return pointsOfInterest;
   }
-
-  
-  
-
-  
 }

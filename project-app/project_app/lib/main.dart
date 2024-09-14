@@ -2,17 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:project_app/blocs/blocs.dart';
 
+import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/screens/screens.dart';
 import 'package:project_app/services/services.dart';
 
 void main() async {
-  //Resources:
-  // Iconos google:
-  //https://fonts.google.com/icons?icon.set=Material+Icons&icon.style=Rounded&icon.platform=flutter&selected=Material+Icons+Round:mode:&icon.query=draw
-  //Icono de la app:
-  //https://pub.dev/packages/flutter_launcher_icons
 
   //TODO resolver caso de no tener internet para que no se quede buscando...
   

@@ -6,7 +6,6 @@ import 'package:project_app/services/services.dart';
 
 import '../blocs/blocs.dart';
 
-
 class BtnTest extends StatelessWidget {
   const BtnTest({super.key});
 
@@ -22,10 +21,12 @@ class BtnTest extends StatelessWidget {
     ];
     */
 
-
-    final searchBloc = BlocProvider.of<SearchBloc>(context);
-    // Para pintar línea
-    final mapBloc = BlocProvider.of<MapBloc>(context);
+    final searchBloc =
+        BlocProvider.of<SearchBloc>(context); // Para obtener la ruta optimizada
+    final mapBloc =
+        BlocProvider.of<MapBloc>(context); // Para dibujar la polilínea
+    final locationBloc = BlocProvider.of<LocationBloc>(
+        context); // Para obtener la última ubicación conocida
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -35,35 +36,51 @@ class BtnTest extends StatelessWidget {
         maxRadius: 25,
         // BlocBuilder para saber si se sigue al usuario.
         child: IconButton(
-            icon: Icon(Icons.quiz_rounded, color: Colors.black),
-            onPressed: () async {
-              // start: posición del usuario o primer punto de la ruta:
-             // final start = locationBloc.state.lastKnownLocation;
-              // si no hay ubicación cancela.
-              //if (start == null) return;
-              // end: valor central del mapa desde el mapbloc
-              //final end = mapBloc.mapCenter;
-              //if (end == null) return;
+          icon: Icon(Icons.quiz_rounded, color: Colors.black),
+          onPressed: () async {
+            // Obtener la última ubicación conocida
+            final lastKnownLocation = locationBloc.state.lastKnownLocation;
 
-              //Mensaje de carga:
-              //LoadingMessageHelper.showLoadingMessage(context);
-              //* Llamada a la API de Gemini
-              final List<PointOfInterest> pois = await GeminiService.fetchGeminiData();
+            // Obtener POIs desde el servicio Gemini
+            final List<PointOfInterest> pois =
+                await GeminiService.fetchGeminiData();
 
-              // Convertir la lista de PointOfInterest a una lista de LatLng
-              final List<LatLng> salamancaCoordinates = pois.map((poi) => poi.gps).toList();
+            // Si no se obtienen POIs, cancelar la acción
+            if (pois.isEmpty) {
+              print('No points of interest found.');
+              return;
+            }
 
-              if (salamancaCoordinates.isEmpty) {
-                print('No coordinates found.');
-                return;
-              }
+            // Añadir la ubicación del usuario como el primer POI, si existe
+            final List<PointOfInterest> allPOIs = lastKnownLocation != null
+                ? [
+                    PointOfInterest(
+                      gps: lastKnownLocation,
+                      name: 'Tu ubicación actual',
+                      description: 'Última ubicación conocida del usuario',
+                    ),
+                    ...pois
+                  ]
+                : pois;
 
-              // Calcula la polilínea a mostrar por el mapbloc
-              final destination = await searchBloc.getOptimizedRoute(salamancaCoordinates);
+            // Convertir la lista de PointOfInterest a una lista de LatLng
+            final List<LatLng> salamancaCoordinates =
+                allPOIs.map((poi) => poi.gps).toList();
 
-              // Se llama a pintar nueva polilínea:
-              await mapBloc.drawRoutePolyline(destination);
-            }),
+            // Si no hay coordenadas (aunque improbable porque ya hay validación previa), cancelar la acción
+            if (salamancaCoordinates.isEmpty) {
+              print('No coordinates found.');
+              return;
+            }
+
+            // Obtener la ruta optimizada
+            final destination =
+                await searchBloc.getOptimizedRoute(salamancaCoordinates);
+
+            // Pintar la nueva polilínea en el mapa
+            await mapBloc.drawRoutePolyline(destination);
+          },
+        ),
       ),
     );
   }
