@@ -115,7 +115,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     double tripDuration = (destination.duration / 60).floorToDouble();
 
     final startMarkerIcon = await getCustomMarker();
-    final endMarkerIcon = await getNetworkImageMarker();
+    //final endMarkerIcon = await getNetworkImageMarker();
 
     final startMarker = Marker(
       markerId: const MarkerId('start'),
@@ -127,7 +127,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       ),
     );
 
-    final finalMarker = Marker(
+/*     final finalMarker = Marker(
       markerId: const MarkerId('final'),
       position: destination.points.last,
       icon: endMarkerIcon,
@@ -135,7 +135,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         title: destination.endPlace.text,
         snippet: destination.endPlace.placeName,
       ),
-    );
+    ); */
 
     // Marcadores de puntos de interés
     Map<String, Marker> poiMarkers = {};
@@ -144,7 +144,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         final poiMarker = Marker(
           markerId: MarkerId(poi.name),
           position: poi.gps,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure), // Por ahora un marcador básico
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure), //TODO Cambiar a marcador por url_img Por ahora un marcador básico
           infoWindow: InfoWindow(
             title: poi.name,
             snippet: poi.description ?? 'Sin descripción',
@@ -159,7 +159,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     currentPolylines['route'] = myRoute;
     currentMarkers['start'] = startMarker;
-    currentMarkers['final'] = finalMarker;
+    //currentMarkers['final'] = finalMarker;
 
     // Agregar los marcadores de POIs
     currentMarkers.addAll(poiMarkers);
