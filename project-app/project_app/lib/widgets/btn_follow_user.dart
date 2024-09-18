@@ -14,14 +14,14 @@ class BtnFollowUser extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         // Botón de centrado en la ubicación actual
         child: CircleAvatar(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).primaryColor, 
             maxRadius: 25,
             // BlocBuilder para saber si se sigue al usuario.
             child: BlocBuilder<MapBloc, MapState>(
               builder: (context, state) {
                 return IconButton(
                     icon:  Icon( state.isFollowingUser ? Icons.directions_run_outlined : Icons.hail_rounded,
-                        color: Colors.black),
+                        color: Colors.white),
                     onPressed: () {
                       mapBloc.add(OnStartFollowingUserEvent());
                       }  

@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/screens/screens.dart';
 import 'package:project_app/services/services.dart';
+import 'package:project_app/themes/themes.dart';
 
 void main() async {
 
@@ -57,9 +58,10 @@ class ProjectApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Eco-City Tour',
+        theme: AppTheme.lightTheme,
         home: LoadingScreen());
   }
 }

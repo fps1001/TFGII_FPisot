@@ -65,7 +65,7 @@ class _CustomSearchBarBody extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(100),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
                         color: Colors.black12,
                         blurRadius: 5,

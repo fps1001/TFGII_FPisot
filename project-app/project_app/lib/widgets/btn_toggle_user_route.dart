@@ -14,7 +14,7 @@ class BtnToggleUserRoute extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       // Botón de centrado en la ubicación actual
       child: CircleAvatar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor, // Verde
         maxRadius: 25,
         // BlocBuilder para saber si se sigue al usuario.
         child: BlocBuilder<MapBloc, MapState>(
@@ -24,7 +24,8 @@ class BtnToggleUserRoute extends StatelessWidget {
                     state.showUserRoute
                         ? Icons.mode_rounded
                         : Icons.draw_rounded,
-                    color: Colors.black),
+                    color: Colors.white, // Icono blanco),
+                ),
                 onPressed: () {
                   mapBloc.add(OnToggleShowUserRouteEvent());
                 });

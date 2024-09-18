@@ -15,11 +15,11 @@ class BtnCurrentLocation extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         // Botón de centrado en la ubicación actual
         child: CircleAvatar(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).primaryColor, 
             maxRadius: 25,
             child: IconButton(
                 icon:
-                    const Icon(Icons.my_location_outlined, color: Colors.black),
+                    const Icon(Icons.my_location_outlined, color: Colors.white), // Icono blanco
                 onPressed: () {
                   //Llamar al bloc
                   final userLocation = locationBloc.state.lastKnownLocation;

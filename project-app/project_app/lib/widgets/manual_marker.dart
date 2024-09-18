@@ -52,7 +52,7 @@ class _ManualMarkerBody extends StatelessWidget {
               offset: const Offset(0, -22),
               child: BounceInDown(
                 from: 100,
-                child: const Icon(Icons.location_on_rounded, size: 60),
+                child:  Icon(Icons.location_on_rounded, size: 60, color:  Theme.of(context).primaryColor,),
               ),
             ),
           ),
@@ -65,7 +65,7 @@ class _ManualMarkerBody extends StatelessWidget {
                 duration: const Duration(milliseconds: 300),
                 child: MaterialButton(
                   minWidth: size.width - 120,
-                  color: Colors.black,
+                  color: Theme.of(context).primaryColor,
                   elevation: 0,
                   height: 50,
                   // Bordes redondeados
@@ -98,7 +98,7 @@ class _ManualMarkerBody extends StatelessWidget {
                   child: const Text(
                     'Confirmar destino',
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w300),
+                        color: Colors.white, fontWeight: FontWeight.w600),
                   ),
                 ),
               ))
@@ -117,11 +117,11 @@ class _BtnBack extends StatelessWidget {
       duration: const Duration(milliseconds: 300),
       child: CircleAvatar(
         maxRadius: 30,
-        backgroundColor: Colors.white,
+        backgroundColor:  Theme.of(context).primaryColor,
         child: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
-            color: Colors.black,
+            color: Colors.white,
           ),
           onPressed: () {
             // Cambio de estado por evento.

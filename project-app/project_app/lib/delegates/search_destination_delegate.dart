@@ -96,7 +96,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
     return ListView(
       children: [
         ListTile(
-          leading: const Icon(Icons.location_on_outlined, color: Colors.black),
+          leading: Icon(Icons.location_on_outlined, color:  Theme.of(context).primaryColor),
           title: const Text('Colocar ubicación manualmente',
               style: TextStyle(color: Colors.black)),
           onTap: () {
@@ -107,7 +107,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
           },
         ),
         ...history.map((place) => ListTile(
-              leading: const Icon(Icons.history, color: Colors.black),
+              leading: Icon(Icons.history, color:  Theme.of(context).primaryColor),
               title: Text(place.text, style: const TextStyle(color: Colors.black)),
               subtitle: Text(place.placeName,
                   style: const TextStyle(color: Colors.black)),

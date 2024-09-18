@@ -17,8 +17,6 @@ class GpsAccessScreen extends StatelessWidget {
             return const _EnableGpsMessage();
           }
         }),
-        //_AccessButton(), // Será uno u otro en función del GPS activado o no
-        //child: _EnableGpsMessage(),
       ),
     );
   }
@@ -31,18 +29,34 @@ class _AccessButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [const Text('Es necesario habilitar el GPS para continuar'),
-      MaterialButton(
-        child: const Text('Solicitar acceso al GPS'),
-        //TODO: Cambiar estilo al botón.
-        onPressed: (){
-        
-          final gpsBloc = BlocProvider.of<GpsBloc>(context);
-          gpsBloc.askGpsAccess();
-
-      }),
-    ],
-      
+      children: [
+        Text(
+          'Es necesario habilitar el GPS para continuar',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontSize: 18,
+                color: Theme.of(context).primaryColor, // Color del tema
+              ), // Aplicar el estilo del tema
+        ),
+        const SizedBox(height: 20), // Espacio entre el texto y el botón
+        MaterialButton(
+          minWidth: MediaQuery.of(context).size.width - 120, // Ancho como el botón de "Confirmar destino"
+          color: Theme.of(context).primaryColor, // Color de fondo del tema
+          elevation: 0,
+          height: 50,
+          shape: const StadiumBorder(), // Bordes redondeados
+          onPressed: () {
+            final gpsBloc = BlocProvider.of<GpsBloc>(context);
+            gpsBloc.askGpsAccess();
+          },
+          child: const Text(
+            'Solicitar acceso al GPS',
+            style: TextStyle(
+              color: Colors.white, // Texto en blanco
+              fontWeight: FontWeight.w600, // Peso del texto
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -52,10 +66,13 @@ class _EnableGpsMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
+    return Text(
       'Debe habilitar el GPS para continuar',
-      style: TextStyle( fontSize: 20, fontWeight: FontWeight.bold),
+      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Theme.of(context).primaryColor,
+          ),
     );
   }
 }
-
