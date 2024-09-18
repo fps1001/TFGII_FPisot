@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
+  
+    static const primary = Color(0xFF00A86B); // Verde principal (del ícono)
+    static const secundary = Color(0xFF0047AB); // Azul secundario (del ícono)
+
   // Tema claro
   static ThemeData get lightTheme {
+
     return ThemeData(
       colorScheme: ColorScheme.light(
-        primary: Color(0xFF00A86B), // Verde principal (del ícono)
-        secondary: Color(0xFF0047AB), // Azul secundario (del ícono)
+        primary: primary, 
+        secondary: secundary, 
         surface: Colors.white, // Fondo blanco
       ),
       scaffoldBackgroundColor: Colors.grey[200], // Fondo del Scaffold
@@ -21,7 +26,7 @@ class AppTheme {
       // Estilos de botones elevados
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFF00A86B),  // Fondo verde del botón
+          backgroundColor: primary,  // Fondo verde del botón
           foregroundColor: Colors.white,       // Texto en blanco
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
@@ -32,7 +37,7 @@ class AppTheme {
 
       // Estilo del AppBar
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF0047AB),  // Azul para el AppBar
+        backgroundColor: primary,  // Azul para el AppBar
         elevation: 4, // Elevación/sombra
         titleTextStyle: TextStyle(
           color: Colors.white,

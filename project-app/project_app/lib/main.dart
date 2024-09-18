@@ -62,6 +62,7 @@ class ProjectApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Eco-City Tour',
         theme: AppTheme.lightTheme,
-        home: LoadingScreen());
+        //home: LoadingScreen());
+        home: TourSelectionScreen());
   }
 }

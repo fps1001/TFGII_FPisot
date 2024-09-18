@@ -26,6 +26,9 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomAppBar(title: 'Eco City Tour'), // Usa el CustomAppBar
+      //TODO añadir un drawer para la selección de tours
+
       body: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, locationState) {
           // Si llega a este punto la ubicación es conocida (null-safety)
@@ -67,7 +70,6 @@ class _MapScreenState extends State<MapScreen> {
           BtnToggleUserRoute(),
           BtnFollowUser(),
           BtnCurrentLocation(),
-
         ],
       ),
     );
