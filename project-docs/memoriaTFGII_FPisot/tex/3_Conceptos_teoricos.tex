@@ -3,30 +3,28 @@
 En este capítulo se describen los conceptos necesarios para comprender el funcionamiento de la aplicación desarrollada.
 
 \section{Conceptos acerca de los Sistemas de Información Geográfica (SIG)}
-	Un Sistema de Información Geográfica, comúnmente abreviado como \acrshort{sig} o \acrshort{gis}, es cualquier herramienta hardware o software que permita la realización de tareas sobre información que esté georreferenciada, es decir que los datos incluyen una ubicación en coordenadas geográficas. 
-	Estas herramientas están específicamente diseñadas para trabajar con datos que no solo realizan operaciones usuales de inserción, eliminación, actualización y extracción en una base de datos común (\acrshort{crud}), sino que realizan análisis con respecto a la ubicación o características geoespaciales o topográficas. Junto con los análisis espaciales, proporciona una mejor visualización de los datos con mapas, de modo que uno pueda presentar la información efectivamente en una manera legible que de otro modo sería difícil de interpretar. 
-	Estas herramientas son cada vez más usadas y dan soporte en múltiples ámbitos: no solo en la informática o en la geología, algunos ejemplos permiten monitorear en tiempo real los dispositivos utilizados en un campo, modelar predicciones como en el caso del clima o ayudar a la toma de decisiones expertas informadas en temas como: satélites, drones, optimizaciones de rutas, desarrollo urbano, cambio climático y un largo etcétera.
+	Un Sistema de Información Geográfica, comúnmente abreviado como \acrshort{sig} o \acrshort{gis}, es cualquier herramienta hardware o software que permita la realización de tareas sobre información que esté georreferenciada, es decir que los datos incluyen una ubicación en coordenadas geográficas.~\cite{qgis_introduction_gis}
+	Estas herramientas están específicamente diseñadas para trabajar con datos que no solo realizan operaciones usuales de inserción, eliminación, actualización y extracción en una base de datos común (\acrshort{crud}), sino que realizan análisis con respecto a la ubicación o características geoespaciales o topográficas. Junto con los análisis espaciales, proporciona una mejor visualización de los datos con mapas, de modo que uno pueda presentar la información efectivamente en una manera legible que de otro modo sería difícil de interpretar.
+	 
+	Estas herramientas están cada vez más presentes en diversos campos de la ciencia y la informática. Facilitan la toma de decisiones en áreas como el desarrollo urbano y la optimización de rutas, además de mejorar la gestión de empresas que ofrecen servicios descentralizados, como el suministro de agua o energía. Es por ello que su aplicación es clave en el análisis del cambio climático y otros desafíos globales como los \acrlong{ods}.
 	
 	\subsection{Servicios GIS empleados en Eco City Tours}
 	Los sistemas o herramientas con referencias geográficas son comúnmente utilizadas como servicios en el desarrollo de aplicaciones con componentes de información geográfica. Los proveedores de estos servicios facilitan datos georreferenciados según las peticiones del usuario. Eco City Tours utiliza varios servicios GIS para su funcionamiento. Entre ellos se incluyen:
 	\begin{itemize}
-		\item \textbf{Servicio de mapas}: con Google como proveedor se usa este servicio para proveer a la aplicación de un mapa para mostrar de fondo así como marcadores y polilíneas de rutas.
+		\item \textbf{Servicio de mapas}: con Google como proveedor~\cite{google_maps} se usa este servicio para proveer a la aplicación de un mapa para mostrar de fondo así como marcadores y polilíneas de rutas.
 		
-		\item \textbf{Geocodificación}: sirve para obtener las coordenadas GPS de un lugar o conseguir el nombre de un lugar próximo a unas coordenadas dadas (inverse geocoding). Se ha utilizado este servicio con el proveedor MapBox.
+		\item \textbf{Geocodificación}: sirve para obtener las coordenadas GPS de un \acrlong{pdi} o conseguir el nombre de un lugar próximo a unas coordenadas dadas (inverse geocoding). Se ha utilizado este servicio con el proveedor MapBox.\cite{mapbox_geocoding}
 		
-		\item \textbf{Servicio de navegación y de Optimización de rutas}: el servicio de navegación nos proporciona una ruta entre dos puntos en el mapa y el servicio de optimización permite generar una ruta que sea la más óptima entre n puntos de interés en el mapa. El proveedor de este servicio fue MapBox que permite solucionar este problema de optimización popularmente conocido como \textit{el Problema del viajante} tanto por tiempo como por distancia según se indique en la petición al servicio.
+		\item \textbf{Servicio de navegación y de optimización de rutas}: el servicio de navegación \cite{mapbox_directions} nos proporciona una ruta entre dos \acrlong{pdi} y el servicio de optimización permite generar una ruta que sea la más corta entre múltiples \acrshort{pdi} en el mapa. El proveedor de este servicio es MapBox \cite{mapbox_optimization}.De esta manera se soluciona este problema popularmente conocido como \textit{el problema del viajante}\cite{ubu_algoritmia} dando el recorrido más corto posible para el medio de transporte elegido en la petición al servicio.
 		
 	\end{itemize}
 	
-\section{Conceptos acerca de los Objetivos de Desarrollo Sostenible}
-	\subsection{Introducción y contexto histórico}
-	Los \acrfull{ods} son una serie de 17 objetivos globales adoptados por la Asamblea General de la \acrfull{onu} el 25 de septiembre de 2015, como parte de la Agenda 2030 para el Desarrollo Sostenible. Según la \acrshort{onu} ~\cite{un_sustainable_development}, ``los líderes mundiales adoptaron un conjunto de objetivos globales para erradicar la pobreza, proteger el planeta y asegurar la prosperidad para todos como parte de una nueva agenda de desarrollo sostenible. Cada objetivo tiene metas específicas que deben alcanzarse en los próximos 15 años''.		
+\section{Conceptos acerca de los Objetivos de Desarrollo Sostenible (ODS)}
+	Los \acrlong{ods} son una lista de 17 objetivos globales adoptados por la Asamblea General de la \acrfull{onu} el 25 de septiembre de 2015, como parte de la Agenda 2030 para el Desarrollo Sostenible. Según la \acrshort{onu} ~\cite{un_sustainable_development}, ``\textit{los líderes mundiales adoptaron un conjunto de objetivos globales para erradicar la pobreza, proteger el planeta y asegurar la prosperidad para todos como parte de una nueva agenda de desarrollo sostenible. Cada objetivo tiene metas específicas que deben alcanzarse en los próximos 15 años}''.		
 	\imagen{odss}{Objetivos de Desarrollo Sostenible}{1}
-	Los \acrshort{ods} suceden a los \acrfull{odm}, que fueron formulados en el año 2000 y finalizados en 2015. A diferencia de los ODM, que se enfocaban principalmente en los países en desarrollo, los ODS son universales y están diseñados para ser aplicados por todos los países, sin importar su nivel de desarrollo. Los ODS son la incorporación de los tres pilares del desarrollo sostenible: económico, social y ambiental, están definidos por una perspectiva universal e indivisible que tiene en cuenta las relaciones entre los tres ámbitos.
+	Los \acrshort{ods} suceden a los \acrfull{odm}, que fueron formulados en el año 2000 y finalizados en 2015. A diferencia de los \acrshort{odm}, que se enfocaban principalmente en los países en desarrollo, los \acrshort{ods} son universales y están diseñados para ser aplicados por todos los países, sin importar su nivel de desarrollo. Los \acrlong{ods} son la incorporación de los tres pilares del desarrollo sostenible: económico, social y ambiental, están definidos por una perspectiva universal e indivisible que tiene en cuenta las relaciones entre los tres ámbitos.
 		
-	\subsection{Los Objetivos de Desarrollo Sostenible}
-	
-	Los 17 ODS son un conjunto integral que abarca desafíos globales que afectan a la humanidad y el planeta. Cada objetivo se desglosa en metas específicas y medibles. Algunos de los objetivos más relevantes para el marco de sostenibilidad y desarrollo urbano son los siguientes:
+	Los 17 ODS son un conjunto integral que abarca desafíos globales que afectan a la humanidad y el planeta (Ver Fig. \ref{fig:odss}). Cada objetivo se desglosa en metas específicas y medibles. Algunos de los objetivos más relevantes para el marco de sostenibilidad y desarrollo urbano son los siguientes:
 	\begin{itemize}
 		\item \textbf{ODS 11}: \textit{Ciudades y comunidades sostenibles}: Busca hacer que las ciudades y los asentamientos humanos sean inclusivos, seguros, resilientes y sostenibles. Dado que más del 55\% de la población mundial vive en áreas urbanas, este objetivo es crucial para mejorar la calidad de vida y reducir el impacto ambiental en las ciudades. Incluye metas como el acceso a una vivienda adecuada y asequible, el transporte sostenible, la planificación urbana inclusiva y la reducción del impacto ambiental urbano.
 		
@@ -44,6 +42,10 @@ En este capítulo se describen los conceptos necesarios para comprender el funci
 		\item Optimización de rutas sostenibles: Facilitan la creación de rutas para peatones y ciclistas que minimicen el uso de vehículos motorizados, contribuyendo a la reducción de emisiones de gases de efecto invernadero.
 		
 		\item Evaluación de riesgos ambientales: Permiten identificar áreas vulnerables a riesgos naturales, como inundaciones o deslizamientos de tierra, y planificar medidas de adaptación al cambio climático.
+		
+		\item \textbf{Gestión de la masificación turística}: Herramientas diagnósticas como el \acrfull{sica}, una plataforma dependiente del Ministerio de Transportes, Movilidad y Agenda Urbana \cite{sica_mapa_ruido}, pueden ayudar a identificar zonas de masificación turística. Al combinar estos datos con otras fuentes, es posible diseñar alternativas o implementar restricciones que redistribuyan el flujo de turistas, minimizando el impacto negativo en áreas frágiles.
+ 
+		
 	\end{itemize}
 	
 
@@ -80,7 +82,7 @@ Al facilitar tres ejemplos de lo que se quiere obtener, la salida obtenida mejor
 Cuando la información del modelo tiene que ser muy precisa se recurre a esta técnica. En el caso del trabajo la información tenía que ser basada en una estructura que desde la programación se pudiera procesar fácilmente. Un archivo cuya estructura fuese en forma de json era vital. Para ello se le pide al modelo qué tipo de salida se requiere y para que no hubiese dudas se le facilitan un par de ejemplos. Una vez establecida la forma de la salida, se procede con el prompt de entrada usando la técnica que se quiera o cumpliendo con las especificaciones del módelo en concreto que se esté usando.
 De esta manera también se realiza una separación de abstracción que facilita la modularidad del código: se puede cambiar de origen en los datos, es decir, elegir otro modelo \acrshort{llm}, pero la salida del mismo siempre debe cumplir con estos requisitos desde el punto de vista de la programación. Es el mismo caso de abstracción usada en otros lenguajes de programación donde existe un repositorio y una fuente de datos. El programa se nutre de uno dejando el otro para acceder a datos de manera más concreta, donde el cambio de uno deja inalterado el funcionamiento del programa.
 
-\section{Retrieval-Augmented Generation (RAG)}
+\subsection{Retrieval-Augmented Generation (RAG)}
 Generación Aumentada por Recuperación es una técnica usada en modelos de inteligencia artificial en la cual se obtiene información para nutrir a un modelo de gran escala que ya ha sido entrenado, de esta manera amplía su conocimiento y es capaz de generar una respuesta más precisa, actualizada y completa. 
 El problema que subyace en los modelos tradicionales es que una vez alimentados con un conjunto de datos, sufren de un aislamiento del mundo que los rodea.
 
@@ -102,7 +104,7 @@ La utilidad de los \acrfull{rag} en aplicaciones es muy amplia. La más habitual
 En nuestro caso se alimenta a la base de datos con embeddings la información actualizada de la web usando agentes que serán explicados a continuación, esta información funciona como una entrada de datos de un sistema RAG para la mayor comprensión del mundo que le rodea al modelo. De esta manera y con un juego de prompts \textbf{se obtienen los mejores resultados posibles} que serán después tratados por la aplicación móvil para mostrar dicha información al usuario.
 
 
-\section{Agentes}
+\subsection{Agentes}
 \label{sec:agentes}
 La información que alimenta a los RAG puede ser un archivo de texto con información general de un tema sin embargo hay veces en los que la información no está físicamente en un archivo y se tiene que obtener a través de agentes.
 Estas múltiples herramientas pueden ser vistas como aplicaciones que alimentarán al modelo con un conjunto de herramientas tales como motores de búsqueda, bases de datos, páginas web, etc. Una vez provisto con esta información el modelo es capaz de razonar acerca de las acciones que debe cumplir para obtener el mejor resultado.
