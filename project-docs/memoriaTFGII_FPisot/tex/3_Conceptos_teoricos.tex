@@ -6,7 +6,7 @@ En este capítulo se describen los conceptos necesarios para comprender el funci
 	Un Sistema de Información Geográfica, comúnmente abreviado como \acrshort{sig} o \acrshort{gis}, es cualquier herramienta hardware o software que permita la realización de tareas sobre información que esté georreferenciada, es decir que los datos incluyen una ubicación en coordenadas geográficas.~\cite{qgis_introduction_gis}
 	Estas herramientas están específicamente diseñadas para trabajar con datos que no solo realizan operaciones usuales de inserción, eliminación, actualización y extracción en una base de datos común (\acrshort{crud}), sino que realizan análisis con respecto a la ubicación o características geoespaciales o topográficas. Junto con los análisis espaciales, proporciona una mejor visualización de los datos con mapas, de modo que uno pueda presentar la información efectivamente en una manera legible que de otro modo sería difícil de interpretar.
 	 
-	Estas herramientas están cada vez más presentes en diversos campos de la ciencia y la informática. Facilitan la toma de decisiones en áreas como el desarrollo urbano y la optimización de rutas, además de mejorar la gestión de empresas que ofrecen servicios descentralizados, como el suministro de agua o energía. Es por ello que su aplicación es clave en el análisis del cambio climático y otros desafíos globales como los \acrlong{ods}.
+	Estas herramientas están cada vez más presentes en diversos campos de la ciencia y la informática. Facilitan la toma de decisiones en áreas como el desarrollo urbano o la optimización de rutas. Además, son capaces de mejorar la gestión de empresas que ofrecen servicios descentralizados, como el suministro de agua o energía. Es por ello que su aplicación es clave también en el análisis del cambio climático y otros desafíos globales como los \acrlong{ods}.
 	
 	\subsection{Servicios GIS empleados en Eco City Tours}
 	Los sistemas o herramientas con referencias geográficas son comúnmente utilizadas como servicios en el desarrollo de aplicaciones con componentes de información geográfica. Los proveedores de estos servicios facilitan datos georreferenciados según las peticiones del usuario. Eco City Tours utiliza varios servicios GIS para su funcionamiento. Entre ellos se incluyen:
@@ -37,13 +37,13 @@ En este capítulo se describen los conceptos necesarios para comprender el funci
 	\subsection{ODS y tecnología GIS en la planificación urbana}
 	El uso de tecnologías como los Sistemas de Información Geográfica (GIS) desempeña un papel crucial en la implementación y seguimiento de los ODS, especialmente en el ámbito urbano. Los GIS permiten en el campo de la planificación urbana:
 	\begin{itemize}
-		\item Monitorización del desarrollo urbano: Ayudan a analizar cómo crecen las ciudades y qué impacto tienen en el medio ambiente, lo cual es vital para cumplir con las metas de ciudades sostenibles.
+		\item \textbf{Monitorización del desarrollo urbano}: Ayudan a analizar cómo crecen las ciudades y qué impacto tienen en el medio ambiente, lo cual es vital para cumplir con las metas de ciudades sostenibles.
 		
-		\item Optimización de rutas sostenibles: Facilitan la creación de rutas para peatones y ciclistas que minimicen el uso de vehículos motorizados, contribuyendo a la reducción de emisiones de gases de efecto invernadero.
+		\item \textbf{Optimización de rutas sostenibles}: Facilitan la creación de rutas para peatones y ciclistas que minimicen el uso de vehículos motorizados, contribuyendo a la reducción de emisiones de gases de efecto invernadero.
 		
-		\item Evaluación de riesgos ambientales: Permiten identificar áreas vulnerables a riesgos naturales, como inundaciones o deslizamientos de tierra, y planificar medidas de adaptación al cambio climático.
+		\item \textbf{Evaluación de riesgos ambientales}: Permiten identificar áreas vulnerables a riesgos naturales, como inundaciones o deslizamientos de tierra, y planificar medidas de adaptación al cambio climático.
 		
-		\item \textbf{Gestión de la masificación turística}: Herramientas diagnósticas como el \acrfull{sica}, una plataforma dependiente del Ministerio de Transportes, Movilidad y Agenda Urbana \cite{sica_mapa_ruido}, pueden ayudar a identificar zonas de masificación turística. Al combinar estos datos con otras fuentes, es posible diseñar alternativas o implementar restricciones que redistribuyan el flujo de turistas, minimizando el impacto negativo en áreas frágiles.
+		\item \textbf{Gestión de la masificación turística}: Herramientas diagnósticas como el \acrfull{sica}, una plataforma dependiente del Ministerio de Transportes, Movilidad y Agenda Urbana \cite{sica_mapa_ruido}, pueden ayudar a identificar zonas de masificación turística. Al combinar estos datos con otras fuentes de datos como la ubicación de personas a través de sus dispositivos móviles, es posible diseñar alternativas o implementar restricciones que redistribuyan el flujo de turistas, minimizando su impacto negativo en el entorno local.
  
 		
 	\end{itemize}
@@ -112,7 +112,7 @@ Estas múltiples herramientas pueden ser vistas como aplicaciones que alimentar�
 Se utilizan varios con el fin de obtener a través de la web información actualizada de los puntos de interés de los lugares que se van a visitar.
 
 \section{Agilidad y método SCRUM}
-\textbf{La metodología ágil} es un enfoque de gestión de proyectos que se centra en la flexibilidad, la colaboración y la entrega continua de valor al cliente. La agilidad se basa en la idea de ciclos de trabajo cortos e iterativos denominados \textbf{sprints}, donde se produce software funcional al final de cada iteración.
+La gestión ágil de proyectos de desarrollo de software tiene como pilares fundamentales la flexibilidad, la colaboración y la entrega continua de valor al cliente\cite{agile_alliance}. La agilidad se basa en la idea de ciclos de trabajo cortos e iterativos denominados \textbf{sprints}, donde se produce software funcional al final de cada iteración.
 
 El Manifiesto Ágil (2001) establece cuatro valores fundamentales:
 \begin{itemize}
@@ -124,7 +124,7 @@ El Manifiesto Ágil (2001) establece cuatro valores fundamentales:
 
 \textbf{SCRUM} es un marco de trabajo ágil que facilita la auto-organización del equipo, promueve la transparencia y mejora la capacidad de adaptación del proyecto.
 
-Este enfoque fue particularmente valioso en el desarrollo de Eco City Tours, iterando rápidamente sobre las funcionalidades de la aplicación, hacer pruebas de usuario con prototipos funcionales y ajustar el desarrollo a las necesidades que surgían durante el proceso usando elementos tales como:
+Este enfoque es particularmente valioso en el desarrollo de Eco City Tours, iterando rápidamente sobre incrementos funcionales de la aplicación, validando con pruebas de usuario con prototipos funcionales y ajustando el desarrollo a las necesidades que surgían durante el proceso. El tutor ha jugado los tres roles definidos en SCRUM: usuario para validar los incrementos funcionales, equipo cuando revisa contenido de las tareas y SCRUM master para ayudar ha aplicar la agilidad. El rol principal del estudiante y autor de trabajo es el de equipo. Ambos participantes se han reunido para:
 
 \begin{itemize}
 	\item \textbf{Planificación de Sprint}: consiste en la creación y asignación de tareas que se realizarán durante el período de tiempo en que consiste el sprint. A cada tarea se le asigna unos puntos de historia que reflejan el tiempo planificado para realizar dicha tarea. También se planifican etiquetas e hitos para los que las diferentes tareas ayudan a lograr.

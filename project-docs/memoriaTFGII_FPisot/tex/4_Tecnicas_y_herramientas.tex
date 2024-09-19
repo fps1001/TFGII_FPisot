@@ -54,7 +54,7 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 		
 		\item \textbf{Escalabilidad y mantenibilidad}: con las extensiones de Visual Studio Code, es posible generar nuevos blocs fácilmente, lo que facilita la creación de nuevas funcionalidades sin añadir complejidad innecesaria al código. Cada nueva funcionalidad de la aplicación puede estar controlada por un bloc independiente, lo que resulta en un código escalable y altamente mantenible.
 				
-		\item \textbf{Reutilización de lógica}: Uno de los beneficios clave de Bloc es que la lógica de negocio se puede reutilizar fácilmente en diferentes partes de la aplicación. Esto facilita la implementación de componentes que comparten comportamientos similares sin duplicar código. Para lograrlo, se utiliza el \textit{BlocProvider}, un widget que inyecta el Bloc y permite que los widgets hijos accedan a su lógica de estado. De esta manera, cualquier widget dentro del contexto del BlocProvider puede interactuar con el Bloc correspondiente.
+		\item \textbf{Reutilización de lógica}: Uno de los beneficios clave de Bloc es que la lógica de negocio se puede reutilizar fácilmente en diferentes partes de la aplicación. Esto facilita la implementación de componentes que comparten comportamientos similares sin duplicar código. Para lograrlo, se utiliza el \textit{BlocProvider}, un widget que comparte el Bloc y permite que los widgets hijos accedan a su lógica de estado. De esta manera, cualquier widget dentro del contexto del BlocProvider puede interactuar con el Bloc correspondiente.
 						
 	\end{itemize}
 	
@@ -108,21 +108,27 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 		
 		\item \textbf{Pubspec Assist}: las dependencias de librerías incluidas en el archivo pub\_spec.yaml son automáticamente instaladas, ordenadas y gestionadas en definitiva por este asistente que ahorra múltiples comandos en consola mejorando la rápidez a la hora de programar.
 		
-		\item \textbf{Snippets}: de manera análoga los snippets de flutter permiten programar rápidamente estructuras del código repetitiva. Por dar un ejemplo si se escribe stlessw y se pulsa tabulador el código de un Stateless Widget aparece escrito en pantalla. De igual manera se pueden personalizar atajos que aumenten la producción del tiempo de desarrollo.
-		
+		\item \textbf{Snippets}: de manera análoga los snippets de flutter permiten programar rápidamente estructuras del código repetitiva. 
+		\imagen{mateapp}{Uso del snippet: mateapp}{1}
+		Sirva de ejemplo la figura \ref{fig:mateapp} donde se ve que sin llegar a escribir mateapp si pulsamos la tecla tabulador se generará todo el código asociado a la derecha y nos dejará el cursor en los campos MyApp para así cambiar el campo a continuación mejorando la velocidad de construcción del código.		
 		\end{itemize}
 
-	\subsubsection{Github Copilot - Github Copilot Chat}
-	Al identificarse como estudiante en GitHub, se obtiene acceso a una serie de privilegios, entre ellos el uso gratuito de estas herramientas \cite{vscode_copilot}, que facilitan la generación automática de código. Dado que este \acrshort{tfg} promueve el uso de \acrfull{ia} y \acrshort{llm}, se decidió incorporar GitHub Copilot para mejorar la eficiencia en el desarrollo.
-	Copilot es una herramienta que ofrece sugerencias automáticas mientras se escribe código, previendo las próximas líneas y ofreciendo opciones que ahorran tiempo al programador.
+	\subsection{Github Copilot}
+	Github Copilot y Github Copilot Chat\cite{vscode_copilot} son dos extensiones de Visual Studio Code que se obtienen gratuitamente entre otras ventajas al identificarse como estudiante en GitHub. Dado que este \acrshort{tfg} promueve el uso de \acrfull{ia} y de los \acrshort{llm}, se decidió incorporar GitHub Copilot para mejorar la eficiencia en el desarrollo.
+	Copilot es una herramienta que ofrece sugerencias automáticas mientras se escribe código (Ver Fig.\ref{fig:copilot}), previendo las próximas líneas y ofreciendo opciones que ahorran tiempo al programador.
 	La extensión Copilot Chat permite la interacción directa con la IA, de manera que se pueden hacer preguntas sobre el código sin necesidad de copiarlo en el chat, ya que el código del archivo abierto se incluye automáticamente en el contexto de la comunicación con Copilot.
 	
-	La ventaja principal es la mejora en la productividad: como se muestra en la imagen (Ver Fig. X), Copilot es capaz de generar un widget completo al interpretar correctamente las primeras líneas de código, evitando escribir manualmente un fragmento largo.
+	\imagen{copilot}{Ejemplo de Ghost Text de Copilot}{0.8}
 	
-	Expectativas vs Realidad.
+	La ventaja principal es el incremento de productividad: como se muestra en la imagen \ref{fig:copilot}, Copilot es capaz de generar prácticamente una clase entera o un widget al interpretar correctamente las primeras líneas de código, evitando escribir manualmente un fragmento largo de texto.
+	
+	\textbf{Expectativas vs Realidad.}\\
 	Es responsabilidad del programador mantener el control total sobre su código. Aunque en ocasiones Copilot acierta completamente, solucionando problemas de forma eficiente, también puede provocar inconsistencias si se aplican sugerencias sin la supervisión adecuada. En algunos casos, las sugerencias automáticas pueden alterar partes del código que no estaban relacionadas con el problema original, introduciendo nuevos errores.
 	
-	En resumen, Copilot resulta muy útil en escenarios donde se trabaja con patrones de código comunes o tareas repetitivas, pero es menos efectivo cuando se trata de resolver problemas específicos del dominio. Aunque no representa un cambio en el paradigma de la programación, sí puede convertirse en una herramienta habitual que, con el tiempo, aumente la productividad del desarrollador.
+	\imagen{copilot_real}{Código real a utilizar en vez de propuesta Copilot}{1}
+	Evidentemente es una tecnología en evolución que irá mejorando pero sirva de ejemplo la figura \ref{fig:copilot_real} para ilustrar el código real usado de apenas unas líneas frente a la propuesta de Copilot de la figura \ref{fig:copilot}.
+	
+	En resumen, por el momento Copilot resulta muy útil en escenarios donde se trabaja con patrones de código comunes o tareas repetitivas, pero es menos efectivo cuando se trata de resolver problemas más específicos. Aunque no representa un cambio en el paradigma de la programación, sí puede convertirse en una herramienta habitual que, con el tiempo, aumente la productividad del desarrollador.
 
 \section{Gestión de proyectos}
 	\subsection{GitHub}
@@ -136,6 +142,9 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 		
 		\item \textbf{Documentación y wikis}: GitHub permite mantener documentación clara y estructurada directamente en el repositorio, facilitando la creación de archivos README para proporcionar información detallada sobre el proyecto.
 		
+		\item \textbf{Gestión de tareas y entrega de releases}: GitHub facilita la planificación y el seguimiento del progreso del proyecto mediante el uso de issues y milestones. Estas herramientas permiten gestionar tareas asignándoles prioridades y etiquetas, lo que proporciona una vista clara del flujo de trabajo. Además, GitHub ofrece una funcionalidad de releases que permite empaquetar y distribuir versiones finales o intermedias del software de forma eficiente, asegurando una entrega organizada y documentada.
+		
+		
 	\end{itemize}
 	Al trabajar desde diferentes equipos GitHub fue especialmente útil en el desarrollo del proyecto: se utilizó la integración de Visual Studio Code con Github para los cambios en la programación de la aplicación y los prototipos en cuadernos Jupyter y se usó la extensión Git Graph para comprobar el funcionamiento y navegación a través de los commits cuando fue necesario. Para realizar commits en los cambios de la documentación se usó GitHub Desktop una vez realizados los cambios con la \acrshort{ide} TeXstudio.
 		\imagen{git_graph}{Uso de GitHub con la extensión de VSCode Git Graph}{1}
@@ -148,7 +157,7 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 		
 		\item Conexión con GitHub: su integración con el repositorio del proyecto para su seguimiento es una condición indispensable. Además, La sincronización es inmediata lo que produce por ejemplo que al crear una tarea, inmediatamente esté disponible para su gestión desde Zube.
 		
-		\item Tableros Kanban: se facilita la visualización del flujo de trabajo. Las tarjetas de tareas pueden moverse fácilmente entre columnas como "Pendiente", "En progreso" y "Completado", lo que permite un seguimiento claro y eficaz del estado de cada tarea..
+		\item Tableros Kanban: se facilita la visualización del flujo de trabajo. Las tarjetas de tareas pueden moverse fácilmente entre columnas como \textit{Pendiente, En progreso y Completado}, lo que permite un seguimiento claro y eficaz del estado de cada tarea..
 		
 		\item Herramientas gráficas para control de los sprints: otra manera de consultar el flujo de trabajo durante los sprints con gráficos burndown, burnup, throughput o de velocidad.
 	 

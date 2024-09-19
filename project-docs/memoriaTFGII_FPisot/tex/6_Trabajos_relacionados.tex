@@ -1,16 +1,16 @@
 \capitulo{6}{Trabajos relacionados}
 
 A continuación, se comparan aplicaciones de referencia o similares usadas por usuarios para obtener lugares de interés turistico. Al final de la sección se presenta una tabla comparativa de estos trabajos relacionados con Eco City Tours.
-\section{Aplicaciones móviles similares}
+\section{Aplicaciones móviles planificadoras de rutas turísticas}
 \subsection{Tripadvisor}
-Tripadvisor\cite{tripadvisor} permite a los usuarios planificar y organizar sus viajes, con recomendaciones basadas en reseñas y experiencias de otros viajeros. Se puede planificar un viaje personalizado indicando fechas pero prioriza los tours de pago, lo que hace difícil seleccionar rutas saludables gratuitas. Además establecimientos pueden promocionar en la plataforma para mejorar su visibilidad lo que interfiere con la objetividad cuando se busca un lugar a visitar.
+Tripadvisor\cite{tripadvisor} permite a los usuarios planificar y organizar sus viajes, con recomendaciones basadas en reseñas y experiencias de otros viajeros. Se puede planificar un viaje personalizado indicando fechas pero prioriza los tours de pago, lo que hace difícil seleccionar rutas saludables gratuitas. Además, los establecimientos pueden promocionarse en la plataforma para mejorar su visibilidad lo que interfiere con la objetividad cuando se busca un lugar a visitar.
 
 \subsection{Wanderlog}
-Wanderlog\cite{wanderlog} es una aplicación para la planificación de viajes que simplifica la creación de itinerarios, permitiendo agregar lugares de interés fácilmente. La aplicación tiene infinidad de funcionalidades. Tiene una versión Pro con asistente IA pagando 5 euros al mes. Gratuitamente se pueden enviar 5 mensajes, pero el chat carece de contexto. En la imagen  se muestra como da lugares de visita de Salamanca por defecto (que se podría obtener de cualquier LLM usando un prompting sencillo) y luego como cambia y no tiene en contexto la respuesta anterior:
+Wanderlog\cite{wanderlog} es una aplicación para la planificación de viajes que simplifica la creación de itinerarios, permitiendo agregar lugares de interés fácilmente. La aplicación tiene infinidad de funcionalidades. Tiene una versión Pro con asistente IA pagando 5 euros al mes. Gratuitamente se pueden enviar 5 mensajes, pero el \acrshort{llm} no almacena ningún contexto de los mensajes previos como se puede ver la imagen \ref{fig:wanderlog_ia} donde muestra lugares de  Salamanca, pero en la respuesta siguiente cambia a la ciudad de Nueva York, sin haber sido ésta citada. Además, la respuesta ofrecida podría ser el resultado de un prompting sencillo como se puede ver en el prototipo del cuaderno Jupyter \href{project-prototypes/prompting.ipynb}{prompting.ipynb}.
 \imagen{wanderlog_ia}{Chatbot de Wanderlog}{.5}
 
 \subsection{Visit A City}
-Visit A City\cite{visitacity} ofrece itinerarios prediseñados para destinos turísticos, permitiendo a los usuarios explorar lugares recomendados según su tiempo disponible. Aunque el uso de la aplicación es gratis, las rutas son todas comerciales y por tanto de pago, aunque existen lo que la aplicación llama planes que son itinerarios generados por usuarios. Las rutas usan también aplicaciones de terceros.
+Visit A City\cite{visitacity} ofrece itinerarios prediseñados para destinos turísticos, permitiendo a los usuarios explorar lugares recomendados según su tiempo disponible. Aunque el uso de la aplicación es gratis, las rutas son todas comerciales y por tanto de pago, aunque existen lo que la aplicación llama \textit{planes} que son itinerarios generados por los propios usuarios. Las rutas son generadas por aplicaciones de terceros.
 
 \subsection{Tiqets - Museos y Atracciones}
 Tiqets\cite{tiquets} es una aplicación que permite comprar entradas para museos y atracciones, ofreciendo guías digitales para planificar visitas. Sólo muestra información de museos, la gestión de mapas es fija, no se puede modificar el zoom y para rutas usa una aplicación por defecto del dispositivo en el que se ejecuta.
@@ -52,6 +52,7 @@ Tiqets\cite{tiquets} es una aplicación que permite comprar entradas para museos
 	\caption{Comparación de aplicaciones similares} % Mueve la leyenda debajo de la tabla
 	\label{herramientasportipodeuso}
 	\end{table}
+	
 \section{Otros \acrfull{tfg}}
 	\subsection{Chatbot}
 	Trabajo Fin de Carrera de José María Redondo Guerra \cite{chatbot_github} que tuvo como tutores a José Ignacio Santos Martín y Carlos López Nozal.
