@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/services.dart';
 import '../widgets/widgets.dart';
 import 'loading_screen.dart'; // Asegúrate de importar LoadingScreen
 
@@ -71,7 +72,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
 
             const SizedBox(height: 30),
 
-            // Botón de realizar el tour más atractivo y redondeado
+            // Botón de realizar el tour
             MaterialButton(
               minWidth: MediaQuery.of(context).size.width - 60,
               color: Theme.of(context).primaryColor,
@@ -80,7 +81,18 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0), // Bordes redondeados
               ),
-              onPressed: () {
+              onPressed: () async{
+                // Llama al servicio del LLM con los valores seleccionados
+                final pois = await GeminiService.fetchGeminiData(
+                  city: selectedPlace,
+                  nPoi: numberOfSites.round(),
+                );
+
+                // Verificar si se obtuvieron POIs
+                if (pois.isEmpty) {
+                  print('No points of interest found.');
+                  return;
+                }
                 // Navegamos a la pantalla de carga
                 Navigator.push(
                   context,

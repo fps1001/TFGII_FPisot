@@ -43,7 +43,7 @@ class BtnTest extends StatelessWidget {
 
             // Obtener POIs desde el servicio Gemini
             final List<PointOfInterest> pois =
-                await GeminiService.fetchGeminiData();
+                await GeminiService.fetchGeminiData(city: 'Salamanca', nPoi: 4);
 
             // Si no se obtienen POIs, cancelar la acción
             if (pois.isEmpty) {

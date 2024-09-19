@@ -6,7 +6,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/models/models.dart';
 
 class GeminiService {
-  static Future<List<PointOfInterest>> fetchGeminiData() async {
+  static Future<List<PointOfInterest>> fetchGeminiData({
+    required String city,
+    required int nPoi,
+  }) async {
     // Fetch data from Gemini API
     await dotenv.load();
     String geminiApi = dotenv.env['GEMINI_API_KEY'] ?? '';
@@ -62,14 +65,13 @@ class GeminiService {
   */
   //* CONSTRUCCIÓN DE PETICIÓN
   // Definimos las variables de ciudad y número de POIs
-  //TODO Se obtendrán estas variables a través del bloc correspondiente, por ahora se definen de forma estática
-  //TODO Las variables se modificarán en el menú de carga de la aplicación, pendiente de crear.
-  final String ciudad = 'Salamanca';
-  final int n_poi = 3;
 
+/*   final String ciudad = 'Salamanca';
+  final int n_poi = 3;
+ */
   final chat = model.startChat();
 
-  final message = '''Genera un array de $n_poi objetos JSON, cada uno representando un punto de interés turístico diferente en $ciudad. Cada objeto debe incluir:
+  final message = '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city. Cada objeto debe incluir:
 * nombre (string)
 * descripción (string)
 * coordenadas (array de dos números: latitud y longitud)

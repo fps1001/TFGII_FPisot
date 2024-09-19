@@ -23,6 +23,7 @@ class MapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Obtenemos el tamaño de la pantalla
+    // TODO hay que restar el tamaño del appbar
     final size = MediaQuery.of(context).size;
 
     final mapBloc = BlocProvider.of<MapBloc>(context);
