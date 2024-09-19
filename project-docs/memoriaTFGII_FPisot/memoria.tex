@@ -11,14 +11,37 @@
 % Añado paquete para poder añadir TODO's
 \usepackage{todonotes}
 
-
-
-
-
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
 \RequirePackage{xtab}
 \RequirePackage{multirow}
+
+% Añado listings para ver el código en la memoria mejor
+\usepackage{listings}
+
+% Definir colores personalizados
+\lstset{
+	basicstyle=\ttfamily\footnotesize,  % Estilo básico del texto
+	keywordstyle=\color{blue},          % Estilo de las palabras clave
+	commentstyle=\color{green},         % Estilo de los comentarios
+	stringstyle=\color{red},            % Estilo de las cadenas
+	numbers=left,                       % Números de línea en la izquierda
+	numberstyle=\tiny\color{gray},      % Estilo de los números de línea
+	stepnumber=1,                       % Cada línea numerada
+	frame=single,                       % Cuadro alrededor del código
+	breaklines=true,                    % Romper líneas largas
+	captionpos=b,                       % Posición del caption (debajo)
+	tabsize=2,                          % Tamaño de tabulación
+	showspaces=false,                   % No mostrar espacios
+	showstringspaces=false,             % No mostrar espacios en las cadenas
+	showtabs=false,                     % No mostrar tabulaciones
+	language=Python                     % Se usa el estilo de Python como base
+}
+
+\renewcommand\lstlistlistingname{Índice de Códigos}
+\renewcommand\lstlistingname{Código}
+
+
 
 % Links
 \PassOptionsToPackage{hyphens}{url}\usepackage[colorlinks]{hyperref}
@@ -30,25 +53,26 @@
 \usepackage[acronym]{glossaries}
 \makenoidxglossaries
 
-\newacronym{llm}{LLM}{\textit{Modelos de Lenguaje de Gran Escala}}
-\newacronym{ods}{ODS}{\textit{Objetivos de Desarrollo Sostenible}}
-\newacronym{rag}{RAG}{\textit{Retrieval Augmented Generation}}
-
-\newacronym{sdg}{SDG}{\textit{Sustainable Development Goals}}
-\newacronym{sc}{Smart City}{\textit{Ciudades Inteligentes}}
-\newacronym{sdg11}{SDG11}{\textit{Sustainable Cities and Communities}}
-\newacronym{pdi}{PDI}{\textit{Puntos de Interés}}
-\newacronym{tfg}{TFG}{\textit{Trabajo de Fin de Grado}}
-\newacronym{nlp}{NLP}{\textit{Procesamiento del Lenguaje Natural}}
-\newacronym{sig}{GIS}{\textit{Sistemas de Información Geográfica}}
 \newacronym{cod}{CoT}{\textit{Cadena de pensamiento}}
 \newacronym{crud}{CRUD}{\textit{Create, Read, Update, Delete}}
-\newacronym{onu}{ONU}{\textit{Organización de las Naciones Unidas}}
-\newacronym{odm}{ODM}{\textit{Objetivos de Desarrollo del Milenio}}
-\newacronym{ide}{IDE}{\textit{{Entorno de Desarrollo Integrado}}}
 \newacronym{gui}{GUI}{\textit{{Interfaz Gráfica de Usuario}}}
+\newacronym{ia}{IA}{\textit{{Inteligencia Artificial}}}
+\newacronym{ide}{IDE}{\textit{{Entorno de Desarrollo Integrado}}}
+\newacronym{llm}{LLM}{\textit{Modelos de Lenguaje de Gran Escala}}
+\newacronym{nlp}{NLP}{\textit{Procesamiento del Lenguaje Natural}}
+\newacronym{odm}{ODM}{\textit{Objetivos de Desarrollo del Milenio}}
+\newacronym{ods}{ODS}{\textit{Objetivos de Desarrollo Sostenible}}
+\newacronym{onu}{ONU}{\textit{Organización de las Naciones Unidas}}
+\newacronym{osm}{OSM}{\textit{{Open Street Maps}}}
+\newacronym{osrm}{OSRM}{\textit{{Open Source Routing Machine}}}
+\newacronym{pdi}{PDI}{\textit{Puntos de Interés}}
+\newacronym{rag}{RAG}{\textit{Retrieval Augmented Generation}}
+\newacronym{sc}{Smart City}{\textit{Ciudades Inteligentes}}
+\newacronym{sdg}{SDG}{\textit{Sustainable Development Goals}}
+\newacronym{sdg11}{SDG11}{\textit{Sustainable Cities and Communities}}
 \newacronym{sica}{SICA}{\textit{{Sistema de Información sobre Contaminación Acústica}}}
-
+\newacronym{sig}{GIS}{\textit{Sistemas de Información Geográfica}}
+\newacronym{tfg}{TFG}{\textit{Trabajo de Fin de Grado}}
 
 
 % Acrónimos en inglés
@@ -360,6 +384,7 @@
   % Cabecera ----------------
 \noindent\includegraphics[width=\textwidth]{cabecera}\vspace{1cm}%
   \vfill
+  
   % Título proyecto y escudo informática ----------------
   \colorbox{cpardoBox}{%
     \begin{minipage}{.8\textwidth}
@@ -376,6 +401,7 @@
     \includegraphics[width=\textwidth]{escudoInfor}
   \end{minipage}
   \vfill
+  
   % Datos de alumno, curso y tutores ------------------
   \begin{center}%
   {%
@@ -394,8 +420,8 @@
 
 
 % Datos de portada
-\title{\fontsize{14pt}{16pt}\selectfont Eco City Tours\\
-Aplicación móvil para la generación de rutas turísticas sostenibles propuestas por modelos de lenguaje de gran escala}
+\title{\fontsize{18pt}{22pt}\selectfont Eco City Tours\\
+	\fontsize{16pt}{18pt}\selectfont Aplicación móvil para la generación de rutas turísticas sostenibles propuestas por modelos de lenguaje de gran escala}
 \author{\nombre}
 \tutor{Carlos López Nozal}
 \date{\today}
@@ -405,7 +431,7 @@ Aplicación móvil para la generación de rutas turísticas sostenibles propuest
 \maketitle
 
 
-\newpage\null\thispagestyle{empty}\newpage
+%\newpage\null\thispagestyle{empty}\newpage
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -485,6 +511,9 @@ Movilidad Sostenible, ODS, LLM, Smart City, Flutter.
 \clearpage
 
 \listoftables
+\clearpage
+
+\lstlistoflistings
 \clearpage
 
 \mainmatter

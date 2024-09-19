@@ -54,25 +54,75 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 		
 		\item \textbf{Escalabilidad y mantenibilidad}: con las extensiones de Visual Studio Code, es posible generar nuevos blocs fácilmente, lo que facilita la creación de nuevas funcionalidades sin añadir complejidad innecesaria al código. Cada nueva funcionalidad de la aplicación puede estar controlada por un bloc independiente, lo que resulta en un código escalable y altamente mantenible.
 				
-		\item \textbf{Reutilización de lógica}: Uno de los beneficios clave de Bloc es que la lógica de negocio se puede reutilizar fácilmente en diferentes partes de la aplicación. Esto facilita la implementación de componentes que comparten comportamientos similares sin duplicar código, simplemente creando Widgets como BlocProvider o MultiBlocProvider como se hace al nivel más alto de una aplicación como se puede ver en el siguiente árbol de Widgets:
-		
-		\imagen{widget_tree}{Árbol de widgets de Eco City Tours durante su desarrollo}{0.8}
-		
-				
+		\item \textbf{Reutilización de lógica}: Uno de los beneficios clave de Bloc es que la lógica de negocio se puede reutilizar fácilmente en diferentes partes de la aplicación. Esto facilita la implementación de componentes que comparten comportamientos similares sin duplicar código. Para lograrlo, se utiliza el \textit{BlocProvider}, un widget que inyecta el Bloc y permite que los widgets hijos accedan a su lógica de estado. De esta manera, cualquier widget dentro del contexto del BlocProvider puede interactuar con el Bloc correspondiente.
+						
 	\end{itemize}
+	
+	\subsubsection{Ejemplo de uso de Bloc en Eco City Tours}
+	El Bloc ubicado en \href{project-app/project_app/lib/blocs/gps/gps_bloc.dart}{gps\_bloc.dart} gestiona el permiso de uso del GPS de la aplicación y la activación del sensor GPS del móvil. 
+	Se aplica el patrón de diseño Observador, estudiado en la asignatura \textit{Diseño y Mantenimiento del Software}, que es uno de los patrones fundamentales descritos por Gamma et al. \cite{gamma2002}.
+	El Bloc actúa como el Sujeto del patrón Observador, gestionando el estado de si el GPS está activado y si los permisos de ubicación han sido concedidos.
+	
+	\begin{figure}[htbp] % Usamos figure para el flotador
+		\centering
+		\begin{lstlisting}[caption={Definición de variables de control en el Bloc}]
+			// Indicates whether GPS is enabled
+			final bool isGpsEnabled;
+			
+			// Indicates whether the app has permission to access GPS
+			final bool isGpsPermissionGranted;
+			
+			// Getter for the correct state of permissions and active GPS.
+			bool get isAllReady =>
+			isGpsEnabled &&
+			isGpsPermissionGranted;
+		\end{lstlisting}
+	\end{figure}
+	Los Widgets que dependen de esta información, como los mapas o botones de la interfaz de usuario, actúan como Observadores. Cada vez que el estado del Bloc cambia, estos Widgets son notificados y se actualizan automáticamente, permitiendo que la interfaz reaccione en tiempo real a los cambios en el estado del GPS o los permisos.
+	Cada vez que el estado del GPS o de los permisos cambia, se dispara un evento \textit{OnGpsAndPermissionEvent}, que actualiza el estado y notifica a los Widgets correspondientes. Esto permite que la interfaz de usuario reaccione dinámicamente y muestre la información correcta según el estado actual.
+	
+	\begin{lstlisting}[caption={Carga en función del estado}]
+	class LoadingScreen extends StatelessWidget {
+		const LoadingScreen({super.key});
+		
+		@override
+		Widget build(BuildContext context) {
+			return Scaffold(
+			body: BlocBuilder<GpsBloc, GpsState>(
+			builder: (context, state) {
+				return state.isAllReady 
+				// If GPS and permissions are ready, show the map; otherwise, show the GPS access screen
+				? const MapScreen()
+				: const GpsAccessScreen();
+			},
+			),
+			);
+		}
+	}
+	\end{lstlisting}	
+	Este ejemplo muestra la comunicación entre lógica de control e interfaz gráfica usando el patrón Observador con Bloc.
 	
 	\subsection{Extensiones de Visual Studio Code más destacadas}
 		Se citan a continuación brevemente algunas de las extensiones que facilitaron el desarrollo de la aplicación aumentando la producción:
 		\begin{itemize}
 		
-		\item \textbf{ChatBot}: con un perfil de estudiante de GitHub hay asociados una serie de privilegios entre los que destacan el uso gratuito de esta herramienta que permite tener autocompletado de código y comentarios o un chat con la IA que facilita la depuración de código. 
-		
 		\item \textbf{Pubspec Assist}: las dependencias de librerías incluidas en el archivo pub\_spec.yaml son automáticamente instaladas, ordenadas y gestionadas en definitiva por este asistente que ahorra múltiples comandos en consola mejorando la rápidez a la hora de programar.
 		
 		\item \textbf{Snippets}: de manera análoga los snippets de flutter permiten programar rápidamente estructuras del código repetitiva. Por dar un ejemplo si se escribe stlessw y se pulsa tabulador el código de un Stateless Widget aparece escrito en pantalla. De igual manera se pueden personalizar atajos que aumenten la producción del tiempo de desarrollo.
 		
-	\end{itemize}
-		
+		\end{itemize}
+
+	\subsubsection{Github Copilot - Github Copilot Chat}
+	Al identificarse como estudiante en GitHub, se obtiene acceso a una serie de privilegios, entre ellos el uso gratuito de estas herramientas \cite{vscode_copilot}, que facilitan la generación automática de código. Dado que este \acrshort{tfg} promueve el uso de \acrfull{ia} y \acrshort{llm}, se decidió incorporar GitHub Copilot para mejorar la eficiencia en el desarrollo.
+	Copilot es una herramienta que ofrece sugerencias automáticas mientras se escribe código, previendo las próximas líneas y ofreciendo opciones que ahorran tiempo al programador.
+	La extensión Copilot Chat permite la interacción directa con la IA, de manera que se pueden hacer preguntas sobre el código sin necesidad de copiarlo en el chat, ya que el código del archivo abierto se incluye automáticamente en el contexto de la comunicación con Copilot.
+	
+	La ventaja principal es la mejora en la productividad: como se muestra en la imagen (Ver Fig. X), Copilot es capaz de generar un widget completo al interpretar correctamente las primeras líneas de código, evitando escribir manualmente un fragmento largo.
+	
+	Expectativas vs Realidad.
+	Es responsabilidad del programador mantener el control total sobre su código. Aunque en ocasiones Copilot acierta completamente, solucionando problemas de forma eficiente, también puede provocar inconsistencias si se aplican sugerencias sin la supervisión adecuada. En algunos casos, las sugerencias automáticas pueden alterar partes del código que no estaban relacionadas con el problema original, introduciendo nuevos errores.
+	
+	En resumen, Copilot resulta muy útil en escenarios donde se trabaja con patrones de código comunes o tareas repetitivas, pero es menos efectivo cuando se trata de resolver problemas específicos del dominio. Aunque no representa un cambio en el paradigma de la programación, sí puede convertirse en una herramienta habitual que, con el tiempo, aumente la productividad del desarrollador.
 
 \section{Gestión de proyectos}
 	\subsection{GitHub}
@@ -87,11 +137,11 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 		\item \textbf{Documentación y wikis}: GitHub permite mantener documentación clara y estructurada directamente en el repositorio, facilitando la creación de archivos README para proporcionar información detallada sobre el proyecto.
 		
 	\end{itemize}
-	Al trabajar desde diferentes equipos GitHub fue especialmente útil en el desarrollo del proyecto: se utilizó la integración de Visual Studio Code con Github para los cambios en la programación de la aplicación y los prototipos en cuadernos jupyter y se usó la extensión Git Graph para comprobar el funcionamiento y navegación a través de los commits cuando fue necesario. Para realizar commits en los cambios de la documentación se usó GitHub Desktop una vez realizados los cambios con la \acrshort{ide} TeXstudio.
+	Al trabajar desde diferentes equipos GitHub fue especialmente útil en el desarrollo del proyecto: se utilizó la integración de Visual Studio Code con Github para los cambios en la programación de la aplicación y los prototipos en cuadernos Jupyter y se usó la extensión Git Graph para comprobar el funcionamiento y navegación a través de los commits cuando fue necesario. Para realizar commits en los cambios de la documentación se usó GitHub Desktop una vez realizados los cambios con la \acrshort{ide} TeXstudio.
 		\imagen{git_graph}{Uso de GitHub con la extensión de VSCode Git Graph}{1}
 	
 	\subsection{Zube}
-	Zube es una plataforma de gestión de proyectos con un enfoque colaborativo durante el seguimiento del desarrollo del mismo. Las características principales que lo hacen la herramienta usada son:
+	Zube \cite{zube} es una plataforma de gestión de proyectos con un enfoque colaborativo durante el seguimiento del desarrollo del mismo. Las características principales que lo hacen la herramienta usada son:
 	\begin{itemize}
 		
 		\item Versión gratuita: Zube ofrece un plan gratuito que cubre las necesidades básicas de gestión de proyectos autogestionados.

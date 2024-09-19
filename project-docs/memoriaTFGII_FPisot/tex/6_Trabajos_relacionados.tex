@@ -1,32 +1,20 @@
 \capitulo{6}{Trabajos relacionados}
 
-A continuación, se comparan aplicaciones de referencia o similares usadas por usuarios que puedan ser objetivos.
-
+A continuación, se comparan aplicaciones de referencia o similares usadas por usuarios para obtener lugares de interés turistico. Al final de la sección se presenta una tabla comparativa de estos trabajos relacionados con Eco City Tours.
+\section{Aplicaciones móviles similares}
 \subsection{Tripadvisor}
-Tripadvisor permite a los usuarios planificar y organizar sus viajes, con recomendaciones basadas en reseñas y experiencias de otros viajeros. Se puede planificar un viaje personalizado indicando fechas pero prioriza los tours de pago, lo que hace difícil seleccionar rutas saludables gratuitas. Además establecimientos pueden promocionar en la plataforma para mejorar su visibilidad lo que interfiere con la objetividad cuando se busca un lugar a visitar.
+Tripadvisor\cite{tripadvisor} permite a los usuarios planificar y organizar sus viajes, con recomendaciones basadas en reseñas y experiencias de otros viajeros. Se puede planificar un viaje personalizado indicando fechas pero prioriza los tours de pago, lo que hace difícil seleccionar rutas saludables gratuitas. Además establecimientos pueden promocionar en la plataforma para mejorar su visibilidad lo que interfiere con la objetividad cuando se busca un lugar a visitar.
 
 \subsection{Wanderlog}
-Wanderlog es una aplicación para la planificación de viajes que simplifica la creación de itinerarios, permitiendo agregar lugares de interés fácilmente. La aplicación tiene infinidad de funcionalidades. Tiene una versión Pro con asistente IA pagando 5 euros al mes. Gratuitamente se pueden enviar 5 mensajes, pero carece de contexto el chat. En la imagen se muestra como da lugares de visita de Salamanca por defecto (que se podría obtener de cualquier LLM usando un prompting sencillo) y luego como cambia y no tiene en contexto la respuesta anterior:
+Wanderlog\cite{wanderlog} es una aplicación para la planificación de viajes que simplifica la creación de itinerarios, permitiendo agregar lugares de interés fácilmente. La aplicación tiene infinidad de funcionalidades. Tiene una versión Pro con asistente IA pagando 5 euros al mes. Gratuitamente se pueden enviar 5 mensajes, pero el chat carece de contexto. En la imagen  se muestra como da lugares de visita de Salamanca por defecto (que se podría obtener de cualquier LLM usando un prompting sencillo) y luego como cambia y no tiene en contexto la respuesta anterior:
 \imagen{wanderlog_ia}{Chatbot de Wanderlog}{.5}
 
 \subsection{Visit A City}
-Visit A City ofrece itinerarios prediseñados para destinos turísticos, permitiendo a los usuarios explorar lugares recomendados según su tiempo disponible. Aunque el uso de la aplicación es gratis, las rutas son todas comerciales y por tanto de pago, aunque existen lo que la aplicación llama planes que son itinerarios generados por usuarios que son gratuitos. Las rutas usan también aplicaciones de terceros.
+Visit A City\cite{visitacity} ofrece itinerarios prediseñados para destinos turísticos, permitiendo a los usuarios explorar lugares recomendados según su tiempo disponible. Aunque el uso de la aplicación es gratis, las rutas son todas comerciales y por tanto de pago, aunque existen lo que la aplicación llama planes que son itinerarios generados por usuarios. Las rutas usan también aplicaciones de terceros.
 
 \subsection{Tiqets - Museos y Atracciones}
-Tiqets es una aplicación que permite comprar entradas para museos y atracciones, ofreciendo guías digitales para planificar visitas. Sólo muestra información de museos, la gestión de mapas es fija, no se puede modificar el zoom y para rutas usa una aplicación por defecto del dispositivo en el que se ejecuta.
+Tiqets\cite{tiquets} es una aplicación que permite comprar entradas para museos y atracciones, ofreciendo guías digitales para planificar visitas. Sólo muestra información de museos, la gestión de mapas es fija, no se puede modificar el zoom y para rutas usa una aplicación por defecto del dispositivo en el que se ejecuta.
 
-
-\subsection{Chatbot - https://github.com/jrg1013/chatbot}
-Trabajo Fin de Carrera de José María Redondo Guerra que tuvo como tutores a José Ignacio Santos Martín y Carlos López Nozal.
-
-Este trabajo fue desarrollado usando \acrfull{llm} para la generación de un chat con un sistema \acrshort{rag} para obtener la información de las normas de los \acrshort{tfg} y así mejorar sus respuestas.
-
-\subsection{Visualización de las actividades socioculturales en Castilla y León CULTURALCyL}
-Trabajo Fin de Carrera de Yanela Lozano Pérez con tutores José Ignacio Santos, Virginia Ahedo y Silvia Díaz.
-Esta aplicación mostraba información de eventos culturales para lo cual usaba una aplicación móvil con servicios API.
-Es especialmente interesante como ejemplo de una aplicación móvil con una fuerte característica de usabilidad, ya que se centra en la visualización de mucha información que debe recibir el usuario de manera clara y sencilla.
-
-\newpage
 
 \begin{table}[h!]
 	\centering
@@ -64,3 +52,13 @@ Es especialmente interesante como ejemplo de una aplicación móvil con una fuer
 	\caption{Comparación de aplicaciones similares} % Mueve la leyenda debajo de la tabla
 	\label{herramientasportipodeuso}
 	\end{table}
+\section{Otros \acrfull{tfg}}
+	\subsection{Chatbot}
+	Trabajo Fin de Carrera de José María Redondo Guerra \cite{chatbot_github} que tuvo como tutores a José Ignacio Santos Martín y Carlos López Nozal.
+	
+	Este trabajo fue desarrollado usando \acrfull{llm} para la generación de un chat con un sistema \acrshort{rag} para obtener la información de las normas de los \acrshort{tfg} y así mejorar sus respuestas.
+	
+	\subsection{Visualización de las actividades socioculturales en Castilla y León CULTURALCyL}
+	Trabajo Fin de Carrera de Yanela Lozano Pérez con tutores José Ignacio Santos, Virginia Ahedo y Silvia Díaz.
+	Esta aplicación mostraba información de eventos culturales para lo cual usaba una aplicación móvil con servicios API.
+	Es especialmente interesante como ejemplo de una aplicación móvil con una fuerte característica de usabilidad, ya que se centra en la visualización de mucha información que debe recibir el usuario de manera clara y sencilla.
