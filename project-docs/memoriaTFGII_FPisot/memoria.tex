@@ -49,9 +49,11 @@
 	allcolors = {red}
 }
 
-% Acrónimos
+% Acrónimos y glosario
+%\usepackage[acronym]{glossaries}
+%\makenoidxglossaries
 \usepackage[acronym]{glossaries}
-\makenoidxglossaries
+\makeglossaries
 
 \newacronym{cod}{CoT}{\textit{Cadena de pensamiento}}
 \newacronym{crud}{CRUD}{\textit{Create, Read, Update, Delete}}
@@ -80,7 +82,8 @@
 \newacronym{gis}{SIG}{\textit{Geographic Information Systems}}
 \newacronym{poie}{POI}{\textit{Points of Interest}}
 
-
+% Glosario
+\newglossaryentry{ingenieria_prompt}{name={Ingeniería del prompt}, description={Proceso de optimización y diseño de instrucciones (prompts) para mejorar las respuestas de los modelos de lenguaje a gran escala (LLM)}}
 
 % Ecuaciones
 \usepackage{amsmath}
@@ -525,7 +528,13 @@ Movilidad Sostenible, ODS, LLM, Smart City, Flutter.
 \include{./tex/6_Trabajos_relacionados}
 \include{./tex/7_Conclusiones_Lineas_de_trabajo_futuras}
 
-\printnoidxglossary[type=\acronymtype]
+%\printnoidxglossary[type=\acronymtype]
+%\printacronyms
+%\printglossary
+%\printnoidxglossary[type=\acronymtype]
+
+
+
 
 \bibliographystyle{plain}
 \bibliography{bibliografia}

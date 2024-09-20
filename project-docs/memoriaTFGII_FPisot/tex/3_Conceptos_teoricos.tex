@@ -50,66 +50,67 @@ En este capítulo se describen los conceptos necesarios para comprender el funci
 	
 
 \section{Modelos de lenguaje a gran escala (LLM)}
-Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que ha sido entrenada para comprender \acrfull{nlp} que es la manera en que se comunican las personas. Estas inteligencias artificiales son entrenadas entonces con ingentes cantidades de datos que los hacen capaces de comprender peticiones, responder a las mismas en los mismos términos de lenguaje generando una especie de comunicación entre el usuario y la máquina.
-
-\subsection{Uso de LLMs en Eco City Tours}
-
-En este trabajo el uso de los modelos de gran escala han sido usados para obtener los \acrfull{pdi}, basado en un juego de conversaciones con la inteligencia artificial el usuario determina basándose en el conocimiento del modelo qué lugares debería visitar a la hora de hacer turismo sostenible.
-En la sección de prototipos de este trabajo se observa como se va construyendo una comunicación con diferentes modelos: desde una conversación básica con resultados mediocres o incluso alucinados, hasta construcciones que tienen en cuenta estructuras de datos que serán construidas como respuesta del modelo al usuario. La aplicación se beneficia de todo ello y genera una respuesta acorde al código que se quiere obtener en la aplicación móvil.
-\subsection{Técnicas usadas en los prototipos}
-\subsubsection{Zero-shot y Few-shot learning}
-\textbf{Zero-shot} se trata de una técnica en la que el usuario no facilita al modelo ningún ejemplo de cómo realizar una tarea. El \acrshort{llm} por tanto interpreta basado en el contexto y su propio entrenamiento lo que se ha requerido y responde acorde a estos datos. Esta técnica se usa cuando lo que se prioriza es la rapidez del modelo frente a la precisión de la salida aportada. Cuando se requiere un trabajo de aproximación mayor una técnica que siempre mejora la conversación con el modelo es la técnica \textbf{few-shot learning}: se facilita en el prompt al modelo unos ejemplos de lo que se quiere obtener. Para comprenderlo mejor veamos el siguiente ejemplo de prompt: 
-\begin{verbatim}
-	Clasifica los siguientes comentarios como Positivos, 
-	Negativos o Neutros:
+Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que ha sido entrenada para realizar tareas de \acrfull{nlp}. Estas inteligencias artificiales son entrenadas con ingentes cantidades de datos que los hacen capaces de comprender peticiones y responder a las éstas en los mismos términos de lenguaje generando una comunicación entre el usuario y la máquina.
 	
-	1. "El producto llegó a tiempo y en perfectas condiciones."
-	Clasificación: Positivo
+	\subsection{Uso de LLMs en Eco City Tours}
 	
-	2. "El artículo no cumplió con mis expectativas, 
-	estoy decepcionado."
-	Clasificación: Negativo
+	En este proyecto, los \acrlong{llm} se han utilizado para obtener los \acrfull{pdi}, a través de un intercambio de diálogos entre la \acrlong{ia} y el usuario, donde este último solicita recomendaciones de lugares para realizar turismo sostenible.
+	En la sección de \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-prototypes/README.md}{prototipos} se implementa una serie de diálogos con un cuaderno de Python para evaluar las mejoras de las respuestas aplicando distintas técnicas de prompting\cite{promptingguide}. El prototipo implementa una conversación básica con resultados mediocres o incluso alucinados, hasta respuestas generadas según las peticiones de estructura de datos por parte del usuario.La aplicación se beneficia de todo ello y genera una respuesta acorde al código que se quiere obtener en la aplicación móvil.
 	
-	3. "La atención al cliente fue aceptable, pero podría mejorar."
-	Clasificación: Neutro
+	\subsection{Técnicas de \gls{ingenieria_prompt}}
+	\subsubsection{Zero-shot y Few-shot learning}
+	\textbf{Zero-shot} se trata de una técnica en la que el usuario no facilita al modelo ningún ejemplo de cómo realizar una tarea. El \acrshort{llm} por tanto interpreta basado en el contexto y su propio entrenamiento lo que se ha requerido y responde acorde a estos datos. Esta técnica se usa cuando lo que se prioriza es la rapidez del modelo frente a la precisión de la salida aportada. Cuando se requiere un trabajo de aproximación mayor una técnica que siempre mejora la conversación con el modelo es la técnica \textbf{few-shot learning}: se facilita en el prompt al modelo unos ejemplos de lo que se quiere obtener. Para comprenderlo mejor veamos el siguiente ejemplo de prompt: 
+	\begin{verbatim}
+		Clasifica los siguientes comentarios como Positivos, 
+		Negativos o Neutros:
+		
+		1. "El producto llegó a tiempo y en perfectas condiciones."
+		Clasificación: Positivo
+		
+		2. "El artículo no cumplió con mis expectativas, 
+		estoy decepcionado."
+		Clasificación: Negativo
+		
+		3. "La atención al cliente fue aceptable, pero podría mejorar."
+		Clasificación: Neutro
+		
+		4. "El servicio fue excelente, muy recomendable."
+		Clasificación:
+	\end{verbatim}
+	Al facilitar tres ejemplos de lo que se quiere obtener, la salida obtenida mejora y es lo que se espera por parte del usuario. Expresar en lenguaje natural lo que se quiere obtener es a veces más difícil y se puede malinterpretar por parte del modelo que darle unos ejemplos para que sepa con precisión el contexto. Más información al respecto se pueden observar en el prototipado del proyecto. Para terminar de ajustar la salida obtenida se usa la siguiente técnica:
 	
-	4. "El servicio fue excelente, muy recomendable."
-	Clasificación:
-\end{verbatim}
-Al facilitar tres ejemplos de lo que se quiere obtener, la salida obtenida mejora y es lo que se espera por parte del usuario. Expresar en lenguaje natural lo que se quiere obtener es a veces más difícil y se puede malinterpretar por parte del modelo que darle unos ejemplos para que sepa con precisión el contexto. Más información al respecto se pueden observar en el prototipado del proyecto. Para terminar de ajustar la salida obtenida se usa la siguiente técnica:
-
-\subsubsection{Tool calling o function calling}
-Cuando la información del modelo tiene que ser muy precisa se recurre a esta técnica. En el caso del trabajo la información tenía que ser basada en una estructura que desde la programación se pudiera procesar fácilmente. Un archivo cuya estructura fuese en forma de json era vital. Para ello se le pide al modelo qué tipo de salida se requiere y para que no hubiese dudas se le facilitan un par de ejemplos. Una vez establecida la forma de la salida, se procede con el prompt de entrada usando la técnica que se quiera o cumpliendo con las especificaciones del módelo en concreto que se esté usando.
-De esta manera también se realiza una separación de abstracción que facilita la modularidad del código: se puede cambiar de origen en los datos, es decir, elegir otro modelo \acrshort{llm}, pero la salida del mismo siempre debe cumplir con estos requisitos desde el punto de vista de la programación. Es el mismo caso de abstracción usada en otros lenguajes de programación donde existe un repositorio y una fuente de datos. El programa se nutre de uno dejando el otro para acceder a datos de manera más concreta, donde el cambio de uno deja inalterado el funcionamiento del programa.
-
-\subsection{Retrieval-Augmented Generation (RAG)}
-Generación Aumentada por Recuperación es una técnica usada en modelos de inteligencia artificial en la cual se obtiene información para nutrir a un modelo de gran escala que ya ha sido entrenado, de esta manera amplía su conocimiento y es capaz de generar una respuesta más precisa, actualizada y completa. 
-El problema que subyace en los modelos tradicionales es que una vez alimentados con un conjunto de datos, sufren de un aislamiento del mundo que los rodea.
-
-Para prevenir este problema se nutre de información que el usuario facilita siguiendo los siguientes pasos:
-\begin{enumerate}
-	\item \textbf{Splitter/tokenización}: la información proporcionada se mide en tokens y cada modelo tiene una cantidad que puede usar como contexto, además del coste que algunos modelos pueden cobrar al usuario por token, es por ello que transformar una cadena de texto inicial que ocupa más espacio del estrictamente necesario en una cadena separada en pequeños trozos de información que además usa ciertos tokens especiales para mayor comprensión es una tarea previa a la recuperación de información.
-
-	\item \textbf{Embeddings}: consiste en transformar la información facilitada y representarla en vectores de n dimensiones. Para ellos se usa comúnmente otro modelo entrenado para transformar la información en vectores.
+	\subsubsection{Tool calling o function calling}
+	Cuando la información del modelo tiene que ser muy precisa se recurre a esta técnica. En el caso del trabajo la información tenía que ser basada en una estructura que desde la programación se pudiera procesar fácilmente. Un archivo cuya estructura fuese en forma de json era vital. Para ello se le pide al modelo qué tipo de salida se requiere y para que no hubiese dudas se le facilitan un par de ejemplos. Una vez establecida la forma de la salida, se procede con el prompt de entrada usando la técnica que se quiera o cumpliendo con las especificaciones del módelo en concreto que se esté usando.
+	De esta manera también se realiza una separación de abstracción que facilita la modularidad del código: se puede cambiar de origen en los datos, es decir, elegir otro modelo \acrshort{llm}, pero la salida del mismo siempre debe cumplir con estos requisitos desde el punto de vista de la programación. Es el mismo caso de abstracción usada en otros lenguajes de programación donde existe un repositorio y una fuente de datos. El programa se nutre de uno dejando el otro para acceder a datos de manera más concreta, donde el cambio de uno deja inalterado el funcionamiento del programa.
 	
-	\imagen{langflow_rag_embeddings}{Preparación de la información de un RAG mostrada en la herramienta Langflow}{1}
+	\subsection{Retrieval-Augmented Generation (RAG)}
+	Generación Aumentada por Recuperación es una técnica usada en modelos de inteligencia artificial en la cual se obtiene información para nutrir a un modelo de gran escala que ya ha sido entrenado, de esta manera amplía su conocimiento y es capaz de generar una respuesta más precisa, actualizada y completa. 
+	El problema que subyace en los modelos tradicionales es que una vez alimentados con un conjunto de datos, sufren de un aislamiento del mundo que los rodea.
 	
-	\item \textbf{RAG}: con la información ampliada ya vectorizada en una base de datos, el usuario genera una entrada o prompt al modelo, el \acrshort{llm} entonces selecciona la información más afín de los datos aportados para generar así un prompt ampliado o mejorado que será pasado al modelo para un procesamiento de información habitual, consiguiendo así un mejor resultado.
+	Para prevenir este problema se nutre de información que el usuario facilita siguiendo los siguientes pasos:
+	\begin{enumerate}
+		\item \textbf{Splitter/tokenización}: la información proporcionada se mide en tokens y cada modelo tiene una cantidad que puede usar como contexto, además del coste que algunos modelos pueden cobrar al usuario por token, es por ello que transformar una cadena de texto inicial que ocupa más espacio del estrictamente necesario en una cadena separada en pequeños trozos de información que además usa ciertos tokens especiales para mayor comprensión es una tarea previa a la recuperación de información.
 	
-	\imagen{langflow_rag_retrieval}{RAG mostrado en la herramienta Langflow usando https://astra.datastax.com }{1}
-\end{enumerate}
-
-\subsubsection{Uso de RAGs en la aplicación de este TFG}
-La utilidad de los \acrfull{rag} en aplicaciones es muy amplia. La más habitual se usa para conseguir un chatbot de empresas que sirvan como atención al cliente. 
-En nuestro caso se alimenta a la base de datos con embeddings la información actualizada de la web usando agentes que serán explicados a continuación, esta información funciona como una entrada de datos de un sistema RAG para la mayor comprensión del mundo que le rodea al modelo. De esta manera y con un juego de prompts \textbf{se obtienen los mejores resultados posibles} que serán después tratados por la aplicación móvil para mostrar dicha información al usuario.
-
-
-\subsection{Agentes}
-\label{sec:agentes}
-La información que alimenta a los RAG puede ser un archivo de texto con información general de un tema sin embargo hay veces en los que la información no está físicamente en un archivo y se tiene que obtener a través de agentes.
-Estas múltiples herramientas pueden ser vistas como aplicaciones que alimentarán al modelo con un conjunto de herramientas tales como motores de búsqueda, bases de datos, páginas web, etc. Una vez provisto con esta información el modelo es capaz de razonar acerca de las acciones que debe cumplir para obtener el mejor resultado.
-\subsubsection{Uso de Agentes en este TFG}
-Se utilizan varios con el fin de obtener a través de la web información actualizada de los puntos de interés de los lugares que se van a visitar.
+		\item \textbf{Embeddings}: consiste en transformar la información facilitada y representarla en vectores de n dimensiones. Para ellos se usa comúnmente otro modelo entrenado para transformar la información en vectores.
+		
+		\imagen{langflow_rag_embeddings}{Preparación de la información de un RAG mostrada en la herramienta Langflow}{1}
+		
+		\item \textbf{RAG}: con la información ampliada ya vectorizada en una base de datos, el usuario genera una entrada o prompt al modelo, el \acrshort{llm} entonces selecciona la información más afín de los datos aportados para generar así un prompt ampliado o mejorado que será pasado al modelo para un procesamiento de información habitual, consiguiendo así un mejor resultado.
+		
+		\imagen{langflow_rag_retrieval}{RAG mostrado en la herramienta Langflow usando https://astra.datastax.com }{1}
+	\end{enumerate}
+	
+	\subsubsection{Uso de RAGs en la aplicación de este TFG}
+	La utilidad de los \acrfull{rag} en aplicaciones es muy amplia. La más habitual se usa para conseguir un chatbot de empresas que sirvan como atención al cliente. 
+	En nuestro caso se alimenta a la base de datos con embeddings la información actualizada de la web usando agentes que serán explicados a continuación, esta información funciona como una entrada de datos de un sistema RAG para la mayor comprensión del mundo que le rodea al modelo. De esta manera y con un juego de prompts \textbf{se obtienen los mejores resultados posibles} que serán después tratados por la aplicación móvil para mostrar dicha información al usuario.
+	
+	
+	\subsection{Agentes}
+	\label{sec:agentes}
+	La información que alimenta a los RAG puede ser un archivo de texto con información general de un tema sin embargo hay veces en los que la información no está físicamente en un archivo y se tiene que obtener a través de agentes.
+	Estas múltiples herramientas pueden ser vistas como aplicaciones que alimentarán al modelo con un conjunto de herramientas tales como motores de búsqueda, bases de datos, páginas web, etc. Una vez provisto con esta información el modelo es capaz de razonar acerca de las acciones que debe cumplir para obtener el mejor resultado.
+	\subsubsection{Uso de Agentes en este TFG}
+	Se utilizan varios con el fin de obtener a través de la web información actualizada de los puntos de interés de los lugares que se van a visitar.
 
 \section{Agilidad y método SCRUM}
 La gestión ágil de proyectos de desarrollo de software tiene como pilares fundamentales la flexibilidad, la colaboración y la entrega continua de valor al cliente\cite{agile_alliance}. La agilidad se basa en la idea de ciclos de trabajo cortos e iterativos denominados \textbf{sprints}, donde se produce software funcional al final de cada iteración.
