@@ -98,7 +98,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   // Metodo que recibe una polilínea y la emite en un nuevo evento.
   // Ahora con POI's opcionales.
-  Future<void> drawRoutePolyline(RouteDestination destination, [List<PointOfInterest>? pois]) async {
+  Future<void> drawRoutePolyline(RouteDestination destination,
+      [List<PointOfInterest>? pois]) async {
     final myRoute = Polyline(
       polylineId: const PolylineId('route'),
       color: Colors.teal,
@@ -138,13 +139,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     ); */
 
     // Marcadores de puntos de interés
+
     Map<String, Marker> poiMarkers = {};
     if (pois != null) {
       for (var poi in pois) {
+        // Cargo el icono desde la URL de la imagen del POI
+        final icon = await getNetworkImageMarker(poi.imageUrl ?? '');
+
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
+
         final poiMarker = Marker(
           markerId: MarkerId(poi.name),
           position: poi.gps,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure), //TODO Cambiar a marcador por url_img Por ahora un marcador básico
+          icon: icon,
           infoWindow: InfoWindow(
             title: poi.name,
             snippet: poi.description ?? 'Sin descripción',
