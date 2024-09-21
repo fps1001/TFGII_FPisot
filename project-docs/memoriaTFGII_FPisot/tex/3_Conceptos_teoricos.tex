@@ -52,36 +52,51 @@ En este capítulo se describen los conceptos necesarios para comprender el funci
 \section{Modelos de lenguaje a gran escala (LLM)}
 Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que ha sido entrenada para realizar tareas de \acrfull{nlp}. Estas inteligencias artificiales son entrenadas con ingentes cantidades de datos que los hacen capaces de comprender peticiones y responder a las éstas en los mismos términos de lenguaje generando una comunicación entre el usuario y la máquina.
 	
-	\subsection{Uso de LLMs en Eco City Tours}
-	
-	En este proyecto, los \acrlong{llm} se han utilizado para obtener los \acrfull{pdi}, a través de un intercambio de diálogos entre la \acrlong{ia} y el usuario, donde este último solicita recomendaciones de lugares para realizar turismo sostenible.
-	En la sección de \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-prototypes/README.md}{prototipos} se implementa una serie de diálogos con un cuaderno de Python para evaluar las mejoras de las respuestas aplicando distintas técnicas de prompting\cite{promptingguide}. El prototipo implementa una conversación básica con resultados mediocres o incluso alucinados, hasta respuestas generadas según las peticiones de estructura de datos por parte del usuario.La aplicación se beneficia de todo ello y genera una respuesta acorde al código que se quiere obtener en la aplicación móvil.
-	
 	\subsection{Técnicas de \gls{ingenieria_prompt}}
-	\subsubsection{Zero-shot y Few-shot learning}
-	\textbf{Zero-shot} se trata de una técnica en la que el usuario no facilita al modelo ningún ejemplo de cómo realizar una tarea. El \acrshort{llm} por tanto interpreta basado en el contexto y su propio entrenamiento lo que se ha requerido y responde acorde a estos datos. Esta técnica se usa cuando lo que se prioriza es la rapidez del modelo frente a la precisión de la salida aportada. Cuando se requiere un trabajo de aproximación mayor una técnica que siempre mejora la conversación con el modelo es la técnica \textbf{few-shot learning}: se facilita en el prompt al modelo unos ejemplos de lo que se quiere obtener. Para comprenderlo mejor veamos el siguiente ejemplo de prompt: 
-	\begin{verbatim}
-		Clasifica los siguientes comentarios como Positivos, 
-		Negativos o Neutros:
-		
-		1. "El producto llegó a tiempo y en perfectas condiciones."
-		Clasificación: Positivo
-		
-		2. "El artículo no cumplió con mis expectativas, 
-		estoy decepcionado."
-		Clasificación: Negativo
-		
-		3. "La atención al cliente fue aceptable, pero podría mejorar."
-		Clasificación: Neutro
-		
-		4. "El servicio fue excelente, muy recomendable."
-		Clasificación:
-	\end{verbatim}
-	Al facilitar tres ejemplos de lo que se quiere obtener, la salida obtenida mejora y es lo que se espera por parte del usuario. Expresar en lenguaje natural lo que se quiere obtener es a veces más difícil y se puede malinterpretar por parte del modelo que darle unos ejemplos para que sepa con precisión el contexto. Más información al respecto se pueden observar en el prototipado del proyecto. Para terminar de ajustar la salida obtenida se usa la siguiente técnica:
+	En el desarrollo de este \acrshort{tfg}, se han implementado y evaluado diversas técnicas de \gls{ingenieria_prompt} con el fin de mejorar la interacción y los resultados generados por los \acrshort{llm}. A continuación, se detallan las principales técnicas empleadas durante este proceso. Para obtener más información sobre estas técnicas y otras estrategias de \gls{ingenieria_prompt}, se puede consultar la guía disponible en \href{https://www.promptingguide.ai/es}{Prompting Guide}\cite{promptingguide}.
 	
-	\subsubsection{Tool calling o function calling}
-	Cuando la información del modelo tiene que ser muy precisa se recurre a esta técnica. En el caso del trabajo la información tenía que ser basada en una estructura que desde la programación se pudiera procesar fácilmente. Un archivo cuya estructura fuese en forma de json era vital. Para ello se le pide al modelo qué tipo de salida se requiere y para que no hubiese dudas se le facilitan un par de ejemplos. Una vez establecida la forma de la salida, se procede con el prompt de entrada usando la técnica que se quiera o cumpliendo con las especificaciones del módelo en concreto que se esté usando.
-	De esta manera también se realiza una separación de abstracción que facilita la modularidad del código: se puede cambiar de origen en los datos, es decir, elegir otro modelo \acrshort{llm}, pero la salida del mismo siempre debe cumplir con estos requisitos desde el punto de vista de la programación. Es el mismo caso de abstracción usada en otros lenguajes de programación donde existe un repositorio y una fuente de datos. El programa se nutre de uno dejando el otro para acceder a datos de manera más concreta, donde el cambio de uno deja inalterado el funcionamiento del programa.
+	\gls{zero-shot} se trata de una técnica en la que el usuario no facilita al modelo ningún ejemplo de cómo realizar una tarea. El \acrshort{llm} por tanto interpreta basado en el contexto y su propio entrenamiento lo que se ha requerido y responde acorde a estos datos. Esta técnica se usa cuando lo que se prioriza es la rapidez del modelo frente a la precisión de la salida aportada. Cuando se requiere una mayor exactitud en la interacción, es recomendable emplear la técnica de \gls{few-shot}, que consiste en proporcionar al modelo algunos ejemplos en el prompt para guiarlo hacia una respuesta mejorada según el criterio del desarrollador.
+	
+	Una vez que se logra establecer el formato de las respuestas, es importante asegurar que el modelo sea capaz de interactuar con herramientas externas o APIs. Aquí es donde entra en juego la técnica de \gls{tool-calling}.
+	Se trata de una habilidad clave para construir chatbots o agentes potenciados por \acrshort{llm} que necesitan recuperar contexto o interactuar con herramientas externas convirtiendo \acrlong{nlp} en llamadas a APIs.
+	Este enfoque de \gls{tool-calling} \textbf{permite una mejora en la modularidad del proyecto}. Al separar el nivel de abstracción, permite por ejemplo cambiar el modelo \acrshort{llm} de origen sin afectar al funcionamiento general del sistema, ya que la estructura de la salida permanece constante.
+
+	A continuación, se ilustra un ejemplo de cómo se nutre al modelo con una plantilla que sirve de estructura para la respuesta, obteniendo de manera consistente datos en formato JSON. Este ejemplo se puede encontrar en el \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-prototypes/prompting.ipynb}{prototipo Python} del proyecto: 
+	
+	\begin{lstlisting}[language=Python, caption={Ejemplo de uso de \textit{few-shot} y \textit{tool-calling} para obtener puntos de interés turísticos}]
+		# Un ejemplo de respuesta que queremos obtener seria la siguiente:
+		plantilla_salida = """[{
+			"nombre": "Sagrada Familia", 
+			"gps": "41.4036, 2.1744", 
+			"descripcion": "Basilica catolica disenada por Gaudi." 
+		},
+		{
+			"nombre": "Parc Guell", 
+			"gps": "41.4145, 2.1527", 
+			"descripcion": "Parque disenado por Gaudi."
+		}]"""
+		
+		ciudad = "Salamanca"
+		complete_and_print(f"""Tu rol es un guia turistico comprometido con el medio ambiente preocupado por la gentrificacion de las ciudades y el turismo masivo. 
+		Dime 3 sitios para visitar en {ciudad}. Quiero que la respuesta consista SOLO en los lugares de interes de este lugar, siguiendo el ejemplo de la {plantilla_salida}. Insisto en que no quiero que me des informacion adicional.""")
+		
+		# Resultado esperado:
+		[{
+			"nombre": "Catedral Vieja de Salamanca", 
+			"gps": "40.9708, -5.6619", 
+			"descripcion": "Edificio gotico del siglo XIII."
+		},
+		{
+			"nombre": "Puente de San Esteban", 
+			"gps": "40.9713, -5.6624", 
+			"descripcion": "Puente medieval que cruza el rio Tormes."
+		},
+		{
+			"nombre": "Jardines de la Alamedilla", 
+			"gps": "40.9694, -5.6632", 
+			"descripcion": "Jardin barroco en el corazon de la ciudad."
+		}]
+	\end{lstlisting}
 	
 	\subsection{Retrieval-Augmented Generation (RAG)}
 	Generación Aumentada por Recuperación es una técnica usada en modelos de inteligencia artificial en la cual se obtiene información para nutrir a un modelo de gran escala que ya ha sido entrenado, de esta manera amplía su conocimiento y es capaz de generar una respuesta más precisa, actualizada y completa. 
@@ -100,17 +115,21 @@ Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que
 		\imagen{langflow_rag_retrieval}{RAG mostrado en la herramienta Langflow usando https://astra.datastax.com }{1}
 	\end{enumerate}
 	
-	\subsubsection{Uso de RAGs en la aplicación de este TFG}
-	La utilidad de los \acrfull{rag} en aplicaciones es muy amplia. La más habitual se usa para conseguir un chatbot de empresas que sirvan como atención al cliente. 
-	En nuestro caso se alimenta a la base de datos con embeddings la información actualizada de la web usando agentes que serán explicados a continuación, esta información funciona como una entrada de datos de un sistema RAG para la mayor comprensión del mundo que le rodea al modelo. De esta manera y con un juego de prompts \textbf{se obtienen los mejores resultados posibles} que serán después tratados por la aplicación móvil para mostrar dicha información al usuario.
+
 	
 	
 	\subsection{Agentes}
 	\label{sec:agentes}
 	La información que alimenta a los RAG puede ser un archivo de texto con información general de un tema sin embargo hay veces en los que la información no está físicamente en un archivo y se tiene que obtener a través de agentes.
 	Estas múltiples herramientas pueden ser vistas como aplicaciones que alimentarán al modelo con un conjunto de herramientas tales como motores de búsqueda, bases de datos, páginas web, etc. Una vez provisto con esta información el modelo es capaz de razonar acerca de las acciones que debe cumplir para obtener el mejor resultado.
-	\subsubsection{Uso de Agentes en este TFG}
-	Se utilizan varios con el fin de obtener a través de la web información actualizada de los puntos de interés de los lugares que se van a visitar.
+
+	
+	\subsection{Uso de LLMs en Eco City Tours}
+	En este proyecto, los \acrlong{llm} se han empleado para obtener los \acrfull{pdi} a través de un diálogo interactivo entre la \acrlong{ia} y el usuario, donde este último solicita recomendaciones de lugares enfocados en el turismo sostenible. En la sección de \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-prototypes/README.md}{prototipos}, se implementa un cuaderno de Python que evalúa las mejoras en las respuestas aplicando diversas técnicas de prompting\cite{promptingguide}. Inicialmente, el prototipo presenta una conversación básica con respuestas de baja calidad o incluso alucinadas, que progresivamente mejoran al incluir estructuras de datos predefinidas en las respuestas. Este enfoque permite que la aplicación aproveche el aprendizaje, generando recomendaciones más precisas y acordes al código requerido en la aplicación móvil.
+	
+	\todo{determinar el alcance usado de RAG y Agentes en el proyecto}
+	La utilidad de los \acrfull{rag} en aplicaciones es muy amplia. La más habitual se usa para conseguir un chatbot de empresas que sirvan como atención al cliente. 
+	En nuestro caso se alimenta a la base de datos con embeddings la información actualizada de la web usando agentes que serán explicados a continuación, esta información funciona como una entrada de datos de un sistema RAG para la mayor comprensión del mundo que le rodea al modelo. De esta manera y con un juego de prompts \textbf{se obtienen los mejores resultados posibles} que serán después tratados por la aplicación móvil para mostrar dicha información al usuario.
 
 \section{Agilidad y método SCRUM}
 La gestión ágil de proyectos de desarrollo de software tiene como pilares fundamentales la flexibilidad, la colaboración y la entrega continua de valor al cliente\cite{agile_alliance}. La agilidad se basa en la idea de ciclos de trabajo cortos e iterativos denominados \textbf{sprints}, donde se produce software funcional al final de cada iteración.
