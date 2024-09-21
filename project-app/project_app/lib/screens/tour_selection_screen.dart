@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_app/helpers/helpers.dart';
+import 'package:project_app/screens/screens.dart';
 import '../services/services.dart';
 import '../widgets/widgets.dart';
 import 'loading_screen.dart'; // Asegúrate de importar LoadingScreen
@@ -40,7 +42,8 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
               decoration: InputDecoration(
                 hintText: 'Introduce un lugar', // Pista para el usuario
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25.0), // Bordes redondeados
+                  borderRadius:
+                      BorderRadius.circular(25.0), // Bordes redondeados
                 ),
               ),
               style: Theme.of(context).textTheme.bodyMedium,
@@ -81,22 +84,38 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0), // Bordes redondeados
               ),
-              onPressed: () async{
-                // Llama al servicio del LLM con los valores seleccionados
+              onPressed: () async {
+                                // Mostrar un mensaje de carga mientras obtenemos los POIs
+                LoadingMessageHelper.showLoadingMessage(context);
+
+                // Llama al servicio de Gemini para obtener los POIs
                 final pois = await GeminiService.fetchGeminiData(
                   city: selectedPlace,
                   nPoi: numberOfSites.round(),
                 );
 
+                // Cierra el mensaje de carga
+                Navigator.of(context).pop();
+
                 // Verificar si se obtuvieron POIs
                 if (pois.isEmpty) {
-                  print('No points of interest found.');
+                  // Muestra un mensaje o maneja el caso en que no haya POIs
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No se encontraron POIs')),
+                  );
                   return;
                 }
-                // Navegamos a la pantalla de carga
+
+                // Navegar a la pantalla del mapa pasando los valores seleccionados
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoadingScreen()), // Cambio de pantalla
+                  MaterialPageRoute(
+                    builder: (context) => MapScreen(
+                      city: selectedPlace,
+                      numberOfSites: numberOfSites.round(),
+                      pois: pois, // Pasamos los POIs obtenidos
+                    ),
+                  ),
                 );
               },
               child: Text(

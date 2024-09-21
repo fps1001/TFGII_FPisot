@@ -22,9 +22,9 @@ class MapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Obtenemos el tamaño de la pantalla
-    // TODO hay que restar el tamaño del appbar
+    // Obtenemos el tamaño de la pantalla menos el AppBar
     final size = MediaQuery.of(context).size;
+    final appBarHeight = Scaffold.of(context).appBarMaxHeight ?? kToolbarHeight;
 
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
@@ -33,7 +33,7 @@ class MapView extends StatelessWidget {
 
     return SizedBox(
         width: size.width,
-        height: size.height,
+        height: size.height - appBarHeight, // Restamos el tamaño del AppBar
         //Se añade un listener para saber si el mapa se ha movido y lanzar un evento.
         child: Listener(
           // Deja de seguir al usuario al mover el mapa.

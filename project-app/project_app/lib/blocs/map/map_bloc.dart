@@ -56,10 +56,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
     {
       _mapController = event.mapController;
-
-      //Añado estilo al mapa
-      // Deprecated
-      //_mapController!.setMapStyle(jsonEncode(retroMapTheme));
       emit(state.copyWith(isMapInitialized: true));
     }
   }
@@ -144,9 +140,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     if (pois != null) {
       for (var poi in pois) {
         // Cargo el icono desde la URL de la imagen del POI
-        final icon = await getNetworkImageMarker(poi.imageUrl ?? '');
-
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
+        //TODO cambiar a imagen de url
+        //final icon = await getNetworkImageMarker(poi.imageUrl ?? '');
+        //BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
+        final icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
 
         final poiMarker = Marker(
           markerId: MarkerId(poi.name),

@@ -31,6 +31,7 @@ Future<BitmapDescriptor> getCustomMarker() async {
 Future<BitmapDescriptor> getNetworkImageMarker(String imageUrl) async {
   try {
     // Realiza la petición HTTP para obtener la imagen de la URL proporcionada
+    //TODO imageUrl puede ser null, hay que manejarlo
     final resp = await Dio()
         .get(imageUrl, options: Options(responseType: ResponseType.bytes));
 

@@ -16,8 +16,6 @@ void main() async {
   
   //TODO decidir si usar customPaint para inicio y final de ruta con duración y km. de ruta...
   
-  //TODO decidir theme de aplicación y si debe ser variable
-
   
   Bloc.observer = MyBlocObserver();
   try {
@@ -63,6 +61,6 @@ class ProjectApp extends StatelessWidget {
         title: 'Eco-City Tour',
         theme: AppTheme.lightTheme,
         //home: LoadingScreen());
-        home: TourSelectionScreen());
+        home: LoadingScreen());
   }
 }

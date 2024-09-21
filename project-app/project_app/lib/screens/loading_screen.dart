@@ -13,7 +13,7 @@ class LoadingScreen extends StatelessWidget {
       body: BlocBuilder<GpsBloc, GpsState>(
         builder: (context, state) {
           return state.isAllReady // Si el GPS y los permisos están listos, se muestra el mapa, si no, se muestra la pantalla de acceso al GPS
-              ? const MapScreen()
+              ? const TourSelectionScreen()
               : const GpsAccessScreen();
         },
       ),
