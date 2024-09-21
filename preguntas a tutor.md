@@ -20,7 +20,7 @@
 
 ### 1. Documentación
 - Revisión de memoria.
-- Trabajar en la parte que se explique.
+- Comprobación de Siglas y glosario
 - Se podía crear un hito que sea fin de la memoria (sin anexos).
 
 ### 2. Prototipos y LLM

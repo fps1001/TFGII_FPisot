@@ -50,10 +50,10 @@
 }
 
 % Acrónimos y glosario
-%\usepackage[acronym]{glossaries}
-%\makenoidxglossaries
 \usepackage[acronym]{glossaries}
-\makeglossaries
+\makenoidxglossaries
+%\usepackage[acronym]{glossaries}
+%\makeglossaries
 
 \newacronym{cod}{CoT}{\textit{Cadena de pensamiento}}
 \newacronym{crud}{CRUD}{\textit{Create, Read, Update, Delete}}
@@ -532,12 +532,13 @@ Movilidad Sostenible, ODS, LLM, Smart City, Flutter.
 \include{./tex/6_Trabajos_relacionados}
 \include{./tex/7_Conclusiones_Lineas_de_trabajo_futuras}
 
-%\printnoidxglossary[type=\acronymtype]
+\printnoidxglossary[type=\acronymtype]
+\printnoidxglossary[]
 %\printacronyms
 %\printglossary
 %\printnoidxglossary[type=\acronymtype]
-\printglossary[type=\acronymtype]
-\printglossary
+%\printglossary[type=\acronymtype]
+%\printglossary
 
 
 
