@@ -8,6 +8,8 @@ import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/helpers/custom_image_marker.dart';
 import 'package:project_app/models/models.dart';
 
+import '../../widgets/widgets.dart';
+
 part 'map_event.dart';
 part 'map_state.dart';
 
@@ -56,7 +58,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
     {
       _mapController = event.mapController;
-      emit(state.copyWith(isMapInitialized: true));
+      // Copio también el contexto del mapa para poder interactuar con la UI.
+      emit(state.copyWith(
+          isMapInitialized: true,
+          mapContext: event.mapContext)); // Se guarda el BuildContext
     }
   }
 
@@ -143,16 +148,34 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         //TODO cambiar a imagen de url
         //final icon = await getNetworkImageMarker(poi.imageUrl ?? '');
         //BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
-        final icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
+        final icon =
+            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
 
         final poiMarker = Marker(
           markerId: MarkerId(poi.name),
           position: poi.gps,
           icon: icon,
-          infoWindow: InfoWindow(
+          /* infoWindow: InfoWindow(
             title: poi.name,
             snippet: poi.description ?? 'Sin descripción',
-          ),
+          ), */
+          onTap: () {
+            if (state.mapContext != null) {
+              showModalBottomSheet(
+                context: state.mapContext!,
+                builder: (context) => CustomBottomSheet(poi: poi),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+              );
+            } else {
+              // Manejo de error o fallback en caso de que el contexto no esté disponible
+              print('Error: mapContext is null');
+            }
+          },
         );
         poiMarkers[poi.name] = poiMarker;
       }
@@ -170,6 +193,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
 
+    // Esperar un poco antes de mostrar la infoWindow de inicio de ruta.
     await Future.delayed(const Duration(milliseconds: 300));
     _mapController?.showMarkerInfoWindow(const MarkerId('start'));
   }

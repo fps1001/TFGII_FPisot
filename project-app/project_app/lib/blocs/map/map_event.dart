@@ -7,32 +7,44 @@ abstract class MapEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Recibe el controlador del mapa cuando se crea.
+// Evento que se dispara cuando el mapa ha sido inicializado y recibimos el controlador del mapa.
 class OnMapInitializedEvent extends MapEvent {
   final GoogleMapController mapController;
+  //Ahora añadimos el contexto del mapa para ser pasado al estado.
+  final BuildContext mapContext;
 
-  const OnMapInitializedEvent(this.mapController);
+  const OnMapInitializedEvent(this.mapController, this.mapContext);
+
+  @override
+  List<Object> get props => [mapController, mapContext]; // Aseguramos que el contexto se compare correctamente.
 }
 
-// Cambia el estado de seguir al usuario.
+// Evento para detener el seguimiento de la ubicación del usuario.
 class OnStopFollowingUserEvent extends MapEvent {}
 
+// Evento para iniciar el seguimiento de la ubicación del usuario.
 class OnStartFollowingUserEvent extends MapEvent {}
 
-//Historial de locationBloc de movimientos de usuario
+// Evento para actualizar las polilíneas de la ruta del usuario.
 class OnUpdateUserPolylinesEvent extends MapEvent {
   final List<LatLng> userLocations;
+
   const OnUpdateUserPolylinesEvent(this.userLocations);
+
+  @override
+  List<Object> get props => [userLocations];
 }
 
-//Muestra la ruta del usuario o la oculta.
+// Evento para alternar la visibilidad de la ruta del usuario.
 class OnToggleShowUserRouteEvent extends MapEvent {}
 
-// Muestra una polilínea o un marcador nuevo
+// Evento para mostrar nuevas polilíneas y marcadores en el mapa.
 class OnDisplayPolylinesEvent extends MapEvent {
-  // Debe recibir lo mismo que user polylinesEvent pero con nuevo modelo:
   final Map<String, Polyline> polylines;
   final Map<String, Marker> markers;
-  // Constructor.
+
   const OnDisplayPolylinesEvent(this.polylines, this.markers);
+
+  @override
+  List<Object> get props => [polylines, markers];
 }

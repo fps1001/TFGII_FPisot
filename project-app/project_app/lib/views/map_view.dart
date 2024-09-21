@@ -49,7 +49,7 @@ class MapView extends StatelessWidget {
 
             // vamos a lanzar un evento cuando el mapa se haya creado para obtener el controlador del mapa.
             onMapCreated: (controller) =>
-                mapBloc.add(OnMapInitializedEvent(controller)),
+                mapBloc.add(OnMapInitializedEvent(controller, context)),
             style: jsonEncode(appleMapEsqueMapTheme),
 
             polylines: polylines,

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/screens/screens.dart';
 import '../services/services.dart';
-import '../widgets/widgets.dart';
-import 'loading_screen.dart'; // Asegúrate de importar LoadingScreen
+import '../widgets/widgets.dart';// Asegúrate de importar LoadingScreen
 
 class TourSelectionScreen extends StatefulWidget {
   const TourSelectionScreen({super.key});
