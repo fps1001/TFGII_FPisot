@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -60,13 +61,15 @@ class BtnTest extends StatelessWidget {
 
             // Si no hay coordenadas (aunque improbable porque ya hay validación previa), cancelar la acción
             if (salamancaCoordinates.isEmpty) {
-              print('No coordinates found.');
+              if (kDebugMode) {
+                print('No coordinates found.');
+              }
               return;
             }
 
             // Obtener la ruta optimizada
             final destination =
-                await searchBloc.getOptimizedRoute(salamancaCoordinates);
+                await searchBloc.getOptimizedRoute(salamancaCoordinates, 'walking');
 
             // Pintar la nueva polilínea en el mapa
             await mapBloc.drawRoutePolyline(destination, allPOIs);

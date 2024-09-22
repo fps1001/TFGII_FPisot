@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/screens/screens.dart';
-import '../services/services.dart';
-import '../widgets/widgets.dart';// Asegúrate de importar LoadingScreen
+import 'package:project_app/models/models.dart';
+import 'package:project_app/services/services.dart';
+import 'package:project_app/widgets/widgets.dart';
 
 class TourSelectionScreen extends StatefulWidget {
   const TourSelectionScreen({super.key});
@@ -14,22 +16,26 @@ class TourSelectionScreen extends StatefulWidget {
 class _TourSelectionScreenState extends State<TourSelectionScreen> {
   String selectedPlace = '';
   double numberOfSites = 2; // Valor inicial para el slider
+  String selectedMode = 'walking'; // Modo de transporte por defecto es andando
+  final List<bool> _isSelected = [true, false]; // Estado inicial del ToggleButton del medio de transporte
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Eco City Tour'), // Usa el CustomAppBar
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start, 
           children: [
+
+            //* SELECCIÓN DE LUGAR
             // Título de la pantalla
             Text(
               '¿Qué lugar quieres visitar?',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
 
             // Campo de texto para el lugar sin sugerencias
             TextField(
@@ -47,9 +53,9 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
               ),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            const SizedBox(height: 20),
 
-            // Pregunta del número de sitios
+            //* SELECCIÓN DE NÚMERO DE SITIOS (SLIDER)
+            const SizedBox(height: 30),
             Text(
               '¿Cuántos sitios te gustaría visitar?',
               style: Theme.of(context).textTheme.headlineSmall,
@@ -72,9 +78,43 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
               inactiveColor: Theme.of(context).primaryColor.withOpacity(0.3),
             ),
 
-            const SizedBox(height: 30),
+            //* SELECCIÓN DE MEDIO DE TRANSPORTE
+            const SizedBox(height: 20),
 
-            // Botón de realizar el tour
+            // Añadimos los ToggleButtons para seleccionar entre "andando" y "bici"
+            Text(
+              'Selecciona tu modo de transporte',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: ToggleButtons(
+                borderRadius: BorderRadius.circular(25.0),
+                isSelected: _isSelected,
+                onPressed: (int index) {
+                  setState(() {
+                    for (int i = 0; i < _isSelected.length; i++) {
+                      _isSelected[i] = i == index;
+                    }
+                    // Establece el modo de transporte según el índice
+                    selectedMode = index == 0 ? 'walking' : 'cycling';
+                  });
+                },
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Icon(Icons.directions_walk),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Icon(Icons.directions_bike),
+                  ),
+                ],
+              ),
+            ),
+
+           //* BOTÓN DE PETICIÓN DE TOUR
+            const SizedBox(height: 50),
             MaterialButton(
               minWidth: MediaQuery.of(context).size.width - 60,
               color: Theme.of(context).primaryColor,
@@ -110,14 +150,17 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MapScreen(
-                      city: selectedPlace,
-                      numberOfSites: numberOfSites.round(),
-                      pois: pois, // Pasamos los POIs obtenidos
+                      tour: EcoCityTour(
+                        city: selectedPlace,
+                        numberOfSites: numberOfSites.round(),
+                        pois: pois,
+                        mode: selectedMode,
+                      ),
                     ),
                   ),
                 );
               },
-              child: Text(
+              child: const Text(
                 'REALIZAR ECO-CITY TOUR',
                 style: TextStyle(
                   color: Colors.white,

@@ -10,17 +10,12 @@ import '../helpers/helpers.dart';
 import '../models/models.dart';
 
 class MapScreen extends StatefulWidget {
-  final String city;
-  final int numberOfSites;
-  final List<PointOfInterest> pois; // Recibimos poi de LLM a través de pantalla de selección de tours
-  
-  const MapScreen({
-    Key? key,
-    required this.city,
-    required this.numberOfSites,
-    required this.pois,
+  final EcoCityTour tour;
 
-  }) : super(key: key);
+  const MapScreen({
+    super.key,
+    required this.tour,
+  });
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -44,28 +39,42 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Eco City Tour'), // Usa el CustomAppBar
-      //TODO añadir un drawer para la selección de tours
-      
+      //TODO añadir un drawer para la selección de tours????
+
       // Cambio builder por futurebuilder para cargar la ruta y los POIs porque se necesita esperar a que se carguen
       body: FutureBuilder<void>(
-        future: _loadRouteAndPois, //future indica que se debe esperar a que se cargue la ruta y los POIs
+        future:
+            _loadRouteAndPois, // future indica que se debe esperar a que se cargue la ruta y los POIs
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Mostrar el diálogo de carga mientras esperamos los POIs y la ruta optimizada
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              LoadingMessageHelper.showLoadingMessage(context);
+              if (mounted) {
+                // Verificar si el widget sigue montado
+                LoadingMessageHelper.showLoadingMessage(context);
+              }
             });
             return const SizedBox(); // Devolvemos un widget vacío mientras se muestra el diálogo
           }
+
           if (snapshot.hasError) {
-            Navigator.of(context).pop(); // Cerrar el diálogo si hay un error
+            if (mounted) {
+              // Verificar si el widget sigue montado
+              Navigator.of(context).pop(); // Cerrar el diálogo si hay un error
+            }
             return const Center(child: Text('Error al cargar la ruta'));
           }
 
-          // Cerrar el mensaje de carga una vez que la ruta esté lista
           if (snapshot.connectionState == ConnectionState.done) {
-            Navigator.of(context).pop();
+            // Cerrar el mensaje de carga una vez que la ruta esté lista
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                // Verificar si el widget sigue montado
+                Navigator.of(context).pop(); // Cerrar el mensaje de carga
+              }
+            });
           }
+
           // Obtener el estado de ubicación usando BlocBuilder
           return BlocBuilder<LocationBloc, LocationState>(
             builder: (context, locationState) {
@@ -79,7 +88,8 @@ class _MapScreenState extends State<MapScreen> {
               return BlocBuilder<MapBloc, MapState>(
                 builder: (context, mapState) {
                   // Calcular si se debe mostrar la ruta del usuario
-                  Map<String, Polyline> polylines = Map.from(mapState.polylines);
+                  Map<String, Polyline> polylines =
+                      Map.from(mapState.polylines);
                   if (!mapState.showUserRoute) {
                     polylines.removeWhere((key, value) => key == 'myRoute');
                   }
@@ -104,7 +114,6 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: const Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          BtnTest(),
           BtnToggleUserRoute(),
           BtnFollowUser(),
           BtnCurrentLocation(),
@@ -130,15 +139,16 @@ class _MapScreenState extends State<MapScreen> {
               name: 'Tu ubicación actual',
               description: 'Última ubicación conocida del usuario',
             ),
-            ...widget.pois
+            ...widget.tour.pois
           ]
-        : widget.pois;
+        : widget.tour.pois;
 
     // Convertir la lista de PointOfInterest a una lista de LatLng
     final List<LatLng> coordinates = allPOIs.map((poi) => poi.gps).toList();
 
     // Obtener la ruta optimizada usando los POIs
-    final destination = await searchBloc.getOptimizedRoute(coordinates);
+    final destination =
+        await searchBloc.getOptimizedRoute(coordinates, widget.tour.mode);
 
     // Pintar la nueva polilínea en el mapa usando el MapBloc
     await mapBloc.drawRoutePolyline(destination, allPOIs);

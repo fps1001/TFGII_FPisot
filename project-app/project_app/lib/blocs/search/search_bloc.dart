@@ -63,9 +63,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     add(OnNewPlacesFoundEvent(places: newPlaces));
   }
 
-Future<RouteDestination> getOptimizedRoute(List<LatLng> waypoints) async {
+Future<RouteDestination> getOptimizedRoute(List<LatLng> waypoints, String mode) async {
   // Obtener la respuesta de la optimización de la ruta
-  final resp = await optimizationService.getOptimizedRoute(waypoints);
+  final resp = await optimizationService.getOptimizedRoute(waypoints, mode);
 
   if (resp.trips.isEmpty) {
     throw AppException("No trips found in the optimization response");

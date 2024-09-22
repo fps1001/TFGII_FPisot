@@ -10,21 +10,21 @@ class OptimizationService {
   final Dio _dioOptimization;
 
   final String _baseOptimizationUrl =
-      'https://api.mapbox.com/optimized-trips/v1/mapbox/walking';
+      'https://api.mapbox.com/optimized-trips/v1/mapbox';
 
   OptimizationService() : _dioOptimization = Dio();
 
-  Future<OptimizationResponse> getOptimizedRoute(List<LatLng> points) async {
+  Future<OptimizationResponse> getOptimizedRoute(List<LatLng> points, String mode) async {
     final coorsString =
         points.map((point) => '${point.longitude},${point.latitude}').join(';');
-    final url = '$_baseOptimizationUrl/$coorsString';
+    // Construimos la URL con los puntos y el modo de transporte
+    final url = '$_baseOptimizationUrl/$mode/$coorsString';
 
     try {
       String accessToken = dotenv.env['MAPBOX_API_KEY'] ?? '';
       final resp = await _dioOptimization.get(url,  
       queryParameters: {
         'geometries': 'polyline6', 
-        //TODO habrá que asegurarse que el primer punto sea lastknownlocation
         'source' : 'first',
         'destination' : 'any',
         'access_token': accessToken,
