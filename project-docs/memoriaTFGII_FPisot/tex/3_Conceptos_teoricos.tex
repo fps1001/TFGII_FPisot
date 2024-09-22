@@ -99,37 +99,33 @@ Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que
 	\end{lstlisting}
 	
 	\subsection{Retrieval-Augmented Generation (RAG)}
-	Generación Aumentada por Recuperación es una técnica usada en modelos de inteligencia artificial en la cual se obtiene información para nutrir a un modelo de gran escala que ya ha sido entrenado, de esta manera amplía su conocimiento y es capaz de generar una respuesta más precisa, actualizada y completa. 
-	El problema que subyace en los modelos tradicionales es que una vez alimentados con un conjunto de datos, sufren de un aislamiento del mundo que los rodea.
+	Generación Aumentada por Recuperación o \gls{rag_glos} es una técnica usada en modelos de inteligencia artificial en la cual se obtiene información para nutrir a un \acrlong{llm} que ya ha sido entrenado, de esta manera amplía su conocimiento y es capaz de generar una respuesta más precisa, actualizada y completa.
 	
-	Para prevenir este problema se nutre de información que el usuario facilita siguiendo los siguientes pasos:
+	El problema que subyace en los modelos tradicionales es que una vez alimentados con un conjunto de datos, sufren de un aislamiento del mundo que los rodea. Para prevenir este problema se nutre de información que el usuario facilita siguiendo los siguientes pasos:
 	\begin{enumerate}
-		\item \textbf{Splitter/tokenización}: la información proporcionada se mide en tokens y cada modelo tiene una cantidad que puede usar como contexto, además del coste que algunos modelos pueden cobrar al usuario por token, es por ello que transformar una cadena de texto inicial que ocupa más espacio del estrictamente necesario en una cadena separada en pequeños trozos de información que además usa ciertos tokens especiales para mayor comprensión es una tarea previa a la recuperación de información.
+		\item \textbf{Splitter y \gls{tokenizacion}}: La información proporcionada al modelo se divide en tokens, donde cada modelo tiene un límite máximo de tokens que puede procesar como contexto. Además, algunos modelos pueden cobrar al usuario por cada token procesado. Por lo tanto, es fundamental transformar una cadena de texto larga en fragmentos más pequeños y optimizados, utilizando tokens específicos para facilitar la comprensión por parte del modelo. Esta división previa es un paso necesario antes de recuperar la información.
 	
-		\item \textbf{Embeddings}: consiste en transformar la información facilitada y representarla en vectores de n dimensiones. Para ellos se usa comúnmente otro modelo entrenado para transformar la información en vectores.
+		\item \gls{embeddings}: consiste en transformar la información facilitada y representarla en vectores de n dimensiones. Para ello se usa comúnmente otro modelo entrenado para transformar la información en vectores.
+		En la imagen \ref{fig:langflow_rag_embeddings_edit} se puede ver cómo la información de Wikipedia API \cite{wikimedia_api} se prepara para guardarse en una base de datos vectorial Astra DB \cite{datastax_astra} para ello usa el modelo Ollama Embeddings
 		
-		\imagen{langflow_rag_embeddings}{Preparación de la información de un RAG mostrada en la herramienta Langflow}{1}
+		\imagen{langflow_rag_embeddings_edit}{Preparación de la información de un RAG mostrada en la herramienta Langflow}{1}
 		
-		\item \textbf{RAG}: con la información ampliada ya vectorizada en una base de datos, el usuario genera una entrada o prompt al modelo, el \acrshort{llm} entonces selecciona la información más afín de los datos aportados para generar así un prompt ampliado o mejorado que será pasado al modelo para un procesamiento de información habitual, consiguiendo así un mejor resultado.
+		\item \textbf{RAG}: con la información ampliada ya vectorizada en una base de datos, el usuario genera una entrada o prompt al modelo. Como se ve en la imagen \ref{fig:langflow_rag_retrieval} el \acrshort{llm}  selecciona la información más afín de los datos aportados para generar así un prompt ampliado o mejorado que será facilitado al modelo para un procesamiento de información habitual, consiguiendo así un mejor resultado.
 		
 		\imagen{langflow_rag_retrieval}{RAG mostrado en la herramienta Langflow usando https://astra.datastax.com }{1}
 	\end{enumerate}
-	
-
-	
-	
+		
 	\subsection{Agentes}
 	\label{sec:agentes}
-	La información que alimenta a los RAG puede ser un archivo de texto con información general de un tema sin embargo hay veces en los que la información no está físicamente en un archivo y se tiene que obtener a través de agentes.
+	La información que alimenta a los RAG puede ser un archivo de texto con información general de un tema sin embargo hay veces en los que la información no está físicamente en un archivo y se tiene que obtener a través de \gls{agentes}.
 	Estas múltiples herramientas pueden ser vistas como aplicaciones que alimentarán al modelo con un conjunto de herramientas tales como motores de búsqueda, bases de datos, páginas web, etc. Una vez provisto con esta información el modelo es capaz de razonar acerca de las acciones que debe cumplir para obtener el mejor resultado.
 
 	
 	\subsection{Uso de LLMs en Eco City Tours}
 	En este proyecto, los \acrlong{llm} se han empleado para obtener los \acrfull{pdi} a través de un diálogo interactivo entre la \acrlong{ia} y el usuario, donde este último solicita recomendaciones de lugares enfocados en el turismo sostenible. En la sección de \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-prototypes/README.md}{prototipos}, se implementa un cuaderno de Python que evalúa las mejoras en las respuestas aplicando diversas técnicas de prompting\cite{promptingguide}. Inicialmente, el prototipo presenta una conversación básica con respuestas de baja calidad o incluso alucinadas, que progresivamente mejoran al incluir estructuras de datos predefinidas en las respuestas. Este enfoque permite que la aplicación aproveche el aprendizaje, generando recomendaciones más precisas y acordes al código requerido en la aplicación móvil.
 	
-	\todo{determinar el alcance usado de RAG y Agentes en el proyecto}
-	La utilidad de los \acrfull{rag} en aplicaciones es muy amplia. La más habitual se usa para conseguir un chatbot de empresas que sirvan como atención al cliente. 
-	En nuestro caso se alimenta a la base de datos con embeddings la información actualizada de la web usando agentes que serán explicados a continuación, esta información funciona como una entrada de datos de un sistema RAG para la mayor comprensión del mundo que le rodea al modelo. De esta manera y con un juego de prompts \textbf{se obtienen los mejores resultados posibles} que serán después tratados por la aplicación móvil para mostrar dicha información al usuario.
+	\todo{determinar el alcance usado de RAG y Agentes en el proyecto. Si se refiere a la aplicación o al prototipo...}
+	La aplicación de los \acrfull{rag} es extensa, siendo su uso más común en la mejora de chatbots empresariales enfocados en ofrecer una atención al cliente más eficaz. En nuestro caso, la base de datos se alimenta con información actualizada sobre lugares de interés obtenida a través de agentes. Esta información es luego procesada por el sistema \acrshort{rag}, lo que permite al modelo tener un contexto más amplio y actualizado del entorno. Mediante el uso de prompts optimizados explicados en esta sección, se determinan los \acrlong{pdi}, que posteriormente son tratados por la aplicación móvil para ser presentados en el mapa.
 
 \section{Agilidad y método SCRUM}
 La gestión ágil de proyectos de desarrollo de software tiene como pilares fundamentales la flexibilidad, la colaboración y la entrega continua de valor al cliente\cite{agile_alliance}. La agilidad se basa en la idea de ciclos de trabajo cortos e iterativos denominados \textbf{sprints}, donde se produce software funcional al final de cada iteración.
