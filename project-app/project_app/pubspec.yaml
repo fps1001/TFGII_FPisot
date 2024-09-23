@@ -47,14 +47,22 @@ dependencies:
   url_launcher: ^6.3.0
 
 dev_dependencies:
-  flutter_app_name: ^0.1.0
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.14.0
   flutter_lints: ^3.0.0
 
-flutter_app_name:
-  name: "Eco City Tours"
-  flutter_test:
-    sdk: flutter
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+# The following section is specific to Flutter packages.
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+  assets:
+    - .env
+    - assets/
+    - assets/icon/
 
 #dart run flutter_native_splash:create --path=path/to/my/file.yaml
 #dart run flutter_native_splash:create --path=pubspec.yaml
@@ -70,31 +78,8 @@ flutter_native_splash:
 #flutter pub run flutter_launcher_icons
 #flutter pub run flutter_launcher_icons -f <your config file name here>
 flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/icon/troll_icon.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
-  web:
-    generate: true
-    image_path: "assets/icon/troll_icon.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
-  windows:
-    generate: true
-    image_path: "assets/icon/troll_icon.png"
-    icon_size: 48 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "assets/icon/troll_icon.png"
+  android: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#009963"
+  adaptive_icon_foreground: "assets/icon/troll_icon.png"
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-# The following section is specific to Flutter packages.
-flutter:
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
-  uses-material-design: true
-  assets:
-    - .env
-    - assets/

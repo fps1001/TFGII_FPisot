@@ -11,7 +11,7 @@
     <application
         android:label="Eco City Tours"
         android:enableOnBackInvokedCallback="true"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
 
         <!-- Meta-data for Google Maps API Key -->
 <meta-data 

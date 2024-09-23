@@ -5,9 +5,9 @@ class CustomBottomSheet extends StatelessWidget {
   final PointOfInterest poi;
 
   const CustomBottomSheet({
-    Key? key,
+    super.key,
     required this.poi,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
