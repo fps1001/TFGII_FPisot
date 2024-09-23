@@ -106,13 +106,13 @@ Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que
 		\item \textbf{Splitter y \gls{tokenizacion}}: La información proporcionada al modelo se divide en tokens, donde cada modelo tiene un límite máximo de tokens que puede procesar como contexto. Además, algunos modelos pueden cobrar al usuario por cada token procesado. Por lo tanto, es fundamental transformar una cadena de texto larga en fragmentos más pequeños y optimizados, utilizando tokens específicos para facilitar la comprensión por parte del modelo. Esta división previa es un paso necesario antes de recuperar la información.
 	
 		\item \gls{embeddings}: consiste en transformar la información facilitada y representarla en vectores de n dimensiones. Para ello se usa comúnmente otro modelo entrenado para transformar la información en vectores.
-		En la imagen \ref{fig:langflow_rag_embeddings_edit} se puede ver cómo la información de Wikipedia API \cite{wikimedia_api} se prepara para guardarse en una base de datos vectorial Astra DB \cite{datastax_astra} para ello usa el modelo Ollama Embeddings
+		En la imagen \ref{fig:langflow_rag_embeddings_gray} se puede ver cómo la información de Wikipedia API \cite{wikimedia_api} se prepara para guardarse en una base de datos vectorial Astra DB \cite{datastax_astra} para ello usa el modelo Ollama Embeddings
 		
-		\imagen{langflow_rag_embeddings_edit}{Preparación de la información de un RAG mostrada en la herramienta Langflow}{1}
+		\imagen{langflow_rag_embeddings_gray}{Preparación de la información de un RAG mostrada en la herramienta Langflow}{1}
 		
-		\item \textbf{RAG}: con la información ampliada ya vectorizada en una base de datos, el usuario genera una entrada o prompt al modelo. Como se ve en la imagen \ref{fig:langflow_rag_retrieval} el \acrshort{llm}  selecciona la información más afín de los datos aportados para generar así un prompt ampliado o mejorado que será facilitado al modelo para un procesamiento de información habitual, consiguiendo así un mejor resultado.
+		\item \textbf{RAG}: con la información ampliada ya vectorizada en una base de datos, el usuario genera una entrada o prompt al modelo. Como se ve en la imagen \ref{fig:langflow_rag_retrieval_gray} el \acrshort{llm} OpenAI en este caso selecciona la información más afín de los datos aportados para generar así un prompt ampliado o mejorado que será facilitado al modelo para un procesamiento de información habitual, consiguiendo así un mejor resultado.
 		
-		\imagen{langflow_rag_retrieval}{RAG mostrado en la herramienta Langflow usando https://astra.datastax.com }{1}
+		\imagen{langflow_rag_retrieval_gray}{Chat Output a través de la salida de un RAG}{1}
 	\end{enumerate}
 		
 	\subsection{Agentes}
