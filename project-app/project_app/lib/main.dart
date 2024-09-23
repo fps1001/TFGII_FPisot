@@ -61,6 +61,6 @@ class ProjectApp extends StatelessWidget {
         title: 'Eco-City Tour',
         theme: AppTheme.lightTheme,
         //home: LoadingScreen());
-        home: LoadingScreen());
+        home: const LoadingScreen());
   }
 }

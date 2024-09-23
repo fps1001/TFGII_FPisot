@@ -169,6 +169,7 @@ class Context {
       };
 }
 
+// ignore: constant_identifier_names
 enum Language { ES }
 
 final languageValues = EnumValues({"es": Language.ES});

@@ -44,42 +44,48 @@ dependencies:
   google_polyline_algorithm: ^3.1.0
   http: ^1.2.2
   permission_handler: ^11.3.1
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_app_name: ^0.1.0
   flutter_launcher_icons: ^0.11.0
   flutter_lints: ^3.0.0
 
-
-
 flutter_app_name:
   name: "Eco City Tours"
   flutter_test:
     sdk: flutter
 
+#dart run flutter_native_splash:create --path=path/to/my/file.yaml
+#dart run flutter_native_splash:create --path=pubspec.yaml
 flutter_native_splash:
   color: "#009963" # Aquí defines el color de fondo del splash
-  image: assets/icon/icon.png # Aquí defines el ícono que quieres que aparezca en el splash
+  image: assets/icon/troll_icon.png # Aquí defines el ícono que quieres que aparezca en el splash
   android: true
   ios: true
 
+#dart run run flutter_launcher_icons:generate
+#dart run run flutter_launcher_icons:generate -f <your config file name here>
+#dart run run flutter_launcher_icons:generate -o
+#flutter pub run flutter_launcher_icons
+#flutter pub run flutter_launcher_icons -f <your config file name here>
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icon/icon.png"
+  image_path: "assets/icon/troll_icon.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "assets/icon/icon.png"
+    image_path: "assets/icon/troll_icon.png"
     background_color: "#hexcode"
     theme_color: "#hexcode"
   windows:
     generate: true
-    image_path: "assets/icon/icon.png"
+    image_path: "assets/icon/troll_icon.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/icon/icon.png"
+    image_path: "assets/icon/troll_icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -92,4 +98,3 @@ flutter:
   assets:
     - .env
     - assets/
-  

@@ -4,9 +4,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +20,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               fontWeight: FontWeight.bold,
             ),
       ),
-      backgroundColor: Theme.of(context).appBarTheme.backgroundColor, // Usamos el color de la AppBar desde el Theme
+      backgroundColor: Theme.of(context)
+          .appBarTheme
+          .backgroundColor, // Usamos el color de la AppBar desde el Theme
       elevation: Theme.of(context).appBarTheme.elevation, // Elevación del Theme
-      iconTheme: const IconThemeData(color: Colors.white), // Hacemos que el icono sea blanco
+      iconTheme: const IconThemeData(
+          color: Colors.white), // Hacemos que el icono sea blanco
     );
   }
 

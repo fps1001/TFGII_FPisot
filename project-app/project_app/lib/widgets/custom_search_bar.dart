@@ -28,7 +28,8 @@ class _CustomSearchBarBody extends StatelessWidget {
   void onSearchResults(BuildContext context, SearchResult result) async {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
-    final start =   BlocProvider.of<LocationBloc>(context).state.lastKnownLocation;
+    final start =
+        BlocProvider.of<LocationBloc>(context).state.lastKnownLocation;
     if (result.manual == true) {
       // Lanza el evento que cambiará el estado.
       searchBloc.add(OnActivateManualMarkerEvent());
@@ -36,7 +37,8 @@ class _CustomSearchBarBody extends StatelessWidget {
     }
     if (result.position != null && start != null) {
       // Calcula la polilínea a mostrar por el mapbloc
-      final destination = await searchBloc.getCoorsStartToEnd(start, result.position!);
+      final destination =
+          await searchBloc.getCoorsStartToEnd(start, result.position!);
       // Se llama a pintar nueva polilínea:
       await mapBloc.drawRoutePolyline(destination);
     }
@@ -65,7 +67,7 @@ class _CustomSearchBarBody extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(100),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                         color: Colors.black12,
                         blurRadius: 5,

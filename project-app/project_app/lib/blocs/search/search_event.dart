@@ -13,12 +13,12 @@ class OnDisactivateManualMarkerEvent extends SearchEvent {}
 
 class OnNewPlacesFoundEvent extends SearchEvent {
   final List<Feature> places;
-  OnNewPlacesFoundEvent({required this.places});
-
+  const OnNewPlacesFoundEvent({required this.places});
 }
+
 // Evento que añade un lugar al historial.
 class OnAddToHistoryEvent extends SearchEvent {
   // place será el lugar a añadir al historial. será required.
   final Feature place;
-  OnAddToHistoryEvent({required this.place});
+  const OnAddToHistoryEvent({required this.place});
 }

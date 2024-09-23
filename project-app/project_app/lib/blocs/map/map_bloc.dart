@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
@@ -117,7 +118,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     double tripDuration = (destination.duration / 60).floorToDouble();
 
     final startMarkerIcon = await getCustomMarker();
-    //final endMarkerIcon = await getNetworkImageMarker();
+    final defaultIcon = await getCustomMarker();
 
     final startMarker = Marker(
       markerId: const MarkerId('start'),
@@ -129,27 +130,26 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       ),
     );
 
-/*     final finalMarker = Marker(
+    final finalMarker = Marker(
       markerId: const MarkerId('final'),
       position: destination.points.last,
-      icon: endMarkerIcon,
+      icon: defaultIcon,
       infoWindow: InfoWindow(
         title: destination.endPlace.text,
         snippet: destination.endPlace.placeName,
       ),
-    ); */
+    );
 
     // Marcadores de puntos de interés
 
     Map<String, Marker> poiMarkers = {};
     if (pois != null) {
       for (var poi in pois) {
-        // Cargo el icono desde la URL de la imagen del POI
-        //TODO cambiar a imagen de url
-        //final icon = await getNetworkImageMarker(poi.imageUrl ?? '');
-        //BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
-        final icon =
-            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
+        // Cargo el icono desde la URL de la imagen del POI, si es posible
+
+        final icon = poi.imageUrl != null
+            ? await getNetworkImageMarker(poi.imageUrl!)
+            : await getCustomMarker();
 
         final poiMarker = Marker(
           markerId: MarkerId(poi.name),
@@ -173,7 +173,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
               );
             } else {
               // Manejo de error o fallback en caso de que el contexto no esté disponible
-              print('Error: mapContext is null');
+              if (kDebugMode) {
+                print('Error: mapContext is null');
+              }
             }
           },
         );
@@ -186,7 +188,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     currentPolylines['route'] = myRoute;
     currentMarkers['start'] = startMarker;
-    //currentMarkers['final'] = finalMarker;
+    currentMarkers['final'] = finalMarker;
 
     // Agregar los marcadores de POIs
     currentMarkers.addAll(poiMarkers);

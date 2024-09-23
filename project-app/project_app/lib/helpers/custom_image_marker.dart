@@ -4,10 +4,11 @@ import 'dart:ui' as ui;
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart'; // Para cargar assets
+import 'package:url_launcher/url_launcher.dart'; // For URL validation
 
 Future<BitmapDescriptor> getCustomMarker() async {
   // Cargar la imagen desde el asset
-  final ByteData data = await rootBundle.load('assets/custompin.png');
+  final ByteData data = await rootBundle.load('assets/location_troll_bg.png');
 
   // Convertir la imagen a formato de bytes y redimensionarla
   final imageCodec = await ui.instantiateImageCodec(
@@ -31,7 +32,14 @@ Future<BitmapDescriptor> getCustomMarker() async {
 Future<BitmapDescriptor> getNetworkImageMarker(String imageUrl) async {
   try {
     // Realiza la petición HTTP para obtener la imagen de la URL proporcionada
-    //TODO imageUrl puede ser null, hay que manejarlo
+
+    if (!await canLaunchUrl(Uri.parse(imageUrl))) {
+      if (kDebugMode) {
+        print('Invalid image URL, using default marker.');
+      }
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+    }
+
     final resp = await Dio()
         .get(imageUrl, options: Options(responseType: ResponseType.bytes));
 
