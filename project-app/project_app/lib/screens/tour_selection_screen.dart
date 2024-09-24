@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/screens/screens.dart';
 import 'package:project_app/models/models.dart';
@@ -22,7 +21,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
     false
   ]; // Estado inicial del ToggleButton del medio de transporte
 
-// Preferencias de usuario con iconos
+  // Preferencias de usuario con iconos
   final Map<String, Map<String, dynamic>> userPreferences = {
     'Naturaleza': {
       'selected': false,
@@ -54,22 +53,28 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
       appBar: const CustomAppBar(title: 'Eco City Tour'), // Usa el CustomAppBar
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: 20.0,
+          right: 20.0,
+          top: 20.0,
+          bottom: bottomInset, // Ajuste automático para el teclado
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //* SELECCIÓN DE LUGAR
-            // Título de la pantalla
             Text(
               '¿Qué lugar quieres visitar?',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
 
-            // Campo de texto para el lugar sin sugerencias
+            // Campo de texto para el lugar
             TextField(
               onChanged: (value) {
                 setState(() {
@@ -77,10 +82,9 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 });
               },
               decoration: InputDecoration(
-                hintText: 'Introduce un lugar', // Pista para el usuario
+                hintText: 'Introduce un lugar',
                 border: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(25.0), // Bordes redondeados
+                  borderRadius: BorderRadius.circular(25.0),
                 ),
               ),
               style: Theme.of(context).textTheme.bodyMedium,
@@ -113,7 +117,6 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
             //* SELECCIÓN DE MEDIO DE TRANSPORTE
             const SizedBox(height: 20),
 
-            // Añadimos los ToggleButtons para seleccionar entre "andando" y "bici"
             Text(
               'Selecciona tu modo de transporte',
               style: Theme.of(context).textTheme.headlineSmall,
@@ -128,7 +131,6 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                     for (int i = 0; i < _isSelected.length; i++) {
                       _isSelected[i] = i == index;
                     }
-                    // Establece el modo de transporte según el índice
                     selectedMode = index == 0 ? 'walking' : 'cycling';
                   });
                 },
@@ -166,14 +168,12 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                     label: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Icono ajustado
                         Icon(
                           preference['icon'],
                           size: 20.0,
                           color: isSelected ? Colors.white : Colors.black54,
                         ),
-                        const SizedBox(
-                            width: 6.0), // Espacio entre icono y texto
+                        const SizedBox(width: 6.0),
                         Text(
                           key,
                           style: TextStyle(
@@ -186,19 +186,17 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                       ],
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(25.0), // Más redondeado
+                      borderRadius: BorderRadius.circular(25.0),
                       side: BorderSide(
                         color: isSelected
                             ? preference['color']
-                            : Colors.grey.shade400, // Bordes más apagados
+                            : Colors.grey.shade400,
                       ),
                     ),
                     selectedColor: preference['color'],
                     backgroundColor: isSelected
                         ? preference['color']
-                        : preference['color']!.withOpacity(
-                            0.3), // Más apagado cuando no está seleccionado
+                        : preference['color']!.withOpacity(0.3),
                     elevation: 4.0,
                     shadowColor: Colors.grey.shade300,
                     selected: isSelected,
@@ -220,49 +218,42 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
               elevation: 0,
               height: 50,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0), // Bordes redondeados
+                borderRadius: BorderRadius.circular(25.0),
               ),
               onPressed: () async {
-                // Mostrar un mensaje de carga mientras obtenemos los POIs
                 LoadingMessageHelper.showLoadingMessage(context);
 
-                // Filtro las preferencias seleccionadas
-                // Lo hago así para pasarle directamente la lista al servicio.
                 final selectedPreferences = userPreferences.entries
                     .where((entry) => entry.value['selected'] == true)
                     .map((entry) => entry.key)
                     .toList();
 
-                // Llama al servicio de Gemini para obtener los POIs
                 final pois = await GeminiService.fetchGeminiData(
                   city: selectedPlace,
                   nPoi: numberOfSites.round(),
                   userPreferences: selectedPreferences,
                 );
 
-                // Cierra el mensaje de carga
                 Navigator.of(context).pop();
 
-                // Verificar si se obtuvieron POIs
                 if (pois.isEmpty) {
-                  // Muestra un mensaje o maneja el caso en que no haya POIs
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('No se encontraron POIs')),
                   );
                   return;
                 }
 
-                // Navegar a la pantalla del mapa pasando los valores seleccionados
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => MapScreen(
                       tour: EcoCityTour(
-                          city: selectedPlace,
-                          numberOfSites: numberOfSites.round(),
-                          pois: pois,
-                          mode: selectedMode,
-                          userPreferences: selectedPreferences),
+                        city: selectedPlace,
+                        numberOfSites: numberOfSites.round(),
+                        pois: pois,
+                        mode: selectedMode,
+                        userPreferences: selectedPreferences,
+                      ),
                     ),
                   ),
                 );

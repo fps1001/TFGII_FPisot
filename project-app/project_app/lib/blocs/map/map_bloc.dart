@@ -117,9 +117,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     double tripDuration = (destination.duration / 60).floorToDouble();
 
-    final startMarkerIcon = await getCustomMarker();
-    final defaultIcon = await getCustomMarker();
-
+    //final startMarkerIcon = await getCustomMarker();
+    //final defaultIcon = await getCustomMarker();
+/* 
     final startMarker = Marker(
       markerId: const MarkerId('start'),
       position: destination.points.first,
@@ -138,7 +138,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         title: destination.endPlace.text,
         snippet: destination.endPlace.placeName,
       ),
-    );
+    ); */
 
     // Marcadores de puntos de interés
 
@@ -187,8 +187,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     final currentMarkers = Map<String, Marker>.from(state.markers);
 
     currentPolylines['route'] = myRoute;
-    currentMarkers['start'] = startMarker;
-    currentMarkers['final'] = finalMarker;
+   // currentMarkers['start'] = startMarker;
+    //currentMarkers['final'] = finalMarker;
 
     // Agregar los marcadores de POIs
     currentMarkers.addAll(poiMarkers);

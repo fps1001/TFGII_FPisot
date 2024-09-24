@@ -64,46 +64,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
 Future<RouteDestination> getOptimizedRoute(List<LatLng> waypoints, String mode) async {
-  // Obtener la respuesta de la optimización de la ruta
   final resp = await optimizationService.getOptimizedRoute(waypoints, mode);
 
-  if (resp.trips.isEmpty) {
-    throw AppException("No trips found in the optimization response");
-  }
-
-  List<LatLng> allPoints = [];
-  double totalDistance = 0;
-  double totalDuration = 0;
-
-  // Recorremos todos los trips y concatenamos los puntos de cada uno
-  for (var trip in resp.trips) {
-    final geometry = trip.geometry;
-    if (geometry.isEmpty) {
-      throw AppException("No geometry found for one of the trips");
-    }
-
-    final points = decodePolyline(geometry, accuracyExponent: 6);
-    final latLngList = points
-        .map((coor) => LatLng(coor[0].toDouble(), coor[1].toDouble()))
-        .toList();
-
-    // Agregamos los puntos a la lista general
-    allPoints.addAll(latLngList);
-
-    // Sumamos distancia y duración totales
-    totalDistance += trip.distance;
-    totalDuration += trip.duration;
-  }
-  // Constuimos un RouteDestination que se puede pintar con los datos de los Trips:
   final endPlace = await trafficService.getPlaceByCoords(waypoints.last);
-  // Retornar la ruta optimizada completa con todos los trips
+
   return RouteDestination(
-    points: allPoints,
-    duration: totalDuration,
-    distance: totalDistance,
-    endPlace: endPlace
+    points: resp.points,
+    duration: resp.duration,
+    distance: resp.distance,
+    endPlace: endPlace,
   );
 }
+
 
 
 }

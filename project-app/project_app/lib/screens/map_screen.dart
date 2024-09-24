@@ -39,8 +39,6 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Eco City Tour'), // Usa el CustomAppBar
-      //TODO añadir un drawer para la selección de tours????
-
       // Cambio builder por futurebuilder para cargar la ruta y los POIs porque se necesita esperar a que se carguen
       body: FutureBuilder<void>(
         future:

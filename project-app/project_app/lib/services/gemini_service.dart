@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,7 +17,9 @@ class GeminiService {
     String geminiApi = dotenv.env['GEMINI_API_KEY'] ?? '';
 
     if (geminiApi.isEmpty) {
-      print('No \$GEMINI_API_KEY environment variable');
+      if (kDebugMode) {
+        print('No \$GEMINI_API_KEY environment variable');
+      }
       return [];
     }
 
