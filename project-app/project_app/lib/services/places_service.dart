@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:project_app/models/place.dart';
 
 class PlacesService {
   final Dio _dio = Dio();
@@ -10,24 +9,25 @@ class PlacesService {
   // Constructor
   PlacesService();
 
-  // Método para buscar lugares por nombre
-  Future<List<Place>?> searchPlace(String query) async {
+  // Método para buscar un lugar por su nombre
+  Future<Map<String, dynamic>?> searchPlace(String query) async {
     const String url = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
 
     try {
       final response = await _dio.get(url, queryParameters: {
         'query': query,
         'key': _apiKey,
+        'language': 'es',
       });
 
       if (response.statusCode == 200) {
-        final List<dynamic> results = response.data['results'];
-        // Convertir cada resultado en un objeto `Place`
-        return results.map((json) => Place.fromJson(json)).toList();
+        return response.data['results']?.isNotEmpty == true
+            ? response.data['results'][0]
+            : null;
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error en la búsqueda de lugares: $e');
+        print('Error en la búsqueda del lugar: $e');
       }
     }
 

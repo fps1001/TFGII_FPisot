@@ -5,11 +5,19 @@ class Place {
   final String name;
   final LatLng location;
   final String? imageUrl;
+  final double rating;
+  final int userRatingsTotal;
+  final String? description;
+  final String? websiteUri;
 
   Place({
     required this.name,
     required this.location,
     this.imageUrl,
+    required this.rating,
+    required this.userRatingsTotal,
+    this.description,
+    this.websiteUri,
   });
 
   // Método de fábrica para crear un `Place` desde los datos JSON de la API de Google Places
@@ -28,13 +36,30 @@ class Place {
     String? imageUrl;
     if (json['photos'] != null && json['photos'].isNotEmpty) {
       final photoReference = json['photos'][0]['photo_reference'];
-      imageUrl = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=$apiKey';
+      imageUrl =
+          'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=$apiKey';
+    }
+
+    // Descripción o resumen del lugar
+    String? description;
+    if (json['editorialSummary'] != null) {
+      description = json['editorialSummary']['text'];
+    }
+
+    // URL del sitio web si existe
+    String? websiteUri;
+    if (json['websiteUri'] != null) {
+      websiteUri = json['websiteUri'];
     }
 
     return Place(
       name: json['name'],
       location: location,
       imageUrl: imageUrl,
+      rating: json['rating'] ?? 0.0,
+      userRatingsTotal: json['user_ratings_total'] ?? 0,
+      description: description,
+      websiteUri: websiteUri,
     );
   }
 }

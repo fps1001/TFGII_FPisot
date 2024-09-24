@@ -156,12 +156,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           markerId: MarkerId(poi.name),
           position: poi.gps,
           icon: icon,
-          onTap: () {
+          onTap: () async {
             if (state.mapContext != null) {
-              showPlaceDetails(state.mapContext!, poi.name); // Llamar a la función de búsqueda y detalles
-            } else {
-              if (kDebugMode) {
-                print('Error: mapContext is null');
+              // Hacer la búsqueda de detalles del lugar
+              final placeJson = await _placesService.searchPlace(poi.name);
+              if (placeJson != null) {
+                final place = Place.fromJson(placeJson); // Crea un objeto Place desde el JSON
+                showPlaceDetails(state.mapContext!, place); // Llama a la función para mostrar el BottomSheet
+              } else {
+                if (kDebugMode) {
+                  print('No se encontraron resultados para el lugar: ${poi.name}');
+                }
               }
             }
           },
@@ -185,34 +190,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
    // Función para mostrar el `BottomSheet` con los detalles del lugar
-  void showPlaceDetails(BuildContext context, String query) async {
-    final places = await _placesService.searchPlace(query);
-
-    if (places != null && places.isNotEmpty) {
-      final place = places.first; // Muestra el primer resultado de la búsqueda
-
-      showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return CustomBottomSheet(
-            poiName: place.name,
-            address: place.location.toString(),
-            imageUrl: place.imageUrl,
-          );
-        },
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-      );
-    } else {
-      if (kDebugMode) {
-        print('No se encontraron resultados para la búsqueda');
-      }
-    }
-  }
+  void showPlaceDetails(BuildContext context, Place place) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return CustomBottomSheet(place: place); // Pasa el objeto `Place` directamente
+    },
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+    ),
+  );
+}
 
   @override
   Future<void> close() {
