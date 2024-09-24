@@ -98,8 +98,8 @@ class _MapScreenState extends State<MapScreen> {
                         polylines: polylines.values.toSet(),
                         markers: mapState.markers.values.toSet(),
                       ),
-                      const CustomSearchBar(),
-                      const ManualMarker(),
+                      //const CustomSearchBar(),
+                      //const ManualMarker(),
                     ],
                   );
                 },

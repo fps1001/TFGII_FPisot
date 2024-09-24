@@ -56,7 +56,7 @@ class Place {
       name: json['name'],
       location: location,
       imageUrl: imageUrl,
-      rating: json['rating'] ?? 0.0,
+      rating: (json['rating'] is int) ? (json['rating'] as int).toDouble() : (json['rating'] ?? 0.0),
       userRatingsTotal: json['user_ratings_total'] ?? 0,
       description: description,
       websiteUri: websiteUri,

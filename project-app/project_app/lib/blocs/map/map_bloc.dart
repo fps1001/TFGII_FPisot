@@ -118,7 +118,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     kms = (kms * 100).floorToDouble();
     kms /= 100;
 
-    double tripDuration = (destination.duration / 60).floorToDouble();
+    //double tripDuration = (destination.duration / 60).floorToDouble();
 
     //final startMarkerIcon = await getCustomMarker();
     //final defaultIcon = await getCustomMarker();
