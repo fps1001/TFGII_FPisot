@@ -9,6 +9,7 @@ class GeminiService {
   static Future<List<PointOfInterest>> fetchGeminiData({
     required String city,
     required int nPoi,
+    required List<String> userPreferences,
   }) async {
     // Fetch data from Gemini API
     await dotenv.load();
@@ -20,19 +21,19 @@ class GeminiService {
     }
 
     //* DEFINICIÓN DEL MODELO
-  final model = GenerativeModel(
-    model: 'gemini-1.5-flash',
-    apiKey: geminiApi,
-    // safetySettings: Adjust safety settings
-    // See https://ai.google.dev/gemini-api/docs/safety-settings
-    generationConfig: GenerationConfig(
-      temperature: 1,
-      topK: 64,
-      topP: 0.95,
-      maxOutputTokens: 8192,
-      //* TOOL CALLING: Se solicita la respuesta en formato JSON
-      responseMimeType: 'application/json',
-        
+    final model = GenerativeModel(
+      model: 'gemini-1.5-flash',
+      apiKey: geminiApi,
+      // safetySettings: Adjust safety settings
+      // See https://ai.google.dev/gemini-api/docs/safety-settings
+      generationConfig: GenerationConfig(
+        temperature: 1,
+        topK: 64,
+        topP: 0.95,
+        maxOutputTokens: 8192,
+        //* TOOL CALLING: Se solicita la respuesta en formato JSON
+        responseMimeType: 'application/json',
+
         responseSchema: Schema(
           SchemaType.array, // Cambiamos a array porque esperamos múltiples POIs
           items: Schema(
@@ -49,11 +50,12 @@ class GeminiService {
         ),
       ),
       //* Role prompting: Se define el rol del modelo
-      systemInstruction: Content.system('Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo'),
-  );
+      systemInstruction: Content.system(
+          'Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo'),
+    );
 
-  //* Se le añade contexto al modelo dandole así también un ejemplo de lo que se espera de él: few-shot learning
-  /*
+    //* Se le añade contexto al modelo dandole así también un ejemplo de lo que se espera de él: few-shot learning
+    /*
   final chat = model.startChat(history: [
     Content.multi([
       TextPart('Genera una lista de 1 puntos de interés en Salamanca, incluyendo para cada uno: nombre, descripción breve, coordenadas GPS, una URL para más información y una URL de una imagen representativa. Organiza la información en formato JSON, con un array de objetos, donde cada objeto representa un punto de interés.'),
@@ -63,15 +65,18 @@ class GeminiService {
     ]),
   ]);
   */
-  //* CONSTRUCCIÓN DE PETICIÓN
-  // Definimos las variables de ciudad y número de POIs
+    //* CONSTRUCCIÓN DE PETICIÓN
+    // Definimos las variables de ciudad y número de POIs
 
 /*   final String ciudad = 'Salamanca';
   final int n_poi = 3;
  */
-  final chat = model.startChat();
+    final chat = model.startChat();
 
-  final message = '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city. Cada objeto debe incluir:
+    // Transformar las preferencias en una lista de intereses seleccionados
+
+    final message =
+        '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city. Cada objeto debe incluir:
 * nombre (string)
 * descripción (string)
 * coordenadas (array de dos números: latitud y longitud)
@@ -86,13 +91,16 @@ class GeminiService {
     "coordenadas": [40.9647, -5.6695],
     "url": "[https://www.salamanca.es/es/turismo/plaza-mayor](https://www.salamanca.es/es/turismo/plaza-mayor)",
     "url_img": "[https://media.traveler.es/photos/61377bcd3decec3303bacc87/master/pass/90285.jpg](Plaza Mayor)"
-}''';
-  final content = Content.text(message);
-  
-  //* VALIDACIÓN E IMPRESIÓN DE RESPUESTA
-  final response = await chat.sendMessage(content);
+}
+Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')}
 
-  if (response.text == null) {
+''';
+    final content = Content.text(message);
+
+    //* VALIDACIÓN E IMPRESIÓN DE RESPUESTA
+    final response = await chat.sendMessage(content);
+
+    if (response.text == null) {
       print('No response from the model.');
       return [];
     }
@@ -102,7 +110,8 @@ class GeminiService {
 
     try {
       // Decodificar el JSON como una lista de mapas
-      List<dynamic> jsonResponse = json.decode(response.text!); // Decodificar el JSON como lista
+      List<dynamic> jsonResponse =
+          json.decode(response.text!); // Decodificar el JSON como lista
 
       // Mapear los datos del JSON a una lista de objetos PointOfInterest
       pointsOfInterest = jsonResponse.map((poiJson) {

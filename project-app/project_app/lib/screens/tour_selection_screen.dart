@@ -17,7 +17,40 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
   String selectedPlace = '';
   double numberOfSites = 2; // Valor inicial para el slider
   String selectedMode = 'walking'; // Modo de transporte por defecto es andando
-  final List<bool> _isSelected = [true, false]; // Estado inicial del ToggleButton del medio de transporte
+  final List<bool> _isSelected = [
+    true,
+    false
+  ]; // Estado inicial del ToggleButton del medio de transporte
+
+// Preferencias de usuario con iconos
+  final Map<String, Map<String, dynamic>> userPreferences = {
+    'Naturaleza': {
+      'selected': false,
+      'icon': Icons.park,
+      'color': Colors.lightBlue
+    },
+    'Museos': {'selected': false, 'icon': Icons.museum, 'color': Colors.purple},
+    'Gastronomía': {
+      'selected': false,
+      'icon': Icons.restaurant,
+      'color': Colors.green
+    },
+    'Deportes': {
+      'selected': false,
+      'icon': Icons.sports_soccer,
+      'color': Colors.red
+    },
+    'Compras': {
+      'selected': false,
+      'icon': Icons.shopping_bag,
+      'color': Colors.teal
+    },
+    'Historia': {
+      'selected': false,
+      'icon': Icons.history_edu,
+      'color': Colors.orange
+    },
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +59,8 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, 
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             //* SELECCIÓN DE LUGAR
             // Título de la pantalla
             Text(
@@ -113,7 +145,74 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
               ),
             ),
 
-           //* BOTÓN DE PETICIÓN DE TOUR
+            //* SELECCIÓN DE PREFERENCIAS DEL USUARIO (CHIPS)
+            const SizedBox(height: 30),
+            Text(
+              '¿Cuáles son tus intereses?',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 10),
+
+            Center(
+              child: Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                alignment: WrapAlignment.center,
+                children: userPreferences.keys.map((String key) {
+                  final preference = userPreferences[key];
+                  final bool isSelected = preference!['selected'];
+
+                  return ChoiceChip(
+                    label: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Icono ajustado
+                        Icon(
+                          preference['icon'],
+                          size: 20.0,
+                          color: isSelected ? Colors.white : Colors.black54,
+                        ),
+                        const SizedBox(
+                            width: 6.0), // Espacio entre icono y texto
+                        Text(
+                          key,
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : Colors.black87,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(25.0), // Más redondeado
+                      side: BorderSide(
+                        color: isSelected
+                            ? preference['color']
+                            : Colors.grey.shade400, // Bordes más apagados
+                      ),
+                    ),
+                    selectedColor: preference['color'],
+                    backgroundColor: isSelected
+                        ? preference['color']
+                        : preference['color']!.withOpacity(
+                            0.3), // Más apagado cuando no está seleccionado
+                    elevation: 4.0,
+                    shadowColor: Colors.grey.shade300,
+                    selected: isSelected,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        userPreferences[key]!['selected'] = selected;
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
+
+            //* BOTÓN DE PETICIÓN DE TOUR
             const SizedBox(height: 50),
             MaterialButton(
               minWidth: MediaQuery.of(context).size.width - 60,
@@ -124,13 +223,21 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 borderRadius: BorderRadius.circular(25.0), // Bordes redondeados
               ),
               onPressed: () async {
-                                // Mostrar un mensaje de carga mientras obtenemos los POIs
+                // Mostrar un mensaje de carga mientras obtenemos los POIs
                 LoadingMessageHelper.showLoadingMessage(context);
+
+                // Filtro las preferencias seleccionadas
+                // Lo hago así para pasarle directamente la lista al servicio.
+                final selectedPreferences = userPreferences.entries
+                    .where((entry) => entry.value['selected'] == true)
+                    .map((entry) => entry.key)
+                    .toList();
 
                 // Llama al servicio de Gemini para obtener los POIs
                 final pois = await GeminiService.fetchGeminiData(
                   city: selectedPlace,
                   nPoi: numberOfSites.round(),
+                  userPreferences: selectedPreferences,
                 );
 
                 // Cierra el mensaje de carga
@@ -151,11 +258,11 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   MaterialPageRoute(
                     builder: (context) => MapScreen(
                       tour: EcoCityTour(
-                        city: selectedPlace,
-                        numberOfSites: numberOfSites.round(),
-                        pois: pois,
-                        mode: selectedMode,
-                      ),
+                          city: selectedPlace,
+                          numberOfSites: numberOfSites.round(),
+                          pois: pois,
+                          mode: selectedMode,
+                          userPreferences: selectedPreferences),
                     ),
                   ),
                 );

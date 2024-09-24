@@ -78,10 +78,10 @@ void main() async {
   //TODO Se obtendrán estas variables a través del bloc correspondiente, por ahora se definen de forma estática
   //TODO Las variables se modificarán en el menú de carga de la aplicación, pendiente de crear.
   const String ciudad = 'Salamanca';
-  const int n_poi = 3;
+  const int nPoi = 3;
 
   const message =
-      '''Genera una lista de $n_poi puntos de interés en $ciudad, incluyendo para cada uno: nombre, descripción breve, coordenadas GPS, una URL para más información y una URL de una imagen representativa. Organiza la información en formato JSON, con un array de objetos, donde cada objeto representa un punto de interés.''';
+      '''Genera una lista de $nPoi puntos de interés en $ciudad, incluyendo para cada uno: nombre, descripción breve, coordenadas GPS, una URL para más información y una URL de una imagen representativa. Organiza la información en formato JSON, con un array de objetos, donde cada objeto representa un punto de interés.''';
   final content = Content.text(message);
 
   //* VALIDACIÓN E IMPRESIÓN DE RESPUESTA

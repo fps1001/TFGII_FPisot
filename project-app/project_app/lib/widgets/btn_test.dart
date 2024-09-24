@@ -8,11 +8,12 @@ import 'package:project_app/services/services.dart';
 import '../blocs/blocs.dart';
 
 class BtnTest extends StatelessWidget {
-  const BtnTest({super.key});
+  BtnTest({super.key});
+
+  final List<String> userPreferences = ['Historia', 'Deportes'];
 
   @override
   Widget build(BuildContext context) {
-
     final searchBloc =
         BlocProvider.of<SearchBloc>(context); // Para obtener la ruta optimizada
     final mapBloc =
@@ -28,14 +29,17 @@ class BtnTest extends StatelessWidget {
         maxRadius: 25,
         // BlocBuilder para saber si se sigue al usuario.
         child: IconButton(
-          icon: Icon(Icons.quiz_rounded, color: Colors.black),
+          icon: const Icon(Icons.quiz_rounded, color: Colors.black),
           onPressed: () async {
             // Obtener la última ubicación conocida
             final lastKnownLocation = locationBloc.state.lastKnownLocation;
 
             // Obtener POIs desde el servicio Gemini
             final List<PointOfInterest> pois =
-                await GeminiService.fetchGeminiData(city: 'Salamanca', nPoi: 4);
+                await GeminiService.fetchGeminiData(
+                    city: 'Salamanca',
+                    nPoi: 4,
+                    userPreferences: userPreferences);
 
             // Si no se obtienen POIs, cancelar la acción
             if (pois.isEmpty) {
@@ -68,8 +72,8 @@ class BtnTest extends StatelessWidget {
             }
 
             // Obtener la ruta optimizada
-            final destination =
-                await searchBloc.getOptimizedRoute(salamancaCoordinates, 'walking');
+            final destination = await searchBloc.getOptimizedRoute(
+                salamancaCoordinates, 'walking');
 
             // Pintar la nueva polilínea en el mapa
             await mapBloc.drawRoutePolyline(destination, allPOIs);

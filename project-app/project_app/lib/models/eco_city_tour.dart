@@ -7,11 +7,13 @@ class EcoCityTour {
   final int numberOfSites;
   final List<PointOfInterest> pois;
   final String mode;
+  final List<String> userPreferences;
 
   EcoCityTour({
     required this.city,
     required this.numberOfSites,
     required this.pois,
     required this.mode,
+    required this.userPreferences,
   });
 }
