@@ -1,5 +1,6 @@
 export 'package:project_app/models/eco_city_tour.dart';
 export 'package:project_app/models/optimization_response.dart';
+export 'package:project_app/models/place.dart';
 export 'package:project_app/models/places_models.dart';
 export 'package:project_app/models/point_of_interest.dart';
 export 'package:project_app/models/route_destination.dart';

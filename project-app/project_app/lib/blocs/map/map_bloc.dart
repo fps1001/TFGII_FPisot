@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/helpers/custom_image_marker.dart';
 import 'package:project_app/models/models.dart';
+import 'package:project_app/services/services.dart';
 
 import '../../widgets/widgets.dart';
 
@@ -22,6 +23,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   StreamSubscription<LocationState>? locationSubscription;
 
   LatLng? mapCenter;
+  // Instancia del servicio de Places
+  final PlacesService _placesService = PlacesService(); 
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     // Cuando recibo un evento de tipo OnMapInitializedEvent emite un nuevo estado.
@@ -145,8 +148,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     Map<String, Marker> poiMarkers = {};
     if (pois != null) {
       for (var poi in pois) {
-        // Cargo el icono desde la URL de la imagen del POI, si es posible
-
         final icon = poi.imageUrl != null
             ? await getNetworkImageMarker(poi.imageUrl!)
             : await getCustomMarker();
@@ -155,24 +156,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           markerId: MarkerId(poi.name),
           position: poi.gps,
           icon: icon,
-          /* infoWindow: InfoWindow(
-            title: poi.name,
-            snippet: poi.description ?? 'Sin descripción',
-          ), */
           onTap: () {
             if (state.mapContext != null) {
-              showModalBottomSheet(
-                context: state.mapContext!,
-                builder: (context) => CustomBottomSheet(poi: poi),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-              );
+              showPlaceDetails(state.mapContext!, poi.name); // Llamar a la función de búsqueda y detalles
             } else {
-              // Manejo de error o fallback en caso de que el contexto no esté disponible
               if (kDebugMode) {
                 print('Error: mapContext is null');
               }
@@ -195,9 +182,36 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
 
-    // Esperar un poco antes de mostrar la infoWindow de inicio de ruta.
-    await Future.delayed(const Duration(milliseconds: 300));
-    _mapController?.showMarkerInfoWindow(const MarkerId('start'));
+  }
+
+   // Función para mostrar el `BottomSheet` con los detalles del lugar
+  void showPlaceDetails(BuildContext context, String query) async {
+    final places = await _placesService.searchPlace(query);
+
+    if (places != null && places.isNotEmpty) {
+      final place = places.first; // Muestra el primer resultado de la búsqueda
+
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomBottomSheet(
+            poiName: place.name,
+            address: place.location.toString(),
+            imageUrl: place.imageUrl,
+          );
+        },
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+      );
+    } else {
+      if (kDebugMode) {
+        print('No se encontraron resultados para la búsqueda');
+      }
+    }
   }
 
   @override

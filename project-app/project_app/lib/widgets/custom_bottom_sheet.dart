@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import '../models/models.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CustomBottomSheet extends StatelessWidget {
-  final PointOfInterest poi;
+  final String poiName;
+  final String address;
+  final String? imageUrl;
 
   const CustomBottomSheet({
     super.key,
-    required this.poi,
+    required this.poiName,
+    required this.address,
+    this.imageUrl,
   });
 
   @override
@@ -19,34 +23,37 @@ class CustomBottomSheet extends StatelessWidget {
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            spreadRadius: 5,
-          ),
-        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            poi.name,
+            poiName,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          if (poi.description != null)
-            Text(
-              poi.description!,
-              style: const TextStyle(fontSize: 14),
-            ),
+          Text(
+            address,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
           const SizedBox(height: 10),
-
+          if (imageUrl != null)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl!,
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    const Icon(Icons.error),
+              ),
+            ),
         ],
       ),
     );
   }
-
- 
 }
