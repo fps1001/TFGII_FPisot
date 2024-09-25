@@ -229,6 +229,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   borderRadius: BorderRadius.circular(25.0),
                 ),
                 onPressed: () {
+                  // Dispara el evento para cargar el tour
                   BlocProvider.of<TourBloc>(context).add(LoadTourEvent(
                     city: selectedPlace,
                     numberOfSites: numberOfSites.round(),
@@ -242,23 +243,13 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   BlocProvider.of<TourBloc>(context).stream.listen((tourState) {
                     if (!tourState.isLoading &&
                         !tourState.hasError &&
-                        tourState.pois.isNotEmpty) {
-                      // Navegar a la pantalla del mapa solo si el estado tiene POIs
+                        tourState.ecoCityTour != null) {
+                      // Navegar a la pantalla del mapa solo si el estado tiene un EcoCityTour cargado
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => MapScreen(
-                            tour: EcoCityTour(
-                              city: selectedPlace,
-                              numberOfSites: numberOfSites.round(),
-                              pois: tourState.pois,
-                              mode: selectedMode,
-                              userPreferences: userPreferences.entries
-                                  .where((entry) =>
-                                      entry.value['selected'] == true)
-                                  .map((entry) => entry.key)
-                                  .toList(),
-                            ),
+                            tour: tourState.ecoCityTour!,
                           ),
                         ),
                       );

@@ -24,7 +24,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   LatLng? mapCenter;
   // Instancia del servicio de Places
-  final PlacesService _placesService = PlacesService(); 
+  final PlacesService _placesService = PlacesService();
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     // Cuando recibo un evento de tipo OnMapInitializedEvent emite un nuevo estado.
@@ -161,11 +161,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
               // Hacer la búsqueda de detalles del lugar
               final placeJson = await _placesService.searchPlace(poi.name);
               if (placeJson != null) {
-                final place = Place.fromJson(placeJson); // Crea un objeto Place desde el JSON
-                showPlaceDetails(state.mapContext!, place); // Llama a la función para mostrar el BottomSheet
+                final place = Place.fromJson(
+                    placeJson); // Crea un objeto Place desde el JSON
+                showPlaceDetails(state.mapContext!,
+                    place); // Llama a la función para mostrar el BottomSheet
               } else {
                 if (kDebugMode) {
-                  print('No se encontraron resultados para el lugar: ${poi.name}');
+                  print(
+                      'No se encontraron resultados para el lugar: ${poi.name}');
                 }
               }
             }
@@ -179,7 +182,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     final currentMarkers = Map<String, Marker>.from(state.markers);
 
     currentPolylines['route'] = myRoute;
-   // currentMarkers['start'] = startMarker;
+    // currentMarkers['start'] = startMarker;
     //currentMarkers['final'] = finalMarker;
 
     // Agregar los marcadores de POIs
@@ -187,23 +190,28 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
 
+    // Centrar la cámara en el primer POI si existe
+    if (pois != null && pois.isNotEmpty) {
+      moveCamera(pois.first.gps); // Centra la cámara en el primer POI
+    }
   }
 
-   // Función para mostrar el `BottomSheet` con los detalles del lugar
+  // Función para mostrar el `BottomSheet` con los detalles del lugar
   void showPlaceDetails(BuildContext context, Place place) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return CustomBottomSheet(place: place); // Pasa el objeto `Place` directamente
-    },
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBottomSheet(
+            place: place); // Pasa el objeto `Place` directamente
+      },
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   @override
   Future<void> close() {
