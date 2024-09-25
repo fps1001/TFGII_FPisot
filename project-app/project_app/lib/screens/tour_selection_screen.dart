@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/screens/screens.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/services/services.dart';
 import 'package:project_app/widgets/widgets.dart';
+
+import '../blocs/blocs.dart';
 
 class TourSelectionScreen extends StatefulWidget {
   const TourSelectionScreen({super.key});
@@ -78,7 +81,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 20),
-        
+
               // Campo de texto para el lugar
               TextField(
                 onChanged: (value) {
@@ -94,7 +97,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 ),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-        
+
               //* SELECCIÓN DE NÚMERO DE SITIOS (SLIDER)
               const SizedBox(height: 30),
               Text(
@@ -102,7 +105,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 10),
-        
+
               // Slider para seleccionar el número de sitios (2 a 8)
               Slider(
                 value: numberOfSites,
@@ -118,10 +121,10 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 activeColor: Theme.of(context).primaryColor,
                 inactiveColor: Theme.of(context).primaryColor.withOpacity(0.3),
               ),
-        
+
               //* SELECCIÓN DE MEDIO DE TRANSPORTE
               const SizedBox(height: 20),
-        
+
               Text(
                 'Selecciona tu modo de transporte',
                 style: Theme.of(context).textTheme.headlineSmall,
@@ -151,7 +154,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   ],
                 ),
               ),
-        
+
               //* SELECCIÓN DE PREFERENCIAS DEL USUARIO (CHIPS)
               const SizedBox(height: 30),
               Text(
@@ -159,7 +162,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 10),
-        
+
               Center(
                 child: Wrap(
                   spacing: 8.0,
@@ -168,7 +171,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   children: userPreferences.keys.map((String key) {
                     final preference = userPreferences[key];
                     final bool isSelected = preference!['selected'];
-        
+
                     return ChoiceChip(
                       label: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -214,7 +217,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   }).toList(),
                 ),
               ),
-        
+
               //* BOTÓN DE PETICIÓN DE TOUR
               const SizedBox(height: 50),
               MaterialButton(
@@ -225,43 +228,42 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25.0),
                 ),
-                onPressed: () async {
-                  LoadingMessageHelper.showLoadingMessage(context);
-        
-                  final selectedPreferences = userPreferences.entries
-                      .where((entry) => entry.value['selected'] == true)
-                      .map((entry) => entry.key)
-                      .toList();
-        
-                  final pois = await GeminiService.fetchGeminiData(
+                onPressed: () {
+                  BlocProvider.of<TourBloc>(context).add(LoadTourEvent(
                     city: selectedPlace,
-                    nPoi: numberOfSites.round(),
-                    userPreferences: selectedPreferences,
-                  );
-        
-                  Navigator.of(context).pop();
-        
-                  if (pois.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('No se encontraron POIs')),
-                    );
-                    return;
-                  }
-        
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapScreen(
-                        tour: EcoCityTour(
-                          city: selectedPlace,
-                          numberOfSites: numberOfSites.round(),
-                          pois: pois,
-                          mode: selectedMode,
-                          userPreferences: selectedPreferences,
+                    numberOfSites: numberOfSites.round(),
+                    userPreferences: userPreferences.entries
+                        .where((entry) => entry.value['selected'] == true)
+                        .map((entry) => entry.key)
+                        .toList(),
+                  ));
+
+                  // Escucha los cambios en el estado del TourBloc
+                  BlocProvider.of<TourBloc>(context).stream.listen((tourState) {
+                    if (!tourState.isLoading &&
+                        !tourState.hasError &&
+                        tourState.pois.isNotEmpty) {
+                      // Navegar a la pantalla del mapa solo si el estado tiene POIs
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapScreen(
+                            tour: EcoCityTour(
+                              city: selectedPlace,
+                              numberOfSites: numberOfSites.round(),
+                              pois: tourState.pois,
+                              mode: selectedMode,
+                              userPreferences: userPreferences.entries
+                                  .where((entry) =>
+                                      entry.value['selected'] == true)
+                                  .map((entry) => entry.key)
+                                  .toList(),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  );
+                      );
+                    }
+                  });
                 },
                 child: const Text(
                   'REALIZAR ECO-CITY TOUR',

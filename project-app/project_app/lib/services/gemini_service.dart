@@ -104,7 +104,9 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
     final response = await chat.sendMessage(content);
 
     if (response.text == null) {
-      print('No response from the model.');
+      if (kDebugMode) {
+        print('No response from the model.');
+      }
       return [];
     }
 
@@ -130,7 +132,9 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
         );
       }).toList();
     } catch (e) {
-      print('Error parsing response: $e');
+      if (kDebugMode) {
+        print('Error parsing response: $e');
+      }
     }
     return pointsOfInterest;
   }
