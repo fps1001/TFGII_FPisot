@@ -7,6 +7,7 @@ class PointOfInterest {
   final String? description;
   final String? url;
   final String? imageUrl;
+  final double? rating;
 
   PointOfInterest({
     required this.gps,
@@ -14,6 +15,6 @@ class PointOfInterest {
     this.description,
     this.url,
     this.imageUrl,
+    this.rating,
   });
-
 }

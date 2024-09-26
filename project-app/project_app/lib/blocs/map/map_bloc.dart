@@ -146,33 +146,25 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     Map<String, Marker> poiMarkers = {};
     if (tour.pois.isNotEmpty) {
-    for (var poi in tour.pois) {
-      final icon = poi.imageUrl != null
-          ? await getNetworkImageMarker(poi.imageUrl!)
-          : await getCustomMarker();
+      for (var poi in tour.pois) {
+        final icon = poi.imageUrl != null
+            ? await getNetworkImageMarker(poi.imageUrl!)
+            : await getCustomMarker();
 
-      final poiMarker = Marker(
-        markerId: MarkerId(poi.name),
-        position: poi.gps,
-        icon: icon,
-        onTap: () async {
-          if (state.mapContext != null) {
-            // Búsqueda de detalles del lugar
-            final placeJson = await _placesService.searchPlace(poi.name);
-            if (placeJson != null) {
-              final place = Place.fromJson(placeJson);
-              showPlaceDetails(state.mapContext!, place);
-            } else {
-              if (kDebugMode) {
-                print('No se encontraron resultados para el lugar: ${poi.name}');
-              }
+        final poiMarker = Marker(
+          markerId: MarkerId(poi.name),
+          position: poi.gps,
+          icon: icon,
+          onTap: () async {
+            if (state.mapContext != null) {
+              // Ahora, llamamos directamente a showPlaceDetails con el POI en lugar de buscar un Place
+              showPlaceDetails(state.mapContext!, poi);
             }
-          }
-        },
-      );
-      poiMarkers[poi.name] = poiMarker;
+          },
+        );
+        poiMarkers[poi.name] = poiMarker;
+      }
     }
-  }
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     final currentMarkers = Map<String, Marker>.from(state.markers);
@@ -186,20 +178,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
 
+    
     // Centrar la cámara en el primer POI si existe
-    // Centrar la cámara en el primer POI si existe
-  if (tour.pois.isNotEmpty) {
-    moveCamera(tour.pois.first.gps);
-  }
+    if (tour.pois.isNotEmpty) {
+      moveCamera(tour.pois.first.gps);
+    }
   }
 
   // Función para mostrar el `BottomSheet` con los detalles del lugar
-  void showPlaceDetails(BuildContext context, Place place) {
+  void showPlaceDetails(BuildContext context, PointOfInterest poi) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return CustomBottomSheet(
-            place: place); // Pasa el objeto `Place` directamente
+            poi: poi); // Pasa el objeto `PointOfInterest` directamente
       },
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
