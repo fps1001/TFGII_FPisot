@@ -58,3 +58,13 @@ class OnRemovePoiMarkerEvent extends MapEvent {
   @override
   List<Object> get props => [poiName];
 }
+
+// Evento para añadir un marcador en el mapa
+class OnAddPoiMarkerEvent extends MapEvent {
+  final PointOfInterest poi; // Información del POI que se añadirá como marcador
+
+  const OnAddPoiMarkerEvent(this.poi);
+
+  @override
+  List<Object> get props => [poi];
+}

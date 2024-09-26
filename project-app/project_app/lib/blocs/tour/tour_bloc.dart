@@ -117,14 +117,19 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   }
 
 // Método para añadir un POI
-  Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
-    if (state.ecoCityTour != null) {
-      final updatedPois = List<PointOfInterest>.from(state.ecoCityTour!.pois)
-        ..add(event.poi);
+Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
+  if (state.ecoCityTour != null) {
+    final updatedPois = List<PointOfInterest>.from(state.ecoCityTour!.pois)
+      ..add(event.poi);
 
-      await _updateTourWithPois(updatedPois, emit);
-    }
+    // Actualizamos el tour con los nuevos POIs
+    await _updateTourWithPois(updatedPois, emit);
+
+    // Añadir el marcador en el mapa usando MapBloc
+    mapBloc.add(OnAddPoiMarkerEvent(event.poi));
   }
+}
+
 
   Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async {
   final ecoCityTour = state.ecoCityTour;

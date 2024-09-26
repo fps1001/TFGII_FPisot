@@ -8,7 +8,6 @@ import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/helpers/custom_image_marker.dart';
 import 'package:project_app/models/models.dart';
 
-
 import '../../widgets/widgets.dart';
 
 part 'map_event.dart';
@@ -43,7 +42,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OnToggleShowUserRouteEvent>((event, emit) =>
         emit(state.copyWith(showUserRoute: !state.showUserRoute)));
     // Manejamos el evento para eliminar el marcador
-    on<OnRemovePoiMarkerEvent>(_onRemovePoiMarker);  
+    on<OnRemovePoiMarkerEvent>(_onRemovePoiMarker);
+    // Cuando recibo el evento para añadir un marcador emito un nuevo estado.
+    on<OnAddPoiMarkerEvent>(_onAddPoiMarker);
 
     // Suscripción al bloc de localización.
     locationSubscription = locationBloc.stream.listen((locationState) {
@@ -71,6 +72,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void moveCamera(LatLng latLng) {
+    if (_mapController == null) {
+      // No mover la cámara si el controlador no está listo
+      print('El controlador del mapa aún no está listo.');
+      return;
+    }
+
     final cameraUpdate = CameraUpdate.newLatLng(latLng);
     _mapController?.animateCamera(cameraUpdate);
   }
@@ -179,11 +186,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
 
-    
+    //TODO Causa error al unirme al tour, porque no espera a que se haya cargado el mapa.
     // Centrar la cámara en el primer POI si existe
-    if (tour.pois.isNotEmpty) {
+/*     if (tour.pois.isNotEmpty) {
       moveCamera(tour.pois.first.gps);
-    }
+    } */
   }
 
   // Función para mostrar el `BottomSheet` con los detalles del lugar
@@ -203,20 +210,47 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
   }
 
-
-
 // Función para eliminar el marcador correspondiente a un POI
-void _onRemovePoiMarker(OnRemovePoiMarkerEvent event, Emitter<MapState> emit) {
-  final updatedMarkers = Map<String, Marker>.from(state.markers);
+  void _onRemovePoiMarker(
+      OnRemovePoiMarkerEvent event, Emitter<MapState> emit) {
+    final updatedMarkers = Map<String, Marker>.from(state.markers);
 
-  // Eliminar el marcador correspondiente al POI
-  updatedMarkers.remove(event.poiName);
+    // Eliminar el marcador correspondiente al POI
+    updatedMarkers.remove(event.poiName);
 
-  // Emitir el nuevo estado con los marcadores actualizados
-  emit(state.copyWith(markers: updatedMarkers));
-}
+    // Emitir el nuevo estado con los marcadores actualizados
+    emit(state.copyWith(markers: updatedMarkers));
+  }
 
+// Método para manejar el evento de añadir un POI como marcador
+  void _onAddPoiMarker(
+      OnAddPoiMarkerEvent event, Emitter<MapState> emit) async {
+    // Clonar los marcadores actuales
+    final updatedMarkers = Map<String, Marker>.from(state.markers);
 
+    // Generar el ícono para el marcador
+    final icon = event.poi.imageUrl != null
+        ? await getNetworkImageMarker(event.poi.imageUrl!)
+        : await getCustomMarker(); // Usa un marcador por defecto si no tiene imagen
+
+    // Crear el nuevo marcador basado en el POI
+    final poiMarker = Marker(
+      markerId: MarkerId(event.poi.name),
+      position: event.poi.gps,
+      icon: icon,
+      onTap: () async {
+        if (state.mapContext != null) {
+          showPlaceDetails(state.mapContext!, event.poi);
+        }
+      },
+    );
+
+    // Añadir el nuevo marcador al mapa
+    updatedMarkers[event.poi.name] = poiMarker;
+
+    // Emitir el nuevo estado con el marcador actualizado
+    emit(state.copyWith(markers: updatedMarkers));
+  }
 
   @override
   Future<void> close() {

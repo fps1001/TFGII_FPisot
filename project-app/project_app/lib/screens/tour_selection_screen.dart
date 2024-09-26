@@ -203,8 +203,11 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                       selectedColor: preference['color'],
                       backgroundColor: isSelected
                           ? preference['color']
-                          : preference['color']!.withOpacity(0.3),
-                      elevation: 4.0,
+                          : preference['color']!.withOpacity(
+                              0.1), // Más apagado si no está seleccionado
+                      elevation: isSelected
+                          ? 4.0
+                          : 1.0, // Ajustar la elevación en función de la selección
                       shadowColor: Colors.grey.shade300,
                       selected: isSelected,
                       onSelected: (bool selected) {
