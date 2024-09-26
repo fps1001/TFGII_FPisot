@@ -48,3 +48,13 @@ class OnDisplayPolylinesEvent extends MapEvent {
   @override
   List<Object> get props => [polylines, markers];
 }
+
+// Evento para eliminar un marcador de POI
+class OnRemovePoiMarkerEvent extends MapEvent {
+  final String poiName;
+
+  const OnRemovePoiMarkerEvent(this.poiName);
+
+  @override
+  List<Object> get props => [poiName];
+}

@@ -42,6 +42,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     // Cuando recibo un evento de tipo OnToggleShowUserRouteEvent emite un nuevo estado.
     on<OnToggleShowUserRouteEvent>((event, emit) =>
         emit(state.copyWith(showUserRoute: !state.showUserRoute)));
+    // Manejamos el evento para eliminar el marcador
+    on<OnRemovePoiMarkerEvent>(_onRemovePoiMarker);  
 
     // Suscripción al bloc de localización.
     locationSubscription = locationBloc.stream.listen((locationState) {
@@ -200,6 +202,21 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       ),
     );
   }
+
+
+
+// Función para eliminar el marcador correspondiente a un POI
+void _onRemovePoiMarker(OnRemovePoiMarkerEvent event, Emitter<MapState> emit) {
+  final updatedMarkers = Map<String, Marker>.from(state.markers);
+
+  // Eliminar el marcador correspondiente al POI
+  updatedMarkers.remove(event.poiName);
+
+  // Emitir el nuevo estado con los marcadores actualizados
+  emit(state.copyWith(markers: updatedMarkers));
+}
+
+
 
   @override
   Future<void> close() {

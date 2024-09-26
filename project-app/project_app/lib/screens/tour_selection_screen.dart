@@ -118,7 +118,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   });
                 },
                 activeColor: Theme.of(context).primaryColor,
-                inactiveColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                inactiveColor: Theme.of(context).primaryColor.withOpacity(0.8),
               ),
 
               //* SELECCIÓN DE MEDIO DE TRANSPORTE

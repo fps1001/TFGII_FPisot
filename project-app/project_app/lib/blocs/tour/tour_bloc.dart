@@ -3,8 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/exceptions/exceptions.dart';
 import 'package:project_app/services/services.dart';
@@ -14,9 +16,13 @@ part 'tour_state.dart';
 
 class TourBloc extends Bloc<TourEvent, TourState> {
   final OptimizationService optimizationService;
+  final MapBloc mapBloc; // Añadimos una referencia al MapBloc para marcadores
 
-  TourBloc({required this.optimizationService}) : super(const TourState()) {
+  TourBloc({required this.mapBloc, required this.optimizationService}) : super(const TourState()) {
+    // Manejadores de eventos a continuación
     on<LoadTourEvent>(_onLoadTour);
+    on<OnRemovePoiEvent>(_onRemovePoi);
+    on<OnAddPoiEvent>(_onAddPoi);
   }
 
   Future<void> _onLoadTour(LoadTourEvent event, Emitter<TourState> emit) async {
@@ -120,15 +126,41 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     }
   }
 
-  // Método para eliminar un POI
   Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async {
-    if (state.ecoCityTour != null) {
-      final updatedPois = List<PointOfInterest>.from(state.ecoCityTour!.pois)
-        ..removeWhere((poi) => poi.placeId == event.poi.placeId);
+  final ecoCityTour = state.ecoCityTour;
+  if (ecoCityTour == null) return;
 
-      await _updateTourWithPois(updatedPois, emit);
-    }
-  }
+  // Remover el POI de la lista
+  final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..remove(event.poi);
+
+  // Recalcular la ruta optimizada
+  final List<LatLng> poiLocations = updatedPois.map((poi) => poi.gps).toList();
+  final optimizedRoute = await optimizationService.getOptimizedRoute(
+    poiLocations,
+    ecoCityTour.mode,
+  );
+
+  // Crear una nueva instancia de EcoCityTour con los datos actualizados
+  final updatedEcoCityTour = EcoCityTour(
+    city: ecoCityTour.city,
+    numberOfSites: updatedPois.length,
+    pois: updatedPois,
+    mode: ecoCityTour.mode,
+    userPreferences: ecoCityTour.userPreferences,
+    duration: optimizedRoute.duration,
+    distance: optimizedRoute.distance,
+    polilynePoints: optimizedRoute.points,
+  );
+
+  // Emitir el nuevo estado con el tour actualizado
+  emit(state.copyWith(ecoCityTour: updatedEcoCityTour));
+
+  // Usar el MapBloc para eliminar el marcador
+  mapBloc.add(OnRemovePoiMarkerEvent(event.poi.name));
+}
+
+
+
 
   // Método para actualizar el tour con una nueva lista de POIs
   Future<void> _updateTourWithPois(

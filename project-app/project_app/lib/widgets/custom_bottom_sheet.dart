@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:project_app/models/models.dart'; // Asegúrate de que este archivo importe el modelo PointOfInterest
+import 'package:project_app/models/models.dart';
+import 'package:project_app/blocs/tour/tour_bloc.dart'; // Importa el bloc correcto
 
 class CustomBottomSheet extends StatelessWidget {
-  final PointOfInterest poi;  // Cambiamos Place por PointOfInterest
+  final PointOfInterest poi;
 
   const CustomBottomSheet({super.key, required this.poi});
 
@@ -95,7 +97,6 @@ class CustomBottomSheet extends StatelessWidget {
                 ),
               ],
             ),
- 
 
           const SizedBox(height: 10.0),
 
@@ -160,6 +161,34 @@ class CustomBottomSheet extends StatelessWidget {
             ),
             const SizedBox(height: 10.0),
           ],
+
+          // Botón para eliminar el POI del EcoCityTour
+          const SizedBox(height: 20.0),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                // Dispara el evento para eliminar el POI
+                BlocProvider.of<TourBloc>(context).add(OnRemovePoiEvent(poi: poi));
+
+                // Cierra el bottom sheet
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+              ),
+              child: const Text(
+                'Eliminar de mi Eco City Tour',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
