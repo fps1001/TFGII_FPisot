@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/screens/screens.dart';
-import 'package:project_app/models/models.dart';
-import 'package:project_app/services/services.dart';
+
 import 'package:project_app/widgets/widgets.dart';
 
 import '../blocs/blocs.dart';
@@ -229,6 +228,9 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   borderRadius: BorderRadius.circular(25.0),
                 ),
                 onPressed: () {
+                  // Mostrar diálogo de carga
+                  LoadingMessageHelper.showLoadingMessage(context);
+
                   // Dispara el evento para cargar el tour
                   BlocProvider.of<TourBloc>(context).add(LoadTourEvent(
                     mode: selectedMode,

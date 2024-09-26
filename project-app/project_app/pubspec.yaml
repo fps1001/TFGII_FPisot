@@ -70,7 +70,7 @@ flutter:
 #dart run flutter_native_splash:create --path=pubspec.yaml
 flutter_native_splash:
   color: "#009963" # Aquí defines el color de fondo del splash
-  image: assets/icon/troll_icon.png # Aquí defines el ícono que quieres que aparezca en el splash
+  image: assets/icon/icon.png # Aquí defines el ícono que quieres que aparezca en el splash
   android: true
   ios: true
 
@@ -81,6 +81,6 @@ flutter_native_splash:
 #flutter pub run flutter_launcher_icons -f <your config file name here>
 flutter_launcher_icons:
   android: true
-  image_path: "assets/icon/icon.png"
-  adaptive_icon_background: "#009963"
+  image_path: "assets/icon/troll_icon.png"
+  adaptive_icon_background: "#ffffff"
   adaptive_icon_foreground: "assets/icon/troll_icon.png"

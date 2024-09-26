@@ -17,33 +17,89 @@ class CustomBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Nombre del lugar (POI)
+          // Título con el nombre del lugar (POI)
           Text(
             poi.name,
             style: const TextStyle(
-              fontSize: 20.0,
+              fontSize: 22.0,
               fontWeight: FontWeight.bold,
+              color: Colors.teal,
             ),
           ),
           const SizedBox(height: 10.0),
 
-          // Coordenadas del POI
-          Text('LatLng(${poi.gps.latitude}, ${poi.gps.longitude})'),
-          const SizedBox(height: 10.0),
-
           // Imagen del POI si está disponible
           if (poi.imageUrl != null)
-            CachedNetworkImage(
-              imageUrl: poi.imageUrl!,
-              placeholder: (context, url) => const Center(
-                child: CircularProgressIndicator(),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: CachedNetworkImage(
+                imageUrl: poi.imageUrl!,
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 200.0,
               ),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              fit: BoxFit.cover,
             ),
           const SizedBox(height: 10.0),
 
-          // Rating si está disponible
+          // Dirección si está disponible
+          if (poi.address != null)
+            Row(
+              children: [
+                const Icon(Icons.location_on, color: Colors.redAccent),
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: Text(
+                    poi.address!,
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          const SizedBox(height: 10.0),
+
+          // Coordenadas del POI
+          Row(
+            children: [
+              const Icon(Icons.map, color: Colors.blueAccent),
+              const SizedBox(width: 8.0),
+              Text(
+                'LatLng(${poi.gps.latitude}, ${poi.gps.longitude})',
+                style: const TextStyle(fontSize: 16.0),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10.0),
+
+          // Estado de negocio (operacional, cerrado, etc.)
+          if (poi.businessStatus != null)
+            Row(
+              children: [
+                const Icon(Icons.store, color: Colors.green),
+                const SizedBox(width: 8.0),
+                Text(
+                  poi.businessStatus == 'OPERATIONAL' ? 'Abierto' : 'Cerrado',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: poi.businessStatus == 'OPERATIONAL'
+                        ? Colors.green
+                        : Colors.red,
+                  ),
+                ),
+              ],
+            ),
+ 
+
+          const SizedBox(height: 10.0),
+
+          // Rating del POI si está disponible
           if (poi.rating != null && poi.rating! > 0) ...[
             Row(
               children: [
@@ -57,8 +113,12 @@ class CustomBottomSheet extends StatelessWidget {
                   itemSize: 20.0,
                 ),
                 const SizedBox(width: 10.0),
-                // Puedes agregar el número de reseñas si está disponible
-                Text('(Rating: ${poi.rating})'),
+                Text(
+                  '${poi.rating!} / 5.0',
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black87),
+                ),
+                if (poi.userRatingsTotal != null)
+                  Text('  (${poi.userRatingsTotal} reseñas)'),
               ],
             ),
             const SizedBox(height: 10.0),
@@ -66,6 +126,11 @@ class CustomBottomSheet extends StatelessWidget {
 
           // Descripción del POI si está disponible
           if (poi.description != null) ...[
+            const Text(
+              'Descripción:',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 5.0),
             Text(
               poi.description!,
               style: const TextStyle(fontSize: 14.0, color: Colors.black54),
@@ -81,7 +146,7 @@ class CustomBottomSheet extends StatelessWidget {
                 if (await canLaunchUrl(url)) {
                   await launchUrl(url);
                 } else {
-                  throw 'Could not launch $url';
+                  throw 'No se pudo abrir el enlace $url';
                 }
               },
               child: const Text(
@@ -89,6 +154,7 @@ class CustomBottomSheet extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.blue,
                   decoration: TextDecoration.underline,
+                  fontSize: 16.0,
                 ),
               ),
             ),

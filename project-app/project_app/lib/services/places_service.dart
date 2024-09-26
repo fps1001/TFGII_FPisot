@@ -22,15 +22,23 @@ class PlacesService {
       });
 
       if (response.statusCode == 200 && response.data['results'] != null && response.data['results'].isNotEmpty) {
-        final result = response.data['results'][0];
+        final result = response.data['results'][0];  // Tomamos el primer resultado
+
+        // Mapeamos todos los campos relevantes del lugar
         return {
-          'name': result['name'],
-          'location': result['geometry']['location'],
-          'rating': result['rating'],
-          'photos': result['photos'],
-          'displayName': result['name'],
-          'editorialSummary': result['editorial_summary'],
-          'websiteUri': result['website'],
+          'name': result['name'],  // Nombre del lugar
+          'location': result['geometry']['location'],  // Coordenadas
+          'formatted_address': result['formatted_address'],  // Dirección completa
+          'rating': result['rating'],  // Puntuación
+          'user_ratings_total': result['user_ratings_total'],  // Total de reseñas
+          'photos': result['photos'],  // Fotos del lugar
+          'place_id': result['place_id'],  // ID del lugar
+          'plus_code': result['plus_code']?['global_code'],  // Código Plus
+          'business_status': result['business_status'],  // Estado comercial
+          'icon': result['icon'],  // Icono del lugar
+          'types': result['types'],  // Tipos de lugar
+          'opening_hours': result['opening_hours']?['open_now'],  // Si está abierto ahora
+          'website': result['website'],  // Sitio web del lugar
         };
       }
     } catch (e) {

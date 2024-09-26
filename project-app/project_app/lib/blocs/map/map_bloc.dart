@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/helpers/custom_image_marker.dart';
 import 'package:project_app/models/models.dart';
-import 'package:project_app/services/services.dart';
+
 
 import '../../widgets/widgets.dart';
 
@@ -24,7 +23,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   LatLng? mapCenter;
   // Instancia del servicio de Places
-  final PlacesService _placesService = PlacesService();
+  //final PlacesService _placesService = PlacesService();
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     // Cuando recibo un evento de tipo OnMapInitializedEvent emite un nuevo estado.
