@@ -38,7 +38,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Eco City Tour'), // Usa el CustomAppBar
+      appBar: const CustomAppBar(title: 'Eco City Tour'), 
       // Cambio builder por futurebuilder para cargar la ruta y los POIs porque se necesita esperar a que se carguen
       body: FutureBuilder<void>(
         future:
@@ -122,34 +122,10 @@ class _MapScreenState extends State<MapScreen> {
 
   /// Método para cargar la ruta optimizada y los POIs
   Future<void> _initializeRouteAndPois() async {
-    final searchBloc = BlocProvider.of<SearchBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
-    final locationBloc = BlocProvider.of<LocationBloc>(context);
 
-    // Obtener la última ubicación conocida
-    final lastKnownLocation = locationBloc.state.lastKnownLocation;
-
-    // Añadir la ubicación del usuario como el primer POI si existe
-    final List<PointOfInterest> allPOIs = lastKnownLocation != null
-        ? [
-            PointOfInterest(
-              gps: lastKnownLocation,
-              name: 'Tu ubicación actual',
-              description: 'Última ubicación conocida del usuario',
-            ),
-            ...widget.tour.pois
-          ]
-        : widget.tour.pois;
-
-    // Convertir la lista de PointOfInterest a una lista de LatLng
-    final List<LatLng> coordinates = allPOIs.map((poi) => poi.gps).toList();
-
-    // Obtener la ruta optimizada usando los POIs
-    final destination =
-        await searchBloc.getOptimizedRoute(coordinates, widget.tour.mode);
-
-    // Pintar la nueva polilínea en el mapa usando el MapBloc
-    await mapBloc.drawRoutePolyline(destination, allPOIs);
+    // Pinta la nueva polilínea en el mapa usando el MapBloc
+    await mapBloc.drawRoutePolyline(widget.tour);
   }
 
   @override

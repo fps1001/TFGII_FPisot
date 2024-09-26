@@ -231,6 +231,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 onPressed: () {
                   // Dispara el evento para cargar el tour
                   BlocProvider.of<TourBloc>(context).add(LoadTourEvent(
+                    mode: selectedMode,
                     city: selectedPlace,
                     numberOfSites: numberOfSites.round(),
                     userPreferences: userPreferences.entries

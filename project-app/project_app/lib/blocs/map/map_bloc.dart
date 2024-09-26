@@ -103,18 +103,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   // Metodo que recibe una polilínea y la emite en un nuevo evento.
   // Ahora con POI's opcionales.
-  Future<void> drawRoutePolyline(RouteDestination destination,
-      [List<PointOfInterest>? pois]) async {
+  Future<void> drawRoutePolyline(EcoCityTour tour) async {
     final myRoute = Polyline(
       polylineId: const PolylineId('route'),
       color: Colors.teal,
       width: 5,
-      points: destination.points,
+      points: tour.polilynePoints,
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,
     );
 
-    double kms = destination.distance / 1000;
+    double kms = tour.distance / 1000;
     kms = (kms * 100).floorToDouble();
     kms /= 100;
 
@@ -146,37 +145,34 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     // Marcadores de puntos de interés
 
     Map<String, Marker> poiMarkers = {};
-    if (pois != null) {
-      for (var poi in pois) {
-        final icon = poi.imageUrl != null
-            ? await getNetworkImageMarker(poi.imageUrl!)
-            : await getCustomMarker();
+    if (tour.pois.isNotEmpty) {
+    for (var poi in tour.pois) {
+      final icon = poi.imageUrl != null
+          ? await getNetworkImageMarker(poi.imageUrl!)
+          : await getCustomMarker();
 
-        final poiMarker = Marker(
-          markerId: MarkerId(poi.name),
-          position: poi.gps,
-          icon: icon,
-          onTap: () async {
-            if (state.mapContext != null) {
-              // Hacer la búsqueda de detalles del lugar
-              final placeJson = await _placesService.searchPlace(poi.name);
-              if (placeJson != null) {
-                final place = Place.fromJson(
-                    placeJson); // Crea un objeto Place desde el JSON
-                showPlaceDetails(state.mapContext!,
-                    place); // Llama a la función para mostrar el BottomSheet
-              } else {
-                if (kDebugMode) {
-                  print(
-                      'No se encontraron resultados para el lugar: ${poi.name}');
-                }
+      final poiMarker = Marker(
+        markerId: MarkerId(poi.name),
+        position: poi.gps,
+        icon: icon,
+        onTap: () async {
+          if (state.mapContext != null) {
+            // Búsqueda de detalles del lugar
+            final placeJson = await _placesService.searchPlace(poi.name);
+            if (placeJson != null) {
+              final place = Place.fromJson(placeJson);
+              showPlaceDetails(state.mapContext!, place);
+            } else {
+              if (kDebugMode) {
+                print('No se encontraron resultados para el lugar: ${poi.name}');
               }
             }
-          },
-        );
-        poiMarkers[poi.name] = poiMarker;
-      }
+          }
+        },
+      );
+      poiMarkers[poi.name] = poiMarker;
     }
+  }
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     final currentMarkers = Map<String, Marker>.from(state.markers);
@@ -191,9 +187,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
 
     // Centrar la cámara en el primer POI si existe
-    if (pois != null && pois.isNotEmpty) {
-      moveCamera(pois.first.gps); // Centra la cámara en el primer POI
-    }
+    // Centrar la cámara en el primer POI si existe
+  if (tour.pois.isNotEmpty) {
+    moveCamera(tour.pois.first.gps);
+  }
   }
 
   // Función para mostrar el `BottomSheet` con los detalles del lugar

@@ -43,7 +43,7 @@ void main() async {
                   OptimizationService())), // Indica si se quiere hacer una busqueda manual o no.
       BlocProvider(
           create: (context) =>
-              TourBloc()), // Guarda la información del Tour y sus POIs
+              TourBloc(optimizationService: OptimizationService())), // Guarda la información del Tour y sus POIs
     ],
     child: const ProjectApp(),
   ));
