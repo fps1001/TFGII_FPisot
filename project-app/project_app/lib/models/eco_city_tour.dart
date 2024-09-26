@@ -24,5 +24,27 @@ class EcoCityTour {
     required this.pois,
     required this.mode,
     required this.userPreferences,});
+
+    EcoCityTour copyWith({
+    String? city,
+    int? numberOfSites,
+    List<PointOfInterest>? pois,
+    String? mode,
+    List<String>? userPreferences,
+    double? duration,
+    double? distance,
+    List<LatLng>? polilynePoints,
+  }) {
+    return EcoCityTour(
+      city: city ?? this.city,
+      numberOfSites: numberOfSites ?? this.numberOfSites,
+      pois: pois ?? this.pois,
+      mode: mode ?? this.mode,
+      userPreferences: userPreferences ?? this.userPreferences,
+      duration: duration ?? this.duration,
+      distance: distance ?? this.distance,
+      polilynePoints: polilynePoints ?? this.polilynePoints,
+    );
+  }
   
 }

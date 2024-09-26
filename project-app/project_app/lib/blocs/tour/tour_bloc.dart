@@ -109,4 +109,54 @@ class TourBloc extends Bloc<TourEvent, TourState> {
       emit(state.copyWith(isLoading: false, hasError: true));
     }
   }
+
+// Método para añadir un POI
+  Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
+    if (state.ecoCityTour != null) {
+      final updatedPois = List<PointOfInterest>.from(state.ecoCityTour!.pois)
+        ..add(event.poi);
+
+      await _updateTourWithPois(updatedPois, emit);
+    }
+  }
+
+  // Método para eliminar un POI
+  Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async {
+    if (state.ecoCityTour != null) {
+      final updatedPois = List<PointOfInterest>.from(state.ecoCityTour!.pois)
+        ..removeWhere((poi) => poi.placeId == event.poi.placeId);
+
+      await _updateTourWithPois(updatedPois, emit);
+    }
+  }
+
+  // Método para actualizar el tour con una nueva lista de POIs
+  Future<void> _updateTourWithPois(
+    List<PointOfInterest> pois,
+    Emitter<TourState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      final List<LatLng> poiLocations = pois.map((poi) => poi.gps).toList();
+      final optimizedRoute = await optimizationService.getOptimizedRoute(
+        poiLocations,
+        state.ecoCityTour!.mode,
+      );
+
+      final updatedTour = state.ecoCityTour!.copyWith(
+        pois: pois,
+        numberOfSites: pois.length,
+        duration: optimizedRoute.duration,
+        distance: optimizedRoute.distance,
+        polilynePoints: optimizedRoute.points,
+      );
+
+      emit(state.copyWith(ecoCityTour: updatedTour, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, hasError: true));
+    }
+  }
+
+
 }
