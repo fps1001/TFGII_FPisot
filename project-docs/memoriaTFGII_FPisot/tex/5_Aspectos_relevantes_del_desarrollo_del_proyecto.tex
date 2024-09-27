@@ -16,16 +16,17 @@ De manera renuente se decide cambiar los servicios necesarios para la visualizac
 	\item \textbf{Riesgos asociados a complementos de terceros}: Durante el desarrollo, se exploraron soluciones como \acrfull{osrm} para gestionar rutas, pero estas requerían procesar manualmente las conexiones con el servicio o confiar en paquetes de terceros. Estos paquetes, aunque facilitan el desarrollo, presentan un riesgo mayor debido a su posible discontinuidad o incompatibilidad con futuras actualizaciones. En cambio, el uso de herramientas como Dio \cite{dio_package}, un paquete marcado como favorito por Flutter, garantiza un soporte nativo y más estable en el ecosistema de Google.
 \end{itemize} 
 
-
-\section{Elección de servicios Geocoding MapBox sobre servicios Google}
-Los servicios de geocoding son herramientas que permiten convertir direcciones físicas (como ``Calle Mayor, Ciudad, País'') en coordenadas geográficas (latitud y longitud), y viceversa. Esto es esencial para aplicaciones que requieren localización geográfica precisa, como mapas interactivos, planificación de rutas, análisis espacial, o cualquier función que dependa de ubicaciones específicas y los puntos de interés alrededor de una ubicación. Estos servicios en Google tienen el nombre de \textit{Google Places} y su uso supone un coste económico para el desarrollador, incluso con el mínimo tráfico posible.
-
-Para una versión inicial de la aplicación de este \acrshort{tfg} se decidió usar MapBox\cite{mapbox}, una empresa de mapas con un soporte similar a Google pero que no incurre gastos en volúmenes de tráfico como en los que se incurre durante la etapa de desarrollo.
-Con Eco City Tours ya publicada y si esta alcanza un uso elevado de peticiones siempre se puede cambiar a \textit{Google Places} ya que la implementación como pasaba con el resto de servicios es nativa y por tanto muy sencilla de llevar a cabo, si se quiere conseguir unificación de servicios y costes. Desde el punto de vista de la programación solo cambia la manera de acceder a los datos pues las coordenadas se presentan primero con longitud y después con latitud, es decir, de manera inversa a los servicios Google. La modularidad del código realizado y el tratamiento de interceptores hace que un futuro cambio de servicios y peticiones GET sean facilmente implementados.
-
 \section{Elección de google generative ai como primer LLM}
 Durante el desarrollo se estudiaron múltiples opciones a la hora de obtener la información desde un \acrshort{llm}. 
-Siguiendo con el ecosistema de Google
-
+Siguiendo con el ecosistema de Google se probó con éxito el modelo \textit{gemini-1.5-flash} gracias al paquete \textit{google\_generative\_ai} que permite configurar el modelo desde su página web para más tarde exportar la configuración a un archivo Dart. Sus resultados cambiaban con los gustos del usuario, y después de aumentar la precisión de las coordenadas GPS éstas eran correctas.
+\
 \section{Descarte de módelo en local}
 Aunque en un principio el ser capaz de probar la aplicación de una manera 
+\todo{Continuar...}
+
+\section{Elección de Google Places}
+El principal inconveniente del modelo liviano de Gemini \cite{deepmindgemini} fue que las URL que marcaba como imágenes no eran accesibles desde el mapa. Para resolver este problema, se consideró utilizar otros servicios de obtención de imágenes en Internet, como Unsplash \cite{unsplash}, o incluso la API de búsqueda de Google. Sin embargo, en términos de coste, resultaba preocupante que estas alternativas incurrieran en gastos tras superar el límite de 100 peticiones diarias. Finalmente, se descartaron estas opciones y se adoptó como solución el servicio de Google Places, que utiliza la misma clave API que se emplea para la gestión de mapas. Este servicio, además de proporcionar más información sobre los \acrlong{pdi}, ofrece una imagen fiable que se puede almacenar en caché gracias al paquete \textit{cached\_network\_image}.
+
+\section{Aclaración sobre el coste de Servicios Google}
+Para la versión inicial de la aplicación de este \acrshort{tfg}, se optó por utilizar MapBox \cite{mapbox}, una plataforma de mapas con características similares a las de Google. Sin embargo, a medida que avanzaba el desarrollo, se fueron integrando cada vez más servicios de Google, hasta el punto de reemplazar el servicio de optimización de rutas por el de Google. En cada cambio se evaluaba cuidadosamente si el número de peticiones mensuales superaría el límite que generaría costos adicionales para el desarrollador. No obstante, tras estimar que el número de peticiones estaría muy por debajo del umbral que implicaría un coste, se decidió aprovechar las ventajas de trabajar dentro de un mismo ecosistema. Como se muestra en la imagen \ref{fig:trafico_google} las peticiones de los diferentes servicios distan mucho de las por ejemplo 20.000 peticiones que serían 100 dolares, la mitad del dinero que da gratis Google durante el desarrollo de sus aplicaciones.
+  \imagen{trafico_google}{Estadísticas de solicitudes de servicios}{1}

@@ -38,20 +38,25 @@ Tiqets\cite{tiquets} es una aplicación que permite comprar entradas para museos
 	\centering
 	\renewcommand{\arraystretch}{1.5} % Controla el espaciado entre las líneas
 	\rowcolors{2}{gray!20}{white} % Alterna colores de fondo en las filas
-	\begin{tabular}{m{4.5cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2.5cm}} % Usamos 'm{<width>}' para centrar verticalmente y ajustamos los anchos
-	\toprule
-	\textbf{Característica} & \textbf{Tripadvisor} & \textbf{Wanderlog} & \textbf{Visit A City} & \textbf{Tiquets} & \textbf{\textit{Eco City Tour}} \\
-	\midrule
-	Versión de pago & Sí & Sí & No & No & No\\
-	Recomendaciones tienen en cuenta factores de sostenibilidad & No & No & No & No & Sí\\
-	Modificación dinámica de rutas & Sí & No & No & No & Sí\\
-	Intereses de terceros pueden afectar a los resultados & Sí & Sí & No & No & No \\
-	Fuente de datos & Propia & Usuarios - LLM & Usuarios & Propia & LLM\\
-	\bottomrule
-	\end{tabular}
-	\caption{Comparación de aplicaciones similares} % Mueve la leyenda debajo de la tabla
+	\resizebox{\textwidth}{!}{ % Ajusta el tamaño de la tabla al ancho de la página
+		\begin{tabular}{m{4cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2cm} >{\centering\arraybackslash}m{2.5cm}} % Ajustamos los anchos de las columnas
+			\toprule  
+			\textbf{Característica} & \textbf{Tripadvisor} & \textbf{Wanderlog} & \textbf{Visit \newline A City} & \textbf{Tiquets} & \textbf{\textit{Eco City Tour}} \\
+			\midrule
+			Versión de pago & Sí & Sí & No & No & No\\
+			Recomendaciones tienen en cuenta factores de sostenibilidad & No & No & No & No & Sí\\
+			Modificación dinámica de rutas & Sí & No & No & No & Sí\\
+			Intereses de terceros pueden afectar a los resultados & Sí & Sí & No & No & No \\
+			Fuente de datos & Propia & Usuarios - LLM & Usuarios & Propia & LLM\\
+			\bottomrule
+		\end{tabular}
+	}
+	\caption{Comparación de aplicaciones similares}
 	\label{herramientasportipodeuso}
-	\end{table}
+\end{table}
+
+
+
 	
 \section{Otros \acrfull{tfg}}
 	\subsection{Chatbot}

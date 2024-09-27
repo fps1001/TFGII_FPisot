@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/screens/screens.dart';
-import 'package:project_app/models/models.dart';
-import 'package:project_app/services/services.dart';
+
 import 'package:project_app/widgets/widgets.dart';
+
+import '../blocs/blocs.dart';
 
 class TourSelectionScreen extends StatefulWidget {
   const TourSelectionScreen({super.key});
@@ -78,7 +80,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 20),
-        
+
               // Campo de texto para el lugar
               TextField(
                 onChanged: (value) {
@@ -94,7 +96,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 ),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-        
+
               //* SELECCIÓN DE NÚMERO DE SITIOS (SLIDER)
               const SizedBox(height: 30),
               Text(
@@ -102,7 +104,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 10),
-        
+
               // Slider para seleccionar el número de sitios (2 a 8)
               Slider(
                 value: numberOfSites,
@@ -116,12 +118,12 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   });
                 },
                 activeColor: Theme.of(context).primaryColor,
-                inactiveColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                inactiveColor: Theme.of(context).primaryColor.withOpacity(0.8),
               ),
-        
+
               //* SELECCIÓN DE MEDIO DE TRANSPORTE
               const SizedBox(height: 20),
-        
+
               Text(
                 'Selecciona tu modo de transporte',
                 style: Theme.of(context).textTheme.headlineSmall,
@@ -151,7 +153,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   ],
                 ),
               ),
-        
+
               //* SELECCIÓN DE PREFERENCIAS DEL USUARIO (CHIPS)
               const SizedBox(height: 30),
               Text(
@@ -159,7 +161,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 10),
-        
+
               Center(
                 child: Wrap(
                   spacing: 8.0,
@@ -168,7 +170,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   children: userPreferences.keys.map((String key) {
                     final preference = userPreferences[key];
                     final bool isSelected = preference!['selected'];
-        
+
                     return ChoiceChip(
                       label: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -201,8 +203,11 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                       selectedColor: preference['color'],
                       backgroundColor: isSelected
                           ? preference['color']
-                          : preference['color']!.withOpacity(0.3),
-                      elevation: 4.0,
+                          : preference['color']!.withOpacity(
+                              0.1), // Más apagado si no está seleccionado
+                      elevation: isSelected
+                          ? 4.0
+                          : 1.0, // Ajustar la elevación en función de la selección
                       shadowColor: Colors.grey.shade300,
                       selected: isSelected,
                       onSelected: (bool selected) {
@@ -214,7 +219,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   }).toList(),
                 ),
               ),
-        
+
               //* BOTÓN DE PETICIÓN DE TOUR
               const SizedBox(height: 50),
               MaterialButton(
@@ -225,43 +230,37 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25.0),
                 ),
-                onPressed: () async {
+                onPressed: () {
+                  // Mostrar diálogo de carga
                   LoadingMessageHelper.showLoadingMessage(context);
-        
-                  final selectedPreferences = userPreferences.entries
-                      .where((entry) => entry.value['selected'] == true)
-                      .map((entry) => entry.key)
-                      .toList();
-        
-                  final pois = await GeminiService.fetchGeminiData(
+
+                  // Dispara el evento para cargar el tour
+                  BlocProvider.of<TourBloc>(context).add(LoadTourEvent(
+                    mode: selectedMode,
                     city: selectedPlace,
-                    nPoi: numberOfSites.round(),
-                    userPreferences: selectedPreferences,
-                  );
-        
-                  Navigator.of(context).pop();
-        
-                  if (pois.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('No se encontraron POIs')),
-                    );
-                    return;
-                  }
-        
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapScreen(
-                        tour: EcoCityTour(
-                          city: selectedPlace,
-                          numberOfSites: numberOfSites.round(),
-                          pois: pois,
-                          mode: selectedMode,
-                          userPreferences: selectedPreferences,
+                    numberOfSites: numberOfSites.round(),
+                    userPreferences: userPreferences.entries
+                        .where((entry) => entry.value['selected'] == true)
+                        .map((entry) => entry.key)
+                        .toList(),
+                  ));
+
+                  // Escucha los cambios en el estado del TourBloc
+                  BlocProvider.of<TourBloc>(context).stream.listen((tourState) {
+                    if (!tourState.isLoading &&
+                        !tourState.hasError &&
+                        tourState.ecoCityTour != null) {
+                      // Navegar a la pantalla del mapa solo si el estado tiene un EcoCityTour cargado
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapScreen(
+                            tour: tourState.ecoCityTour!,
+                          ),
                         ),
-                      ),
-                    ),
-                  );
+                      );
+                    }
+                  });
                 },
                 child: const Text(
                   'REALIZAR ECO-CITY TOUR',
