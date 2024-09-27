@@ -1,25 +1,25 @@
-# Aplicación Móvil de Rutas Turísticas
+# Eco City Tours
+## TFG Ingeniería Informática - Fernando Pisot
 
-Este repositorio contiene el código fuente de una aplicación móvil que propone rutas turísticas generadas con tecnologías GIS y enriquecidas mediante la utilización de modelos de lenguaje (LLM) y LangChain para obtener información detallada sobre lugares de interés turístico. La aplicación se enfoca en la promoción de rutas no motorizadas, optimizadas para ciclistas y peatones, que conectan estos lugares de interés.
+Este repositorio contiene el código fuente de una aplicación móvil que propone rutas turísticas generadas con tecnologías GIS y enriquecidas mediante la utilización de modelos de lenguaje (LLM) para obtener información detallada sobre lugares de interés turístico. La aplicación se enfoca en la promoción de rutas no motorizadas, optimizadas para ciclistas y peatones, que conectan estos lugares de interés.
 
 ## Objetivos del Proyecto
 
 - **Promoción de Rutas No Motorizadas**: Fomentar el uso de rutas para ciclistas y peatones.
-- **Enriquecimiento de Datos**: Utilizar LLM y LangChain para proporcionar información detallada sobre lugares turísticos.
+- **Enriquecimiento de Datos**: Utilizar LLM y Google Places para proporcionar información detallada sobre lugares turísticos.
 - **ODS11**: Contribuir a los Objetivos de Desarrollo Sostenible, específicamente a la creación de ciudades y comunidades sostenibles.
 
 ## Tecnologías Utilizadas
 
 - **Flutter & Dart**: Desarrollo de la interfaz de usuario y lógica de la aplicación.
-- **OpenStreetMap (OSM)**: Fuente de datos GIS de código abierto.
 - **Modelos de Lenguaje (LLM)**: Para el enriquecimiento de datos y generación de información detallada.
-- **LangChain**: Integración y procesamiento de datos de modelos de lenguaje.
+- **Servicios Google**: Para obtención de información y optimización de rutas en el mapa.
 
 ## Funcionalidades Principales
 
 - Generación de rutas personalizadas para ciclistas y peatones.
 - Información detallada sobre puntos de interés turístico a lo largo de las rutas.
-- Optimización de rutas utilizando datos GIS y tecnologías de IA.
+- Optimización de rutas utilizando datos GIS.
 
 ## Instalación
 
@@ -45,8 +45,8 @@ Para clonar y ejecutar esta aplicación, sigue los siguientes pasos:
 ## Uso
 
 1. Abre la aplicación en tu dispositivo móvil.
-2. Selecciona tu punto de partida y destino.
-3. Visualiza la ruta sugerida con puntos de interés turístico detallados.
+2. Selecciona un lugar que quieras visitar, así como el resto de menú de configuración del Eco City Tour
+3. Visualiza la ruta sugerida con puntos de interés turístico detallados y configurala a tu gusto añadiendo y quitando Puntos de Interés.
 4. Sigue la ruta optimizada para ciclistas o peatones.
 
 ## Contribución
@@ -68,7 +68,7 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](./LICENS
 Para más información, puedes contactarme a través de:
 
 - **Correo Electrónico**: fpisot@gmail.com / fps1001@alu.ubu.es
-- **LinkedIn**: [Perfil de LinkedIn]([https://www.linkedin.com/in/fernando-pisot-17b93b251/])
+- **LinkedIn**: [Fernando Pisot en LinkedIn]([https://www.linkedin.com/in/fernando-pisot-17b93b251/])
 
 ---
 

@@ -79,7 +79,7 @@ class _MapScreenState extends State<MapScreen> {
             builder: (context, locationState) {
               if (locationState.lastKnownLocation == null) {
                 return const Center(
-                  child: Text('Espere por favor...'),
+                  child: Text('Presentando nuevo Eco City Tour...'),
                 );
               }
 

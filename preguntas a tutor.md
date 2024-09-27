@@ -13,36 +13,23 @@
 
 ---
 
-## Reunión 17/09
+## Reunión 01/10
 
 **Participante**: @clopezno, @fps1001
 
-
 ### 1. Documentación
 - Revisión de memoria.
-- Comprobación de Siglas y glosario
 - Se podía crear un hito que sea fin de la memoria (sin anexos).
+- Explicación de siguientes partes a desarrollar.
+- Desarrollar Requisitos.
 
 ### 2. Prototipos y LLM
-- Se pueden terminar los prototipos de cuaderno jupyter y langflow con agentes. **(hito a final de mes)**
+- Se pueden terminar los prototipos de cuaderno jupyter y langflow con agentes. **(hito a final del próximo sprint)**
 ### 3. Desarrollo de la Aplicación
-Una vez conectado los servicios y gestores de estado desde la petición LLM hasta la optimización (funcionamiento core de la aplicación), se pretende disponer la aplicación de la manera más profesional posible añadiendo las funcionalidades de UI que faltan como la pantalla de carga de petición a LLM.
-
-- **Tareas**:
-  - **TODO**: Adaptación a iOS no dispongo de medios para probarlo. **Buscar solución.**
-  - **TODO**: Pantalla de carga de petición: bici/andando, n_poi, ciudad, distancia? tiempo?, gustos?
-  - **TODO**: Añadir un theme común para el contexto.
-  - **TODO**: Modificar InfoWindow por BottomSheet: en vez de ventana de información, se presentará como una ventana desde abajo del móvil.
-  - **TODO**: Marcador básico de POI de marcador básico a imagen URL
-  - *Sin crear todavía 🡻🡻*
-  - **TODO**: Mejoras de diseño, UI, robustez, incluyen:
-    - **TODO**: Resolver el caso de no tener internet para que la app no se quede buscando indefinidamente.
-    - **TODO**: Añadir un diálogo para cuando el usuario escoge un lugar de la lista.
-    - **TODO**: Decidir si usar `customPaint` para el inicio y final de ruta con duración y km de la ruta.
-    <p>
-
-### 4. Propuesta de próximo sprint:
-
-Llegar a los hitos del próximo prototipo con la versión más profesional posible de la aplicación y generar release 1.0. <p>
-
-Se puede justificar el uso de generative_ai de google, dado el marco de trabajo: servicios de google, uso compartido de api_key, servicios de mapas de google, se ha creado un ecosistema Google y si el LLM es suficientemente potente y genera buenas respuesta sería la mejor opción.
+Una vez mejorada la aplicación dejandola en un punto estable, con buena estructura y bastantes funcionalidades... se pueden realizar las funcionalidades que @clopezno considere oportunas para el TFG. Entre ellas:
+- Validación y pruebas: comprobar todos los casos de error posible, 
+- Poner un límite de distancia/duración al Tour.
+- Añadir POI desde búsqueda manual/manual marker.
+- Guardar/cargar recorridos con Isar(BD)
+- Estudiar RAG en adaptive_ai
+- Probar otros LLM para comprobar resultados.
