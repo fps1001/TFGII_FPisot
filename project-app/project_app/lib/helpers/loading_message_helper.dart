@@ -7,18 +7,18 @@ class LoadingMessageHelper {
         context: context,
         barrierDismissible: false, // Para que lo pueda quitar el usuario.
         builder: (context) => AlertDialog(
-            title: const Text('Espere por favor'),
+            title: Text('Espere por favor', style: TextStyle(color: Theme.of(context).primaryColor,)),
             content: Container(
               width: 100,
               height: 100,
               margin: const EdgeInsets.only(top: 10),
-              child: const Column(
+              child:  Column(
                 children: [
-                  Text('Encontrando lugares de interés'),
-                  SizedBox(
+                   Text('Encontrando lugares de interés', style: TextStyle(color: Theme.of(context).primaryColor,),),
+                  const SizedBox(
                     height: 5,
                   ),
-                  CircularProgressIndicator(strokeWidth: 3, color: Colors.black)
+                  CircularProgressIndicator(strokeWidth: 3, color: Theme.of(context).primaryColor,)
                 ],
               ),
             )));

@@ -64,9 +64,9 @@ class CustomBottomSheet extends StatelessWidget {
                 ),
               ],
             ),
-          const SizedBox(height: 10.0),
+/*          const SizedBox(height: 10.0),
 
-          // Coordenadas del POI
+           // Coordenadas del POI
           Row(
             children: [
               const Icon(Icons.map, color: Colors.blueAccent),
@@ -76,10 +76,10 @@ class CustomBottomSheet extends StatelessWidget {
                 style: const TextStyle(fontSize: 16.0),
               ),
             ],
-          ),
+          ), */
           const SizedBox(height: 10.0),
 
-          // Estado de negocio (operacional, cerrado, etc.)
+          /* // Estado de negocio (operacional, cerrado, etc.)
           if (poi.businessStatus != null)
             Row(
               children: [
@@ -98,7 +98,7 @@ class CustomBottomSheet extends StatelessWidget {
               ],
             ),
 
-          const SizedBox(height: 10.0),
+          const SizedBox(height: 10.0), */
 
           // Rating del POI si está disponible
           if (poi.rating != null && poi.rating! > 0) ...[

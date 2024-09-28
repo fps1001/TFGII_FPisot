@@ -70,16 +70,16 @@ class TourBloc extends Bloc<TourEvent, TourState> {
 
             // Información adicional del lugar
             address: placeData['formatted_address'],
-            //iconUrl: placeData['icon'],
+            /* iconUrl: placeData['icon'],
             iconUrl: null,
             businessStatus: placeData['business_status'],
-            //placeId: placeData['place_id'],
+            placeId: placeData['place_id'],
             placeId: null,
-            //plusCode: placeData['plus_code'],
+            plusCode: placeData['plus_code'],
             plusCode: null,
               openNow: (placeData['opening_hours'] is Map)
                   ? placeData['opening_hours']['open_now'] ?? false
-                  : placeData['opening_hours'] ?? false, // Verificamos si es Map o bool
+                  : placeData['opening_hours'] ?? false, // Verificamos si es Map o bool */
             userRatingsTotal: placeData['user_ratings_total'],
           );
           updatedPois.add(updatedPoi);
@@ -122,9 +122,8 @@ class TourBloc extends Bloc<TourEvent, TourState> {
 
  // Manejo del evento de unirse al tour
   Future<void> _onJoinTour(OnJoinTourEvent event, Emitter<TourState> emit) async {
-    if (!state.isJoined) {
-      emit(state.copyWith(isJoined: true));
-    }
+  // Cambiar el valor de isJoined al valor contrario
+  emit(state.copyWith(isJoined: !state.isJoined));
   }
 
   // Método para añadir un POI
@@ -149,13 +148,15 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   // Remover el POI de la lista
   final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..remove(event.poi);
 
+  // Establece isLoading a true antes de recalcular la ruta
+  emit(state.copyWith(isLoading: true));
+
   // Comprobar si el POI eliminado es la ubicación del usuario
   if (event.poi.name == 'Ubicación actual' || event.poi.description == 'Este es mi lugar actual') {
     // Actualizar el estado de `isJoined` a false si se eliminó el POI del usuario
     emit(state.copyWith(isJoined: false));
   }
 
-  // Recalcular la ruta optimizada si aún quedan POIs
   if (updatedPois.isNotEmpty) {
     final List<LatLng> poiLocations = updatedPois.map((poi) => poi.gps).toList();
     final optimizedRoute = await optimizationService.getOptimizedRoute(
@@ -176,15 +177,16 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     );
 
     // Emitir el nuevo estado con el tour actualizado
-    emit(state.copyWith(ecoCityTour: updatedEcoCityTour));
+    emit(state.copyWith(ecoCityTour: updatedEcoCityTour, isLoading: false)); // Detenemos la carga aquí
   } else {
     // Si no quedan POIs, emitimos el estado sin una ruta actual
-    emit(state.copyWith(ecoCityTour: null));
+    emit(state.copyWith(ecoCityTour: null, isLoading: false));  // Asegurarse de que isLoading sea false
   }
 
   // Usar el MapBloc para eliminar el marcador
   mapBloc.add(OnRemovePoiMarkerEvent(event.poi.name));
 }
+
 
 
 

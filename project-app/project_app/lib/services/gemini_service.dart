@@ -45,8 +45,8 @@ class GeminiService {
               "gps": Schema(SchemaType.array, items: Schema(SchemaType.number)),
               "name": Schema(SchemaType.string),
               "description": Schema(SchemaType.string),
-              "url": Schema(SchemaType.string),
-              "url_img": Schema(SchemaType.string),
+              /* "url": Schema(SchemaType.string),
+              "url_img": Schema(SchemaType.string), */
             },
             requiredProperties: ['gps', 'name'],
           ),
@@ -83,21 +83,22 @@ class GeminiService {
 * nombre (string)
 * descripción (string)
 * coordenadas (array de dos números: latitud y longitud)
-* url (string)
-* url_img (string)
+
 
 **Ejemplo de objeto JSON:**
 ```json
 {
     "nombre": "Plaza Mayor",
-    "descripcion": "La Plaza Mayor de Salamanca...",
+    "descripcion": "La Plaza Mayor de Salamanca, del siglo XVIII, es una de las más bellas plazas monumentales urbanas de Europa. Comenzó a construirse en 1729 a instancias del corregidor Rodrigo Caballero Llanes. El proyecto fue a cargo del arquitecto Alberto de Churriguera, al que siguió su sobrino Manuel de Lara Churriguera y fue finalizado por Andrés García de Quiñones en 1755. ...",
     "coordenadas": [40.965027795465176, -5.664062074092496],
-    "url": "[https://www.salamanca.es/es/turismo/plaza-mayor](https://www.salamanca.es/es/turismo/plaza-mayor)",
-    "url_img": "[https://media.traveler.es/photos/61377bcd3decec3303bacc87/master/pass/90285.jpg](Plaza Mayor)"
 }
 Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')}
 
 ''';
+/* 
+
+"url": "[https://www.salamanca.es/es/turismo/plaza-mayor](https://www.salamanca.es/es/turismo/plaza-mayor)",
+    "url_img": "[https://media.traveler.es/photos/61377bcd3decec3303bacc87/master/pass/90285.jpg](Plaza Mayor)" */
     final content = Content.text(message);
 
     //* VALIDACIÓN E IMPRESIÓN DE RESPUESTA
@@ -127,8 +128,8 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
           gps: gpsPoint,
           name: poiJson['name'] ?? '',
           description: poiJson['description'],
-          url: poiJson['url'],
-          imageUrl: poiJson['url_img'],
+          /* url: poiJson['url'],
+          imageUrl: poiJson['url_img'], */
         );
       }).toList();
     } catch (e) {

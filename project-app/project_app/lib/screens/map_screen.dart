@@ -61,7 +61,7 @@ class _MapScreenState extends State<MapScreen> {
               // Verificar si el widget sigue montado
               Navigator.of(context).pop(); // Cerrar el diálogo si hay un error
             }
-            return const Center(child: Text('Error al cargar la ruta'));
+            return const Center(child: Text('Error al cargar la ruta', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF00A86B)), ));
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
@@ -79,7 +79,8 @@ class _MapScreenState extends State<MapScreen> {
             builder: (context, locationState) {
               if (locationState.lastKnownLocation == null) {
                 return const Center(
-                  child: Text('Presentando nuevo Eco City Tour...'),
+                  //* Si lo pongo según context me da el error de native socket... lo dejo hardcoded
+                  child: Text('Presentando nuevo Eco City Tour...', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF00A86B)), ),
                 );
               }
 
@@ -100,24 +101,25 @@ class _MapScreenState extends State<MapScreen> {
                         polylines: polylines.values.toSet(),
                         markers: mapState.markers.values.toSet(),
                       ),
-                      // Añadimos los botones flotantes en la parte inferior derecha
-                      const Positioned(
-                        bottom:
-                            90, // Ajustamos la posición para evitar solapamientos
-                        right: 10,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            BtnToggleUserRoute(),
-                            SizedBox(
-                                height: 10), // Añadir espacio entre los botones
-                            BtnFollowUser(),
-                            SizedBox(height: 10),
-                            BtnCurrentLocation(),
-                          ],
-                        ),
+                     // Añadir los botones flotantes en la parte inferior derecha
+                      BlocBuilder<TourBloc, TourState>(
+                        builder: (context, tourState) {
+                          return Positioned(
+                            bottom: tourState.isJoined ? 30 : 90,  // Cambia la posición si el usuario está unido o no
+                            right: 10,
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                BtnToggleUserRoute(),
+                                SizedBox(height: 10),
+                                BtnFollowUser(),
+                                SizedBox(height: 10),
+                                BtnCurrentLocation(),
+                              ],
+                            ),
+                          );
+                        },
                       ),
-
                       // Añadir el botón de "Unirme al Eco City Tour" en la parte inferior
                       BlocBuilder<TourBloc, TourState>(
                         builder: (context, tourState) {
@@ -149,8 +151,7 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                             );
                           }
-                          return const SizedBox
-                              .shrink(); // No muestra el botón si ya está unido
+                          return const SizedBox.shrink(); // No muestra el botón si ya está unido
                         },
                       ),
                     ],
@@ -196,9 +197,8 @@ class _MapScreenState extends State<MapScreen> {
     // Añadir el POI al TourBloc
     BlocProvider.of<TourBloc>(context).add(OnAddPoiEvent(poi: newPoi));
 
-    // Volver a pintar el mapa con el nuevo POI
-    //BlocProvider.of<MapBloc>(context).drawRoutePolyline(BlocProvider.of<TourBloc>(context).state.ecoCityTour!,);
-    
+    // Cambiar el estado de isJoined después de añadir el POI
+    BlocProvider.of<TourBloc>(context).add(const OnJoinTourEvent());
   }
 
   @override
