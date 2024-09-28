@@ -186,11 +186,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
 
-    //TODO Causa error al unirme al tour, porque no espera a que se haya cargado el mapa.
-    // Centrar la cámara en el primer POI si existe
-/*     if (tour.pois.isNotEmpty) {
-      moveCamera(tour.pois.first.gps);
-    } */
   }
 
   // Función para mostrar el `BottomSheet` con los detalles del lugar

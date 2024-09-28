@@ -69,10 +69,13 @@ class TourBloc extends Bloc<TourEvent, TourState> {
 
             // Información adicional del lugar
             address: placeData['formatted_address'],
-            iconUrl: placeData['icon'],
+            //iconUrl: placeData['icon'],
+            iconUrl: null,
             businessStatus: placeData['business_status'],
-            placeId: placeData['place_id'],
-            plusCode: placeData['plus_code'],
+            //placeId: placeData['place_id'],
+            placeId: null,
+            //plusCode: placeData['plus_code'],
+            plusCode: null,
               openNow: (placeData['opening_hours'] is Map)
                   ? placeData['opening_hours']['open_now'] ?? false
                   : placeData['opening_hours'] ?? false, // Verificamos si es Map o bool

@@ -167,15 +167,23 @@ class _MapScreenState extends State<MapScreen> {
   void _joinEcoCityTour() {
     final lastKnownLocation = locationBloc.state.lastKnownLocation;
 
-    if (lastKnownLocation != null) {
+    if (lastKnownLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackbar( msg: 'No se encontró la ubicación actual.'),
+
+      );
+      return;
+    }
+
+   
       // Crear un PointOfInterest con la ubicación actual
       final newPoi = PointOfInterest(
         gps: lastKnownLocation,
         name: 'Ubicación actual', // Nombre del lugar
         description: 'Este es mi lugar actual',
         url: null,
-        imageUrl: null, // No tienes una imagen para esto
-        rating: null, // Sin calificación
+        imageUrl: null, 
+        rating: 5.0, 
       );
 
       // Añadir el POI al TourBloc
@@ -190,12 +198,7 @@ class _MapScreenState extends State<MapScreen> {
       setState(() {
         isJoined = true;
       });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        CustomSnackbar( msg: 'No se encontró la ubicación actual.'),
-
-      );
-    }
+    
   }
 
   @override
