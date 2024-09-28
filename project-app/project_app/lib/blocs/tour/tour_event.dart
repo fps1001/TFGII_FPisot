@@ -45,3 +45,10 @@ class OnRemovePoiEvent extends TourEvent {
   List<Object> get props => [poi];
 }
 
+// Evento para indicar que el usuario se ha unido al tour.
+class OnJoinTourEvent extends TourEvent {
+  const OnJoinTourEvent();
+
+  @override
+  List<Object> get props => [];
+}

@@ -23,6 +23,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     on<LoadTourEvent>(_onLoadTour);
     on<OnRemovePoiEvent>(_onRemovePoi);
     on<OnAddPoiEvent>(_onAddPoi);
+    on<OnJoinTourEvent>(_onJoinTour);
   }
 
   Future<void> _onLoadTour(LoadTourEvent event, Emitter<TourState> emit) async {
@@ -119,49 +120,67 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     }
   }
 
-// Método para añadir un POI
-Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
-  if (state.ecoCityTour != null) {
-    final updatedPois = List<PointOfInterest>.from(state.ecoCityTour!.pois)
-      ..add(event.poi);
-
-    // Actualizamos el tour con los nuevos POIs
-    await _updateTourWithPois(updatedPois, emit);
-
-    // Añadir el marcador en el mapa usando MapBloc
-    mapBloc.add(OnAddPoiMarkerEvent(event.poi));
+ // Manejo del evento de unirse al tour
+  Future<void> _onJoinTour(OnJoinTourEvent event, Emitter<TourState> emit) async {
+    if (!state.isJoined) {
+      emit(state.copyWith(isJoined: true));
+    }
   }
-}
 
+  // Método para añadir un POI
+  Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
+    if (state.ecoCityTour != null) {
+      final updatedPois = List<PointOfInterest>.from(state.ecoCityTour!.pois)
+        ..add(event.poi);
 
-  Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async {
+      // Actualizamos el tour con los nuevos POIs
+      await _updateTourWithPois(updatedPois, emit);
+
+      // Añadir el marcador en el mapa usando MapBloc
+      mapBloc.add(OnAddPoiMarkerEvent(event.poi));
+    }
+  }
+
+  // Método para eliminar un POI (comprobando que sea o no la ubicación actual)
+ Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async {
   final ecoCityTour = state.ecoCityTour;
   if (ecoCityTour == null) return;
 
   // Remover el POI de la lista
   final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..remove(event.poi);
 
-  // Recalcular la ruta optimizada
-  final List<LatLng> poiLocations = updatedPois.map((poi) => poi.gps).toList();
-  final optimizedRoute = await optimizationService.getOptimizedRoute(
-    poiLocations,
-    ecoCityTour.mode,
-  );
+  // Comprobar si el POI eliminado es la ubicación del usuario
+  if (event.poi.name == 'Ubicación actual' || event.poi.description == 'Este es mi lugar actual') {
+    // Actualizar el estado de `isJoined` a false si se eliminó el POI del usuario
+    emit(state.copyWith(isJoined: false));
+  }
 
-  // Crear una nueva instancia de EcoCityTour con los datos actualizados
-  final updatedEcoCityTour = EcoCityTour(
-    city: ecoCityTour.city,
-    numberOfSites: updatedPois.length,
-    pois: updatedPois,
-    mode: ecoCityTour.mode,
-    userPreferences: ecoCityTour.userPreferences,
-    duration: optimizedRoute.duration,
-    distance: optimizedRoute.distance,
-    polilynePoints: optimizedRoute.points,
-  );
+  // Recalcular la ruta optimizada si aún quedan POIs
+  if (updatedPois.isNotEmpty) {
+    final List<LatLng> poiLocations = updatedPois.map((poi) => poi.gps).toList();
+    final optimizedRoute = await optimizationService.getOptimizedRoute(
+      poiLocations,
+      ecoCityTour.mode,
+    );
 
-  // Emitir el nuevo estado con el tour actualizado
-  emit(state.copyWith(ecoCityTour: updatedEcoCityTour));
+    // Crear una nueva instancia de EcoCityTour con los datos actualizados
+    final updatedEcoCityTour = EcoCityTour(
+      city: ecoCityTour.city,
+      numberOfSites: updatedPois.length,
+      pois: updatedPois,
+      mode: ecoCityTour.mode,
+      userPreferences: ecoCityTour.userPreferences,
+      duration: optimizedRoute.duration,
+      distance: optimizedRoute.distance,
+      polilynePoints: optimizedRoute.points,
+    );
+
+    // Emitir el nuevo estado con el tour actualizado
+    emit(state.copyWith(ecoCityTour: updatedEcoCityTour));
+  } else {
+    // Si no quedan POIs, emitimos el estado sin una ruta actual
+    emit(state.copyWith(ecoCityTour: null));
+  }
 
   // Usar el MapBloc para eliminar el marcador
   mapBloc.add(OnRemovePoiMarkerEvent(event.poi.name));
