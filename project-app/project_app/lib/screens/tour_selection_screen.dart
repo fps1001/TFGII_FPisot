@@ -58,7 +58,17 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Eco City Tour'), // Usa el CustomAppBar
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Eco City Tours',
+          style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      ), // Usa el CustomAppBar
       body: GestureDetector(
         onTap: () {
           //Cierra el teclado al hacer tap fuera.
@@ -231,6 +241,11 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   borderRadius: BorderRadius.circular(25.0),
                 ),
                 onPressed: () {
+                  // Para evitar copiar tanto texto voy a poner Salamanca por defecto.
+                  if (selectedPlace.isEmpty) {
+                    //selectedPlace = 'Salamanca, España';
+                    selectedPlace = 'San José, California, EEUU';
+                  }
                   // Mostrar diálogo de carga
                   LoadingMessageHelper.showLoadingMessage(context);
 
@@ -250,6 +265,9 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                     if (!tourState.isLoading &&
                         !tourState.hasError &&
                         tourState.ecoCityTour != null) {
+                      // Cerrar el mensaje de carga
+                      Navigator.of(context).pop(); // Cierra el diálogo de carga
+
                       // Navegar a la pantalla del mapa solo si el estado tiene un EcoCityTour cargado
                       Navigator.push(
                         context,
@@ -258,6 +276,15 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                             tour: tourState.ecoCityTour!,
                           ),
                         ),
+                      );
+                    } else if (tourState.hasError) {
+                      // Cerrar el diálogo de carga si hay un error
+                      Navigator.of(context).pop();
+
+                      // Mostrar un error al usuario
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Error al cargar el tour')),
                       );
                     }
                   });

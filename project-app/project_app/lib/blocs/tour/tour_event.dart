@@ -52,3 +52,11 @@ class OnJoinTourEvent extends TourEvent {
   @override
   List<Object> get props => [];
 }
+
+// Evento para resetear el tour al volver a pantalla de carga.
+class ResetTourEvent extends TourEvent {
+  const ResetTourEvent();
+
+  @override
+  List<Object> get props => [];
+}

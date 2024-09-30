@@ -39,7 +39,17 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Eco City Tour'),
+      appBar: CustomAppBar(
+        title: 'Eco City Tour',
+        onBackPressed: () {
+          // Limpiamos el estado del TourBloc al regresar
+          BlocProvider.of<TourBloc>(context).add(const ResetTourEvent());
+
+          // Luego, navegamos de regreso
+          Navigator.of(context).pop();
+        },
+      ),
+
       // Cambio builder por FutureBuilder para cargar la ruta y los POIs porque se necesita esperar a que se carguen
       body: FutureBuilder<void>(
         future:

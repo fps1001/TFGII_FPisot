@@ -1,19 +1,4 @@
-## Referencias Importantes
-
-### Artículos sobre la masificación turística
-
-- **Artículo de El País:**
-  [En el corazón del turismo masivo de Barcelona](https://elpais.com/espana/catalunya/2024-08-20/en-el-corazon-del-turismo-masivo-de-barcelona-que-el-park-guell-este-lleno-demuestra-que-hay-que-verlo.html)
-  - *Fecha*: 20/08/2024
-  - **Resumen**: Habla de la masificación turística y cómo los visitantes aplauden la idea de una app que les avise de la afluencia.
-
-- **Noticia de la BBC:**
-  [BBC sobre el mismo problema](https://www.bbc.com/news/articles/clyn5l20z72o)
-  - *Fecha*: 02/09/2024
-
----
-
-## Reunión 01/10
+## Reunión 01/10. Fin de Sprint 6.
 
 **Participante**: @clopezno, @fps1001
 
@@ -27,9 +12,25 @@
 - Se pueden terminar los prototipos de cuaderno jupyter y langflow con agentes. **(hito a final del próximo sprint)**
 ### 3. Desarrollo de la Aplicación
 Una vez mejorada la aplicación dejandola en un punto estable, con buena estructura y bastantes funcionalidades... se pueden realizar las funcionalidades que @clopezno considere oportunas para el TFG. Entre ellas:
-- Validación y pruebas: comprobar todos los casos de error posible, 
+- Validación y pruebas: comprobar todos los casos de error posible.
 - Poner un límite de distancia/duración al Tour.
 - Añadir POI desde búsqueda manual/manual marker.
 - Guardar/cargar recorridos con Isar(BD)
-- Estudiar RAG en adaptive_ai
+- Estudiar RAG y Fine Tune en adaptive_ai
 - Probar otros LLM para comprobar resultados.
+
+
+
+-----
+## Referencias Importantes
+
+### Artículos sobre la masificación turística
+
+- **Artículo de El País:**
+  [En el corazón del turismo masivo de Barcelona](https://elpais.com/espana/catalunya/2024-08-20/en-el-corazon-del-turismo-masivo-de-barcelona-que-el-park-guell-este-lleno-demuestra-que-hay-que-verlo.html)
+  - *Fecha*: 20/08/2024
+  - **Resumen**: Habla de la masificación turística y cómo los visitantes aplauden la idea de una app que les avise de la afluencia.
+
+- **Noticia de la BBC:**
+  [BBC sobre el mismo problema](https://www.bbc.com/news/articles/clyn5l20z72o)
+  - *Fecha*: 02/09/2024

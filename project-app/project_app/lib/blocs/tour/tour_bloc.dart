@@ -18,12 +18,17 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   final OptimizationService optimizationService;
   final MapBloc mapBloc; // Añadimos una referencia al MapBloc para marcadores
 
-  TourBloc({required this.mapBloc, required this.optimizationService}) : super(const TourState()) {
+  TourBloc({required this.mapBloc, required this.optimizationService})
+      : super(const TourState()) {
     // Manejadores de eventos a continuación
     on<LoadTourEvent>(_onLoadTour);
     on<OnRemovePoiEvent>(_onRemovePoi);
     on<OnAddPoiEvent>(_onAddPoi);
     on<OnJoinTourEvent>(_onJoinTour);
+    // Reset de Tour. Emite estado con EcoCityTour a null.
+    on<ResetTourEvent>((event, emit) {
+      emit(state.copyWith(ecoCityTour: null, isJoined: false));
+    });
   }
 
   Future<void> _onLoadTour(LoadTourEvent event, Emitter<TourState> emit) async {
@@ -90,7 +95,8 @@ class TourBloc extends Bloc<TourEvent, TourState> {
       }
 
       // 3. Llamar al servicio de optimización de rutas.
-      final List<LatLng> poiLocations = updatedPois.map((poi) => poi.gps).toList();
+      final List<LatLng> poiLocations =
+          updatedPois.map((poi) => poi.gps).toList();
       final optimizedRoute = await optimizationService.getOptimizedRoute(
         poiLocations,
         event.mode,
@@ -120,10 +126,11 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     }
   }
 
- // Manejo del evento de unirse al tour
-  Future<void> _onJoinTour(OnJoinTourEvent event, Emitter<TourState> emit) async {
-  // Cambiar el valor de isJoined al valor contrario
-  emit(state.copyWith(isJoined: !state.isJoined));
+  // Manejo del evento de unirse al tour
+  Future<void> _onJoinTour(
+      OnJoinTourEvent event, Emitter<TourState> emit) async {
+    // Cambiar el valor de isJoined al valor contrario
+    emit(state.copyWith(isJoined: !state.isJoined));
   }
 
   // Método para añadir un POI
@@ -141,55 +148,59 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   }
 
   // Método para eliminar un POI (comprobando que sea o no la ubicación actual)
- Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async {
-  final ecoCityTour = state.ecoCityTour;
-  if (ecoCityTour == null) return;
+  Future<void> _onRemovePoi(
+      OnRemovePoiEvent event, Emitter<TourState> emit) async {
+    final ecoCityTour = state.ecoCityTour;
+    if (ecoCityTour == null) return;
 
-  // Remover el POI de la lista
-  final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..remove(event.poi);
+    // Remover el POI de la lista
+    final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)
+      ..remove(event.poi);
 
-  // Establece isLoading a true antes de recalcular la ruta
-  emit(state.copyWith(isLoading: true));
+    // Establece isLoading a true antes de recalcular la ruta
+    emit(state.copyWith(isLoading: true));
 
-  // Comprobar si el POI eliminado es la ubicación del usuario
-  if (event.poi.name == 'Ubicación actual' || event.poi.description == 'Este es mi lugar actual') {
-    // Actualizar el estado de `isJoined` a false si se eliminó el POI del usuario
-    emit(state.copyWith(isJoined: false));
+    // Comprobar si el POI eliminado es la ubicación del usuario
+    if (event.poi.name == 'Ubicación actual' ||
+        event.poi.description == 'Este es mi lugar actual') {
+      // Actualizar el estado de `isJoined` a false si se eliminó el POI del usuario
+      emit(state.copyWith(isJoined: false));
+    }
+
+    if (updatedPois.isNotEmpty) {
+      final List<LatLng> poiLocations =
+          updatedPois.map((poi) => poi.gps).toList();
+      final optimizedRoute = await optimizationService.getOptimizedRoute(
+        poiLocations,
+        ecoCityTour.mode,
+      );
+
+      // Crear una nueva instancia de EcoCityTour con los datos actualizados
+      final updatedEcoCityTour = EcoCityTour(
+        city: ecoCityTour.city,
+        numberOfSites: updatedPois.length,
+        pois: updatedPois,
+        mode: ecoCityTour.mode,
+        userPreferences: ecoCityTour.userPreferences,
+        duration: optimizedRoute.duration,
+        distance: optimizedRoute.distance,
+        polilynePoints: optimizedRoute.points,
+      );
+
+      // Emitir el nuevo estado con el tour actualizado
+      emit(state.copyWith(
+          ecoCityTour: updatedEcoCityTour,
+          isLoading: false)); // Detenemos la carga aquí
+    } else {
+      // Si no quedan POIs, emitimos el estado sin una ruta actual
+      emit(state.copyWith(
+          ecoCityTour: null,
+          isLoading: false)); // Asegurarse de que isLoading sea false
+    }
+
+    // Usar el MapBloc para eliminar el marcador
+    mapBloc.add(OnRemovePoiMarkerEvent(event.poi.name));
   }
-
-  if (updatedPois.isNotEmpty) {
-    final List<LatLng> poiLocations = updatedPois.map((poi) => poi.gps).toList();
-    final optimizedRoute = await optimizationService.getOptimizedRoute(
-      poiLocations,
-      ecoCityTour.mode,
-    );
-
-    // Crear una nueva instancia de EcoCityTour con los datos actualizados
-    final updatedEcoCityTour = EcoCityTour(
-      city: ecoCityTour.city,
-      numberOfSites: updatedPois.length,
-      pois: updatedPois,
-      mode: ecoCityTour.mode,
-      userPreferences: ecoCityTour.userPreferences,
-      duration: optimizedRoute.duration,
-      distance: optimizedRoute.distance,
-      polilynePoints: optimizedRoute.points,
-    );
-
-    // Emitir el nuevo estado con el tour actualizado
-    emit(state.copyWith(ecoCityTour: updatedEcoCityTour, isLoading: false)); // Detenemos la carga aquí
-  } else {
-    // Si no quedan POIs, emitimos el estado sin una ruta actual
-    emit(state.copyWith(ecoCityTour: null, isLoading: false));  // Asegurarse de que isLoading sea false
-  }
-
-  // Usar el MapBloc para eliminar el marcador
-  mapBloc.add(OnRemovePoiMarkerEvent(event.poi.name));
-}
-
-
-
-
 
   // Método para actualizar el tour con una nueva lista de POIs
   Future<void> _updateTourWithPois(
@@ -218,6 +229,4 @@ class TourBloc extends Bloc<TourEvent, TourState> {
       emit(state.copyWith(isLoading: false, hasError: true));
     }
   }
-
-
 }
