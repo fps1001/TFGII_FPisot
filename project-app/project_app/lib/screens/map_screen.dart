@@ -111,6 +111,13 @@ class _MapScreenState extends State<MapScreen> {
                         polylines: polylines.values.toSet(),
                         markers: mapState.markers.values.toSet(),
                       ),
+                      // Posicionar el CustomSearchBar en la parte superior
+                      const Positioned(
+                        top: 10, // Ajusta según la distancia que prefieras desde la parte superior
+                        left: 10,
+                        right: 10,
+                        child: CustomSearchBar(), // Barra de búsqueda personalizada
+                      ),
                      // Añadir los botones flotantes en la parte inferior derecha
                       BlocBuilder<TourBloc, TourState>(
                         builder: (context, tourState) {

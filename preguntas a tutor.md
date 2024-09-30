@@ -18,6 +18,7 @@ Una vez mejorada la aplicación dejandola en un punto estable, con buena estruct
 - Guardar/cargar recorridos con Isar(BD)
 - Estudiar RAG y Fine Tune en adaptive_ai
 - Probar otros LLM para comprobar resultados.
+- Instalación de logger.
 
 
 

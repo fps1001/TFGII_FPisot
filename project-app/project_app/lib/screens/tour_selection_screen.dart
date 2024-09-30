@@ -1,9 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/screens/screens.dart';
 
-import 'package:project_app/widgets/widgets.dart';
 
 import '../blocs/blocs.dart';
 
@@ -243,8 +244,8 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 onPressed: () {
                   // Para evitar copiar tanto texto voy a poner Salamanca por defecto.
                   if (selectedPlace.isEmpty) {
-                    //selectedPlace = 'Salamanca, España';
-                    selectedPlace = 'San José, California, EEUU';
+                    selectedPlace = 'Salamanca, España';
+                    //selectedPlace = 'San José, California, EEUU';
                   }
                   // Mostrar diálogo de carga
                   LoadingMessageHelper.showLoadingMessage(context);

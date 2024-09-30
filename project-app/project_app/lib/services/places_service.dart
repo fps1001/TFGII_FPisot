@@ -32,12 +32,6 @@ class PlacesService {
           'rating': result['rating'],  // Puntuación
           'user_ratings_total': result['user_ratings_total'],  // Total de reseñas
           'photos': result['photos'],  // Fotos del lugar
-          //'place_id': result['place_id'],  // ID del lugar
-          //'plus_code': result['plus_code']?['global_code'],  // Código Plus
-          //'business_status': result['business_status'],  // Estado comercial
-          //'icon': result['icon'],  // Icono del lugar
-          //'types': result['types'],  // Tipos de lugar
-          //'opening_hours': result['opening_hours']?['open_now'],  // Si está abierto ahora
           'website': result['website'],  // Sitio web del lugar
         };
       }

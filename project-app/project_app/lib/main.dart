@@ -9,9 +9,6 @@ import 'package:project_app/services/services.dart';
 import 'package:project_app/themes/themes.dart';
 
 void main() async {
-  //TODO resolver caso de no tener internet para que no se quede buscando...
-
-  //TODO decidir si usar customPaint para inicio y final de ruta con duración y km. de ruta...
 
   Bloc.observer = MyBlocObserver();
   try {
@@ -34,13 +31,7 @@ void main() async {
       BlocProvider(
           create: (context) => MapBloc(
               locationBloc: BlocProvider.of<LocationBloc>(
-                  context))), // Gestión de controlador de mapa.
-      BlocProvider(
-          create: (context) => SearchBloc(
-              // Instancia un trafficService que necesita para rutas.
-              trafficService: TrafficService(),
-              optimizationService:
-                  OptimizationService())), // Indica si se quiere hacer una busqueda manual o no.
+                  context))), // Gestión de controlador de mapa.// Indica si se quiere hacer una busqueda manual o no.
       BlocProvider(
           create: (context) => TourBloc(
               optimizationService: OptimizationService(),
