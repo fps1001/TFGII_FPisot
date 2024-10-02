@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
+import 'package:project_app/screens/screens.dart';
 import 'package:project_app/ui/ui.dart';
 
 import 'package:project_app/views/views.dart';
@@ -44,10 +45,22 @@ class _MapScreenState extends State<MapScreen> {
         onBackPressed: () {
           // Limpiamos el estado del TourBloc al regresar
           BlocProvider.of<TourBloc>(context).add(const ResetTourEvent());
-
-          // Luego, navegamos de regreso
+          // Luego, navegamos atrás
           Navigator.of(context).pop();
         },
+        // Botón de resumen
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.list),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => TourSummary(tour: widget.tour),
+                ),
+              );
+            },
+          ),
+        ], // Añadimos el botón de listado en el AppBar
       ),
 
       // Cambio builder por FutureBuilder para cargar la ruta y los POIs porque se necesita esperar a que se carguen
@@ -71,7 +84,14 @@ class _MapScreenState extends State<MapScreen> {
               // Verificar si el widget sigue montado
               Navigator.of(context).pop(); // Cerrar el diálogo si hay un error
             }
-            return const Center(child: Text('Error al cargar la ruta', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF00A86B)), ));
+            return const Center(
+                child: Text(
+              'Error al cargar la ruta',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF00A86B)),
+            ));
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
@@ -90,7 +110,13 @@ class _MapScreenState extends State<MapScreen> {
               if (locationState.lastKnownLocation == null) {
                 return const Center(
                   //* Si lo pongo según context me da el error de native socket... lo dejo hardcoded
-                  child: Text('Presentando nuevo Eco City Tour...', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF00A86B)), ),
+                  child: Text(
+                    'Presentando nuevo Eco City Tour...',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF00A86B)),
+                  ),
                 );
               }
 
@@ -113,16 +139,20 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                       // Posicionar el CustomSearchBar en la parte superior
                       const Positioned(
-                        top: 10, // Ajusta según la distancia que prefieras desde la parte superior
+                        top:
+                            10, // Ajusta según la distancia que prefieras desde la parte superior
                         left: 10,
                         right: 10,
-                        child: CustomSearchBar(), // Barra de búsqueda personalizada
+                        child:
+                            CustomSearchBar(), // Barra de búsqueda personalizada
                       ),
-                     // Añadir los botones flotantes en la parte inferior derecha
+                      // Añadir los botones flotantes en la parte inferior derecha
                       BlocBuilder<TourBloc, TourState>(
                         builder: (context, tourState) {
                           return Positioned(
-                            bottom: tourState.isJoined ? 30 : 90,  // Cambia la posición si el usuario está unido o no
+                            bottom: tourState.isJoined
+                                ? 30
+                                : 90, // Cambia la posición si el usuario está unido o no
                             right: 10,
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -168,7 +198,8 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                             );
                           }
-                          return const SizedBox.shrink(); // No muestra el botón si ya está unido
+                          return const SizedBox
+                              .shrink(); // No muestra el botón si ya está unido
                         },
                       ),
                     ],

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/exceptions/exceptions.dart';
@@ -9,14 +10,16 @@ class OptimizationService {
 
   OptimizationService() : _dioOptimization = Dio();
 
-  Future<OptimizationResponse> getOptimizedRoute(List<LatLng> points, String mode) async {
+  Future<OptimizationResponse> getOptimizedRoute(
+      List<LatLng> points, String mode) async {
     String apiKey = dotenv.env['GOOGLE_DIRECTIONS_API_KEY'] ?? '';
     if (apiKey.isEmpty) {
       throw AppException("Google API Key not found");
     }
 
-    final coorsString = points.map((point) => '${point.latitude},${point.longitude}').join('|');
-    
+    final coorsString =
+        points.map((point) => '${point.latitude},${point.longitude}').join('|');
+
     const url = 'https://maps.googleapis.com/maps/api/directions/json';
 
     try {
@@ -27,7 +30,9 @@ class OptimizationService {
         'mode': mode,
         'key': apiKey,
       });
-      print(response.data); // Para inspeccionar la respuesta completa
+      if (kDebugMode) {
+        print(response.data);
+      } // Para inspeccionar la respuesta completa
 
       if (response.data['routes'] == null || response.data['routes'].isEmpty) {
         throw AppException("No routes found in response");

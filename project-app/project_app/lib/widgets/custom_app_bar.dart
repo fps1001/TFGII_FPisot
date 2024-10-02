@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onBackPressed; // Función para el botón de atrás
+  final List<Widget>? actions; // Para ir al resumen.
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.onBackPressed,
+    this.actions,
   });
 
   @override
@@ -31,6 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             () => Navigator.of(context)
                 .pop(), // Usamos el callback si está disponible, sino hacemos pop
       ),
+      actions: actions,
     );
   }
 

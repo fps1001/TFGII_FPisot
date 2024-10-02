@@ -3,55 +3,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/helpers/helpers.dart';
+// Importar el helper de iconos
 import 'package:project_app/screens/screens.dart';
-
-
 import '../blocs/blocs.dart';
 
 class TourSelectionScreen extends StatefulWidget {
   const TourSelectionScreen({super.key});
 
   @override
-  _TourSelectionScreenState createState() => _TourSelectionScreenState();
+  TourSelectionScreenState createState() => TourSelectionScreenState();
 }
 
-class _TourSelectionScreenState extends State<TourSelectionScreen> {
+class TourSelectionScreenState extends State<TourSelectionScreen> {
   String selectedPlace = '';
   double numberOfSites = 2; // Valor inicial para el slider
   String selectedMode = 'walking'; // Modo de transporte por defecto es andando
   final List<bool> _isSelected = [
     true,
     false
-  ]; // Estado inicial del ToggleButton del medio de transporte
+  ]; // Estado del ToggleButton del transporte
 
-  // Preferencias de usuario con iconos
-  final Map<String, Map<String, dynamic>> userPreferences = {
-    'Naturaleza': {
-      'selected': false,
-      'icon': Icons.park,
-      'color': Colors.lightBlue
-    },
-    'Museos': {'selected': false, 'icon': Icons.museum, 'color': Colors.purple},
-    'Gastronomía': {
-      'selected': false,
-      'icon': Icons.restaurant,
-      'color': Colors.green
-    },
-    'Deportes': {
-      'selected': false,
-      'icon': Icons.sports_soccer,
-      'color': Colors.red
-    },
-    'Compras': {
-      'selected': false,
-      'icon': Icons.shopping_bag,
-      'color': Colors.teal
-    },
-    'Historia': {
-      'selected': false,
-      'icon': Icons.history_edu,
-      'color': Colors.orange
-    },
+  // **Mapa para almacenar el estado de selección de preferencias**
+  final Map<String, bool> selectedPreferences = {
+    'Naturaleza': false,
+    'Museos': false,
+    'Gastronomía': false,
+    'Deportes': false,
+    'Compras': false,
+    'Historia': false,
   };
 
   @override
@@ -69,10 +48,10 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 fontWeight: FontWeight.bold,
               ),
         ),
-      ), // Usa el CustomAppBar
+      ),
       body: GestureDetector(
         onTap: () {
-          //Cierra el teclado al hacer tap fuera.
+          // Cierra el teclado al hacer tap fuera.
           FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
@@ -85,7 +64,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //* SELECCIÓN DE LUGAR
+              // SELECCIÓN DE LUGAR
               Text(
                 '¿Qué lugar quieres visitar?',
                 style: Theme.of(context).textTheme.headlineSmall,
@@ -108,7 +87,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
 
-              //* SELECCIÓN DE NÚMERO DE SITIOS (SLIDER)
+              // SELECCIÓN DE NÚMERO DE SITIOS (SLIDER)
               const SizedBox(height: 30),
               Text(
                 '¿Cuántos sitios te gustaría visitar?',
@@ -132,9 +111,8 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 inactiveColor: Theme.of(context).primaryColor.withOpacity(0.8),
               ),
 
-              //* SELECCIÓN DE MEDIO DE TRANSPORTE
+              // SELECCIÓN DE MEDIO DE TRANSPORTE
               const SizedBox(height: 20),
-
               Text(
                 'Selecciona tu modo de transporte',
                 style: Theme.of(context).textTheme.headlineSmall,
@@ -152,20 +130,20 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                       selectedMode = index == 0 ? 'walking' : 'cycling';
                     });
                   },
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Icon(Icons.directions_walk),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Icon(transportIcons['walking']),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Icon(Icons.directions_bike),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Icon(transportIcons['cycling']),
                     ),
                   ],
                 ),
               ),
 
-              //* SELECCIÓN DE PREFERENCIAS DEL USUARIO (CHIPS)
+              // SELECCIÓN DE PREFERENCIAS DEL USUARIO (CHIPS)
               const SizedBox(height: 30),
               Text(
                 '¿Cuáles son tus intereses?',
@@ -180,14 +158,14 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   alignment: WrapAlignment.center,
                   children: userPreferences.keys.map((String key) {
                     final preference = userPreferences[key];
-                    final bool isSelected = preference!['selected'];
+                    final bool isSelected = selectedPreferences[key] ?? false;
 
                     return ChoiceChip(
                       label: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            preference['icon'],
+                            preference?['icon'],
                             size: 20.0,
                             color: isSelected ? Colors.white : Colors.black54,
                           ),
@@ -207,23 +185,22 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                         borderRadius: BorderRadius.circular(25.0),
                         side: BorderSide(
                           color: isSelected
-                              ? preference['color']
+                              ? preference!['color']
                               : Colors.grey.shade400,
                         ),
                       ),
-                      selectedColor: preference['color'],
+                      selectedColor: preference!['color'],
                       backgroundColor: isSelected
                           ? preference['color']
                           : preference['color']!.withOpacity(
                               0.1), // Más apagado si no está seleccionado
-                      elevation: isSelected
-                          ? 4.0
-                          : 1.0, // Ajustar la elevación en función de la selección
+                      elevation: isSelected ? 4.0 : 1.0,
                       shadowColor: Colors.grey.shade300,
                       selected: isSelected,
                       onSelected: (bool selected) {
                         setState(() {
-                          userPreferences[key]!['selected'] = selected;
+                          selectedPreferences[key] =
+                              selected; // Actualizamos el estado
                         });
                       },
                     );
@@ -231,7 +208,7 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                 ),
               ),
 
-              //* BOTÓN DE PETICIÓN DE TOUR
+              // BOTÓN DE PETICIÓN DE TOUR
               const SizedBox(height: 50),
               MaterialButton(
                 minWidth: MediaQuery.of(context).size.width - 60,
@@ -245,8 +222,8 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                   // Para evitar copiar tanto texto voy a poner Salamanca por defecto.
                   if (selectedPlace.isEmpty) {
                     selectedPlace = 'Salamanca, España';
-                    //selectedPlace = 'San José, California, EEUU';
                   }
+
                   // Mostrar diálogo de carga
                   LoadingMessageHelper.showLoadingMessage(context);
 
@@ -255,8 +232,8 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                     mode: selectedMode,
                     city: selectedPlace,
                     numberOfSites: numberOfSites.round(),
-                    userPreferences: userPreferences.entries
-                        .where((entry) => entry.value['selected'] == true)
+                    userPreferences: selectedPreferences.entries
+                        .where((entry) => entry.value == true)
                         .map((entry) => entry.key)
                         .toList(),
                   ));
@@ -285,7 +262,8 @@ class _TourSelectionScreenState extends State<TourSelectionScreen> {
                       // Mostrar un error al usuario
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                            content: Text('Error al cargar el tour')),
+                          content: Text('Error al cargar el tour'),
+                        ),
                       );
                     }
                   });

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
@@ -74,7 +75,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   void moveCamera(LatLng latLng) {
     if (_mapController == null) {
       // No mover la cámara si el controlador no está listo
-      print('El controlador del mapa aún no está listo.');
+      if (kDebugMode) {
+        print('El controlador del mapa aún no está listo.');
+      }
       return;
     }
 
@@ -185,7 +188,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentMarkers.addAll(poiMarkers);
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
-
   }
 
   // Función para mostrar el `BottomSheet` con los detalles del lugar
