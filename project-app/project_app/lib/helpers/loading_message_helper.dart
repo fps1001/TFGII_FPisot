@@ -9,7 +9,8 @@ class LoadingMessageHelper {
         builder: (context) => AlertDialog(
             title: Text('Espere por favor',
                 style: TextStyle(
-                  color: Theme.of(context).secondaryHeaderColor,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColorDark,
                 )),
             content: Container(
               width: 100,
@@ -18,9 +19,12 @@ class LoadingMessageHelper {
               child: Column(
                 children: [
                   Text(
-                    'Encontrando lugares de interés',
+                    'Trabajando en tu Eco City Tour',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColorDark,
                     ),
                   ),
                   const SizedBox(

@@ -9,7 +9,6 @@ import 'package:project_app/services/services.dart';
 import 'package:project_app/themes/themes.dart';
 
 void main() async {
-
   Bloc.observer = MyBlocObserver();
   try {
     await dotenv.load(fileName: '.env');
@@ -42,6 +41,7 @@ void main() async {
   ));
 }
 
+//TODO EL Foco al recalcular una ruta debería ir al primer POI en vez de a la ubicación del usuario.
 class ProjectApp extends StatelessWidget {
   const ProjectApp({super.key});
 

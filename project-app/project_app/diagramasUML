@@ -1,0 +1,525 @@
+@startuml
+set namespaceSeparator ::
+
+class "project_app::blocs::gps::gps_bloc.dart::GpsBloc" {
+  -StreamSubscription<dynamic>? _gpsSubscription
+  -dynamic _init()
+  -dynamic _isPermissionGranted()
+  -dynamic _checkGpsStatus()
+  +dynamic askGpsAccess()
+  +dynamic close()
+}
+
+"project_app::blocs::gps::gps_bloc.dart::GpsBloc" o-- "dart::async::StreamSubscription<dynamic>"
+"bloc::src::bloc.dart::Bloc" <|-- "project_app::blocs::gps::gps_bloc.dart::GpsBloc"
+
+class "project_app::blocs::gps::gps_bloc.dart::GpsEvent" {
+  +List<Object> props
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "project_app::blocs::gps::gps_bloc.dart::GpsEvent"
+
+class "project_app::blocs::gps::gps_bloc.dart::OnGpsAndPermissionEvent" {
+  +bool isGpsEnabled
+  +bool isGpsPermissionGranted
+}
+
+"project_app::blocs::gps::gps_bloc.dart::GpsEvent" <|-- "project_app::blocs::gps::gps_bloc.dart::OnGpsAndPermissionEvent"
+
+class "project_app::blocs::gps::gps_bloc.dart::GpsState" {
+  +bool isGpsEnabled
+  +bool isGpsPermissionGranted
+  +bool isAllReady
+  +List<Object> props
+  +GpsState copyWith()
+  +String toString()
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "project_app::blocs::gps::gps_bloc.dart::GpsState"
+
+class "project_app::blocs::location::location_bloc.dart::LocationBloc" {
+  +StreamSubscription<dynamic>? positionStream
+  +dynamic getCurrentPosition()
+  +void startFollowingUser()
+  +void stopFollowingUser()
+  +dynamic close()
+}
+
+"project_app::blocs::location::location_bloc.dart::LocationBloc" o-- "dart::async::StreamSubscription<dynamic>"
+"bloc::src::bloc.dart::Bloc" <|-- "project_app::blocs::location::location_bloc.dart::LocationBloc"
+
+class "project_app::blocs::location::location_bloc.dart::LocationEvent" {
+  +List<Object> props
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "project_app::blocs::location::location_bloc.dart::LocationEvent"
+
+class "project_app::blocs::location::location_bloc.dart::OnNewUserLocationEvent" {
+  +LatLng newLocation
+}
+
+"project_app::blocs::location::location_bloc.dart::OnNewUserLocationEvent" o-- "google_maps_flutter_platform_interface::src::types::location.dart::LatLng"
+"project_app::blocs::location::location_bloc.dart::LocationEvent" <|-- "project_app::blocs::location::location_bloc.dart::OnNewUserLocationEvent"
+
+class "project_app::blocs::location::location_bloc.dart::OnStartFollowingUser" {
+}
+
+"project_app::blocs::location::location_bloc.dart::LocationEvent" <|-- "project_app::blocs::location::location_bloc.dart::OnStartFollowingUser"
+
+class "project_app::blocs::location::location_bloc.dart::OnStopFollowingUser" {
+}
+
+"project_app::blocs::location::location_bloc.dart::LocationEvent" <|-- "project_app::blocs::location::location_bloc.dart::OnStopFollowingUser"
+
+class "project_app::blocs::location::location_bloc.dart::LocationState" {
+  +bool followingUser
+  +LatLng? lastKnownLocation
+  +List<LatLng> myLocationHistory
+  +List<Object?> props
+  +LocationState copyWith()
+}
+
+"project_app::blocs::location::location_bloc.dart::LocationState" o-- "google_maps_flutter_platform_interface::src::types::location.dart::LatLng"
+"equatable::src::equatable.dart::Equatable" <|-- "project_app::blocs::location::location_bloc.dart::LocationState"
+
+class "project_app::blocs::map::map_bloc.dart::MapBloc" {
+  -GoogleMapController? _mapController
+  +LocationBloc locationBloc
+  +StreamSubscription<LocationState>? locationSubscription
+  +LatLng? mapCenter
+  -void _onInitMap()
+  +void moveCamera()
+  -void _onStartFollowingUser()
+  -void _onPolylineNewPoint()
+  +dynamic drawEcoCityTour()
+  +void showPlaceDetails()
+  -void _onRemovePoiMarker()
+  -void _onAddPoiMarker()
+  +dynamic close()
+}
+
+"project_app::blocs::map::map_bloc.dart::MapBloc" o-- "google_maps_flutter::google_maps_flutter.dart::GoogleMapController"
+"project_app::blocs::map::map_bloc.dart::MapBloc" o-- "project_app::blocs::location::location_bloc.dart::LocationBloc"
+"project_app::blocs::map::map_bloc.dart::MapBloc" o-- "dart::async::StreamSubscription<LocationState>"
+"project_app::blocs::map::map_bloc.dart::MapBloc" o-- "google_maps_flutter_platform_interface::src::types::location.dart::LatLng"
+"bloc::src::bloc.dart::Bloc" <|-- "project_app::blocs::map::map_bloc.dart::MapBloc"
+
+abstract class "project_app::blocs::map::map_bloc.dart::MapEvent" {
+  +List<Object> props
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "project_app::blocs::map::map_bloc.dart::MapEvent"
+
+class "project_app::blocs::map::map_bloc.dart::OnMapInitializedEvent" {
+  +GoogleMapController mapController
+  +BuildContext mapContext
+  +List<Object> props
+}
+
+"project_app::blocs::map::map_bloc.dart::OnMapInitializedEvent" o-- "google_maps_flutter::google_maps_flutter.dart::GoogleMapController"
+"project_app::blocs::map::map_bloc.dart::OnMapInitializedEvent" o-- "flutter::src::widgets::framework.dart::BuildContext"
+"project_app::blocs::map::map_bloc.dart::MapEvent" <|-- "project_app::blocs::map::map_bloc.dart::OnMapInitializedEvent"
+
+class "project_app::blocs::map::map_bloc.dart::OnStopFollowingUserEvent" {
+}
+
+"project_app::blocs::map::map_bloc.dart::MapEvent" <|-- "project_app::blocs::map::map_bloc.dart::OnStopFollowingUserEvent"
+
+class "project_app::blocs::map::map_bloc.dart::OnStartFollowingUserEvent" {
+}
+
+"project_app::blocs::map::map_bloc.dart::MapEvent" <|-- "project_app::blocs::map::map_bloc.dart::OnStartFollowingUserEvent"
+
+class "project_app::blocs::map::map_bloc.dart::OnUpdateUserPolylinesEvent" {
+  +List<LatLng> userLocations
+  +List<Object> props
+}
+
+"project_app::blocs::map::map_bloc.dart::MapEvent" <|-- "project_app::blocs::map::map_bloc.dart::OnUpdateUserPolylinesEvent"
+
+class "project_app::blocs::map::map_bloc.dart::OnToggleShowUserRouteEvent" {
+}
+
+"project_app::blocs::map::map_bloc.dart::MapEvent" <|-- "project_app::blocs::map::map_bloc.dart::OnToggleShowUserRouteEvent"
+
+class "project_app::blocs::map::map_bloc.dart::OnDisplayPolylinesEvent" {
+  +Map<String, Polyline> polylines
+  +Map<String, Marker> markers
+  +List<Object> props
+}
+
+"project_app::blocs::map::map_bloc.dart::MapEvent" <|-- "project_app::blocs::map::map_bloc.dart::OnDisplayPolylinesEvent"
+
+class "project_app::blocs::map::map_bloc.dart::OnRemovePoiMarkerEvent" {
+  +String poiName
+  +List<Object> props
+}
+
+"project_app::blocs::map::map_bloc.dart::MapEvent" <|-- "project_app::blocs::map::map_bloc.dart::OnRemovePoiMarkerEvent"
+
+class "project_app::blocs::map::map_bloc.dart::OnAddPoiMarkerEvent" {
+  +PointOfInterest poi
+  +List<Object> props
+}
+
+"project_app::blocs::map::map_bloc.dart::OnAddPoiMarkerEvent" o-- "project_app::models::point_of_interest.dart::PointOfInterest"
+"project_app::blocs::map::map_bloc.dart::MapEvent" <|-- "project_app::blocs::map::map_bloc.dart::OnAddPoiMarkerEvent"
+
+class "project_app::blocs::map::map_bloc.dart::MapState" {
+  +bool isMapInitialized
+  +bool isFollowingUser
+  +bool showUserRoute
+  +Map<String, Polyline> polylines
+  +Map<String, Marker> markers
+  +BuildContext? mapContext
+  +List<Object?> props
+  +MapState copyWith()
+}
+
+"project_app::blocs::map::map_bloc.dart::MapState" o-- "flutter::src::widgets::framework.dart::BuildContext"
+"equatable::src::equatable.dart::Equatable" <|-- "project_app::blocs::map::map_bloc.dart::MapState"
+
+class "project_app::blocs::my_bloc_observer.dart::MyBlocObserver" {
+  +void onCreate()
+  +void onEvent()
+  +void onChange()
+  +void onTransition()
+  +void onError()
+  +void onClose()
+}
+
+"bloc::src::bloc_observer.dart::BlocObserver" <|-- "project_app::blocs::my_bloc_observer.dart::MyBlocObserver"
+
+class "project_app::blocs::tour::tour_bloc.dart::TourBloc" {
+  +OptimizationService optimizationService
+  +MapBloc mapBloc
+  -dynamic _onLoadTour()
+  -dynamic _onJoinTour()
+  -dynamic _onAddPoi()
+  -dynamic _onRemovePoi()
+  -dynamic _updateTourWithPois()
+}
+
+"project_app::blocs::tour::tour_bloc.dart::TourBloc" o-- "project_app::services::optimization_service.dart::OptimizationService"
+"project_app::blocs::tour::tour_bloc.dart::TourBloc" o-- "project_app::blocs::map::map_bloc.dart::MapBloc"
+"bloc::src::bloc.dart::Bloc" <|-- "project_app::blocs::tour::tour_bloc.dart::TourBloc"
+
+abstract class "project_app::blocs::tour::tour_bloc.dart::TourEvent" {
+  +List<Object> props
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "project_app::blocs::tour::tour_bloc.dart::TourEvent"
+
+class "project_app::blocs::tour::tour_bloc.dart::LoadTourEvent" {
+  +String city
+  +int numberOfSites
+  +List<String> userPreferences
+  +String mode
+  +List<Object> props
+}
+
+"project_app::blocs::tour::tour_bloc.dart::TourEvent" <|-- "project_app::blocs::tour::tour_bloc.dart::LoadTourEvent"
+
+class "project_app::blocs::tour::tour_bloc.dart::OnAddPoiEvent" {
+  +PointOfInterest poi
+  +List<Object> props
+}
+
+"project_app::blocs::tour::tour_bloc.dart::OnAddPoiEvent" o-- "project_app::models::point_of_interest.dart::PointOfInterest"
+"project_app::blocs::tour::tour_bloc.dart::TourEvent" <|-- "project_app::blocs::tour::tour_bloc.dart::OnAddPoiEvent"
+
+class "project_app::blocs::tour::tour_bloc.dart::OnRemovePoiEvent" {
+  +PointOfInterest poi
+  +List<Object> props
+}
+
+"project_app::blocs::tour::tour_bloc.dart::OnRemovePoiEvent" o-- "project_app::models::point_of_interest.dart::PointOfInterest"
+"project_app::blocs::tour::tour_bloc.dart::TourEvent" <|-- "project_app::blocs::tour::tour_bloc.dart::OnRemovePoiEvent"
+
+class "project_app::blocs::tour::tour_bloc.dart::OnJoinTourEvent" {
+  +List<Object> props
+}
+
+"project_app::blocs::tour::tour_bloc.dart::TourEvent" <|-- "project_app::blocs::tour::tour_bloc.dart::OnJoinTourEvent"
+
+class "project_app::blocs::tour::tour_bloc.dart::ResetTourEvent" {
+  +List<Object> props
+}
+
+"project_app::blocs::tour::tour_bloc.dart::TourEvent" <|-- "project_app::blocs::tour::tour_bloc.dart::ResetTourEvent"
+
+class "project_app::blocs::tour::tour_bloc.dart::TourState" {
+  +EcoCityTour? ecoCityTour
+  +bool isLoading
+  +bool hasError
+  +bool isJoined
+  +List<Object?> props
+  +TourState copyWith()
+}
+
+"project_app::blocs::tour::tour_bloc.dart::TourState" o-- "project_app::models::eco_city_tour.dart::EcoCityTour"
+"equatable::src::equatable.dart::Equatable" <|-- "project_app::blocs::tour::tour_bloc.dart::TourState"
+
+class "project_app::delegates::search_destination_delegate.dart::SearchDestinationDelegate" {
+  -PlacesService _placesService
+  +String apiKey
+  +List<Widget>? buildActions()
+  +Widget? buildLeading()
+  +Widget buildResults()
+  +Widget buildSuggestions()
+}
+
+"project_app::delegates::search_destination_delegate.dart::SearchDestinationDelegate" o-- "project_app::services::places_service.dart::PlacesService"
+"flutter::src::material::search.dart::SearchDelegate" <|-- "project_app::delegates::search_destination_delegate.dart::SearchDestinationDelegate"
+
+class "project_app::exceptions::app_exception.dart::AppException" {
+  +String message
+  +String? prefix
+  +String? url
+  +String toString()
+}
+
+"dart::core::Exception" <|-- "project_app::exceptions::app_exception.dart::AppException"
+
+class "project_app::exceptions::app_exception.dart::FetchDataException" {
+}
+
+"project_app::exceptions::app_exception.dart::AppException" <|-- "project_app::exceptions::app_exception.dart::FetchDataException"
+
+class "project_app::exceptions::app_exception.dart::BadRequestException" {
+}
+
+"project_app::exceptions::app_exception.dart::AppException" <|-- "project_app::exceptions::app_exception.dart::BadRequestException"
+
+class "project_app::exceptions::app_exception.dart::UnauthorizedException" {
+}
+
+"project_app::exceptions::app_exception.dart::AppException" <|-- "project_app::exceptions::app_exception.dart::UnauthorizedException"
+
+class "project_app::exceptions::app_exception.dart::InvalidInputException" {
+}
+
+"project_app::exceptions::app_exception.dart::AppException" <|-- "project_app::exceptions::app_exception.dart::InvalidInputException"
+
+class "project_app::exceptions::dio_exception.dart::DioExceptions" {
+  {static} +AppException handleDioError()
+  {static} -AppException _handleHttpResponseError()
+}
+
+class "project_app::helpers::loading_message_helper.dart::LoadingMessageHelper" {
+  {static} +void showLoadingMessage()
+}
+
+class "project_app::main.dart::ProjectApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::main.dart::ProjectApp"
+
+class "project_app::models::eco_city_tour.dart::EcoCityTour" {
+  +String city
+  +int numberOfSites
+  +List<PointOfInterest> pois
+  +String mode
+  +List<String> userPreferences
+  +double duration
+  +double distance
+  +List<LatLng> polilynePoints
+  +EcoCityTour copyWith()
+}
+
+class "project_app::models::point_of_interest.dart::PointOfInterest" {
+  +LatLng gps
+  +String name
+  +String? description
+  +String? url
+  +String? imageUrl
+  +double? rating
+  +String? address
+  +int? userRatingsTotal
+}
+
+"project_app::models::point_of_interest.dart::PointOfInterest" o-- "google_maps_flutter_platform_interface::src::types::location.dart::LatLng"
+
+class "project_app::screens::gps_access_screen.dart::GpsAccessScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::screens::gps_access_screen.dart::GpsAccessScreen"
+
+class "project_app::screens::gps_access_screen.dart::_AccessButton" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::screens::gps_access_screen.dart::_AccessButton"
+
+class "project_app::screens::gps_access_screen.dart::_EnableGpsMessage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::screens::gps_access_screen.dart::_EnableGpsMessage"
+
+class "project_app::screens::loading_screen.dart::LoadingScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::screens::loading_screen.dart::LoadingScreen"
+
+class "project_app::screens::map_screen.dart::MapScreen" {
+  +EcoCityTour tour
+  +State<MapScreen> createState()
+}
+
+"project_app::screens::map_screen.dart::MapScreen" o-- "project_app::models::eco_city_tour.dart::EcoCityTour"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project_app::screens::map_screen.dart::MapScreen"
+
+class "project_app::screens::map_screen.dart::_MapScreenState" {
+  +LocationBloc locationBloc
+  -dynamic _loadRouteAndPois
+  +void initState()
+  +Widget build()
+  -dynamic _initializeRouteAndPois()
+  -void _joinEcoCityTour()
+  +void dispose()
+}
+
+"project_app::screens::map_screen.dart::_MapScreenState" o-- "project_app::blocs::location::location_bloc.dart::LocationBloc"
+"flutter::src::widgets::framework.dart::State" <|-- "project_app::screens::map_screen.dart::_MapScreenState"
+
+class "project_app::screens::tour_selection_screen.dart::TourSelectionScreen" {
+  +TourSelectionScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project_app::screens::tour_selection_screen.dart::TourSelectionScreen"
+
+class "project_app::screens::tour_selection_screen.dart::TourSelectionScreenState" {
+  +String selectedPlace
+  +double numberOfSites
+  +String selectedMode
+  -List<bool> _isSelected
+  +Map<String, bool> selectedPreferences
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project_app::screens::tour_selection_screen.dart::TourSelectionScreenState"
+
+class "project_app::screens::tour_summary.dart::TourSummary" {
+  +EcoCityTour tour
+  +Widget build()
+}
+
+"project_app::screens::tour_summary.dart::TourSummary" o-- "project_app::models::eco_city_tour.dart::EcoCityTour"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::screens::tour_summary.dart::TourSummary"
+
+class "project_app::services::gemini_service.dart::GeminiService" {
+  {static} +dynamic fetchGeminiData()
+}
+
+class "project_app::services::optimization_service.dart::OptimizationService" {
+  -Dio _dioOptimization
+  +dynamic getOptimizedRoute()
+}
+
+"project_app::services::optimization_service.dart::OptimizationService" o-- "dio::src::dio.dart::Dio"
+
+class "project_app::services::places_service.dart::PlacesService" {
+  -Dio _dio
+  -String _apiKey
+  +dynamic searchPlace()
+}
+
+"project_app::services::places_service.dart::PlacesService" o-- "dio::src::dio.dart::Dio"
+
+class "project_app::themes::app_theme.dart::AppTheme" {
+  {static} +Color primary
+  {static} +Color secundary
+  {static} +ThemeData lightTheme
+  {static} +ThemeData darkTheme
+}
+
+"project_app::themes::app_theme.dart::AppTheme" o-- "dart::ui::Color"
+"project_app::themes::app_theme.dart::AppTheme" o-- "flutter::src::material::theme_data.dart::ThemeData"
+
+class "project_app::ui::custom_snackbar.dart::CustomSnackbar" {
+  {static} +void show()
+}
+
+"flutter::src::material::snack_bar.dart::SnackBar" <|-- "project_app::ui::custom_snackbar.dart::CustomSnackbar"
+
+class "project_app::views::map_view.dart::MapView" {
+  +LatLng initialPosition
+  +Set<Polyline> polylines
+  +Set<Marker> markers
+  +Widget build()
+}
+
+"project_app::views::map_view.dart::MapView" o-- "google_maps_flutter_platform_interface::src::types::location.dart::LatLng"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::views::map_view.dart::MapView"
+
+class "project_app::widgets::btn_follow_user.dart::BtnFollowUser" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::widgets::btn_follow_user.dart::BtnFollowUser"
+
+class "project_app::widgets::btn_location.dart::BtnCurrentLocation" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::widgets::btn_location.dart::BtnCurrentLocation"
+
+class "project_app::widgets::btn_toggle_user_route.dart::BtnToggleUserRoute" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::widgets::btn_toggle_user_route.dart::BtnToggleUserRoute"
+
+class "project_app::widgets::custom_app_bar.dart::CustomAppBar" {
+  +String title
+  +void Function()? onBackPressed
+  +List<Widget>? actions
+  +Size preferredSize
+  +Widget build()
+}
+
+"project_app::widgets::custom_app_bar.dart::CustomAppBar" o-- "dart::ui::void Function()"
+"project_app::widgets::custom_app_bar.dart::CustomAppBar" o-- "dart::ui::Size"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::widgets::custom_app_bar.dart::CustomAppBar"
+"flutter::src::widgets::preferred_size.dart::PreferredSizeWidget" <|-- "project_app::widgets::custom_app_bar.dart::CustomAppBar"
+
+class "project_app::widgets::custom_bottom_sheet.dart::CustomBottomSheet" {
+  +PointOfInterest poi
+  +Widget build()
+}
+
+"project_app::widgets::custom_bottom_sheet.dart::CustomBottomSheet" o-- "project_app::models::point_of_interest.dart::PointOfInterest"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::widgets::custom_bottom_sheet.dart::CustomBottomSheet"
+
+class "project_app::widgets::custom_search_bar.dart::CustomSearchBar" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project_app::widgets::custom_search_bar.dart::CustomSearchBar"
+
+class "project_app::widgets::poi_list_item.dart::ExpandablePoiItem" {
+  +PointOfInterest poi
+  +TourBloc tourBloc
+  +ExpandablePoiItemState createState()
+}
+
+"project_app::widgets::poi_list_item.dart::ExpandablePoiItem" o-- "project_app::models::point_of_interest.dart::PointOfInterest"
+"project_app::widgets::poi_list_item.dart::ExpandablePoiItem" o-- "project_app::blocs::tour::tour_bloc.dart::TourBloc"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project_app::widgets::poi_list_item.dart::ExpandablePoiItem"
+
+class "project_app::widgets::poi_list_item.dart::ExpandablePoiItemState" {
+  +bool isExpanded
+  -dynamic _imageWidget
+  +void initState()
+  -dynamic _loadImage()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project_app::widgets::poi_list_item.dart::ExpandablePoiItemState"
+
+
+@enduml

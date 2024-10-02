@@ -112,9 +112,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(polylines: currentPolylines));
   }
 
-  // Metodo que recibe una polilínea y la emite en un nuevo evento.
-  // Ahora con POI's opcionales.
-  Future<void> drawRoutePolyline(EcoCityTour tour) async {
+  // Metodo que recibe un EcoCityTour y lo pinta.
+  Future<void> drawEcoCityTour(EcoCityTour tour) async {
     final myRoute = Polyline(
       polylineId: const PolylineId('route'),
       color: Colors.teal,

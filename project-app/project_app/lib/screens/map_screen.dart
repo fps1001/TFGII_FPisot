@@ -218,7 +218,7 @@ class _MapScreenState extends State<MapScreen> {
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
     // Pinta la nueva polilínea en el mapa usando el MapBloc
-    await mapBloc.drawRoutePolyline(widget.tour);
+    await mapBloc.drawEcoCityTour(widget.tour);
   }
 
   /// Función que añade un nuevo POI al Eco City Tour basado en la ubicación actual del usuario

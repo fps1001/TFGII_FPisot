@@ -19,6 +19,49 @@ class ExpandablePoiItem extends StatefulWidget {
 
 class ExpandablePoiItemState extends State<ExpandablePoiItem> {
   bool isExpanded = false;
+  late Future<Widget> _imageWidget;
+
+  @override
+  void initState() {
+    super.initState();
+    _imageWidget = _loadImage();
+  }
+
+  Future<Widget> _loadImage() async {
+    // Si la imagen URL no está disponible, cargar la imagen desde assets
+    if (widget.poi.imageUrl == null) {
+      return Image.asset(
+        'assets/icon/icon.png',
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image.network(
+        widget.poi.imageUrl!,
+        fit: BoxFit.cover,
+        loadingBuilder:
+            (BuildContext context, Widget child, ImageChunkEvent? progress) {
+          if (progress == null) return child;
+          return Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Theme.of(context).primaryColor,
+              value: progress.expectedTotalBytes != null
+                  ? progress.cumulativeBytesLoaded /
+                      progress.expectedTotalBytes!
+                  : null,
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          // En caso de error de carga, usa la imagen del troll
+          return Image.asset(
+            'assets/location_troll_bg.png',
+            fit: BoxFit.cover,
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,29 +82,19 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
               shape: BoxShape.circle, // Forma circular
             ),
             child: ClipOval(
-              child: widget.poi.imageUrl != null
-                  ? Image.network(
-                      widget.poi.imageUrl!,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child; // La imagen está completamente cargada
-                        } else {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Theme.of(context).primaryColor,
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  : const Icon(Icons.place, size: 60, color: Colors.grey),
+              child: FutureBuilder<Widget>(
+                future: _imageWidget,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    return snapshot.data!;
+                  }
+                  // Mostrar indicador de carga mientras se resuelve
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
             ),
           ),
           // Expansión del texto del POI y botón eliminar al final
@@ -110,8 +143,6 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
             onPressed: () {
               // Mostrar el mensaje de carga antes de eliminar
               LoadingMessageHelper.showLoadingMessage(context);
-
-              // Esperar un pequeño delay para simular una espera antes de la eliminación
 
               // Eliminar el POI y lanzar el evento en TourBloc
               widget.tourBloc.add(OnRemovePoiEvent(poi: widget.poi));
