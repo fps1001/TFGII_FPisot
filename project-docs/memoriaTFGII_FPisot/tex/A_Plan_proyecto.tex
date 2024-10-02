@@ -35,6 +35,8 @@ Los hitos o milestones son puntos de referencia que marcan el final de un conjun
     El objetivo es tener una documentación suficiente para que el tutor pueda dar feedback acerca de la misma y poder corregir errores.
 
     \item \textbf{Prototipo Prompting} Este prototipo se puede realizar en un cuaderno Jupyter y su objetivo es mostrar la evolución en el prompt que dará como resultado unos POI de mayor calidad.
+    
+    \item \textbf{Prototipo con tours generados por LLM} El objetivo es transitar desde una aplicación inicial capaz de mostrar lugares y rutas en un mapa, hacia una aplicación que sea capaz de conseguir que estos mismos marcadores y polilíneas sean generados a través de un LLM. \label{hito:prototipo_llm}
 \end{itemize}
 
 \subsection{Organización en \textit{Sprints}}
@@ -45,7 +47,7 @@ Al comenzar este proyecto durante periodo no lectivo se realizaron los Sprint co
 \begin{itemize}
     \item \textbf{Sprint Kick-off(22/07/2024 - 29/07/2024):} Después de las reuniones con el tutor, se establecen los objetivos del proyecto y se comienza a trabajar en la puesta en marcha del proyecto. Se establecen las herramientas a utilizar y se comienza a trabajar en la documentación del proyecto. 33 puntos de historia en 5 tareas.
     ~\ref{fig:bd-kick-off sprint}
-\imagen{bd-kick-off sprint}{Figura burndown del Sprint Kick-off.}
+	\imagen{bd-kick-off sprint}{Figura burndown del Sprint Kick-off.}
     
 
     \item \textbf{Sprint 1(29/07/2024 - 05/08/2024):} Con las herramientas y una idea previa establecida, es el momento de empezar a desarrollar.
@@ -64,9 +66,19 @@ Al comenzar este proyecto durante periodo no lectivo se realizaron los Sprint co
     
     \item \textbf{Sprint 4(22/08/2024 - 02/09/2024):} El objetivo es mostrar la versión más completa de la aplicación, la documentación y ahondar en el uso de nuevas herramientas como Figma como herramienta de diseño de aplicaciones y LangFlow a la hora de utilizar otro modelo de prototipo.
     
+\item \textbf{S5 - Aplicación con origen de datos LLM (Preparación y documentación):} Después de la reunión con el tutor de inicio de septiembre y habiendo cumplido los objetivos de los primeros hitos se decide continuar intentando alcanzar el hito \ref{hito:prototipo_llm}. Para ello se prepara y documenta primero en este sprint el desarrollo necesario.
+
+\item \textbf{S6 - Desarrollo y Finalización prototipo google\_generative\_ai como LLM} Habiendo encontrado una solución óptima al modelo LLM a utilizar se propone realizar un prototipo que implemente la interfaz de usuario y su conexión con el modelo LLM. En los diferentes apartados encontramos. Se trata de un sprint de prominente desarrollo de la aplicación. Se consiguió reestructurar todo el código centralizando labores de gestión del tour generado y sus \acrshort{poi} manteniendo la modularidad del código.
+	
+	\item \textbf{S7 - Consolidación y Calidad} Habiendo cumplido el hito \ref{hito:prototipo_llm} y teniendo una aplicación con muchas funcionalidades buscadas, durante este sprint se busca consolidar el código y dotarlo de una calidad y mantenimiento con herramientas de soporte como Sonar Cloud o Logger.
+    
 \end{itemize}
 
 \subsection{Métricas Ágiles}
+Gracias al uso de Zube se hace uso de diferentes métricas ágiles que han sido vitales para la evaluación del desarrollo de la aplicación y su organización a través de los sprints citados. Algunos de los artefactos usados son los siguientes:
+\subsubsection{Gráficos burnup / burndown} 
+Muestran a lo largo del tiempo de un sprint la evolución de tareas realizadas por el equipo de desarrollo.
+\imagen{burnup-s6}{Gráfico Burnup del Sprint 6}{1}
 
 \section{Estudio de viabilidad}
 
