@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+import 'package:project_app/logger/logger.dart'; // Importar logger para registrar errores
 import 'package:project_app/exceptions/exceptions.dart';
 import 'package:project_app/models/models.dart';
 
@@ -12,6 +13,7 @@ class OptimizationService {
   OptimizationService() : _dioOptimization = Dio();
 
   Future<EcoCityTour> getOptimizedRoute({
+    //TODO quizá allá que recolocar en la lista los POI en función del orden que le asigna.
     required List<PointOfInterest> pois,
     required String mode,
     required String city,
@@ -20,6 +22,9 @@ class OptimizationService {
   }) async {
     String apiKey = dotenv.env['GOOGLE_DIRECTIONS_API_KEY'] ?? '';
     if (apiKey.isEmpty) {
+      // Si la clave de la API está vacía, lanzamos un error y lo registramos
+      log.e(
+          'OptimizationService: No se encontró la clave API de Google Directions');
       throw AppException("Google API Key not found");
     }
 
@@ -33,6 +38,9 @@ class OptimizationService {
     const url = 'https://maps.googleapis.com/maps/api/directions/json';
 
     try {
+      log.i(
+          'OptimizationService: Solicitando optimización de ruta para $city con modo $mode y ${pois.length} POIs');
+
       final response = await _dioOptimization.get(url, queryParameters: {
         'origin': '${points.first.latitude},${points.first.longitude}',
         'destination': '${points.last.latitude},${points.last.longitude}',
@@ -48,6 +56,7 @@ class OptimizationService {
 
       // Verificar si la respuesta contiene rutas
       if (response.data['routes'] == null || response.data['routes'].isEmpty) {
+        log.w('OptimizationService: No se encontraron rutas en la respuesta');
         throw AppException("No routes found in response");
       }
 
@@ -66,6 +75,9 @@ class OptimizationService {
           .fold(0, (sum, leg) => sum + leg['duration']['value'])
           .toDouble();
 
+      log.i(
+          'OptimizationService: Ruta optimizada recibida. Distancia total: $distance m, Duración total: $duration segundos.');
+
       // Crear un EcoCityTour y retornarlo
       final ecoCityTour = EcoCityTour(
         city: city,
@@ -80,8 +92,15 @@ class OptimizationService {
 
       return ecoCityTour;
     } on DioException catch (e) {
+      log.e(
+          'OptimizationService: Error durante la solicitud a la API de Google Directions',
+          error: e);
       throw DioExceptions.handleDioError(e, url: url);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log.e(
+          'OptimizationService: Error desconocido durante la optimización de la ruta',
+          error: e,
+          stackTrace: stackTrace);
       throw AppException("An unknown error occurred", url: url);
     }
   }

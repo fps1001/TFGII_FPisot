@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/helpers/helpers.dart'; // Importar el archivo de helpers
 import 'package:project_app/models/models.dart';
+import 'package:project_app/logger/logger.dart'; // Importar logger para registrar eventos
 import 'package:project_app/widgets/widgets.dart';
 import 'package:project_app/blocs/blocs.dart';
 
@@ -15,6 +16,11 @@ class TourSummary extends StatelessWidget {
     // Obtener el tamaño de la pantalla usando MediaQuery
     final screenWidth = MediaQuery.of(context).size.width;
     final cardWidth = screenWidth * 0.9;
+
+    // Log para la creación del resumen del tour
+    log.i(
+        'TourSummary: Mostrando resumen del EcoCityTour en ${tour.city} con ${tour.pois.length} POIs.');
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
@@ -103,6 +109,10 @@ class TourSummary extends StatelessWidget {
               itemCount: tour.pois.length,
               itemBuilder: (context, index) {
                 final poi = tour.pois[index];
+
+                // Log para cada POI en la lista
+                log.i('TourSummary: Mostrando POI ${poi.name} en la lista.');
+
                 return ExpandablePoiItem(
                     poi: poi, tourBloc: BlocProvider.of<TourBloc>(context));
               },

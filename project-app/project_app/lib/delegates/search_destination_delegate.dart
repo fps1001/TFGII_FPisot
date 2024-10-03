@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:project_app/logger/logger.dart'; // Importar logger
 
 import 'package:project_app/models/models.dart';
 import 'package:project_app/services/services.dart';
 import 'package:project_app/blocs/blocs.dart';
-import 'package:project_app/ui/ui.dart';  // Para usar el CustomSnackbar
+import 'package:project_app/ui/ui.dart'; // Para usar el CustomSnackbar
 
 class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
-  final PlacesService _placesService = PlacesService(); // Servicio de Google Places
+  final PlacesService _placesService =
+      PlacesService(); // Servicio de Google Places
   final String apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'] ?? '';
 
   SearchDestinationDelegate() : super(searchFieldLabel: 'Buscar un lugar...');
@@ -19,7 +21,10 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
     return [
       IconButton(
         icon: const Icon(Icons.clear),
-        onPressed: () => query = '',  // Limpiar búsqueda
+        onPressed: () {
+          log.d('SearchDestinationDelegate: Buscador limpiado');
+          query = ''; // Limpiar búsqueda
+        },
       ),
     ];
   }
@@ -28,7 +33,10 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
   Widget? buildLeading(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.arrow_back_ios),
-      onPressed: () => close(context, null),  // Cerrar el buscador
+      onPressed: () {
+        log.d('SearchDestinationDelegate: Volviendo atrás desde el buscador');
+        close(context, null); // Cerrar el buscador
+      },
     );
   }
 
@@ -39,22 +47,29 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
 
     // Comprobar si el estado tiene un EcoCityTour asignado
     if (tourState.ecoCityTour == null || tourState.ecoCityTour!.city.isEmpty) {
+      log.w('SearchDestinationDelegate: No se ha seleccionado ninguna ciudad');
       return const Center(child: Text('No se ha seleccionado ninguna ciudad.'));
     }
 
     final String city = tourState.ecoCityTour!.city;
 
+    // Log para la búsqueda que se va a realizar
+    log.i(
+        'SearchDestinationDelegate: Realizando búsqueda en Google Places para: "$query" en la ciudad: "$city"');
+
     // Realizar la búsqueda con la ciudad actual
     return FutureBuilder<Map<String, dynamic>?>(
-      future: _placesService.searchPlace(query, city),  // Pasar la ciudad obtenida del TourBloc
+      future: _placesService.searchPlace(
+          query, city), // Pasar la ciudad obtenida del TourBloc
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          log.d(
+              'SearchDestinationDelegate: Esperando respuesta de Google Places');
           return const Center(child: CircularProgressIndicator());
         }
 
-        final placeData = snapshot.data;
-
-        if (placeData == null) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          log.w('SearchDestinationDelegate: No se encontró el lugar: "$query"');
           // Mostrar un mensaje usando CustomSnackbar
           ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackbar(msg: 'No se encontró dicho lugar.'),
@@ -62,19 +77,25 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
 
           // Usar Future.delayed para cerrar el buscador después de que se complete el ciclo de construcción
           Future.delayed(Duration.zero, () {
-            close(context, null);  // Cerrar el buscador y volver al mapa
+            log.d(
+                'SearchDestinationDelegate: Cerrando el buscador después de no encontrar lugar.');
+            close(context, null); // Cerrar el buscador y volver al mapa
           });
 
           return const SizedBox();
         }
 
+        final placeData = snapshot.data;
+
         // Crear un PointOfInterest con la respuesta de Google Places
         final pointOfInterest = PointOfInterest(
-          gps: LatLng(placeData['location']['lat'], placeData['location']['lng']),
+          gps: LatLng(
+              placeData!['location']['lat'], placeData['location']['lng']),
           name: placeData['name'],
           description: placeData['formatted_address'],
           url: placeData['website'],
-          imageUrl: placeData['photos'] != null && placeData['photos'].isNotEmpty
+          imageUrl: placeData['photos'] != null &&
+                  placeData['photos'].isNotEmpty
               ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${placeData['photos'][0]['photo_reference']}&key=$apiKey'
               : null,
           rating: placeData['rating']?.toDouble(),
@@ -82,15 +103,23 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
           userRatingsTotal: placeData['user_ratings_total'],
         );
 
+        log.i(
+            'SearchDestinationDelegate: POI encontrado y creado: ${pointOfInterest.name}, ${pointOfInterest.address}');
+
         // Disparar el evento para añadir el POI al tour usando el TourBloc
-        BlocProvider.of<TourBloc>(context).add(OnAddPoiEvent(poi: pointOfInterest));
+        BlocProvider.of<TourBloc>(context)
+            .add(OnAddPoiEvent(poi: pointOfInterest));
 
         // Disparar el evento para añadir el marcador en el mapa usando el MapBloc
-        BlocProvider.of<MapBloc>(context).add(OnAddPoiMarkerEvent(pointOfInterest));
+        BlocProvider.of<MapBloc>(context)
+            .add(OnAddPoiMarkerEvent(pointOfInterest));
 
         // Usar Future.delayed para cerrar el buscador después de que se complete el ciclo de construcción
         Future.delayed(Duration.zero, () {
-          close(context, pointOfInterest);  // Cerrar el buscador al seleccionar el resultado
+          log.d(
+              'SearchDestinationDelegate: Cerrando el buscador tras seleccionar un POI.');
+          close(context,
+              pointOfInterest); // Cerrar el buscador al seleccionar el resultado
         });
 
         return const SizedBox();
@@ -100,6 +129,7 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    log.d('SearchDestinationDelegate: Mostrando sugerencias de búsqueda.');
     return const Center(child: Text('Escribe el nombre de un lugar...'));
   }
 }

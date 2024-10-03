@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:project_app/blocs/blocs.dart';
+import 'package:project_app/logger/logger.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/exceptions/exceptions.dart';
 import 'package:project_app/services/services.dart';
@@ -33,6 +33,8 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   }
 
   Future<void> _onLoadTour(LoadTourEvent event, Emitter<TourState> emit) async {
+    log.i(
+        'TourBloc: Loading tour for city: ${event.city}, with ${event.numberOfSites} sites');
     emit(state.copyWith(isLoading: true, hasError: false));
 
     try {
@@ -43,7 +45,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
         userPreferences: event
             .userPreferences, // Mantén las preferencias al obtener los POIs
       );
-
+      log.d('TourBloc: Fetched ${pois.length} POIs for ${event.city}');
       // 2. **Recuperar información adicional de Google Places**
       List<PointOfInterest> updatedPois = [];
       for (PointOfInterest poi in pois) {
@@ -51,6 +53,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
             await PlacesService().searchPlace(poi.name, event.city);
 
         if (placeData != null) {
+          log.d('TourBloc: Updating POI with Google Places data: ${poi.name}');
           final String apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'] ?? '';
           final location = placeData['location'];
 
@@ -90,11 +93,10 @@ class TourBloc extends Bloc<TourEvent, TourState> {
 
       // 4. Emitir el estado con el tour cargado.
       emit(state.copyWith(ecoCityTour: ecoCityTour, isLoading: false));
+      log.i('TourBloc: Successfully loaded tour for ${event.city}');
     } catch (e) {
       if (e is AppException || e is DioException) {
-        if (kDebugMode) {
-          print(e.toString());
-        }
+        log.e('TourBloc: Error loading tour: $e', error: e);
       }
       emit(state.copyWith(isLoading: false, hasError: true));
     }
@@ -103,12 +105,14 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   // Manejo del evento de unirse al tour
   Future<void> _onJoinTour(
       OnJoinTourEvent event, Emitter<TourState> emit) async {
+    log.i('TourBloc: User joined the tour');
     // Cambiar el valor de isJoined al valor contrario
     emit(state.copyWith(isJoined: !state.isJoined));
   }
 
   // Método para añadir un POI
   Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
+    log.i('TourBloc: Adding POI: ${event.poi.name}');
     final ecoCityTour = state.ecoCityTour;
     if (ecoCityTour == null) return;
 
@@ -126,6 +130,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   // Método para eliminar un POI (comprobando que sea o no la ubicación actual)
   Future<void> _onRemovePoi(
       OnRemovePoiEvent event, Emitter<TourState> emit) async {
+    log.i('TourBloc: Removing POI: ${event.poi.name}');
     final ecoCityTour = state.ecoCityTour;
     if (ecoCityTour == null) return;
 
@@ -158,6 +163,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     List<PointOfInterest> pois,
     Emitter<TourState> emit,
   ) async {
+    log.d('TourBloc: Updating tour with ${pois.length} POIs');
     if (pois.isNotEmpty) {
       try {
         // Recalcular la ruta optimizada

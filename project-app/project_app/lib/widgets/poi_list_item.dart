@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_app/logger/logger.dart'; // Importar logger para registrar eventos y errores
 import 'package:project_app/models/models.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/helpers/helpers.dart';
@@ -24,17 +25,21 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
   @override
   void initState() {
     super.initState();
-    _imageWidget = _loadImage();
+    _imageWidget = _loadImage(); // Cargar la imagen del POI o de un asset
   }
 
+  // Método para cargar la imagen del POI o usar un asset en caso de error
   Future<Widget> _loadImage() async {
     // Si la imagen URL no está disponible, cargar la imagen desde assets
     if (widget.poi.imageUrl == null) {
+      log.w(
+          'ExpandablePoiItem: No se encontró imagen para el POI ${widget.poi.name}, usando imagen predeterminada');
       return Image.asset(
         'assets/icon/icon.png',
         fit: BoxFit.cover,
       );
     } else {
+      log.i('ExpandablePoiItem: Cargando imagen desde ${widget.poi.imageUrl}');
       return Image.network(
         widget.poi.imageUrl!,
         fit: BoxFit.cover,
@@ -53,7 +58,11 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
           );
         },
         errorBuilder: (context, error, stackTrace) {
-          // En caso de error de carga, usa la imagen del troll
+          // En caso de error de carga, registrar el error y usar la imagen del troll
+          log.e(
+              'ExpandablePoiItem: Error al cargar la imagen desde ${widget.poi.imageUrl}',
+              error: error,
+              stackTrace: stackTrace);
           return Image.asset(
             'assets/location_troll_bg.png',
             fit: BoxFit.cover,
@@ -118,12 +127,14 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
                             style: const TextStyle(fontSize: 14)),
                       ],
                     ),
+                  // Mostrar solo una parte de la descripción si no está expandido
                   if (!isExpanded && widget.poi.description != null)
                     Text(
                       widget.poi.description!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
+                  // Mostrar la descripción completa si está expandido
                   if (isExpanded && widget.poi.description != null)
                     Text(widget.poi.description!),
                 ],
@@ -131,6 +142,8 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
               onTap: () {
                 setState(() {
                   isExpanded = !isExpanded; // Alternar expansión
+                  log.i(
+                      'ExpandablePoiItem: Descripción de ${widget.poi.name} ${isExpanded ? "expandida" : "colapsada"}');
                 });
               },
             ),
@@ -141,6 +154,9 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
             padding: const EdgeInsets.all(0),
             constraints: const BoxConstraints(),
             onPressed: () {
+              log.i(
+                  'ExpandablePoiItem: Eliminando POI ${widget.poi.name} del EcoCityTour');
+
               // Mostrar el mensaje de carga antes de eliminar
               LoadingMessageHelper.showLoadingMessage(context);
 

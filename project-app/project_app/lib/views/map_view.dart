@@ -12,13 +12,11 @@ class MapView extends StatelessWidget {
   final Set<Polyline> polylines;
   final Set<Marker> markers;
 
-
-  const MapView({
-    super.key, 
-    required this.initialPosition, 
-    required this.polylines, 
-    required this.markers
-  });
+  const MapView(
+      {super.key,
+      required this.initialPosition,
+      required this.polylines,
+      required this.markers});
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +53,8 @@ class MapView extends StatelessWidget {
             polylines: polylines,
             markers: markers,
             // Se utiliza para no generar tantas peticiones al mover el mapa.
+            //TODO aquí hay que poner que vaya al primer POI
             onCameraMove: (position) => mapBloc.mapCenter = position.target,
-
           ),
         ));
   }

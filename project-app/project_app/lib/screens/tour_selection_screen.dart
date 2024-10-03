@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project_app/helpers/helpers.dart';
-// Importar el helper de iconos
+import 'package:project_app/logger/logger.dart'; // Importar logger para registrar eventos
+import 'package:project_app/helpers/helpers.dart'; // Importar el helper de iconos
 import 'package:project_app/screens/screens.dart';
 import '../blocs/blocs.dart';
 
@@ -77,6 +77,8 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                   setState(() {
                     selectedPlace = value;
                   });
+                  log.i(
+                      'TourSelectionScreen: Lugar seleccionado: $selectedPlace');
                 },
                 decoration: InputDecoration(
                   hintText: 'Introduce un lugar',
@@ -106,6 +108,8 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                   setState(() {
                     numberOfSites = value;
                   });
+                  log.i(
+                      'TourSelectionScreen: Número de sitios seleccionado: ${numberOfSites.round()}');
                 },
                 activeColor: Theme.of(context).primaryColor,
                 inactiveColor: Theme.of(context).primaryColor.withOpacity(0.8),
@@ -129,6 +133,8 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                       }
                       selectedMode = index == 0 ? 'walking' : 'cycling';
                     });
+                    log.i(
+                        'TourSelectionScreen: Modo de transporte seleccionado: $selectedMode');
                   },
                   children: [
                     Padding(
@@ -202,6 +208,8 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                           selectedPreferences[key] =
                               selected; // Actualizamos el estado
                         });
+                        log.i(
+                            'TourSelectionScreen: Preferencia "$key" seleccionada: $selected');
                       },
                     );
                   }).toList(),
@@ -222,10 +230,14 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                   // Para evitar copiar tanto texto voy a poner Salamanca por defecto.
                   if (selectedPlace.isEmpty) {
                     selectedPlace = 'Salamanca, España';
+                    log.w(
+                        'TourSelectionScreen: Lugar vacío, usando "Salamanca, España" por defecto.');
                   }
 
                   // Mostrar diálogo de carga
                   LoadingMessageHelper.showLoadingMessage(context);
+                  log.i(
+                      'TourSelectionScreen: Solicitando tour en $selectedPlace con $numberOfSites sitios.');
 
                   // Dispara el evento para cargar el tour
                   BlocProvider.of<TourBloc>(context).add(LoadTourEvent(
@@ -246,6 +258,9 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                       // Cerrar el mensaje de carga
                       Navigator.of(context).pop(); // Cierra el diálogo de carga
 
+                      log.i(
+                          'TourSelectionScreen: Tour cargado exitosamente, navegando al mapa.');
+
                       // Navegar a la pantalla del mapa solo si el estado tiene un EcoCityTour cargado
                       Navigator.push(
                         context,
@@ -260,6 +275,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                       Navigator.of(context).pop();
 
                       // Mostrar un error al usuario
+                      log.e('TourSelectionScreen: Error al cargar el tour.');
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Error al cargar el tour'),

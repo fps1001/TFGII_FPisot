@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:project_app/logger/logger.dart'; // Importar logger para registrar eventos y errores
 import 'package:project_app/models/models.dart';
 import 'package:project_app/blocs/tour/tour_bloc.dart'; // Importa el bloc correcto
 
@@ -39,7 +40,12 @@ class CustomBottomSheet extends StatelessWidget {
                 placeholder: (context, url) => const Center(
                   child: CircularProgressIndicator(),
                 ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+                errorWidget: (context, url, error) {
+                  // Registrar si hay un error al cargar la imagen
+                  log.e(
+                      'CustomBottomSheet: Error al cargar la imagen desde $url');
+                  return const Icon(Icons.error);
+                },
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 200.0,
@@ -64,41 +70,7 @@ class CustomBottomSheet extends StatelessWidget {
                 ),
               ],
             ),
-/*          const SizedBox(height: 10.0),
-
-           // Coordenadas del POI
-          Row(
-            children: [
-              const Icon(Icons.map, color: Colors.blueAccent),
-              const SizedBox(width: 8.0),
-              Text(
-                'LatLng(${poi.gps.latitude}, ${poi.gps.longitude})',
-                style: const TextStyle(fontSize: 16.0),
-              ),
-            ],
-          ), */
           const SizedBox(height: 10.0),
-
-          /* // Estado de negocio (operacional, cerrado, etc.)
-          if (poi.businessStatus != null)
-            Row(
-              children: [
-                const Icon(Icons.store, color: Colors.green),
-                const SizedBox(width: 8.0),
-                Text(
-                  poi.businessStatus == 'OPERATIONAL' ? 'Abierto' : 'Cerrado',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: poi.businessStatus == 'OPERATIONAL'
-                        ? Colors.green
-                        : Colors.red,
-                  ),
-                ),
-              ],
-            ),
-
-          const SizedBox(height: 10.0), */
 
           // Rating del POI si está disponible
           if (poi.rating != null && poi.rating! > 0) ...[
@@ -144,10 +116,18 @@ class CustomBottomSheet extends StatelessWidget {
             GestureDetector(
               onTap: () async {
                 final Uri url = Uri.parse(poi.url!);
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                } else {
-                  throw 'No se pudo abrir el enlace $url';
+                // Intentar abrir el enlace y registrar los errores si ocurren
+                try {
+                  if (await canLaunchUrl(url)) {
+                    log.i('CustomBottomSheet: Abriendo enlace $url');
+                    await launchUrl(url);
+                  } else {
+                    log.e('CustomBottomSheet: No se pudo abrir el enlace $url');
+                    throw 'No se pudo abrir el enlace $url';
+                  }
+                } catch (e) {
+                  log.e('CustomBottomSheet: Error al intentar abrir el enlace',
+                      error: e);
                 }
               },
               child: const Text(
@@ -168,14 +148,18 @@ class CustomBottomSheet extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 // Dispara el evento para eliminar el POI
-                BlocProvider.of<TourBloc>(context).add(OnRemovePoiEvent(poi: poi));
+                log.i(
+                    'CustomBottomSheet: Eliminando POI ${poi.name} del EcoCityTour');
+                BlocProvider.of<TourBloc>(context)
+                    .add(OnRemovePoiEvent(poi: poi));
 
                 // Cierra el bottom sheet
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25.0),
                 ),

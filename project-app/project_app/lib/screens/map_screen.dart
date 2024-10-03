@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:project_app/logger/logger.dart'; // Importar logger para registrar eventos
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/screens/screens.dart';
 import 'package:project_app/ui/ui.dart';
-
 import 'package:project_app/views/views.dart';
 import 'package:project_app/widgets/widgets.dart';
 
@@ -35,6 +35,10 @@ class _MapScreenState extends State<MapScreen> {
 
     // Inicializa la carga de puntos de interés (POIs) cuando se inicia la pantalla, pero después de que se haya iniciado la localización.
     _loadRouteAndPois = _initializeRouteAndPois();
+
+    // Log para el inicio del mapa con el tour
+    log.i(
+        'MapScreen: Iniciando la pantalla del mapa para el EcoCityTour en ${widget.tour.city}');
   }
 
   @override
@@ -43,6 +47,7 @@ class _MapScreenState extends State<MapScreen> {
       appBar: CustomAppBar(
         title: 'Eco City Tour',
         onBackPressed: () {
+          //TODO si se elimina un POI desde el resumen esto ya no va a funcionar. Buscar solución!
           // Limpiamos el estado del TourBloc al regresar
           BlocProvider.of<TourBloc>(context).add(const ResetTourEvent());
           // Luego, navegamos atrás
@@ -53,6 +58,7 @@ class _MapScreenState extends State<MapScreen> {
           IconButton(
             icon: const Icon(Icons.list),
             onPressed: () {
+              log.i('MapScreen: Abriendo resumen del EcoCityTour');
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => TourSummary(tour: widget.tour),
@@ -74,6 +80,7 @@ class _MapScreenState extends State<MapScreen> {
               if (mounted) {
                 // Verificar si el widget sigue montado
                 LoadingMessageHelper.showLoadingMessage(context);
+                log.i('MapScreen: Cargando la ruta y los POIs...');
               }
             });
             return const SizedBox(); // Devolvemos un widget vacío mientras se muestra el diálogo
@@ -84,6 +91,7 @@ class _MapScreenState extends State<MapScreen> {
               // Verificar si el widget sigue montado
               Navigator.of(context).pop(); // Cerrar el diálogo si hay un error
             }
+            log.e('MapScreen: Error al cargar la ruta: ${snapshot.error}');
             return const Center(
                 child: Text(
               'Error al cargar la ruta',
@@ -100,6 +108,7 @@ class _MapScreenState extends State<MapScreen> {
               if (mounted) {
                 // Verificar si el widget sigue montado
                 Navigator.of(context).pop(); // Cerrar el mensaje de carga
+                log.i('MapScreen: Ruta y POIs cargados correctamente.');
               }
             });
           }
@@ -218,6 +227,7 @@ class _MapScreenState extends State<MapScreen> {
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
     // Pinta la nueva polilínea en el mapa usando el MapBloc
+    log.i('MapScreen: Dibujando la ruta optimizada en el mapa.');
     await mapBloc.drawEcoCityTour(widget.tour);
   }
 
@@ -229,6 +239,8 @@ class _MapScreenState extends State<MapScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackbar(msg: 'No se encontró la ubicación actual.'),
       );
+      log.w(
+          'MapScreen: Intento fallido de unirse al EcoCityTour, no se encontró la ubicación actual.');
       return;
     }
 
@@ -242,6 +254,8 @@ class _MapScreenState extends State<MapScreen> {
       rating: 5.0,
     );
 
+    log.i('MapScreen: Añadiendo la ubicación actual al EcoCityTour como POI.');
+
     // Añadir el POI al TourBloc
     BlocProvider.of<TourBloc>(context).add(OnAddPoiEvent(poi: newPoi));
 
@@ -252,6 +266,8 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     locationBloc.stopFollowingUser();
+    log.i(
+        'MapScreen: Deteniendo el seguimiento de ubicación y saliendo de la pantalla del mapa.');
     super.dispose();
   }
 }

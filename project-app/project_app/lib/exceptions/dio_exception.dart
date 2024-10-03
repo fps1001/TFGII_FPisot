@@ -1,43 +1,51 @@
-// lib/exceptions/dio_exceptions.dart
 import 'app_exception.dart';
 import 'package:dio/dio.dart';
+import 'package:project_app/logger/logger.dart'; // Importar logger
 
 class DioExceptions {
   static AppException handleDioError(DioException error, {String? url}) {
+    // Log del error recibido por Dio antes de procesarlo
+    log.e(
+        'DioExceptions: Error de tipo ${error.type}, mensaje: ${error.message}, URL: $url');
+
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
-        return FetchDataException("Connection timed out", url: url);
+        return FetchDataException("Tiempo de conexión agotado", url: url);
       case DioExceptionType.sendTimeout:
-        return FetchDataException("Send request timed out", url: url);
+        return FetchDataException("Tiempo de envío agotado", url: url);
       case DioExceptionType.receiveTimeout:
-        return FetchDataException("Receive response timed out", url: url);
+        return FetchDataException("Tiempo de recepción agotado", url: url);
       case DioExceptionType.badResponse:
         return _handleHttpResponseError(error, url: url);
       case DioExceptionType.cancel:
-        return AppException("Request to the server was cancelled", url: url);
+        return AppException("La solicitud al servidor fue cancelada", url: url);
       case DioExceptionType.unknown:
-        return FetchDataException("No Internet connection", url: url);
+        return FetchDataException("Sin conexión a Internet", url: url);
       default:
-        return AppException("Unexpected error occurred", url: url);
+        return AppException("Ocurrió un error inesperado", url: url);
     }
   }
 
   static AppException _handleHttpResponseError(DioException error,
       {String? url}) {
     int? statusCode = error.response?.statusCode;
+
+    // Log del estado HTTP y la URL en caso de error de respuesta
+    log.e('DioExceptions: Error HTTP $statusCode para la URL: $url');
+
     switch (statusCode) {
       case 400:
-        return BadRequestException("Bad request", url: url);
+        return BadRequestException("Solicitud incorrecta", url: url);
       case 401:
-        return UnauthorizedException("Unauthorized", url: url);
+        return UnauthorizedException("No autorizado", url: url);
       case 403:
-        return AppException("Forbidden", url: url);
+        return AppException("Prohibido", url: url);
       case 404:
-        return AppException("Resource not found", url: url);
+        return AppException("Recurso no encontrado", url: url);
       case 500:
-        return AppException("Internal server error", url: url);
+        return AppException("Error interno del servidor", url: url);
       default:
-        return AppException("Received invalid status code: $statusCode",
+        return AppException("Código de estado inválido recibido: $statusCode",
             url: url);
     }
   }

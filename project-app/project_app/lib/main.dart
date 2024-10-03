@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,15 +6,15 @@ import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/screens/screens.dart';
 import 'package:project_app/services/services.dart';
 import 'package:project_app/themes/themes.dart';
+import 'package:project_app/logger/logger.dart';
 
 void main() async {
   Bloc.observer = MyBlocObserver();
   try {
     await dotenv.load(fileName: '.env');
+    log.i('Variables de entorno cargadas');
   } catch (e) {
-    if (kDebugMode) {
-      print("Error específico: $e");
-    }
+    log.e("Error en archivo .env: $e");
   }
 
   runApp(MultiBlocProvider(
@@ -41,7 +40,6 @@ void main() async {
   ));
 }
 
-//TODO EL Foco al recalcular una ruta debería ir al primer POI en vez de a la ubicación del usuario.
 class ProjectApp extends StatelessWidget {
   const ProjectApp({super.key});
 

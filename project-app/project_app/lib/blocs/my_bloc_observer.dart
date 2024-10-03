@@ -1,52 +1,43 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
+import 'package:project_app/logger/logger.dart';
 
+// Ahora con logger.
+// Pongo creación y cerrar en información y los demás en debug.
 class MyBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-    if (kDebugMode) {
-      print('onCreate -- ${bloc.runtimeType}');
-    }
+    log.i('onCreate -- ${bloc.runtimeType}');
   }
 
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    if (kDebugMode) {
-      print('onEvent -- ${bloc.runtimeType}, $event');
-    }
+    log.d('onEvent -- ${bloc.runtimeType}, $event');
   }
 
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    if (kDebugMode) {
-      print('onChange -- ${bloc.runtimeType}, $change');
-    }
+    log.d('onChange -- ${bloc.runtimeType}, $change');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    if (kDebugMode) {
-      print('onTransition -- ${bloc.runtimeType}, $transition');
-    }
+    log.d('onTransition -- ${bloc.runtimeType}, $transition');
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    if (kDebugMode) {
-      print('onError -- ${bloc.runtimeType}, $error');
-    }
+    log.e('onError -- ${bloc.runtimeType}, $error',
+        error: error, stackTrace: stackTrace);
     super.onError(bloc, error, stackTrace);
   }
 
   @override
   void onClose(BlocBase bloc) {
     super.onClose(bloc);
-    if (kDebugMode) {
-      print('onClose -- ${bloc.runtimeType}');
-    }
+    log.i('onClose -- ${bloc.runtimeType}');
   }
 }

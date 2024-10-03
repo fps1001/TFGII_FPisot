@@ -1,9 +1,13 @@
+import 'package:project_app/logger/logger.dart'; // Importar logger para registrar errores
+
 class AppException implements Exception {
   final String message;
   final String? prefix;
   final String? url;
 
-  AppException(this.message, {this.prefix, this.url});
+  AppException(this.message, {this.prefix, this.url}) {
+    log.e('$prefix$message${url != null ? ' (URL: $url)' : ''}');
+  }
 
   @override
   String toString() {
@@ -13,20 +17,20 @@ class AppException implements Exception {
 
 class FetchDataException extends AppException {
   FetchDataException(super.message, {super.url})
-      : super(prefix: "Error during communication: ");
+      : super(prefix: "Error en la comunicación: ");
 }
 
 class BadRequestException extends AppException {
   BadRequestException(super.message, {super.url})
-      : super(prefix: "Invalid Request: ");
+      : super(prefix: "Solicitud incorrecta: ");
 }
 
 class UnauthorizedException extends AppException {
   UnauthorizedException(super.message, {super.url})
-      : super(prefix: "Unauthorized: ");
+      : super(prefix: "No autorizado: ");
 }
 
 class InvalidInputException extends AppException {
   InvalidInputException(super.message, {super.url})
-      : super(prefix: "Invalid Input: ");
+      : super(prefix: "Entrada no válida: ");
 }

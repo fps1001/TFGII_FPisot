@@ -10,7 +10,7 @@ class LoadingMessageHelper {
             title: Text('Espere por favor',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColorDark,
+                  color: Theme.of(context).primaryColor,
                 )),
             content: Container(
               width: 100,
@@ -24,7 +24,7 @@ class LoadingMessageHelper {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColorDark,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   const SizedBox(

@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:project_app/logger/logger.dart'; // Importar logger para registrar errores
 import 'package:project_app/models/models.dart';
 
 class GeminiService {
@@ -17,6 +17,9 @@ class GeminiService {
     String geminiApi = dotenv.env['GEMINI_API_KEY'] ?? '';
 
     if (geminiApi.isEmpty) {
+      // Se registra el error si no se encuentra la clave API
+      log.e(
+          'GeminiService: No se encontró la variable de entorno \$GEMINI_API_KEY');
       if (kDebugMode) {
         print('No \$GEMINI_API_KEY environment variable');
       }
@@ -105,13 +108,15 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
     final response = await chat.sendMessage(content);
 
     if (response.text == null) {
+      // Log si el modelo no da respuesta
+      log.w('GeminiService: No se recibió respuesta del modelo.');
       if (kDebugMode) {
         print('No response from the model.');
       }
       return [];
     }
 
-// Parsear la respuesta JSON para crear la lista de PointOfInterest
+    // Parsear la respuesta JSON para crear la lista de PointOfInterest
     List<PointOfInterest> pointsOfInterest = [];
 
     try {
@@ -132,7 +137,11 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
           imageUrl: poiJson['url_img'], */
         );
       }).toList();
-    } catch (e) {
+      log.i(
+          'GeminiService: Se obtuvieron ${pointsOfInterest.length} puntos de interés en $city');
+    } catch (e, stackTrace) {
+      log.e('GeminiService: Error al parsear la respuesta JSON',
+          error: e, stackTrace: stackTrace);
       if (kDebugMode) {
         print('Error parsing response: $e');
       }
