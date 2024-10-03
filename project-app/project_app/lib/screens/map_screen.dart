@@ -47,11 +47,16 @@ class _MapScreenState extends State<MapScreen> {
       appBar: CustomAppBar(
         title: 'Eco City Tour',
         onBackPressed: () {
-          //TODO si se elimina un POI desde el resumen esto ya no va a funcionar. Buscar solución!
+          log.i('MapScreen: Regresando a la selección de EcoCityTour.');
           // Limpiamos el estado del TourBloc al regresar
           BlocProvider.of<TourBloc>(context).add(const ResetTourEvent());
-          // Luego, navegamos atrás
-          Navigator.of(context).pop();
+          // Luego, navegamos atrás quitando todas las pantallas anteriores.
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const TourSelectionScreen()),
+            (route) => false, // Remueve todas las pantallas anteriores
+            //todo no funciona el retorno
+          );
         },
         // Botón de resumen
         actions: [
@@ -181,9 +186,9 @@ class _MapScreenState extends State<MapScreen> {
                         builder: (context, tourState) {
                           if (!tourState.isJoined) {
                             return Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
+                              bottom: 20,
+                              left: 32,
+                              right: 32,
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: MaterialButton(

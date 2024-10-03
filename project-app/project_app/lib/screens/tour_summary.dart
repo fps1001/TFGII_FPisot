@@ -55,13 +55,12 @@ class TourSummary extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        // TODO Cambiar a números amigables, desde segundos y metros.
                         const SizedBox(height: 8),
-                        Text('Distancia: ${tour.distance.round()} m.',
+                        Text('Distancia: ${formatDistance(tour.distance)}',
                             style: const TextStyle(fontSize: 16)),
                         const SizedBox(height: 4),
                         Text(
-                            'Duración: ${tour.duration.round() / 60} minutos', // Eliminamos los decimales
+                            'Duración: ${formatDuration(tour.duration.toInt())}', // Eliminamos los decimales
                             style: const TextStyle(fontSize: 16)),
                         const SizedBox(height: 4),
 
@@ -121,5 +120,25 @@ class TourSummary extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String formatDuration(int seconds) {
+    int hours = seconds ~/ 3600;
+    int minutes = (seconds % 3600) ~/ 60;
+
+    if (hours > 0) {
+      return '$hours horas $minutes minutos';
+    } else {
+      return '$minutes minutos';
+    }
+  }
+
+  String formatDistance(double meters) {
+    if (meters >= 1000) {
+      double kilometers = meters / 1000;
+      return '${kilometers.toStringAsFixed(1)} km';
+    } else {
+      return '${meters.round()} m';
+    }
   }
 }

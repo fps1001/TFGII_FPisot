@@ -10,8 +10,7 @@ import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/ui/ui.dart'; // Para usar el CustomSnackbar
 
 class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
-  final PlacesService _placesService =
-      PlacesService(); // Servicio de Google Places
+  final PlacesService _placesService = PlacesService(); // Servicio de Google Places
   final String apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'] ?? '';
 
   SearchDestinationDelegate() : super(searchFieldLabel: 'Buscar un lugar...');
@@ -53,44 +52,35 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
 
     final String city = tourState.ecoCityTour!.city;
 
-    // Log para la búsqueda que se va a realizar
     log.i(
         'SearchDestinationDelegate: Realizando búsqueda en Google Places para: "$query" en la ciudad: "$city"');
 
-    // Realizar la búsqueda con la ciudad actual
+    // Retornar un FutureBuilder para esperar los resultados de la búsqueda
     return FutureBuilder<Map<String, dynamic>?>(
-      future: _placesService.searchPlace(
-          query, city), // Pasar la ciudad obtenida del TourBloc
+      future: _placesService.searchPlace(query, city),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          log.d(
-              'SearchDestinationDelegate: Esperando respuesta de Google Places');
           return const Center(child: CircularProgressIndicator());
         }
 
         if (!snapshot.hasData || snapshot.data == null) {
-          log.w('SearchDestinationDelegate: No se encontró el lugar: "$query"');
-          // Mostrar un mensaje usando CustomSnackbar
-          ScaffoldMessenger.of(context).showSnackBar(
-            CustomSnackbar(msg: 'No se encontró dicho lugar.'),
-          );
-
-          // Usar Future.delayed para cerrar el buscador después de que se complete el ciclo de construcción
-          Future.delayed(Duration.zero, () {
-            log.d(
-                'SearchDestinationDelegate: Cerrando el buscador después de no encontrar lugar.');
+          // Mostrar snackbar antes de cerrar el buscador
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (ScaffoldMessenger.of(context).mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackbar(msg: 'No se encontró dicho lugar.'),
+              );
+            }
             close(context, null); // Cerrar el buscador y volver al mapa
           });
-
           return const SizedBox();
         }
 
-        final placeData = snapshot.data;
-
         // Crear un PointOfInterest con la respuesta de Google Places
+        final placeData = snapshot.data!;
         final pointOfInterest = PointOfInterest(
           gps: LatLng(
-              placeData!['location']['lat'], placeData['location']['lng']),
+              placeData['location']['lat'], placeData['location']['lng']),
           name: placeData['name'],
           description: placeData['formatted_address'],
           url: placeData['website'],
@@ -106,20 +96,15 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
         log.i(
             'SearchDestinationDelegate: POI encontrado y creado: ${pointOfInterest.name}, ${pointOfInterest.address}');
 
-        // Disparar el evento para añadir el POI al tour usando el TourBloc
+        // Agregar el POI al estado del TourBloc y al MapBloc inmediatamente
         BlocProvider.of<TourBloc>(context)
             .add(OnAddPoiEvent(poi: pointOfInterest));
-
-        // Disparar el evento para añadir el marcador en el mapa usando el MapBloc
         BlocProvider.of<MapBloc>(context)
             .add(OnAddPoiMarkerEvent(pointOfInterest));
 
-        // Usar Future.delayed para cerrar el buscador después de que se complete el ciclo de construcción
-        Future.delayed(Duration.zero, () {
-          log.d(
-              'SearchDestinationDelegate: Cerrando el buscador tras seleccionar un POI.');
-          close(context,
-              pointOfInterest); // Cerrar el buscador al seleccionar el resultado
+        // Cerrar el buscador tras seleccionar el POI
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          close(context, pointOfInterest);
         });
 
         return const SizedBox();
