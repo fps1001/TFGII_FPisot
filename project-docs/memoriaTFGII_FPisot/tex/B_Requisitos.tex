@@ -32,9 +32,34 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 \end{table}
 
 \section{Objetivos generales}
-
+La misión fundamental de este proyecto persigue conseguir los siguientes propósitos:
+\begin{itemize}
+	\item Desarrollar una aplicación útil para el usuario que consiga proporcionar información valiosa a la hora de realizar turismo sostenible en una ciudad.
+	\
+\end{itemize}
 \section{Catálogo de requisitos}
-
+\subsection{Requisitos funcionales}
+\begin{itemize}
+	\item \textbf{RF-1 Solicitar permisos de uso de GPS:} Eco City Tours utiliza la posición del dispositivo y el usuario debe garantizar el permiso de uso.
+	\item \textbf{RF-2 Solicitud de activación de GPS:} Eco City Tours debe detectar que se ha desactivado el GPS y solicitar su activación para el uso de la aplicación.
+	\item \textbf{RF-3 Activación/Desactivación de seguimiento de usuario:} se debe mostrar el camino seguido por el usuario sobre el mapa siempre que así lo indique, dicho seguimiento se puede activar y desactivar a petición en cualquier momento.
+	\item \textbf{RF-4 Centrar la situación actual del usuario sobre mapa:} se debe mover la vista del mapa a la ubicación actual del usuario a petición del mismo. También se puede dejar fija la ubicación del usuario en el centro del mapa.
+	\item \textbf{RF-5 Selección de Tour:} El usuario rellenará sus preferencias en una pantalla formulario para indicar qué ciudad quiere visitar, los puntos de interés que quiere o sus gustos al viajar.
+	\item \textbf{RF-6 Calculo de información a través de un \acrfull{llm}: la aplicación debe proporcionar información de \acrfull{pdi} según los criterios introducidos.
+	\item \textbf{RF-7 Eliminación de \acrshort{pdi}}: el usuario podrá eliminar los lugares que no quiera visitar lo que recalculará la ruta óptima de nuevo.
+	\item \textbf{RF-8 Cálculo de ruta optimizada}: el Eco City Tour que una los \acrshort{pdi} tiene que seguir una ruta adaptada al medio de transporte elegido por el usuario siendo el más corto posible.
+	\item \textbf{RF-9 Capacidad de añadir un \acrshort{pdi}:} el usuario podrá introducir el texto de un lugar que conozca para agregar dicho lugar a su ruta.
+	\item \textbf{RF-10 Unirse a Eco City Tour:} el usuario podrá unirse a la ruta calculada cuando así lo requiera, calculando para ello una ruta que lo una de la manera más corta posible a dicho tour.
+	
+	
+\end{itemize}
+\subsection{Requisitos no funcionales}
+\begin{itemize}
+	\item \textbf{RNF-1 Rendimiento:} la aplicación debe ...  
+	\item \textbf{RNF-2 Usabilidad:} Eco City Tours debe ser intuitiva y fácil de entender y utilizar.  
+	\item \textbf{RNF-4 Disponibilidad:} la aplicación debe estar disponible el mayor tiempo posible.
+	\item \textbf{RNF-5 Mantenibilidad:} la aplicación debe ser fácilmente modificable.
+\end{itemize}
 \section{Especificación de requisitos}
 
 
