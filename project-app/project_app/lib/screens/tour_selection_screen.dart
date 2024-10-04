@@ -22,6 +22,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
     true,
     false
   ]; // Estado del ToggleButton del transporte
+  double maxTimeInMinutes = 90;
 
   // **Mapa para almacenar el estado de selección de preferencias**
   final Map<String, bool> selectedPreferences = {
@@ -71,7 +72,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Campo de texto para el lugar
+              //* Campo de texto para el lugar
               TextField(
                 onChanged: (value) {
                   setState(() {
@@ -89,7 +90,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
 
-              // SELECCIÓN DE NÚMERO DE SITIOS (SLIDER)
+              //* SELECCIÓN DE NÚMERO DE SITIOS (SLIDER)
               const SizedBox(height: 30),
               Text(
                 '¿Cuántos sitios te gustaría visitar?',
@@ -98,24 +99,36 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
               const SizedBox(height: 10),
 
               // Slider para seleccionar el número de sitios (2 a 8)
-              Slider(
-                value: numberOfSites,
-                min: 2,
-                max: 8,
-                divisions: 6, // Cada paso representa un sitio
-                label: numberOfSites.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    numberOfSites = value;
-                  });
-                  log.i(
-                      'TourSelectionScreen: Número de sitios seleccionado: ${numberOfSites.round()}');
-                },
-                activeColor: Theme.of(context).primaryColor,
-                inactiveColor: Theme.of(context).primaryColor.withOpacity(0.8),
+              // Mostrar los extremos del slider en la misma línea
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('2', style: Theme.of(context).textTheme.headlineSmall),
+                  Expanded(
+                    // Hacer que el slider ocupe el espacio restante
+                    child: Slider(
+                      value: numberOfSites,
+                      min: 2,
+                      max: 8,
+                      divisions: 6, // Cada paso representa un sitio
+                      label: numberOfSites.round().toString(),
+                      onChanged: (double value) {
+                        setState(() {
+                          numberOfSites = value;
+                        });
+                        log.i(
+                            'TourSelectionScreen: Número de sitios seleccionado: ${numberOfSites.round()}');
+                      },
+                      activeColor: Theme.of(context).primaryColor,
+                      inactiveColor:
+                          Theme.of(context).primaryColor.withOpacity(0.8),
+                    ),
+                  ),
+                  Text('8', style: Theme.of(context).textTheme.headlineSmall),
+                ],
               ),
 
-              // SELECCIÓN DE MEDIO DE TRANSPORTE
+              //* SELECCIÓN DE MEDIO DE TRANSPORTE
               const SizedBox(height: 20),
               Text(
                 'Selecciona tu modo de transporte',
@@ -149,7 +162,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                 ),
               ),
 
-              // SELECCIÓN DE PREFERENCIAS DEL USUARIO (CHIPS)
+              //* SELECCIÓN DE PREFERENCIAS DEL USUARIO (CHIPS)
               const SizedBox(height: 30),
               Text(
                 '¿Cuáles son tus intereses?',
@@ -216,7 +229,42 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                 ),
               ),
 
-              // BOTÓN DE PETICIÓN DE TOUR
+              //* SELECCIÓN DE TIEMPO MÁXIMO PARA LA RUTA (SLIDER)
+              const SizedBox(height: 15),
+              Text(
+                'Tiempo máximo para la ruta (en minutos):',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 5),
+
+              Row(
+                children: [
+                  Text('15m', style: Theme.of(context).textTheme.headlineSmall),
+                  Expanded(
+                    child: Slider(
+                      value: maxTimeInMinutes,
+                      min: 15,
+                      max: 180, // Máximo 3 horas
+                      divisions: 11, // Cada paso representa 15 minutos
+                      label: formatTime(maxTimeInMinutes)
+                          .toString(), // Mostrar horas y minutos formateados
+                      onChanged: (double value) {
+                        setState(() {
+                          maxTimeInMinutes = value;
+                        });
+                        log.i(
+                            'TourSelectionScreen: Tiempo máximo de ruta seleccionado: ${maxTimeInMinutes.round()} minutos');
+                      },
+                      activeColor: Theme.of(context).primaryColor,
+                      inactiveColor:
+                          Theme.of(context).primaryColor.withOpacity(0.8),
+                    ),
+                  ),
+                  Text('3h', style: Theme.of(context).textTheme.headlineSmall),
+                ],
+              ),
+
+              //* BOTÓN DE PETICIÓN DE TOUR
               const SizedBox(height: 50),
               MaterialButton(
                 minWidth: MediaQuery.of(context).size.width - 60,
@@ -241,14 +289,14 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
 
                   // Dispara el evento para cargar el tour
                   BlocProvider.of<TourBloc>(context).add(LoadTourEvent(
-                    mode: selectedMode,
-                    city: selectedPlace,
-                    numberOfSites: numberOfSites.round(),
-                    userPreferences: selectedPreferences.entries
-                        .where((entry) => entry.value == true)
-                        .map((entry) => entry.key)
-                        .toList(),
-                  ));
+                      mode: selectedMode,
+                      city: selectedPlace,
+                      numberOfSites: numberOfSites.round(),
+                      userPreferences: selectedPreferences.entries
+                          .where((entry) => entry.value == true)
+                          .map((entry) => entry.key)
+                          .toList(),
+                      maxTime: 60));
 
                   // Escucha los cambios en el estado del TourBloc
                   BlocProvider.of<TourBloc>(context).stream.listen((tourState) {
@@ -298,5 +346,22 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
         ),
       ),
     );
+  }
+
+  String formatTime(double minutes) {
+    final hours = minutes ~/ 60;
+    final mins = minutes % 60;
+
+    if (hours == 0) {
+      return '${mins.round()}m'; // Solo mostrar minutos si es menos de una hora
+    } else if (hours == 1 && mins == 0) {
+      return '1 hora'; // Mostrar "1 hora" si es exactamente una hora
+    } else if (hours == 1) {
+      return '1 hora ${mins.round()}m'; // "1 hora" en singular con minutos
+    } else if (mins == 0) {
+      return '$hours horas'; // Mostrar solo horas si no hay minutos
+    } else {
+      return '$hours horas ${mins.round()}m'; // Mostrar horas y minutos
+    }
   }
 }

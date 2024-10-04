@@ -2,25 +2,32 @@ import 'package:flutter/material.dart';
 
 class LoadingMessageHelper {
   static void showLoadingMessage(BuildContext context) {
-    // Android
     showDialog(
         context: context,
-        barrierDismissible: false, // Para que lo pueda quitar el usuario.
+        barrierDismissible:
+            false, // Evita que el usuario lo cierre accidentalmente.
         builder: (context) => AlertDialog(
-            title: Text('Espere por favor',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
-                )),
-            content: Container(
-              width: 100,
-              height: 100,
-              margin: const EdgeInsets.only(top: 10),
+            title: Text(
+              'Espere por favor',
+              textAlign: TextAlign.center, // Centrar el título
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            content: IntrinsicHeight(
+              // Dejar que el contenido se ajuste a su tamaño natural
               child: Column(
+                mainAxisSize:
+                    MainAxisSize.min, // Adaptar la altura según el contenido
+                mainAxisAlignment: MainAxisAlignment
+                    .center, // Centrar el contenido verticalmente
+                crossAxisAlignment:
+                    CrossAxisAlignment.center, // Centrar horizontalmente
                 children: [
                   Text(
-                    'Trabajando en tu Eco City Tour',
-                    textAlign: TextAlign.center,
+                    'Trabajando en tu\nEco City Tour',
+                    textAlign: TextAlign.center, // Centrar el texto
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -28,18 +35,14 @@ class LoadingMessageHelper {
                     ),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 20, // Espacio entre el texto y el indicador
                   ),
                   CircularProgressIndicator(
                     strokeWidth: 3,
                     color: Theme.of(context).primaryColor,
-                  )
+                  ),
                 ],
               ),
             )));
-    return;
   }
 }
-// Muestra un mensaje de carga.
-
-

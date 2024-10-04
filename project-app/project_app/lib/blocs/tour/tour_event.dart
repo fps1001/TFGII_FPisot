@@ -12,17 +12,19 @@ class LoadTourEvent extends TourEvent {
   final String city;
   final int numberOfSites;
   final List<String> userPreferences;
-  final String mode; 
+  final String mode;
+  final double maxTime;
 
-  const LoadTourEvent({
-    required this.city,
-    required this.numberOfSites,
-    required this.userPreferences,
-    required this.mode, 
-  });
+  const LoadTourEvent(
+      {required this.city,
+      required this.numberOfSites,
+      required this.userPreferences,
+      required this.mode,
+      required this.maxTime});
 
   @override
-  List<Object> get props => [city, numberOfSites, userPreferences, mode];
+  List<Object> get props =>
+      [city, numberOfSites, userPreferences, mode, maxTime];
 }
 
 // Evento que se dispara cuando se añade un punto de interés al recorrido.

@@ -11,6 +11,7 @@ class GeminiService {
     required String city,
     required int nPoi,
     required List<String> userPreferences,
+    required double maxTime,
   }) async {
     // Fetch data from Gemini API
     await dotenv.load();
@@ -86,7 +87,7 @@ class GeminiService {
 * nombre (string)
 * descripción (string)
 * coordenadas (array de dos números: latitud y longitud)
-
+Ten en cuenta que el tiempo que el usuario quiere pasar de un sitio a otro no puede superar los $maxTime minutos.
 
 **Ejemplo de objeto JSON:**
 ```json

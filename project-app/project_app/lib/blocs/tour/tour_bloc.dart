@@ -42,8 +42,8 @@ class TourBloc extends Bloc<TourEvent, TourState> {
       final pois = await GeminiService.fetchGeminiData(
         city: event.city,
         nPoi: event.numberOfSites,
-        userPreferences: event
-            .userPreferences, // Mantén las preferencias al obtener los POIs
+        userPreferences: event.userPreferences,
+        maxTime: event.maxTime,
       );
       log.d('TourBloc: Fetched ${pois.length} POIs for ${event.city}');
       // 2. **Recuperar información adicional de Google Places**
