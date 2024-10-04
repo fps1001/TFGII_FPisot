@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -15,46 +16,31 @@ part 'map_event.dart';
 part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
-  // Opcional porque al iniciar no existe.
   GoogleMapController? _mapController;
-  // Añado bloc de localización
   final LocationBloc locationBloc;
   StreamSubscription<LocationState>? locationSubscription;
 
   LatLng? mapCenter;
-  // Instancia del servicio de Places
-  //final PlacesService _placesService = PlacesService();
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
-    // Cuando recibo un evento de tipo OnMapInitializedEvent emite un nuevo estado.
     on<OnMapInitializedEvent>(_onInitMap);
-    // Cuando recibo un evento de tipo OnStartFollowingUserEvent emite un nuevo estado.
     on<OnStartFollowingUserEvent>(_onStartFollowingUser);
-    // Cuando recibo un evento de tipo OnStopFollowingUserEvent emite un nuevo estado.
     on<OnStopFollowingUserEvent>(
         (event, emit) => emit(state.copyWith(isFollowingUser: false)));
-    // Cuando recibo un evento de tipo OnUpdateUserPolylinesEvent emite un nuevo estado.
     on<OnUpdateUserPolylinesEvent>(_onPolylineNewPoint);
-    // Cuando recibo una nueva polilínea a dibujar emite un nuevo estado al que le pasa la nueva polilínea.
     on<OnDisplayPolylinesEvent>((event, emit) => emit(
         state.copyWith(polylines: event.polylines, markers: event.markers)));
-
-    // Cuando recibo un evento de tipo OnToggleShowUserRouteEvent emite un nuevo estado.
-    on<OnToggleShowUserRouteEvent>((event, emit) =>
-        emit(state.copyWith(showUserRoute: !state.showUserRoute)));
-    // Manejamos el evento para eliminar el marcador
+    on<OnToggleShowUserRouteEvent>(
+        (event, emit) => emit(state.copyWith(showUserRoute: !state.showUserRoute)));
     on<OnRemovePoiMarkerEvent>(_onRemovePoiMarker);
-    // Cuando recibo el evento para añadir un marcador emito un nuevo estado.
     on<OnAddPoiMarkerEvent>(_onAddPoiMarker);
 
-    // Suscripción al bloc de localización.
     locationSubscription = locationBloc.stream.listen((locationState) {
-      // Llama al evento de añadir una polilínea al recorrido de usuario.
       if (locationState.lastKnownLocation != null) {
+        log('Añadiendo nueva polilínea con la ubicación del usuario: ${locationState.lastKnownLocation}');
         add(OnUpdateUserPolylinesEvent(locationState.myLocationHistory));
       }
 
-      // Saber si hay que mover la cámara.
       if (!state.isFollowingUser) return;
       if (locationState.lastKnownLocation == null) return;
 
@@ -63,40 +49,32 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
-    {
-      _mapController = event.mapController;
-      // Copio también el contexto del mapa para poder interactuar con la UI.
-      emit(state.copyWith(
-          isMapInitialized: true,
-          mapContext: event.mapContext)); // Se guarda el BuildContext
-    }
+    _mapController = event.mapController;
+    log('Mapa inicializado. Controlador del mapa establecido.');
+    emit(state.copyWith(isMapInitialized: true, mapContext: event.mapContext));
   }
 
   void moveCamera(LatLng latLng) {
     if (_mapController == null) {
-      // No mover la cámara si el controlador no está listo
       if (kDebugMode) {
-        print('El controlador del mapa aún no está listo.');
+        log('El controlador del mapa aún no está listo.');
       }
       return;
     }
-
+    log('Moviendo cámara a la posición: $latLng');
     final cameraUpdate = CameraUpdate.newLatLng(latLng);
     _mapController?.animateCamera(cameraUpdate);
   }
 
-  //Función para que al tocar el botón se centre en el usuario sin esperar al cambio de localización.
-  void _onStartFollowingUser(
-      OnStartFollowingUserEvent event, Emitter<MapState> emit) {
+  void _onStartFollowingUser(OnStartFollowingUserEvent event, Emitter<MapState> emit) {
     emit(state.copyWith(isFollowingUser: true));
+    log('Comenzando a seguir al usuario.');
     if (locationBloc.state.lastKnownLocation == null) return;
     moveCamera(locationBloc.state.lastKnownLocation!);
   }
 
-  // Función para añadir un punto a una polilínea.
-  void _onPolylineNewPoint(
-      OnUpdateUserPolylinesEvent event, Emitter<MapState> emit) {
-    // Se crea la nueva polilínea y se añade a las que ya había.
+  void _onPolylineNewPoint(OnUpdateUserPolylinesEvent event, Emitter<MapState> emit) {
+    log('Añadiendo nuevo punto a la polilínea.');
     final myRoute = Polyline(
       polylineId: const PolylineId('myRoute'),
       points: event.userLocations,
@@ -106,14 +84,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       endCap: Cap.roundCap,
     );
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
-    // crea una copia del estado actual y se añade la nueva polilínea.
     currentPolylines['myRoute'] = myRoute;
-    // Emite el nuevo estado.
     emit(state.copyWith(polylines: currentPolylines));
   }
 
-  // Metodo que recibe un EcoCityTour y lo pinta.
   Future<void> drawEcoCityTour(EcoCityTour tour) async {
+    log('Dibujando EcoCityTour en el mapa: ${tour.name}');
     final myRoute = Polyline(
       polylineId: const PolylineId('route'),
       color: Colors.teal,
@@ -122,37 +98,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,
     );
-
-    double kms = tour.distance / 1000;
-    kms = (kms * 100).floorToDouble();
-    kms /= 100;
-
-    //double tripDuration = (destination.duration / 60).floorToDouble();
-
-    //final startMarkerIcon = await getCustomMarker();
-    //final defaultIcon = await getCustomMarker();
-/* 
-    final startMarker = Marker(
-      markerId: const MarkerId('start'),
-      position: destination.points.first,
-      icon: startMarkerIcon,
-      infoWindow: InfoWindow(
-        title: 'Inicio',
-        snippet: 'Kms: $kms, duración: $tripDuration',
-      ),
-    );
-
-    final finalMarker = Marker(
-      markerId: const MarkerId('final'),
-      position: destination.points.last,
-      icon: defaultIcon,
-      infoWindow: InfoWindow(
-        title: destination.endPlace.text,
-        snippet: destination.endPlace.placeName,
-      ),
-    ); */
-
-    // Marcadores de puntos de interés
 
     Map<String, Marker> poiMarkers = {};
     if (tour.pois.isNotEmpty) {
@@ -167,7 +112,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           icon: icon,
           onTap: () async {
             if (state.mapContext != null) {
-              // Ahora, llamamos directamente a showPlaceDetails con el POI en lugar de buscar un Place
+              log('Mostrando detalles del lugar: ${poi.name}');
               showPlaceDetails(state.mapContext!, poi);
             }
           },
@@ -178,24 +123,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     final currentMarkers = Map<String, Marker>.from(state.markers);
-
     currentPolylines['route'] = myRoute;
-    // currentMarkers['start'] = startMarker;
-    //currentMarkers['final'] = finalMarker;
-
-    // Agregar los marcadores de POIs
     currentMarkers.addAll(poiMarkers);
-
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
   }
 
-  // Función para mostrar el `BottomSheet` con los detalles del lugar
   void showPlaceDetails(BuildContext context, PointOfInterest poi) {
+    log('Mostrando detalles del POI: ${poi.name}');
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return CustomBottomSheet(
-            poi: poi); // Pasa el objeto `PointOfInterest` directamente
+        return CustomBottomSheet(poi: poi);
       },
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -206,30 +144,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
   }
 
-// Función para eliminar el marcador correspondiente a un POI
-  void _onRemovePoiMarker(
-      OnRemovePoiMarkerEvent event, Emitter<MapState> emit) {
+  void _onRemovePoiMarker(OnRemovePoiMarkerEvent event, Emitter<MapState> emit) {
+    log('Eliminando marcador de POI: ${event.poiName}');
     final updatedMarkers = Map<String, Marker>.from(state.markers);
-
-    // Eliminar el marcador correspondiente al POI
     updatedMarkers.remove(event.poiName);
-
-    // Emitir el nuevo estado con los marcadores actualizados
     emit(state.copyWith(markers: updatedMarkers));
   }
 
-// Método para manejar el evento de añadir un POI como marcador
-  void _onAddPoiMarker(
-      OnAddPoiMarkerEvent event, Emitter<MapState> emit) async {
-    // Clonar los marcadores actuales
+  void _onAddPoiMarker(OnAddPoiMarkerEvent event, Emitter<MapState> emit) async {
+    log('Añadiendo marcador de POI: ${event.poi.name}');
     final updatedMarkers = Map<String, Marker>.from(state.markers);
-
-    // Generar el ícono para el marcador
     final icon = event.poi.imageUrl != null
         ? await getNetworkImageMarker(event.poi.imageUrl!)
-        : await getCustomMarker(); // Usa un marcador por defecto si no tiene imagen
+        : await getCustomMarker();
 
-    // Crear el nuevo marcador basado en el POI
     final poiMarker = Marker(
       markerId: MarkerId(event.poi.name),
       position: event.poi.gps,
@@ -241,15 +169,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       },
     );
 
-    // Añadir el nuevo marcador al mapa
     updatedMarkers[event.poi.name] = poiMarker;
-
-    // Emitir el nuevo estado con el marcador actualizado
     emit(state.copyWith(markers: updatedMarkers));
   }
 
   @override
   Future<void> close() {
+    log('Cerrando MapBloc y cancelando suscripción de localización.');
     locationSubscription?.cancel();
     return super.close();
   }

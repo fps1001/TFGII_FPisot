@@ -13,18 +13,21 @@ class EcoCityTour {
   final double distance;
   final List<LatLng> polilynePoints;
 
-  
   EcoCityTour({
     required this.duration,
-    required this.distance, 
-    required this.polilynePoints, 
+    required this.distance,
+    required this.polilynePoints,
     required this.city,
     required this.numberOfSites,
     required this.pois,
     required this.mode,
-    required this.userPreferences,});
+    required this.userPreferences,
+  });
 
-    EcoCityTour copyWith({
+  // Para mensaje de logger me hace falta un getter.
+  String get name => city;
+
+  EcoCityTour copyWith({
     String? city,
     int? numberOfSites,
     List<PointOfInterest>? pois,
@@ -45,5 +48,4 @@ class EcoCityTour {
       polilynePoints: polilynePoints ?? this.polilynePoints,
     );
   }
-  
 }
