@@ -26,9 +26,11 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     on<OnRemovePoiEvent>(_onRemovePoi);
     on<OnAddPoiEvent>(_onAddPoi);
     on<OnJoinTourEvent>(_onJoinTour);
-    // Reset de Tour. Emite estado con EcoCityTour a null.
+    // Reset de Tour. Emite estado con EcoCityTour y POI's a null.
     on<ResetTourEvent>((event, emit) {
-      emit(state.copyWith(ecoCityTour: null, isJoined: false));
+      emit(state.copyWith(ecoCityTour: null,  isJoined: false));
+      // Limpia el mapa al resetear el tour
+      mapBloc.add(OnClearMapEvent());
     });
   }
 

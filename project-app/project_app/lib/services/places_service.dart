@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:project_app/logger/logger.dart'; // Importar logger para registrar errores
 
@@ -56,9 +55,6 @@ class PlacesService {
     } catch (e, stackTrace) {
       log.e('PlacesService: Error durante la búsqueda del lugar "$placeName"',
           error: e, stackTrace: stackTrace);
-      if (kDebugMode) {
-        print('Error en la búsqueda del lugar: $e');
-      }
     }
     return null;
   }

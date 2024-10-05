@@ -236,7 +236,6 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 5),
-
               Row(
                 children: [
                   Text('15m', style: Theme.of(context).textTheme.headlineSmall),
@@ -298,37 +297,38 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                           .toList(),
                       maxTime: 60));
 
-                  // Escucha los cambios en el estado del TourBloc
+                  // Modificación en la pantalla de selección para cerrar el diálogo de carga
                   BlocProvider.of<TourBloc>(context).stream.listen((tourState) {
                     if (!tourState.isLoading &&
                         !tourState.hasError &&
                         tourState.ecoCityTour != null) {
-                      // Cerrar el mensaje de carga
-                      Navigator.of(context).pop(); // Cierra el diálogo de carga
+                      if (mounted) {
+                        // Verificamos si el widget aún está montado
+                        Navigator.of(context)
+                            .pop(); // Cerrar el diálogo de carga
+                        log.i(
+                            'TourSelectionScreen: Tour cargado exitosamente, navegando al mapa.');
 
-                      log.i(
-                          'TourSelectionScreen: Tour cargado exitosamente, navegando al mapa.');
-
-                      // Navegar a la pantalla del mapa solo si el estado tiene un EcoCityTour cargado
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MapScreen(
-                            tour: tourState.ecoCityTour!,
+                        // Navegar a la pantalla del mapa
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MapScreen(tour: tourState.ecoCityTour!),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     } else if (tourState.hasError) {
-                      // Cerrar el diálogo de carga si hay un error
-                      Navigator.of(context).pop();
-
-                      // Mostrar un error al usuario
-                      log.e('TourSelectionScreen: Error al cargar el tour.');
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Error al cargar el tour'),
-                        ),
-                      );
+                      if (mounted) {
+                        Navigator.of(context)
+                            .pop(); // Cerrar el diálogo de carga si hay un error
+                        log.e('TourSelectionScreen: Error al cargar el tour.');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Error al cargar el tour'),
+                          ),
+                        );
+                      }
                     }
                   });
                 },

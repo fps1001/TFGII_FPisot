@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,9 +20,6 @@ class GeminiService {
       // Se registra el error si no se encuentra la clave API
       log.e(
           'GeminiService: No se encontró la variable de entorno \$GEMINI_API_KEY');
-      if (kDebugMode) {
-        print('No \$GEMINI_API_KEY environment variable');
-      }
       return [];
     }
 
@@ -87,7 +83,7 @@ class GeminiService {
 * nombre (string)
 * descripción (string)
 * coordenadas (array de dos números: latitud y longitud)
-Ten en cuenta que el tiempo que el usuario quiere pasar de un sitio a otro no puede superar los $maxTime minutos.
+
 
 **Ejemplo de objeto JSON:**
 ```json
@@ -96,7 +92,7 @@ Ten en cuenta que el tiempo que el usuario quiere pasar de un sitio a otro no pu
     "descripcion": "La Plaza Mayor de Salamanca, del siglo XVIII, es una de las más bellas plazas monumentales urbanas de Europa. Comenzó a construirse en 1729 a instancias del corregidor Rodrigo Caballero Llanes. El proyecto fue a cargo del arquitecto Alberto de Churriguera, al que siguió su sobrino Manuel de Lara Churriguera y fue finalizado por Andrés García de Quiñones en 1755. ...",
     "coordenadas": [40.965027795465176, -5.664062074092496],
 }
-Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')}
+Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')} y que bajo ningún concepto debe superar el tiempo de transito los $maxTime minutos.
 
 ''';
 /* 
@@ -111,9 +107,6 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
     if (response.text == null) {
       // Log si el modelo no da respuesta
       log.w('GeminiService: No se recibió respuesta del modelo.');
-      if (kDebugMode) {
-        print('No response from the model.');
-      }
       return [];
     }
 
@@ -143,9 +136,7 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
     } catch (e, stackTrace) {
       log.e('GeminiService: Error al parsear la respuesta JSON',
           error: e, stackTrace: stackTrace);
-      if (kDebugMode) {
-        print('Error parsing response: $e');
-      }
+
     }
     return pointsOfInterest;
   }

@@ -14,7 +14,6 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
   final String apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'] ?? '';
 
   SearchDestinationDelegate() : super(searchFieldLabel: 'Buscar un lugar...');
-
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [

@@ -68,3 +68,6 @@ class OnAddPoiMarkerEvent extends MapEvent {
   @override
   List<Object> get props => [poi];
 }
+
+// Definir el nuevo evento que se dispara cuando se limpia el mapa
+class OnClearMapEvent extends MapEvent {}

@@ -47,15 +47,16 @@ class _MapScreenState extends State<MapScreen> {
       appBar: CustomAppBar(
         title: 'Eco City Tour',
         onBackPressed: () {
-          log.i('MapScreen: Regresando a la selección de EcoCityTour.');
-          // Limpiamos el estado del TourBloc al regresar
-          BlocProvider.of<TourBloc>(context).add(const ResetTourEvent());
-          // Luego, navegamos atrás quitando todas las pantallas anteriores.
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => const TourSelectionScreen()),
-            (route) => false, // Remueve todas las pantallas anteriores
-            //todo no funciona el retorno
+ log.i('MapScreen: Regresando a la selección de EcoCityTour.');
+        
+        // Reiniciar el estado del tour al volver
+        BlocProvider.of<TourBloc>(context).add(const ResetTourEvent());
+
+        // Usar pushAndRemoveUntil para limpiar el stack de navegación
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const TourSelectionScreen()),
+          (route) => false, // Remover todas las pantallas anteriores
           );
         },
         // Botón de resumen

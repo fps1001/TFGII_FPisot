@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-import 'package:project_app/logger/logger.dart'; // Importar logger para registrar errores
+import 'package:project_app/logger/logger.dart';
 import 'package:project_app/exceptions/exceptions.dart';
 import 'package:project_app/models/models.dart';
 
@@ -50,9 +49,8 @@ class OptimizationService {
         'key': apiKey,
       });
 
-      if (kDebugMode) {
-        print(response.data);
-      }
+      log.d('Response data: ${response.data}');
+      
 
       // Verificar si la respuesta contiene rutas
       if (response.data['routes'] == null || response.data['routes'].isEmpty) {
@@ -75,7 +73,7 @@ class OptimizationService {
           .fold(0, (sum, leg) => sum + leg['duration']['value'])
           .toDouble();
 
-      log.i(
+      log.d(
           'OptimizationService: Ruta optimizada recibida. Distancia total: $distance m, Duración total: $duration segundos.');
 
       // Crear un EcoCityTour y retornarlo
