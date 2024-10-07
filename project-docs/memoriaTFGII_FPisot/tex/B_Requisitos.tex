@@ -9,6 +9,57 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
+		\textbf{CU-1}    & \textbf{Activación de permiso de localización \acrshort{gps} del dispositivo}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-1 \\
+		\textbf{Descripción}          & Concede permisos de localización al dispositivo \\
+		\textbf{Precondición}         & Acceder a la aplicación \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario abre la aplicación o ha restringido los accesos a la localización
+			\item Un mensaje del \acrfull{so} solicita conceder permisos
+		\end{enumerate}\\
+		\textbf{Postcondición}        & El permiso de seguimiento del usuario ha sido concedido \\
+		\textbf{Excepciones}          & El usuario no concede los permisos \\
+		\textbf{Importancia}          & Alta  \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-1 Activación de permiso de localización \acrshort{gps} del dispositivo.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-1}    & \textbf{Activación de sensor \acrshort{gps} en el dispositivo}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-2 \\
+		\textbf{Descripción}          & Activa el uso de GPS en el dispositivo \\
+		\textbf{Precondición}         & El dispositivo debe tener un sensor \acrshort{gps}. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario activará el sensor de \acrshort{gps} de su dispositivo a través de cualquier de cualquier menú o atajo de configuración.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La aplicación tiene acceso a la posición del dispositivo. \\
+		\textbf{Excepciones}          & Problemas con el sensor \acrshort{gps} del dispositivo. \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-2 Activación de sensor \acrshort{gps} en el dispositivo.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
 		\textbf{CU-1}    & \textbf{Ejemplo de caso de uso}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
@@ -45,7 +96,7 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 	\item \textbf{RF-3 Activación/Desactivación de seguimiento de usuario:} se debe mostrar el camino seguido por el usuario sobre el mapa siempre que así lo indique, dicho seguimiento se puede activar y desactivar a petición en cualquier momento.
 	\item \textbf{RF-4 Centrar la situación actual del usuario sobre mapa:} se debe mover la vista del mapa a la ubicación actual del usuario a petición del mismo. También se puede dejar fija la ubicación del usuario en el centro del mapa.
 	\item \textbf{RF-5 Selección de Tour:} El usuario rellenará sus preferencias en una pantalla formulario para indicar qué ciudad quiere visitar, los puntos de interés que quiere o sus gustos al viajar.
-	\item \textbf{RF-6 Calculo de información a través de un \acrfull{llm}: la aplicación debe proporcionar información de \acrfull{pdi} según los criterios introducidos.
+	\item \textbf{RF-6 Cálculo de información a través de un \acrfull{llm}}: la aplicación debe proporcionar información de \acrfull{pdi} según los criterios introducidos.
 	\item \textbf{RF-7 Eliminación de \acrshort{pdi}}: el usuario podrá eliminar los lugares que no quiera visitar lo que recalculará la ruta óptima de nuevo.
 	\item \textbf{RF-8 Cálculo de ruta optimizada}: el Eco City Tour que una los \acrshort{pdi} tiene que seguir una ruta adaptada al medio de transporte elegido por el usuario siendo el más corto posible.
 	\item \textbf{RF-9 Capacidad de añadir un \acrshort{pdi}:} el usuario podrá introducir el texto de un lugar que conozca para agregar dicho lugar a su ruta.
