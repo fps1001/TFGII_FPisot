@@ -232,7 +232,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
               //* SELECCIÓN DE TIEMPO MÁXIMO PARA LA RUTA (SLIDER)
               const SizedBox(height: 15),
               Text(
-                'Tiempo máximo para la ruta (en minutos):',
+                'Tiempo máximo invertido en el trayecto:',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 5),
@@ -295,7 +295,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                           .where((entry) => entry.value == true)
                           .map((entry) => entry.key)
                           .toList(),
-                      maxTime: 60));
+                      maxTime: maxTimeInMinutes));
 
                   // Modificación en la pantalla de selección para cerrar el diálogo de carga
                   BlocProvider.of<TourBloc>(context).stream.listen((tourState) {

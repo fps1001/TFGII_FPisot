@@ -28,7 +28,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     on<OnJoinTourEvent>(_onJoinTour);
     // Reset de Tour. Emite estado con EcoCityTour y POI's a null.
     on<ResetTourEvent>((event, emit) {
-      emit(state.copyWith(ecoCityTour: null,  isJoined: false));
+      emit(state.copyWith(ecoCityTour: null, isJoined: false));
       // Limpia el mapa al resetear el tour
       mapBloc.add(OnClearMapEvent());
     });
@@ -42,11 +42,11 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     try {
       // 1. Obtener puntos de interés (POIs) desde el servicio Gemini.
       final pois = await GeminiService.fetchGeminiData(
-        city: event.city,
-        nPoi: event.numberOfSites,
-        userPreferences: event.userPreferences,
-        maxTime: event.maxTime,
-      );
+          city: event.city,
+          nPoi: event.numberOfSites,
+          userPreferences: event.userPreferences,
+          maxTime: event.maxTime,
+          mode: event.mode);
       log.d('TourBloc: Fetched ${pois.length} POIs for ${event.city}');
       // 2. **Recuperar información adicional de Google Places**
       List<PointOfInterest> updatedPois = [];

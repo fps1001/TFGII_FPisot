@@ -11,6 +11,7 @@ class GeminiService {
     required int nPoi,
     required List<String> userPreferences,
     required double maxTime,
+    required String mode,
   }) async {
     // Fetch data from Gemini API
     await dotenv.load();
@@ -57,29 +58,16 @@ class GeminiService {
           'Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo'),
     );
 
-    //* Se le añade contexto al modelo dandole así también un ejemplo de lo que se espera de él: few-shot learning
-    /*
-  final chat = model.startChat(history: [
-    Content.multi([
-      TextPart('Genera una lista de 1 puntos de interés en Salamanca, incluyendo para cada uno: nombre, descripción breve, coordenadas GPS, una URL para más información y una URL de una imagen representativa. Organiza la información en formato JSON, con un array de objetos, donde cada objeto representa un punto de interés.'),
-    ]),
-    Content.model([
-      TextPart('```json\n{"gps": [40.965027795465176, -5.664062074092496], "name": "Plaza Mayor", "description": "La Plaza Mayor de Salamanca es uno de los lugares más emblemáticos de la ciudad, un espacio público que ha sido testigo de la historia de la ciudad desde el siglo XVIII. Es un buen ejemplo de arquitectura barroca, y está rodeada de edificios con balcones que dan a la plaza.  Es un lugar perfecto para pasear, disfrutar de la gastronomía local y  observar el ambiente  de la ciudad. ", "url": "https://www.salamanca.es/es/turismo/plaza-mayor", "url_img": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Plaza_Mayor_de_Salamanca_%282015%29.jpg/1280px-Plaza_Mayor_de_Salamanca_%282015%29.jpg"\n} \n```'),
-    ]),
-  ]);
-  */
     //* CONSTRUCCIÓN DE PETICIÓN
-    // Definimos las variables de ciudad y número de POIs
 
-/*   final String ciudad = 'Salamanca';
-  final int n_poi = 3;
- */
+    final medioTransporte = (mode == 'walking' ? 'andando' : 'en bicicleta');
+
     final chat = model.startChat();
 
-    // Transformar las preferencias en una lista de intereses seleccionados
-
     final message =
-        '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city. Cada objeto debe incluir:
+        '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city. 
+Además, no sirve cualquier lugar, puesto que el tiempo que se tarde en viajar entre ellos no debe ser superior en ningún momento a $maxTime minutos $medioTransporte.
+Cada objeto debe incluir:
 * nombre (string)
 * descripción (string)
 * coordenadas (array de dos números: latitud y longitud)
@@ -92,7 +80,7 @@ class GeminiService {
     "descripcion": "La Plaza Mayor de Salamanca, del siglo XVIII, es una de las más bellas plazas monumentales urbanas de Europa. Comenzó a construirse en 1729 a instancias del corregidor Rodrigo Caballero Llanes. El proyecto fue a cargo del arquitecto Alberto de Churriguera, al que siguió su sobrino Manuel de Lara Churriguera y fue finalizado por Andrés García de Quiñones en 1755. ...",
     "coordenadas": [40.965027795465176, -5.664062074092496],
 }
-Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')} y que bajo ningún concepto debe superar el tiempo de transito los $maxTime minutos.
+Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')}.
 
 ''';
 /* 
@@ -127,8 +115,6 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
           gps: gpsPoint,
           name: poiJson['name'] ?? '',
           description: poiJson['description'],
-          /* url: poiJson['url'],
-          imageUrl: poiJson['url_img'], */
         );
       }).toList();
       log.i(
@@ -136,7 +122,6 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
     } catch (e, stackTrace) {
       log.e('GeminiService: Error al parsear la respuesta JSON',
           error: e, stackTrace: stackTrace);
-
     }
     return pointsOfInterest;
   }
