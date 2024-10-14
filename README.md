@@ -73,3 +73,5 @@ Para más información, puedes contactarme a través de:
 ---
 
 ¡Gracias por tu interés en este proyecto!
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fps1001_TFGII_FPisot&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fps1001_TFGII_FPisot)

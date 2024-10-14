@@ -1,4 +1,5 @@
 // Obtenido de: https://snazzymaps.com/style/42/apple-maps-esque
+const geometryFill = "geometry.fill";
 const appleMapEsqueMapTheme = [
   {
     "featureType": "landscape.man_made",
@@ -65,7 +66,7 @@ const appleMapEsqueMapTheme = [
   },
   {
     "featureType": "road.highway",
-    "elementType": "geometry.fill",
+    "elementType": geometryFill,
     "stylers": [
       {"color": "#ffe15f"}
     ]
@@ -79,21 +80,21 @@ const appleMapEsqueMapTheme = [
   },
   {
     "featureType": "road.arterial",
-    "elementType": "geometry.fill",
+    "elementType": geometryFill,
     "stylers": [
       {"color": "#ffffff"}
     ]
   },
   {
     "featureType": "road.local",
-    "elementType": "geometry.fill",
+    "elementType": geometryFill,
     "stylers": [
       {"color": "black"}
     ]
   },
   {
     "featureType": "transit.station.airport",
-    "elementType": "geometry.fill",
+    "elementType": geometryFill,
     "stylers": [
       {"color": "#cfb2db"}
     ]
