@@ -1,24 +1,20 @@
-## Reunión 01/10. Fin de Sprint 6.
+## Reunión 22/10. Fin de Sprint 7.
 
 **Participante**: @clopezno, @fps1001
 
 ### 1. Documentación
-- Revisión de memoria.
+- Revisión de memoria si hay.
 - Se podía crear un hito que sea fin de la memoria (sin anexos).
 - Explicación de siguientes partes a desarrollar.
-- Desarrollar Requisitos.
+- Explicación modificación en diagramas.
 
 ### 2. Prototipos y LLM
-- Se pueden terminar los prototipos de cuaderno jupyter y langflow con agentes. **(hito a final del próximo sprint)**
+- Finalizado: revisión.
+
 ### 3. Desarrollo de la Aplicación
 Una vez mejorada la aplicación dejandola en un punto estable, con buena estructura y bastantes funcionalidades... se pueden realizar las funcionalidades que @clopezno considere oportunas para el TFG. Entre ellas:
 - Validación y pruebas: comprobar todos los casos de error posible.
-- Poner un límite de distancia/duración al Tour.
-- Añadir POI desde búsqueda manual/manual marker.
 - Guardar/cargar recorridos con Isar(BD)
-- Estudiar RAG y Fine Tune en adaptive_ai
-- Probar otros LLM para comprobar resultados.
-- Instalación de logger.
 
 
 
