@@ -5,7 +5,6 @@ import 'models.dart';
 
 class EcoCityTour {
   final String city;
-  final int numberOfSites;
   final List<PointOfInterest> pois;
   final String mode;
   final List<String> userPreferences;
@@ -18,7 +17,6 @@ class EcoCityTour {
     required this.distance,
     required this.polilynePoints,
     required this.city,
-    required this.numberOfSites,
     required this.pois,
     required this.mode,
     required this.userPreferences,
@@ -39,7 +37,6 @@ class EcoCityTour {
   }) {
     return EcoCityTour(
       city: city ?? this.city,
-      numberOfSites: numberOfSites ?? this.numberOfSites,
       pois: pois ?? this.pois,
       mode: mode ?? this.mode,
       userPreferences: userPreferences ?? this.userPreferences,

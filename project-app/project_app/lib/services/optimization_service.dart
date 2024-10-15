@@ -50,7 +50,6 @@ class OptimizationService {
       });
 
       log.d('Response data: ${response.data}');
-      
 
       // Verificar si la respuesta contiene rutas
       if (response.data['routes'] == null || response.data['routes'].isEmpty) {
@@ -79,7 +78,6 @@ class OptimizationService {
       // Crear un EcoCityTour y retornarlo
       final ecoCityTour = EcoCityTour(
         city: city,
-        numberOfSites: pois.length,
         pois: pois,
         mode: mode,
         userPreferences: userPreferences,

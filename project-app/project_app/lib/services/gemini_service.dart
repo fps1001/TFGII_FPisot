@@ -26,7 +26,7 @@ class GeminiService {
 
     //* DEFINICIÓN DEL MODELO
     final model = GenerativeModel(
-      model: 'gemini-1.5-flash',
+      model: 'gemini-1.5-pro',
       apiKey: geminiApi,
       // safetySettings: Adjust safety settings
       // See https://ai.google.dev/gemini-api/docs/safety-settings
@@ -46,8 +46,6 @@ class GeminiService {
               "gps": Schema(SchemaType.array, items: Schema(SchemaType.number)),
               "name": Schema(SchemaType.string),
               "description": Schema(SchemaType.string),
-              /* "url": Schema(SchemaType.string),
-              "url_img": Schema(SchemaType.string), */
             },
             requiredProperties: ['gps', 'name'],
           ),
@@ -83,10 +81,7 @@ Cada objeto debe incluir:
 Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')}.
 
 ''';
-/* 
 
-"url": "[https://www.salamanca.es/es/turismo/plaza-mayor](https://www.salamanca.es/es/turismo/plaza-mayor)",
-    "url_img": "[https://media.traveler.es/photos/61377bcd3decec3303bacc87/master/pass/90285.jpg](Plaza Mayor)" */
     final content = Content.text(message);
 
     //* VALIDACIÓN E IMPRESIÓN DE RESPUESTA
