@@ -40,8 +40,9 @@ class OnAddPoiEvent extends TourEvent {
 // Evento que se dispara cuando se elimina un punto de interés del recorrido.
 class OnRemovePoiEvent extends TourEvent {
   final PointOfInterest poi;
+  final bool shouldUpdateMap; // Añadimos un booleano para actualizar el mapa o no en función de donde se emita.
 
-  const OnRemovePoiEvent({required this.poi});
+  const OnRemovePoiEvent({required this.poi, this.shouldUpdateMap = true});
 
   @override
   List<Object> get props => [poi];

@@ -26,10 +26,7 @@ class LoadingMessageHelper {
                     CrossAxisAlignment.center, // Centrar horizontalmente
                 children: [
                   Text(
-                    'Generando información para tu Eco City Tour.\n\n'
-                    'Tenga en cuenta que los datos pueden contener errores '
-                    'debido a la naturaleza del procesamiento automático. '
-                    'Revise la información cuidadosamente.',
+                    'Generando información para tu Eco City Tour.\n\n',
                     textAlign: TextAlign.center, // Centrar el texto
                     style: TextStyle(
                       fontSize:
@@ -38,6 +35,15 @@ class LoadingMessageHelper {
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
+                  Text(                    
+                    'Tenga en cuenta que los datos pueden contener errores '
+                    'debido a la naturaleza del procesamiento automático. '
+                    'Revise la información cuidadosamente.',
+                      textAlign: TextAlign.center, // Centrar el texto
+                      style: TextStyle(
+                        fontSize: 14, // Ajusta el tamaño del texto si es necesario
+                        color: Theme.of(context).primaryColor,
+                      )),
                   const SizedBox(
                     height: 20, // Espacio entre el texto y el indicador
                   ),

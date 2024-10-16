@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:project_app/logger/logger.dart'; // Importar logger para registrar eventos y errores
 import 'package:project_app/models/models.dart';
 import 'package:project_app/blocs/blocs.dart';
-import 'package:project_app/helpers/helpers.dart';
 
 class ExpandablePoiItem extends StatefulWidget {
   final PointOfInterest poi;
@@ -156,15 +155,9 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
             onPressed: () {
               log.i(
                   'ExpandablePoiItem: Eliminando POI ${widget.poi.name} del EcoCityTour');
-
-              // Mostrar el mensaje de carga antes de eliminar
-              LoadingMessageHelper.showLoadingMessage(context);
-
-              // Eliminar el POI y lanzar el evento en TourBloc
-              widget.tourBloc.add(OnRemovePoiEvent(poi: widget.poi));
-
-              // Cerrar el mensaje de carga
-              Navigator.of(context).pop();
+              // Eliminar el POI sin actualizar el mapa
+              widget.tourBloc.add(
+                  OnRemovePoiEvent(poi: widget.poi, shouldUpdateMap: false));
             },
           ),
         ],

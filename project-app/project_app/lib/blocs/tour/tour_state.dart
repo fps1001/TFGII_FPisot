@@ -27,6 +27,12 @@ class TourState extends Equatable {
     );
   }
 
+  TourState copyWithNull() {
+    return const TourState(
+      ecoCityTour: null,
+    );
+  }
+
   @override
   List<Object?> get props => [ecoCityTour, isLoading, hasError, isJoined];
 }

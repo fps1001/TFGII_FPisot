@@ -71,3 +71,4 @@ class OnAddPoiMarkerEvent extends MapEvent {
 
 // Definir el nuevo evento que se dispara cuando se limpia el mapa
 class OnClearMapEvent extends MapEvent {}
+

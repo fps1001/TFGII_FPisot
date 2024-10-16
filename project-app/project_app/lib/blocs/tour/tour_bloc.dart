@@ -186,7 +186,8 @@ class TourBloc extends Bloc<TourEvent, TourState> {
       }
     } else {
       // Si no quedan POIs, emitimos el estado sin una ruta actual
-      emit(state.copyWith(ecoCityTour: null));
+      
+      emit(state.copyWithNull());
     }
   }
 }
