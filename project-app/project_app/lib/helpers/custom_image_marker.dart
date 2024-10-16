@@ -7,14 +7,15 @@ import 'package:project_app/logger/logger.dart'; // Importar logger
 
 Future<BitmapDescriptor> getCustomMarker() async {
   try {
-    final ByteData data = await rootBundle.load('assets/location_troll_bg.png');
-    final imageCodec = await ui.instantiateImageCodec(
+    final ByteData data =
+        await rootBundle.load('assets/location_troll_bg2.png');
+    final ui.Codec imageCodec = await ui.instantiateImageCodec(
       data.buffer.asUint8List(),
-      targetHeight: 40,
-      targetWidth: 40,
+      targetHeight: 62,
+      targetWidth: 45,
     );
-    final frameInfo = await imageCodec.getNextFrame();
-    final resizedData =
+    final ui.FrameInfo frameInfo = await imageCodec.getNextFrame();
+    final ByteData? resizedData =
         await frameInfo.image.toByteData(format: ui.ImageByteFormat.png);
 
     if (resizedData == null) {

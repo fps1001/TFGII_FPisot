@@ -7,7 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/helpers/custom_image_marker.dart';
 import 'package:project_app/models/models.dart';
-import 'package:project_app/logger/logger.dart'; 
+import 'package:project_app/logger/logger.dart';
 import 'package:project_app/widgets/widgets.dart';
 
 part 'map_event.dart';
@@ -28,8 +28,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OnUpdateUserPolylinesEvent>(_onPolylineNewPoint);
     on<OnDisplayPolylinesEvent>((event, emit) => emit(
         state.copyWith(polylines: event.polylines, markers: event.markers)));
-    on<OnToggleShowUserRouteEvent>(
-        (event, emit) => emit(state.copyWith(showUserRoute: !state.showUserRoute)));
+    on<OnToggleShowUserRouteEvent>((event, emit) =>
+        emit(state.copyWith(showUserRoute: !state.showUserRoute)));
     on<OnRemovePoiMarkerEvent>(_onRemovePoiMarker);
     on<OnAddPoiMarkerEvent>(_onAddPoiMarker);
     // Añadir el manejador de evento en el constructor del MapBloc
@@ -37,7 +37,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     locationSubscription = locationBloc.stream.listen((locationState) {
       if (locationState.lastKnownLocation != null) {
-        log.i('Añadiendo nueva polilínea con la ubicación del usuario: ${locationState.lastKnownLocation}');
+        log.i(
+            'Añadiendo nueva polilínea con la ubicación del usuario: ${locationState.lastKnownLocation}');
         add(OnUpdateUserPolylinesEvent(locationState.myLocationHistory));
       }
 
@@ -64,14 +65,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     _mapController?.animateCamera(cameraUpdate);
   }
 
-  void _onStartFollowingUser(OnStartFollowingUserEvent event, Emitter<MapState> emit) {
+  void _onStartFollowingUser(
+      OnStartFollowingUserEvent event, Emitter<MapState> emit) {
     emit(state.copyWith(isFollowingUser: true));
     log.i('Comenzando a seguir al usuario.');
     if (locationBloc.state.lastKnownLocation == null) return;
     moveCamera(locationBloc.state.lastKnownLocation!);
   }
 
-  void _onPolylineNewPoint(OnUpdateUserPolylinesEvent event, Emitter<MapState> emit) {
+  void _onPolylineNewPoint(
+      OnUpdateUserPolylinesEvent event, Emitter<MapState> emit) {
     log.i('Añadiendo nuevo punto a la polilínea.');
     final myRoute = Polyline(
       polylineId: const PolylineId('myRoute'),
@@ -142,14 +145,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
   }
 
-  void _onRemovePoiMarker(OnRemovePoiMarkerEvent event, Emitter<MapState> emit) {
+  void _onRemovePoiMarker(
+      OnRemovePoiMarkerEvent event, Emitter<MapState> emit) {
     log.i('Eliminando marcador de POI: ${event.poiName}');
     final updatedMarkers = Map<String, Marker>.from(state.markers);
     updatedMarkers.remove(event.poiName);
     emit(state.copyWith(markers: updatedMarkers));
   }
 
-  void _onAddPoiMarker(OnAddPoiMarkerEvent event, Emitter<MapState> emit) async {
+  void _onAddPoiMarker(
+      OnAddPoiMarkerEvent event, Emitter<MapState> emit) async {
     log.i('Añadiendo marcador de POI: ${event.poi.name}');
     final updatedMarkers = Map<String, Marker>.from(state.markers);
     final icon = event.poi.imageUrl != null
@@ -171,19 +176,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(markers: updatedMarkers));
   }
 
-
-
 // Modificar el MapBloc para manejar el evento de limpiar el mapa
-void _onClearMap(OnClearMapEvent event, Emitter<MapState> emit) {
-  log.i('MapBloc: Limpiando todos los marcadores y polilíneas del mapa.');
-  emit(state.copyWith(
-    polylines: {}, // Limpiamos todas las polilíneas
-    markers: {}, // Limpiamos todos los marcadores
-  ));
-}
-
-
-
+  void _onClearMap(OnClearMapEvent event, Emitter<MapState> emit) {
+    log.i('MapBloc: Limpiando todos los marcadores y polilíneas del mapa.');
+    emit(state.copyWith(
+      polylines: {}, // Limpiamos todas las polilíneas
+      markers: {}, // Limpiamos todos los marcadores
+    ));
+  }
 
   @override
   Future<void> close() {

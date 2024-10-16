@@ -26,10 +26,14 @@ class LoadingMessageHelper {
                     CrossAxisAlignment.center, // Centrar horizontalmente
                 children: [
                   Text(
-                    'Trabajando en tu\nEco City Tour',
+                    'Generando información para tu Eco City Tour.\n\n'
+                    'Tenga en cuenta que los datos pueden contener errores '
+                    'debido a la naturaleza del procesamiento automático. '
+                    'Revise la información cuidadosamente.',
                     textAlign: TextAlign.center, // Centrar el texto
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize:
+                          16, // Ajusta el tamaño del texto si es necesario
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).primaryColor,
                     ),
