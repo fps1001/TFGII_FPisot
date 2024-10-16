@@ -87,10 +87,10 @@ class TourBloc extends Bloc<TourEvent, TourState> {
 
       // 3. Llamar al servicio de optimización de rutas con los POIs actualizados
       final ecoCityTour = await optimizationService.getOptimizedRoute(
-        pois: updatedPois, // Usar la lista de POIs actualizada
+        pois: updatedPois, // Usa la lista de POIs actualizada
         mode: event.mode,
         city: event.city,
-        userPreferences: event.userPreferences, // Pasar las preferencias aquí
+        userPreferences: event.userPreferences, 
       );
 
       // 4. Emitir el estado con el tour cargado.

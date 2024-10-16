@@ -56,11 +56,11 @@ class TourSummary extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Text('Distancia: ${formatDistance(tour.distance)}',
+                        Text('Distancia: ${formatDistance(tour.distance ?? 0)}',
                             style: const TextStyle(fontSize: 16)),
                         const SizedBox(height: 4),
                         Text(
-                            'Duración: ${formatDuration(tour.duration.toInt())}', // Eliminamos los decimales
+                            'Duración: ${formatDuration((tour.duration ?? 0).toInt())}', // Eliminamos los decimales
                             style: const TextStyle(fontSize: 16)),
                         const SizedBox(height: 4),
 

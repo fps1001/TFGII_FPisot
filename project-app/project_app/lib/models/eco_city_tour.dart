@@ -1,5 +1,3 @@
-// Clase: EcoCityTour
-
 import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
 import 'models.dart';
 
@@ -8,13 +6,13 @@ class EcoCityTour {
   final List<PointOfInterest> pois;
   final String mode;
   final List<String> userPreferences;
-  final double duration;
-  final double distance;
+  final double? duration;  // Hacemos duración opcional
+  final double? distance;  // Hacemos distancia opcional
   final List<LatLng> polilynePoints;
 
   EcoCityTour({
-    required this.duration,
-    required this.distance,
+    this.duration,  
+    this.distance,  
     required this.polilynePoints,
     required this.city,
     required this.pois,
@@ -22,12 +20,11 @@ class EcoCityTour {
     required this.userPreferences,
   });
 
-  // Para mensaje de logger me hace falta un getter.
+  // Getter para el mensaje del logger.
   String get name => city;
 
   EcoCityTour copyWith({
     String? city,
-    int? numberOfSites,
     List<PointOfInterest>? pois,
     String? mode,
     List<String>? userPreferences,
