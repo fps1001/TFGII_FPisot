@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:project_app/blocs/blocs.dart';
+import 'package:project_app/logger/logger.dart'; // Importar GoRouter
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final VoidCallback? onBackPressed; // Función para el botón de atrás
-  final List<Widget>? actions; // Para ir al resumen.
+  final TourState tourState; // Recibe el estado del Tour
 
   const CustomAppBar({
     super.key,
     required this.title,
-    this.onBackPressed,
-    this.actions,
+    required this.tourState,
   });
 
   @override
@@ -28,12 +30,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: Theme.of(context).appBarTheme.elevation,
       iconTheme: const IconThemeData(color: Colors.white),
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: onBackPressed ??
-            () => Navigator.of(context)
-                .pop(), // Usamos el callback si está disponible, sino hacemos pop
+        icon: const Icon(Icons.refresh), // Icono de reinicio
+        onPressed: () {
+          log.i('MapScreen: Regresando a la selección de EcoCityTour.');
+          // Reiniciar el estado del tour antes de volver
+          BlocProvider.of<TourBloc>(context).add(const ResetTourEvent());
+          // Navegar directamente a la pantalla de selección de tours
+          context.go('/tour-selection');
+        },
       ),
-      actions: actions,
+      actions: [
+        if (tourState.ecoCityTour != null)
+          IconButton(
+            icon: const Icon(Icons.list),
+            onPressed: () {
+              log.i('MapScreen: Abriendo resumen del EcoCityTour');
+              context.push('/tour-summary');
+            },
+          )
+      ],
     );
   }
 

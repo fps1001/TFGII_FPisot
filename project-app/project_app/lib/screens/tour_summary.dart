@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/helpers/helpers.dart'; // Importar el archivo de helpers
-import 'package:project_app/logger/logger.dart'; // Importar logger para registrar eventos
 import 'package:project_app/ui/ui.dart';
 import 'package:project_app/widgets/widgets.dart';
 import 'package:project_app/blocs/blocs.dart';
-
-
 
 class TourSummary extends StatelessWidget {
   const TourSummary({super.key});
@@ -16,105 +13,95 @@ class TourSummary extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final cardWidth = screenWidth * 0.9;
 
-     return PopScope<bool>(
-      canPop: true, // Permitir el pop (volver)
-      onPopInvokedWithResult: (didPop, result) {
-        // Al regresar, actualizamos el mapa si hubo cambios en los POIs.
-        if (didPop) {
-          final tourBloc = BlocProvider.of<TourBloc>(context);
-          if (tourBloc.state.ecoCityTour != null) {
-            log.i('TourSummary: Actualizando el mapa al regresar del resumen');
-            BlocProvider.of<MapBloc>(context).drawEcoCityTour(tourBloc.state.ecoCityTour!);
-          }
+    return BlocBuilder<TourBloc, TourState>(
+      builder: (context, state) {
+        if (state.ecoCityTour == null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            CustomSnackbar.show(
+                context, 'Eco City Tour vacío, genera uno nuevo');
+            Navigator.pop(context);
+          });
+          return const SizedBox.shrink();
         }
-      },
-      child: BlocBuilder<TourBloc, TourState>(
-        builder: (context, state) {
-          if (state.ecoCityTour == null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              CustomSnackbar.show(context, 'Eco City Tour vacío, genera uno nuevo');
-              Navigator.pop(context);
-            });
-            return const SizedBox.shrink();
-          }
 
-          return Scaffold(
-            appBar: AppBar(
-              iconTheme: const IconThemeData(color: Colors.white),
-              centerTitle: true,
-              title: const Text(
-                'Resumen de tu Eco City Tour',
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Theme.of(context).primaryColor,
+        return Scaffold(
+          appBar: AppBar(
+            iconTheme: const IconThemeData(color: Colors.white),
+            centerTitle: true,
+            title: const Text(
+              'Resumen de tu Eco City Tour',
+              style: TextStyle(color: Colors.white),
             ),
-            body: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  child: Center(
-                    child: SizedBox(
-                      width: cardWidth,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Ciudad: ${state.ecoCityTour!.city}',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+            backgroundColor: Theme.of(context).primaryColor,
+          ),
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: Center(
+                  child: SizedBox(
+                    width: cardWidth,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Ciudad: ${state.ecoCityTour!.city}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Distancia: ${formatDistance(state.ecoCityTour!.distance ?? 0)}',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Duración: ${formatDuration((state.ecoCityTour!.duration ?? 0).toInt())}',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                const Text('Medio de transporte:',
+                                    style: TextStyle(fontSize: 16)),
+                                const SizedBox(width: 8),
+                                Icon(
+                                  transportIcons[state.ecoCityTour!.mode],
+                                  size: 24,
+                                  color: Theme.of(context).primaryColor,
                                 ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Distancia: ${formatDistance(state.ecoCityTour!.distance ?? 0)}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'Duración: ${formatDuration((state.ecoCityTour!.duration ?? 0).toInt())}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  const Text('Medio de transporte:', style: TextStyle(fontSize: 16)),
-                                  const SizedBox(width: 8),
-                                  Icon(
-                                    transportIcons[state.ecoCityTour!.mode],
-                                    size: 24,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                            ],
-                          ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: state.ecoCityTour!.pois.length,
-                    itemBuilder: (context, index) {
-                      final poi = state.ecoCityTour!.pois[index];
-                      return ExpandablePoiItem(poi: poi, tourBloc: BlocProvider.of<TourBloc>(context));
-                    },
-                  ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: state.ecoCityTour!.pois.length,
+                  itemBuilder: (context, index) {
+                    final poi = state.ecoCityTour!.pois[index];
+                    return ExpandablePoiItem(
+                        poi: poi, tourBloc: BlocProvider.of<TourBloc>(context));
+                  },
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

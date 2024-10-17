@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:project_app/blocs/blocs.dart';
-import 'package:project_app/screens/screens.dart';
+import 'package:project_app/router/app_router.dart';
 import 'package:project_app/services/services.dart';
 import 'package:project_app/themes/themes.dart';
 import 'package:project_app/logger/logger.dart';
@@ -45,11 +45,10 @@ class ProjectApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Eco-City Tour',
         theme: AppTheme.lightTheme,
-        //home: LoadingScreen());
-        home: const LoadingScreen());
+        routerConfig: AppRouter.router);
   }
 }

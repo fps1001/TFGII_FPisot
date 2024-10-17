@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:project_app/blocs/blocs.dart';
 
@@ -9,14 +10,25 @@ class GpsAccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: BlocBuilder<GpsBloc, GpsState>(builder: (context, state) {
+      body: BlocListener<GpsBloc, GpsState>(
+        listener: (context, state) {
           if (state.isGpsEnabled) {
-            return const _AccessButton();
-          } else {
-            return const _EnableGpsMessage();
+            // Si el GPS está habilitado, navegamos a la siguiente pantalla
+            context.go(
+                '/tour-selection'); // Cambia la ruta a la pantalla de selección de tour
           }
-        }),
+        },
+        child: Center(
+          child: BlocBuilder<GpsBloc, GpsState>(
+            builder: (context, state) {
+              if (state.isGpsEnabled) {
+                return const _AccessButton();
+              } else {
+                return const _EnableGpsMessage();
+              }
+            },
+          ),
+        ),
       ),
     );
   }
@@ -39,14 +51,15 @@ class _AccessButton extends StatelessWidget {
         ),
         const SizedBox(height: 20), // Espacio entre el texto y el botón
         MaterialButton(
-          minWidth: MediaQuery.of(context).size.width - 120, // Ancho como el botón de "Confirmar destino"
+          minWidth: MediaQuery.of(context).size.width -
+              120, // Ancho como el botón de "Confirmar destino"
           color: Theme.of(context).primaryColor, // Color de fondo del tema
           elevation: 0,
           height: 50,
           shape: const StadiumBorder(), // Bordes redondeados
           onPressed: () {
             final gpsBloc = BlocProvider.of<GpsBloc>(context);
-            gpsBloc.askGpsAccess();
+            gpsBloc.askGpsAccess(); // Solicitamos acceso al GPS
           },
           child: const Text(
             'Solicitar acceso al GPS',
