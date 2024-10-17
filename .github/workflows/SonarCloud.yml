@@ -21,6 +21,10 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
+      # Step to run Flutter tests with coverage
+      - name: Run Flutter tests with coverage
+        run: flutter test --coverage
       #- name: Build
       #  run: <mark><commands_to_build_your_project></mark>
       - name: Download sonar-scanner
