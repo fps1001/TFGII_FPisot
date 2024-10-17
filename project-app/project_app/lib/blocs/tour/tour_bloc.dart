@@ -35,74 +35,79 @@ class TourBloc extends Bloc<TourEvent, TourState> {
   }
 
   Future<void> _onLoadTour(LoadTourEvent event, Emitter<TourState> emit) async {
-    log.i(
-        'TourBloc: Loading tour for city: ${event.city}, with ${event.numberOfSites} sites');
-    emit(state.copyWith(isLoading: true, hasError: false));
+  log.i(
+      'TourBloc: Loading tour for city: ${event.city}, with ${event.numberOfSites} sites');
+  emit(state.copyWith(isLoading: true, hasError: false));
 
-    try {
-      // 1. Obtener puntos de interés (POIs) desde el servicio Gemini.
-      final pois = await GeminiService.fetchGeminiData(
-          city: event.city,
-          nPoi: event.numberOfSites,
-          userPreferences: event.userPreferences,
-          maxTime: event.maxTime,
-          mode: event.mode);
-      log.d('TourBloc: Fetched ${pois.length} POIs for ${event.city}');
-      // 2. **Recuperar información adicional de Google Places**
-      List<PointOfInterest> updatedPois = [];
-      for (PointOfInterest poi in pois) {
-        final placeData =
-            await PlacesService().searchPlace(poi.name, event.city);
-
-        if (placeData != null) {
-          log.d('TourBloc: Updating POI with Google Places data: ${poi.name}');
-          final String apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'] ?? '';
-          final location = placeData['location'];
-
-          // Actualizar POI con información de Google Places
-          final updatedPoi = PointOfInterest(
-            gps: location != null
-                ? LatLng(
-                    location['lat']?.toDouble() ?? poi.gps.latitude,
-                    location['lng']?.toDouble() ?? poi.gps.longitude,
-                  )
-                : poi.gps,
-            name: placeData['name'] ?? poi.name,
-            description: placeData['editorialSummary'] ?? poi.description,
-            url: placeData['website'] ?? poi.url,
-            imageUrl: placeData['photos'] != null &&
-                    placeData['photos'].isNotEmpty
-                ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${placeData['photos'][0]['photo_reference']}&key=$apiKey'
-                : poi.imageUrl,
-            rating: placeData['rating']?.toDouble() ?? poi.rating,
-            address: placeData['formatted_address'],
-            userRatingsTotal: placeData['user_ratings_total'],
-          );
-          updatedPois.add(updatedPoi); // Añadimos el POI actualizado
-        } else {
-          updatedPois
-              .add(poi); // Si no hay información extra, añadimos el original
-        }
-      }
-
-      // 3. Llamar al servicio de optimización de rutas con los POIs actualizados
-      final ecoCityTour = await optimizationService.getOptimizedRoute(
-        pois: updatedPois, // Usa la lista de POIs actualizada
-        mode: event.mode,
+  try {
+    // 1. Obtener puntos de interés (POIs) desde el servicio Gemini.
+    final pois = await GeminiService.fetchGeminiData(
         city: event.city,
-        userPreferences: event.userPreferences, 
-      );
+        nPoi: event.numberOfSites,
+        userPreferences: event.userPreferences,
+        maxTime: event.maxTime,
+        mode: event.mode);
+    log.d('TourBloc: Fetched ${pois.length} POIs for ${event.city}');
 
-      // 4. Emitir el estado con el tour cargado.
-      emit(state.copyWith(ecoCityTour: ecoCityTour, isLoading: false));
-      log.i('TourBloc: Successfully loaded tour for ${event.city}');
-    } catch (e) {
-      if (e is AppException || e is DioException) {
-        log.e('TourBloc: Error loading tour: $e', error: e);
+    // 2. **Recuperar información adicional de Google Places**
+    List<PointOfInterest> updatedPois = [];
+    for (PointOfInterest poi in pois) {
+      final placeData =
+          await PlacesService().searchPlace(poi.name, event.city);
+
+      if (placeData != null) {
+        log.d('TourBloc: Updating POI with Google Places data: ${poi.name}');
+        final String apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'] ?? '';
+        final location = placeData['location'];
+
+        // Actualizar POI con información de Google Places
+        final updatedPoi = PointOfInterest(
+          gps: location != null
+              ? LatLng(
+                  location['lat']?.toDouble() ?? poi.gps.latitude,
+                  location['lng']?.toDouble() ?? poi.gps.longitude,
+                )
+              : poi.gps,
+          name: placeData['name'] ?? poi.name,
+          description: placeData['editorialSummary'] ?? poi.description,
+          url: placeData['website'] ?? poi.url,
+          imageUrl: placeData['photos'] != null &&
+                  placeData['photos'].isNotEmpty
+              ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${placeData['photos'][0]['photo_reference']}&key=$apiKey'
+              : poi.imageUrl,
+          rating: placeData['rating']?.toDouble() ?? poi.rating,
+          address: placeData['formatted_address'],
+          userRatingsTotal: placeData['user_ratings_total'],
+        );
+        updatedPois.add(updatedPoi); // Añadimos el POI actualizado
+      } else {
+        updatedPois.add(poi); // Si no hay información extra, añadimos el original
       }
-      emit(state.copyWith(isLoading: false, hasError: true));
     }
+
+    // 3. Llamar al servicio de optimización de rutas con los POIs actualizados
+    final ecoCityTour = await optimizationService.getOptimizedRoute(
+      pois: updatedPois, // Usa la lista de POIs actualizada
+      mode: event.mode,
+      city: event.city,
+      userPreferences: event.userPreferences, 
+    );
+
+    // 4. Emitir el estado con el tour cargado.
+    emit(state.copyWith(ecoCityTour: ecoCityTour, isLoading: false));
+    log.i('TourBloc: Successfully loaded tour for ${event.city}');
+
+    // **5. Mandar a pintar el mapa en el MapBloc**
+    await mapBloc.drawEcoCityTour(ecoCityTour);
+
+  } catch (e) {
+    if (e is AppException || e is DioException) {
+      log.e('TourBloc: Error loading tour: $e', error: e);
+    }
+    emit(state.copyWith(isLoading: false, hasError: true));
   }
+}
+
 
   // Manejo del evento de unirse al tour
   Future<void> _onJoinTour(
@@ -112,52 +117,34 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     emit(state.copyWith(isJoined: !state.isJoined));
   }
 
-  // Método para añadir un POI
-  Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
-    log.i('TourBloc: Adding POI: ${event.poi.name}');
-    final ecoCityTour = state.ecoCityTour;
-    if (ecoCityTour == null) return;
+ Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
+  log.i('Añadiendo POI: ${event.poi.name}');
+  final ecoCityTour = state.ecoCityTour;
+  if (ecoCityTour == null) return;
 
-    emit(state.copyWith(isLoading: true));
-    final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)
-      ..add(event.poi);
+  final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..add(event.poi);
 
-    await _updateTourWithPois(updatedPois, emit);
+  await _updateTourWithPois(updatedPois, emit);
 
-    // Añadir el marcador en el mapa usando MapBloc
-    mapBloc.add(OnAddPoiMarkerEvent(event.poi));
-    emit(state.copyWith(isLoading: false));
-  }
+  // Añadir marcador en el mapa
+  mapBloc.add(OnAddPoiMarkerEvent(event.poi));
+}
+
 
   // Método para eliminar un POI (comprobando que sea o no la ubicación actual)
-  Future<void> _onRemovePoi(
-      OnRemovePoiEvent event, Emitter<TourState> emit) async {
-    log.i('TourBloc: Removing POI: ${event.poi.name}');
-    final ecoCityTour = state.ecoCityTour;
-    if (ecoCityTour == null) return;
+Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async {
+  log.i('Eliminando POI: ${event.poi.name}');
+  final ecoCityTour = state.ecoCityTour;
+  if (ecoCityTour == null) return;
 
-    // Establece isLoading a true antes de recalcular la ruta
-    emit(state.copyWith(isLoading: true));
+  final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..remove(event.poi);
 
-    // Remover el POI de la lista
-    final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)
-      ..remove(event.poi);
+  await _updateTourWithPois(updatedPois, emit);
 
-    // Comprobar si el POI eliminado es la ubicación del usuario
-    if (event.poi.name == 'Ubicación actual' ||
-        event.poi.description == 'Este es mi lugar actual') {
-      // Actualizar el estado de `isJoined` a false si se eliminó el POI del usuario
-      emit(state.copyWith(isJoined: false));
-    }
+  // Eliminar marcador del mapa
+  mapBloc.add(OnRemovePoiMarkerEvent(event.poi.name));
+}
 
-    // Llamamos a _updateTourWithPois para recalcular la ruta si hay POIs
-    await _updateTourWithPois(updatedPois, emit);
-
-    // Usar el MapBloc para eliminar el marcador
-    mapBloc.add(OnRemovePoiMarkerEvent(event.poi.name));
-    // Fin de carga.
-    emit(state.copyWith(isLoading: false));
-  }
 
   // Método para optimizar el tour que ha sufrido algún cambio de POIs y
   // llamar a pintarlo -> MapBloc

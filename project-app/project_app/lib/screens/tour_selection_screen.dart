@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/blocs/blocs.dart';
@@ -281,8 +283,9 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                       maxTime: maxTimeInMinutes,
                     ));
 
-                    // Escucha los cambios de estado del TourBloc
-                    BlocProvider.of<TourBloc>(context).stream.listen((tourState) {
+                    // Declaro el listener que se encargará de navegar al mapa cuando el tour se cargue
+                    late StreamSubscription listener;
+                    listener = BlocProvider.of<TourBloc>(context).stream.listen((tourState) {
                       if (!mounted) return;
 
                       // Si el tour se carga correctamente
@@ -299,6 +302,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                             builder: (context) => MapScreen(tour: tourState.ecoCityTour!),
                           ),
                         );
+                        listener.cancel(); // Cancelar el listener
                         return;
                       }
 
