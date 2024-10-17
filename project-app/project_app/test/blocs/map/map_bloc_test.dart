@@ -4,8 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:project_app/blocs/blocs.dart';
-import 'package:project_app/helpers/helpers.dart';
-import 'package:project_app/models/models.dart';
+
 
 class MockGoogleMapController extends Mock implements GoogleMapController {}
 class MockLocationBloc extends Mock implements LocationBloc {}
