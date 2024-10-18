@@ -58,4 +58,46 @@ class PlacesService {
     }
     return null;
   }
+
+ // Nuevo método para buscar varios lugares
+  Future<List<Map<String, dynamic>>> searchPlaces(String query, String city) async {
+    const String url = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
+
+    // Si no hay clave API, registramos el error
+    if (_apiKey.isEmpty) {
+      log.e('PlacesService: No se encontró la clave API de Google Places');
+      return [];
+    }
+
+    try {
+      log.i('PlacesService: Buscando lugares para "$query" en la ciudad $city');
+
+      // Incluimos tanto el nombre del lugar como la ciudad en el query
+      final response = await _dio.get(url, queryParameters: {
+        'query': '$query, $city',
+        'key': _apiKey,
+        'language': 'es',
+      });
+
+      if (response.statusCode == 200 && response.data['results'] != null && response.data['results'].isNotEmpty) {
+        final results = response.data['results'] as List;
+
+        // Convertimos los resultados a una lista de mapas
+        return results.map((result) {
+          return {
+            'name': result['name'],
+            'location': result['geometry']['location'],
+            'formatted_address': result['formatted_address'],
+            'rating': result['rating'],
+            'user_ratings_total': result['user_ratings_total'],
+            'photos': result['photos'],
+            'website': result['website'],
+          };
+        }).toList();
+      }
+    } catch (e, stackTrace) {
+      log.e('PlacesService: Error durante la búsqueda de lugares "$query"', error: e, stackTrace: stackTrace);
+    }
+    return [];
+  }
 }

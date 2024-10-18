@@ -14,6 +14,7 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
   final String apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'] ?? '';
 
   SearchDestinationDelegate() : super(searchFieldLabel: 'Buscar un lugar...');
+  
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -51,23 +52,22 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
 
     final String city = tourState.ecoCityTour!.city;
 
-    log.i(
-        'SearchDestinationDelegate: Realizando búsqueda en Google Places para: "$query" en la ciudad: "$city"');
+    log.i('SearchDestinationDelegate: Realizando búsqueda en Google Places para: "$query" en la ciudad: "$city"');
 
     // Retornar un FutureBuilder para esperar los resultados de la búsqueda
-    return FutureBuilder<Map<String, dynamic>?>(
-      future: _placesService.searchPlace(query, city),
+    return FutureBuilder<List<Map<String, dynamic>>?>(
+      future: _placesService.searchPlaces(query, city), // Cambié el método para buscar una lista de lugares
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (!snapshot.hasData || snapshot.data == null) {
+        if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
           // Mostrar snackbar antes de cerrar el buscador
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (ScaffoldMessenger.of(context).mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackbar(msg: 'No se encontró dicho lugar.'),
+                CustomSnackbar(msg: 'No se encontró ningún lugar.'),
               );
             }
             close(context, null); // Cerrar el buscador y volver al mapa
@@ -75,38 +75,42 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
           return const SizedBox();
         }
 
-        // Crear un PointOfInterest con la respuesta de Google Places
-        final placeData = snapshot.data!;
-        final pointOfInterest = PointOfInterest(
-          gps: LatLng(
-              placeData['location']['lat'], placeData['location']['lng']),
-          name: placeData['name'],
-          description: placeData['formatted_address'],
-          url: placeData['website'],
-          imageUrl: placeData['photos'] != null &&
-                  placeData['photos'].isNotEmpty
-              ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${placeData['photos'][0]['photo_reference']}&key=$apiKey'
-              : null,
-          rating: placeData['rating']?.toDouble(),
-          address: placeData['formatted_address'],
-          userRatingsTotal: placeData['user_ratings_total'],
+        // Mostrar los resultados como una lista de opciones para que el usuario elija
+        final places = snapshot.data!;
+        return ListView.builder(
+          itemCount: places.length,
+          itemBuilder: (context, index) {
+            final place = places[index];
+            return ListTile(
+              title: Text(place['name']),
+              subtitle: Text(place['formatted_address']),
+              onTap: () {
+                // Crear el POI con la selección del usuario
+                final pointOfInterest = PointOfInterest(
+                  gps: LatLng(place['location']['lat'], place['location']['lng']),
+                  name: place['name'],
+                  description: place['formatted_address'],
+                  url: place['website'],
+                  imageUrl: place['photos'] != null && place['photos'].isNotEmpty
+                      ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place['photos'][0]['photo_reference']}&key=$apiKey'
+                      : null,
+                  rating: place['rating']?.toDouble(),
+                  address: place['formatted_address'],
+                  userRatingsTotal: place['user_ratings_total'],
+                );
+
+                log.i('SearchDestinationDelegate: POI seleccionado: ${pointOfInterest.name}, ${pointOfInterest.address}');
+
+                // Agregar el POI al estado del TourBloc y al MapBloc
+                BlocProvider.of<TourBloc>(context).add(OnAddPoiEvent(poi: pointOfInterest));
+                BlocProvider.of<MapBloc>(context).add(OnAddPoiMarkerEvent(pointOfInterest));
+
+                // Cerrar el buscador tras seleccionar el POI
+                close(context, pointOfInterest);
+              },
+            );
+          },
         );
-
-        log.i(
-            'SearchDestinationDelegate: POI encontrado y creado: ${pointOfInterest.name}, ${pointOfInterest.address}');
-
-        // Agregar el POI al estado del TourBloc y al MapBloc inmediatamente
-        BlocProvider.of<TourBloc>(context)
-            .add(OnAddPoiEvent(poi: pointOfInterest));
-        BlocProvider.of<MapBloc>(context)
-            .add(OnAddPoiMarkerEvent(pointOfInterest));
-
-        // Cerrar el buscador tras seleccionar el POI
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          close(context, pointOfInterest);
-        });
-
-        return const SizedBox();
       },
     );
   }
@@ -114,6 +118,6 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
   @override
   Widget buildSuggestions(BuildContext context) {
     log.d('SearchDestinationDelegate: Mostrando sugerencias de búsqueda.');
-    return const Center(child: Text('Escribe el nombre de un lugar...'));
+    return const Center(child: Text('Escribe el nombre de un lugar que quieras añadir.'));
   }
 }

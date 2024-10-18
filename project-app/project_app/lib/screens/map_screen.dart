@@ -127,12 +127,21 @@ class _MapScreenState extends State<MapScreen> {
                         polylines: polylines.values.toSet(),
                         markers: mapState.markers.values.toSet(),
                       ),
-                      const Positioned(
-                        top: 10,
-                        left: 10,
-                        right: 10,
-                        child:
-                            CustomSearchBar(), // Barra de búsqueda personalizada
+                      BlocBuilder<TourBloc, TourState>(
+                        builder: (context, tourState) {
+                          // Mostrar el CustomSearchBar solo si el tourState no es null
+                          if (tourState.ecoCityTour != null) {
+                            return const Positioned(
+                              top: 10,
+                              left: 10,
+                              right: 10,
+                              child:
+                                  CustomSearchBar(), // Barra de búsqueda personalizada
+                            );
+                          }
+                          return const SizedBox
+                              .shrink(); // Retorna un widget vacío si el tourState es null
+                        },
                       ),
                       BlocBuilder<TourBloc, TourState>(
                         builder: (context, tourState) {
@@ -152,7 +161,8 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                       BlocBuilder<TourBloc, TourState>(
                         builder: (context, tourState) {
-                          if (!tourState.isJoined) {
+                          // Mostrar el botón solo si el tourState.tour no es null y no está unido
+                          if (tourState.ecoCityTour != null && !tourState.isJoined) {
                             return Positioned(
                               bottom: 20,
                               left: 32,
@@ -180,7 +190,8 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                             );
                           }
-                          return const SizedBox.shrink();
+                          return const SizedBox
+                              .shrink(); // Si el usuario ya está unido o el tour es null, oculta el botón
                         },
                       ),
                     ],

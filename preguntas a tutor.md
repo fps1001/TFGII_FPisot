@@ -3,18 +3,16 @@
 **Participante**: @clopezno, @fps1001
 
 ### 1. Documentación
-- Revisión de memoria si hay.
-- Se podía crear un hito que sea fin de la memoria (sin anexos).
-- Explicación de siguientes partes a desarrollar.
-- Explicación modificación en diagramas.
+- Revisión.
 
 ### 2. Prototipos y LLM
-- Finalizado: revisión.
+- Finalizado.
 
 ### 3. Desarrollo de la Aplicación
-Una vez mejorada la aplicación dejandola en un punto estable, con buena estructura y bastantes funcionalidades... se pueden realizar las funcionalidades que @clopezno considere oportunas para el TFG. Entre ellas:
+Una vez mejorada la aplicación dejandola en un punto estable, con buena estructura y bastantes funcionalidades... se pueden agregar aquellas funcionalidades que @clopezno considere oportunas para el TFG. Entre ellas:
 - Validación y pruebas: comprobar todos los casos de error posible.
 - Guardar/cargar recorridos con Isar(BD)
+- Integración automática.
 
 
 

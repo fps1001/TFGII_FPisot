@@ -3,8 +3,7 @@ on:
   push:
     branches:
       - main
-  #pull_request:
-  #  types: [opened, synchronize, reopened]
+
 jobs:
   build:
     name: Build and analyze
@@ -15,6 +14,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
         with:
@@ -22,16 +22,29 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
+      # Step to set up Flutter
+      - name: Set up Flutter
+        run: flutter pub get
+
+      # Crear el archivo .env temporalmente
+      - name: Create .env file
+        working-directory: ./project-app/project_app
+        run: |
+          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> .env
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          echo "GOOGLE_DIRECTIONS_API_KEY=${{ secrets.GOOGLE_DIRECTIONS_API_KEY }}" >> .env
+          echo "GOOGLE_PLACES_API_KEY=${{ secrets.GOOGLE_PLACES_API_KEY }}" >> .env
+
       # Step to run Flutter tests with coverage
       - name: Run Flutter tests with coverage
         working-directory: ./project-app/project_app
         run: flutter test --coverage
-      #- name: Build
-      #  run: <mark><commands_to_build_your_project></mark>
+
       - name: Download sonar-scanner
         run: |
           curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.2.1.4610-linux-x64.zip
           unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any

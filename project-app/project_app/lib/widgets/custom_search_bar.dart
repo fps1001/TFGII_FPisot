@@ -25,7 +25,6 @@ class CustomSearchBar extends StatelessWidget {
             // No necesitamos hacer nada más aquí ya que el resultado se maneja en el SearchDelegate
             if (result == null) return;
 
-            // Si fuera necesario, podrías añadir más acciones aquí después de la búsqueda
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
