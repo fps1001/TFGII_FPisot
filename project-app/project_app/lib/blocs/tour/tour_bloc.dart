@@ -117,33 +117,66 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     emit(state.copyWith(isJoined: !state.isJoined));
   }
 
- Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
-  log.i('Añadiendo POI: ${event.poi.name}');
+Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
+  log.i('TourBloc: Añadiendo POI: ${event.poi.name}');
+
   final ecoCityTour = state.ecoCityTour;
-  if (ecoCityTour == null) return;
+  if (ecoCityTour == null) {
+    return;
+  }
 
-  final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..add(event.poi);
+  // Iniciar la carga
+  emit(state.copyWith(isLoading: true));  // Aquí ponemos el loading en true
 
-  await _updateTourWithPois(updatedPois, emit);
+  try {
+    // Actualizamos la lista de POIs añadiendo el nuevo POI
+    final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..add(event.poi);
 
-  // Añadir marcador en el mapa
-  mapBloc.add(OnAddPoiMarkerEvent(event.poi));
+    // Llamamos al método que actualiza la ruta con los nuevos POIs y vuelve a optimizar el tour
+    await _updateTourWithPois(updatedPois, emit);
+
+    // Añadir el marcador del nuevo POI en el mapa
+    mapBloc.add(OnAddPoiMarkerEvent(event.poi));
+
+  } catch (e) {
+    log.e('Error añadiendo el POI: $e');
+    emit(state.copyWith(hasError: true));
+  } finally {
+    // Finalizar la carga
+    emit(state.copyWith(isLoading: false));  // Aquí quitamos el loading al finalizar
+  }
 }
 
 
-  // Método para eliminar un POI (comprobando que sea o no la ubicación actual)
+
 Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async {
-  log.i('Eliminando POI: ${event.poi.name}');
+  log.i('TourBloc: Eliminando POI: ${event.poi.name}');
+  
   final ecoCityTour = state.ecoCityTour;
   if (ecoCityTour == null) return;
 
-  final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..remove(event.poi);
+  // Iniciar la carga
+  emit(state.copyWith(isLoading: true));  // Aquí ponemos el loading en true
 
-  await _updateTourWithPois(updatedPois, emit);
+  try {
+    // Actualizamos la lista de POIs eliminando el POI
+    final updatedPois = List<PointOfInterest>.from(ecoCityTour.pois)..remove(event.poi);
 
-  // Eliminar marcador del mapa
-  mapBloc.add(OnRemovePoiMarkerEvent(event.poi.name));
+    // Actualizamos el tour y recalculamos la ruta con los POIs restantes
+    await _updateTourWithPois(updatedPois, emit);
+
+    // Eliminar el marcador del POI en el mapa
+    mapBloc.add(OnRemovePoiMarkerEvent(event.poi.name));
+
+  } catch (e) {
+    log.e('Error eliminando el POI: $e');
+    emit(state.copyWith(hasError: true));
+  } finally {
+    // Finalizar la carga
+    emit(state.copyWith(isLoading: false));  // Aquí quitamos el loading al finalizar
+  }
 }
+
 
 
   // Método para optimizar el tour que ha sufrido algún cambio de POIs y

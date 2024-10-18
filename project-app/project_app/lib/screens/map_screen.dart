@@ -24,8 +24,9 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   late LocationBloc locationBloc;
-  late Future<void> _loadRouteAndPois;
-  bool _isLoading = true; // Nueva bandera para controlar el estado de carga
+  
+  
+  bool _isDialogShown = false; // Nueva bandera para evitar múltiples diálogos
 
   @override
   void initState() {
@@ -34,7 +35,7 @@ class _MapScreenState extends State<MapScreen> {
     locationBloc.startFollowingUser();
 
     // Inicializa la carga de puntos de interés (POIs) cuando se inicia la pantalla
-    _loadRouteAndPois = _initializeRouteAndPois();
+    _initializeRouteAndPois();
 
     // Log para el inicio del mapa con el tour
     log.i(
@@ -46,161 +47,125 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Eco City Tour',
-        tourState: BlocProvider.of<TourBloc>(context)
-            .state, // Pasamos el estado del tour
+        tourState: BlocProvider.of<TourBloc>(context).state, // Pasamos el estado del tour
       ),
-      body: FutureBuilder<void>(
-        future: _loadRouteAndPois, // Esperar a que se cargue la ruta y los POIs
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting &&
-              _isLoading) {
-            // Mostrar el diálogo de carga mientras se espera que los POIs y la ruta se carguen
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) {
-                LoadingMessageHelper.showLoadingMessage(context);
-                log.i('MapScreen: Cargando la ruta y los POIs...');
-              }
-            });
-            return const SizedBox(); // Widget vacío mientras se muestra el diálogo
+      body: BlocListener<TourBloc, TourState>(
+        listener: (context, tourState) {
+          // Manejo del diálogo de carga
+          if (tourState.isLoading && !_isDialogShown) {
+            // Mostrar el diálogo de carga si no está ya mostrado
+            _isDialogShown = true; // Marcar que el diálogo está mostrado
+            LoadingMessageHelper.showLoadingMessage(context);
+          } else if (!tourState.isLoading && _isDialogShown) {
+            // Cerrar el diálogo de carga si ya no está cargando y el diálogo está mostrado
+            _isDialogShown = false; // Marcar que el diálogo ya fue cerrado
+            if (Navigator.canPop(context)) {
+              Navigator.of(context).pop(); // Cerrar el diálogo
+            }
           }
-
-          if (snapshot.hasError) {
-            // Si ocurre un error, cierra el diálogo y muestra un mensaje de error
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) {
-                Navigator.of(context).pop(); // Cerrar el diálogo de carga
-                log.e('MapScreen: Error al cargar la ruta: ${snapshot.error}');
-              }
-            });
-            return const Center(
-              child: Text(
-                'Error al cargar la ruta',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF00A86B),
-                ),
-              ),
-            );
-          }
-
-          if (snapshot.connectionState == ConnectionState.done) {
-            // Cerrar el diálogo de carga una vez que la ruta esté lista
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted && _isLoading) {
-                Navigator.of(context).pop(); // Cerrar el diálogo de carga
-                _isLoading =
-                    false; // Actualizamos el estado para indicar que la carga ha finalizado
-                log.i('MapScreen: Ruta y POIs cargados correctamente.');
-              }
-            });
-          }
-
-          // Mostrar el contenido del mapa y lógica de BlocBuilders aquí
-          return BlocBuilder<LocationBloc, LocationState>(
-            builder: (context, locationState) {
-              if (locationState.lastKnownLocation == null) {
-                return const Center(
-                  child: Text(
-                    'Presentando nuevo Eco City Tour...',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF00A86B),
-                    ),
+        },
+        child: BlocBuilder<LocationBloc, LocationState>(
+          builder: (context, locationState) {
+            if (locationState.lastKnownLocation == null) {
+              return const Center(
+                child: Text(
+                  'Presentando nuevo Eco City Tour...',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF00A86B),
                   ),
-                );
-              }
+                ),
+              );
+            }
 
-              return BlocBuilder<MapBloc, MapState>(
-                builder: (context, mapState) {
-                  Map<String, Polyline> polylines =
-                      Map.from(mapState.polylines);
-                  if (!mapState.showUserRoute) {
-                    polylines.removeWhere((key, value) => key == 'myRoute');
-                  }
+            return BlocBuilder<MapBloc, MapState>(
+              builder: (context, mapState) {
+                Map<String, Polyline> polylines = Map.from(mapState.polylines);
+                if (!mapState.showUserRoute) {
+                  polylines.removeWhere((key, value) => key == 'myRoute');
+                }
 
-                  return Stack(
-                    children: [
-                      MapView(
-                        initialPosition: locationState.lastKnownLocation!,
-                        polylines: polylines.values.toSet(),
-                        markers: mapState.markers.values.toSet(),
-                      ),
-                      BlocBuilder<TourBloc, TourState>(
-                        builder: (context, tourState) {
-                          // Mostrar el CustomSearchBar solo si el tourState no es null
-                          if (tourState.ecoCityTour != null) {
-                            return const Positioned(
-                              top: 10,
-                              left: 10,
-                              right: 10,
-                              child:
-                                  CustomSearchBar(), // Barra de búsqueda personalizada
-                            );
-                          }
-                          return const SizedBox
-                              .shrink(); // Retorna un widget vacío si el tourState es null
-                        },
-                      ),
-                      BlocBuilder<TourBloc, TourState>(
-                        builder: (context, tourState) {
-                          return Positioned(
-                            bottom: tourState.isJoined ? 30 : 90,
+                return Stack(
+                  children: [
+                    MapView(
+                      initialPosition: locationState.lastKnownLocation!,
+                      polylines: polylines.values.toSet(),
+                      markers: mapState.markers.values.toSet(),
+                    ),
+                    BlocBuilder<TourBloc, TourState>(
+                      builder: (context, tourState) {
+                        // Mostrar el CustomSearchBar solo si el tourState no es null
+                        if (tourState.ecoCityTour != null) {
+                          return const Positioned(
+                            top: 10,
+                            left: 10,
                             right: 10,
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                BtnToggleUserRoute(),
-                                SizedBox(height: 10),
-                                BtnFollowUser(),
-                              ],
-                            ),
+                            child:
+                                CustomSearchBar(), // Barra de búsqueda personalizada
                           );
-                        },
-                      ),
-                      BlocBuilder<TourBloc, TourState>(
-                        builder: (context, tourState) {
-                          // Mostrar el botón solo si el tourState.tour no es null y no está unido
-                          if (tourState.ecoCityTour != null && !tourState.isJoined) {
-                            return Positioned(
-                              bottom: 20,
-                              left: 32,
-                              right: 32,
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: MaterialButton(
-                                  color: Theme.of(context).primaryColor,
-                                  height: 50,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                  ),
-                                  onPressed: () {
-                                    _joinEcoCityTour();
-                                  },
-                                  child: const Text(
-                                    'Unirme al Eco City Tour',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
+                        }
+                        return const SizedBox
+                            .shrink(); // Retorna un widget vacío si el tourState es null
+                      },
+                    ),
+                    BlocBuilder<TourBloc, TourState>(
+                      builder: (context, tourState) {
+                        return Positioned(
+                          bottom: tourState.isJoined ? 30 : 90,
+                          right: 10,
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              BtnToggleUserRoute(),
+                              SizedBox(height: 10),
+                              BtnFollowUser(),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    BlocBuilder<TourBloc, TourState>(
+                      builder: (context, tourState) {
+                        // Mostrar el botón solo si el tourState.tour no es null y no está unido
+                        if (tourState.ecoCityTour != null &&
+                            !tourState.isJoined) {
+                          return Positioned(
+                            bottom: 20,
+                            left: 32,
+                            right: 32,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: MaterialButton(
+                                color: Theme.of(context).primaryColor,
+                                height: 50,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                onPressed: () {
+                                  _joinEcoCityTour();
+                                },
+                                child: const Text(
+                                  'Unirme al Eco City Tour',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ),
-                            );
-                          }
-                          return const SizedBox
-                              .shrink(); // Si el usuario ya está unido o el tour es null, oculta el botón
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          );
-        },
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink(); // Si el usuario ya está unido o el tour es null, oculta el botón
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -222,8 +187,7 @@ class _MapScreenState extends State<MapScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackbar(msg: 'No se encontró la ubicación actual.'),
       );
-      log.w(
-          'MapScreen: Intento fallido de unirse al EcoCityTour, no se encontró la ubicación actual.');
+      log.w('MapScreen: Intento fallido de unirse al EcoCityTour, no se encontró la ubicación actual.');
       return;
     }
 
@@ -249,8 +213,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     locationBloc.stopFollowingUser();
-    log.i(
-        'MapScreen: Deteniendo el seguimiento de ubicación y saliendo de la pantalla del mapa.');
+    log.i('MapScreen: Deteniendo el seguimiento de ubicación y saliendo de la pantalla del mapa.');
     super.dispose();
   }
 }

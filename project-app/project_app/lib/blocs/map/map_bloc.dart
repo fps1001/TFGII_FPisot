@@ -126,7 +126,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     final currentMarkers = Map<String, Marker>.from(state.markers);
     currentPolylines['route'] = myRoute;
     currentMarkers.addAll(poiMarkers);
+
+    // Mandar a mostrar las polilíneas y marcadores
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
+
+    // Centramos la cámara en el primer POI del tour
+    if (tour.pois.isNotEmpty) {
+      final LatLng firstPoiLocation = tour.pois.first.gps;
+      log.i('Moviendo la cámara al primer POI: ${tour.pois.first.name}');
+      moveCamera(firstPoiLocation);
+    }
   }
 
   void showPlaceDetails(BuildContext context, PointOfInterest poi) {
