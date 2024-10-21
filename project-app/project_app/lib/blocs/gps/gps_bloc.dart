@@ -34,7 +34,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
       log.i('GpsBloc: Inicializando estado del GPS y permisos.');
       // Se obtienen los estados del GPS y los permisos
       final gpsInitStatus =
-          await Future.wait([_checkGpsStatus(), _isPermissionGranted()]);
+          await Future.wait([checkGpsStatus(), isPermissionGranted()]);
 
       log.d(
           'GpsBloc: Estado inicial - GPS habilitado: ${gpsInitStatus[0]}, Permisos concedidos: ${gpsInitStatus[1]}');
@@ -51,7 +51,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
   }
 
   // Se comprueba si el permiso de localización está concedido
-  Future<bool> _isPermissionGranted() async {
+  Future<bool> isPermissionGranted() async {
     try {
       final isGranted = await Permission.location.isGranted;
       log.d('GpsBloc: Permiso de localización concedido: $isGranted');
@@ -64,7 +64,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
   }
 
   // Se comprueba si el GPS está habilitado
-  Future<bool> _checkGpsStatus() async {
+  Future<bool> checkGpsStatus() async {
     try {
       final isEnable = await Geolocator.isLocationServiceEnabled();
       log.d('GpsBloc: GPS habilitado: $isEnable');

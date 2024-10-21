@@ -23,7 +23,7 @@ class MapState extends Equatable {
   const MapState({
     this.mapContext, // El contexto puede ser nulo al inicio.
     this.isMapInitialized = false,
-    this.isFollowingUser = true,
+    this.isFollowingUser = false,
     this.showUserRoute = false,
     Map<String, Polyline>? polylines,
     Map<String, Marker>? markers,

@@ -24,15 +24,16 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   late LocationBloc locationBloc;
-  
-  
+
   bool _isDialogShown = false; // Nueva bandera para evitar múltiples diálogos
 
   @override
   void initState() {
     super.initState();
     locationBloc = BlocProvider.of<LocationBloc>(context);
-    locationBloc.startFollowingUser();
+
+    // Obtener la ubicación inicial sin seguir al usuario
+    locationBloc.getInitialUserLocation();
 
     // Inicializa la carga de puntos de interés (POIs) cuando se inicia la pantalla
     _initializeRouteAndPois();
@@ -47,7 +48,8 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Eco City Tour',
-        tourState: BlocProvider.of<TourBloc>(context).state, // Pasamos el estado del tour
+        tourState: BlocProvider.of<TourBloc>(context)
+            .state, // Pasamos el estado del tour
       ),
       body: BlocListener<TourBloc, TourState>(
         listener: (context, tourState) {
@@ -89,7 +91,8 @@ class _MapScreenState extends State<MapScreen> {
                 return Stack(
                   children: [
                     MapView(
-                      initialPosition: locationState.lastKnownLocation!,
+                      initialPosition: widget
+                          .tour.pois.first.gps, // Centrar en el primer POI
                       polylines: polylines.values.toSet(),
                       markers: mapState.markers.values.toSet(),
                     ),
@@ -157,7 +160,8 @@ class _MapScreenState extends State<MapScreen> {
                             ),
                           );
                         }
-                        return const SizedBox.shrink(); // Si el usuario ya está unido o el tour es null, oculta el botón
+                        return const SizedBox
+                            .shrink(); // Si el usuario ya está unido o el tour es null, oculta el botón
                       },
                     ),
                   ],
@@ -177,6 +181,10 @@ class _MapScreenState extends State<MapScreen> {
     // Pinta la nueva polilínea en el mapa usando el MapBloc
     log.i('MapScreen: Dibujando la ruta optimizada en el mapa.');
     await mapBloc.drawEcoCityTour(widget.tour);
+
+    // No seguimos al usuario automáticamente, solo centramos la cámara en el primer POI
+    final firstPoiLocation = widget.tour.pois.first.gps;
+    mapBloc.moveCamera(firstPoiLocation); // Centra la cámara en el primer POI
   }
 
   /// Función que añade un nuevo POI al Eco City Tour basado en la ubicación actual del usuario
@@ -187,7 +195,8 @@ class _MapScreenState extends State<MapScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackbar(msg: 'No se encontró la ubicación actual.'),
       );
-      log.w('MapScreen: Intento fallido de unirse al EcoCityTour, no se encontró la ubicación actual.');
+      log.w(
+          'MapScreen: Intento fallido de unirse al EcoCityTour, no se encontró la ubicación actual.');
       return;
     }
 
@@ -213,7 +222,8 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     locationBloc.stopFollowingUser();
-    log.i('MapScreen: Deteniendo el seguimiento de ubicación y saliendo de la pantalla del mapa.');
+    log.i(
+        'MapScreen: Deteniendo el seguimiento de ubicación y saliendo de la pantalla del mapa.');
     super.dispose();
   }
 }

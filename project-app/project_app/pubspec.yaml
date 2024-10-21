@@ -49,7 +49,6 @@ dependencies:
   http: ^1.2.2
   intl: ^0.19.0
   logger: ^2.4.0
-  mocktail: ^1.0.4
   permission_handler: ^11.3.1
   url_launcher: ^6.3.0
 
@@ -61,7 +60,10 @@ dev_dependencies:
     sdk: flutter
 
   test: 1.25.7
+  mocktail: ^1.0.4
   mockito: ^5.3.0
+  geolocator_platform_interface: ^4.2.4
+  plugin_platform_interface: ^2.1.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
