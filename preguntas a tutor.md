@@ -1,31 +1,22 @@
-## Reunión 22/10. Fin de Sprint 7.
+## Reunión 12/11. Fin de Sprint 7.
 
 **Participante**: @clopezno, @fps1001
 
 ### 1. Documentación
-- Revisión.
+- Diagrama de clases en vez de entidades con precaución de visibilidad.
+- Servicios de Google como actores.
+- Caso de uso por pantalla.
+- Justificar mantenibilidad por el uso de Sonarcloud.
+- Revisión de requisitos.
+- Documentar consumos de API's
 
-### 2. Prototipos y LLM
-- Finalizado.
+### 2. Calidad del código.
+- Conseguir que se indique la cobertura.
+- Obtener una integración que demuestre calidad en el repositorio: uso de badges...
 
 ### 3. Desarrollo de la Aplicación
-Una vez mejorada la aplicación dejandola en un punto estable, con buena estructura y bastantes funcionalidades... se pueden agregar aquellas funcionalidades que @clopezno considere oportunas para el TFG. Entre ellas:
-- Validación y pruebas: comprobar todos los casos de error posible.
-- Guardar/cargar recorridos con Isar(BD)
-- Integración automática.
+- Guardar/cargar tours.
+- Guardar archivos de logger a un archivo compartido. (google cloude json API? Cloud Starage? Google Drive?)
 
-
-
------
-## Referencias Importantes
-
-### Artículos sobre la masificación turística
-
-- **Artículo de El País:**
-  [En el corazón del turismo masivo de Barcelona](https://elpais.com/espana/catalunya/2024-08-20/en-el-corazon-del-turismo-masivo-de-barcelona-que-el-park-guell-este-lleno-demuestra-que-hay-que-verlo.html)
-  - *Fecha*: 20/08/2024
-  - **Resumen**: Habla de la masificación turística y cómo los visitantes aplauden la idea de una app que les avise de la afluencia.
-
-- **Noticia de la BBC:**
-  [BBC sobre el mismo problema](https://www.bbc.com/news/articles/clyn5l20z72o)
-  - *Fecha*: 02/09/2024
+### A tener en cuenta:
+- Tiempo en recorridos en bicicleta excesivos.

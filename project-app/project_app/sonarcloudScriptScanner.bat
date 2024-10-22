@@ -15,7 +15,8 @@ call sonar-scanner.bat ^
 -D"sonar.organization=fps" ^
 -D"sonar.sources=." ^
 -D"sonar.host.url=https://sonarcloud.io" ^
--D"sonar.dart.coverage.reportPaths=project-app/project_app/coverage/lcov.info"
+-D"sonar.tests=./test" ^
+-D"sonar.dart.coverage.reportPaths=./coverage/lcov.info"
 
 :: Comprobar si el análisis con SonarCloud tuvo éxito
 if %ERRORLEVEL% neq 0 (
