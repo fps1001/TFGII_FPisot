@@ -45,7 +45,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       if (!state.isFollowingUser) return;
       if (locationState.lastKnownLocation == null) return;
 
-      moveCamera(locationState.lastKnownLocation!);
+      //moveCamera(locationState.lastKnownLocation!);
     });
   }
 

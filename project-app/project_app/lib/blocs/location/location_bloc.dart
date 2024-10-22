@@ -67,21 +67,10 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     add(OnStopFollowingUser());
   }
 
-void getInitialUserLocation() async {
-  try {
-    final currentPosition = await getCurrentPosition(); // Usamos el método ya existente.
-    add(OnNewUserLocationEvent(currentPosition)); // Emitir la ubicación inicial
-  } catch (e) {
-    log.e('Error obteniendo la ubicación inicial: $e');
-  }
-}
-
   @override
   Future<void> close() {
     log.i('LocationBloc: Cerrando LocationBloc y cancelando suscripciones.');
     stopFollowingUser(); // Puede que no lo tengamos.
     return super.close();
   }
-
-
 }

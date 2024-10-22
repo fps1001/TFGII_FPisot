@@ -31,9 +31,7 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     locationBloc = BlocProvider.of<LocationBloc>(context);
-
-    // Obtener la ubicación inicial sin seguir al usuario
-    locationBloc.getInitialUserLocation();
+    locationBloc.startFollowingUser();
 
     // Inicializa la carga de puntos de interés (POIs) cuando se inicia la pantalla
     _initializeRouteAndPois();
@@ -91,8 +89,7 @@ class _MapScreenState extends State<MapScreen> {
                 return Stack(
                   children: [
                     MapView(
-                      initialPosition: widget
-                          .tour.pois.first.gps, // Centrar en el primer POI
+                      initialPosition: locationState.lastKnownLocation!,
                       polylines: polylines.values.toSet(),
                       markers: mapState.markers.values.toSet(),
                     ),
@@ -181,10 +178,13 @@ class _MapScreenState extends State<MapScreen> {
     // Pinta la nueva polilínea en el mapa usando el MapBloc
     log.i('MapScreen: Dibujando la ruta optimizada en el mapa.');
     await mapBloc.drawEcoCityTour(widget.tour);
-
-    // No seguimos al usuario automáticamente, solo centramos la cámara en el primer POI
-    final firstPoiLocation = widget.tour.pois.first.gps;
-    mapBloc.moveCamera(firstPoiLocation); // Centra la cámara en el primer POI
+    // Después de dibujar la ruta, mueve la cámara al primer POI si hay POIs
+    if (widget.tour.pois.isNotEmpty) {
+      final LatLng firstPoiLocation = widget.tour.pois.first.gps;
+      log.i(
+          'MapScreen: Moviendo la cámara al primer POI: ${widget.tour.pois.first.name}');
+      mapBloc.moveCamera(firstPoiLocation); // Mover la cámara al primer POI
+    }
   }
 
   /// Función que añade un nuevo POI al Eco City Tour basado en la ubicación actual del usuario
