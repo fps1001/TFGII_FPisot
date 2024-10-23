@@ -1,6 +1,13 @@
 # Eco City Tours
 ## TFG Ingeniería Informática - Fernando Pisot
 
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=fps1001_TFGII_FPisot&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=fps1001_TFGII_FPisot)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fps1001_TFGII_FPisot&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fps1001_TFGII_FPisot)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=fps1001_TFGII_FPisot&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=fps1001_TFGII_FPisot)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fps1001_TFGII_FPisot&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fps1001_TFGII_FPisot) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fps1001_TFGII_FPisot&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fps1001_TFGII_FPisot) 
+
+
+
 Este repositorio contiene el código fuente de una aplicación móvil que propone rutas turísticas generadas con tecnologías GIS y enriquecidas mediante la utilización de modelos de lenguaje (LLM) para obtener información detallada sobre lugares de interés turístico. La aplicación se enfoca en la promoción de rutas no motorizadas, optimizadas para ciclistas y peatones, que conectan estos lugares de interés.
 
 ## Objetivos del Proyecto
@@ -68,10 +75,9 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](./LICENS
 Para más información, puedes contactarme a través de:
 
 - **Correo Electrónico**: fpisot@gmail.com / fps1001@alu.ubu.es
-- **LinkedIn**: [Fernando Pisot en LinkedIn]([https://www.linkedin.com/in/fernando-pisot-17b93b251/])
+- **LinkedIn**: [Fernando Pisot]([https://www.linkedin.com/in/fernando-pisot-17b93b251/])
 
 ---
 
 ¡Gracias por tu interés en este proyecto!
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fps1001_TFGII_FPisot&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fps1001_TFGII_FPisot)

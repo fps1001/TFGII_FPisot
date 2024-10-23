@@ -1,0 +1,66 @@
+# Para generar un APK de Flutter y subirlo a GitHub Release:
+#    git tag v0.4.0
+#    git push origin v0.4.0
+
+name: Build APK
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # El flujo se activará cuando se cree un tag de versión, por ejemplo, v0.4.0.
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      # Variables de entorno configuradas en los secretos de GitHub
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      GOOGLE_DIRECTIONS_API_KEY: ${{ secrets.GOOGLE_DIRECTIONS_API_KEY }}
+      GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: 'stable'
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Build APK
+      run: flutter build apk --release
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: ncipollo/release-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref }}  # Este tag será el mismo que generó el push
+        name: "Eco City Tours - Pre-Release ${{ github.ref_name }}"
+        body: |
+          Esta pre-release incluye las siguientes mejoras:
+          - Pantalla de resumen de Eco City Tour.
+          - Mejores resultados con modelo LLM: gemini-1.5-pro.
+          - Mejoras en la navegación entre páginas con gorouter.
+          - Recarga de configuración de Eco City Tour y mejor gestión POI's.
+        draft: false  # Puedes cambiar a true si deseas que sea un borrador
+        prerelease: true
+
+    - name: Upload APK to Release
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/app/outputs/flutter-apk/app-release.apk  # Cambié el path correcto del APK generado
+        asset_name: eco_city_tours_v${{ github.ref_name }}.apk
+        asset_content_type: application/vnd.android.package-archive

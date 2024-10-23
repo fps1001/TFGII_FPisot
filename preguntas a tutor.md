@@ -1,4 +1,4 @@
-## Reunión 12/11. Fin de Sprint 7.
+## Reunión 12/11. Fin de Sprint 8.
 
 **Participante**: @clopezno, @fps1001
 
