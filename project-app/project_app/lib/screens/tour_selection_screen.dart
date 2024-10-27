@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -60,28 +61,23 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
           ),
           iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-          automaticallyImplyLeading: false, 
+          automaticallyImplyLeading: false,
           actions: [
             IconButton(
-              icon: const Icon(Icons.drive_file_move_rounded), 
+              icon: const Icon(Icons.drive_file_move_rounded),
               tooltip: 'Cargar Ruta Guardada',
               onPressed: () {
-                // Simulación de tours guardados
-    final List<EcoCityTour> savedTours = [
-      EcoCityTour(
-        city: 'Salamanca, España',
-        pois: [/* Lista de POIs */],
-        mode: 'walking',
-        userPreferences: ['Naturaleza', 'Museos'],
-        duration: 45.0,
-        distance: 1.8,
-        polilynePoints: [LatLng(40.964, -5.669)], // Ejemplo de coordenadas
-      ),
-      // Más tours guardados
-    ];
+                // Voy a generar una excepción de prueba para comprobar la integración con crashlytics
+                try {
+                  throw Exception(
+                      "Prueba de excepción para Firebase Crashlytics");
+                } catch (e, stackTrace) {
+                  // Registrar la excepción en Crashlytics
+                  FirebaseCrashlytics.instance.recordError(e, stackTrace);
+                }
+
                 //TODO Cargar ruta guardada
-                // Navegar a la pantalla de tours guardados con la lista de tours
-                context.push('/saved-tours', extra: savedTours);
+
                 CustomSnackbar.show(context, 'Cargar una ruta guardada');
               },
             ),

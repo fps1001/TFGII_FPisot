@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:project_app/blocs/blocs.dart';
+import 'package:project_app/firebase_options.dart';
 import 'package:project_app/router/app_router.dart';
 import 'package:project_app/services/services.dart';
 import 'package:project_app/themes/themes.dart';
@@ -16,14 +17,8 @@ void main() async {
   await dotenv.load(fileName: ".env");
 
   // Inicializar Firebase usando las variables de entorno
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: dotenv.env['FIREBASE_API_KEY']!,
-      appId: dotenv.env['FIREBASE_APP_ID']!,
-      messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID']!,
-      projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
-      storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
-    ),
+    await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
   Bloc.observer = MyBlocObserver();
