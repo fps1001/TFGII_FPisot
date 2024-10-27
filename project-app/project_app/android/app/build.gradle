@@ -1,9 +1,13 @@
 plugins {
     id "com.android.application"
+    
     // START: FlutterFire Configuration
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
     // END: FlutterFire Configuration
+
     id "kotlin-android"
+
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -28,7 +32,7 @@ if (flutterVersionName == null) {
 
 def getEnvVariable(String name) {
     Properties properties = new Properties()
-def envFile = file("${rootProject.projectDir}/../.env")
+    def envFile = file("${rootProject.projectDir}/../.env")
     if (envFile.exists()) {
         envFile.withInputStream { stream ->
             properties.load(stream)
@@ -38,9 +42,6 @@ def envFile = file("${rootProject.projectDir}/../.env")
     }
     return properties[name]
 }
-
-
-
 
 android {
     namespace = "com.example.project_app"
@@ -53,17 +54,14 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.project_app"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 21
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
 
         // Agrega la clave API a los placeholders del manifiesto
- manifestPlaceholders = [
+        manifestPlaceholders = [
             googleApiKey: getEnvVariable("GOOGLE_API_KEY") ?: "",
             mapboxApiKey: getEnvVariable("MAPBOX_API_KEY") ?: ""
         ]
@@ -71,9 +69,23 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // Configuración para habilitar Crashlytics en el build release
             signingConfig = signingConfigs.debug
+
+            // Enable the following line to shrink, obfuscate, and optimize your app’s code when building for release.
+            // minifyEnabled true
+            // shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // Para habilitar Crashlytics, también en los builds de depuración (opcional)
+    buildTypes {
+        debug {
+            firebaseCrashlytics {
+                // Se recomienda desactivar en modo depuración
+                mappingFileUploadEnabled false
+            }
         }
     }
 }
@@ -81,3 +93,14 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Crashlytics necesita el siguiente plugin para funcionar
+    implementation platform('com.google.firebase:firebase-bom:30.3.1') // Puedes actualizar según la versión más reciente
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+}
+
+// Aplicar Google Services
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'

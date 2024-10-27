@@ -33,6 +33,16 @@ class TourSummary extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Theme.of(context).primaryColor,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.save_as_rounded),
+                tooltip: 'Guardar Eco City Tour',
+                onPressed: () {
+                  //TODO GUARDAR RUTA
+                  CustomSnackbar.show(context, 'Ruta guardada exitosamente');
+                },
+              ),
+            ],
           ),
           body: Column(
             children: [

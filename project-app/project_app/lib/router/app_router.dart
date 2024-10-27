@@ -35,7 +35,15 @@ class AppRouter {
           return MapScreen(tour: ecoCityTour);
         },
       ),
+      GoRoute(
+        path: '/saved-tours',
+        name: 'saved-tours',
+        builder: (context, state) {
+          final savedTours =
+              state.extra as List<EcoCityTour>; // Pasamos los tours guardados
+          return SavedToursScreen(savedTours: savedTours);
+        },
+      ),
     ],
   );
 }
-

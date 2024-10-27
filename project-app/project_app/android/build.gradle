@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Añadir las siguientes líneas para Google Services y Firebase Crashlytics
+        classpath 'com.google.gms:google-services:4.3.10' // Versión más reciente de Google Services
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1' // Versión más reciente de Crashlytics
+    }
+}
+
 allprojects {
     repositories {
         google()
