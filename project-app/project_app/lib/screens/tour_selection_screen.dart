@@ -45,9 +45,6 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
 
     return PopScope(
       canPop: false, // Impide cualquier acción de retroceso
-      onPopInvokedWithResult: (didPop, result) async {
-        return;
-      },
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
