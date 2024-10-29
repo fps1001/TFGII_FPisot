@@ -53,7 +53,6 @@ class MapView extends StatelessWidget {
             polylines: polylines,
             markers: markers,
             // Se utiliza para no generar tantas peticiones al mover el mapa.
-            //TODO aquí hay que poner que vaya al primer POI
             onCameraMove: (position) => mapBloc.mapCenter = position.target,
           ),
         ));
