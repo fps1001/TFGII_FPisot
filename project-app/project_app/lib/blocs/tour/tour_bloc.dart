@@ -10,6 +10,7 @@ import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/logger/logger.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/exceptions/exceptions.dart';
+import 'package:project_app/repositories/repositories.dart';
 import 'package:project_app/services/services.dart';
 
 part 'tour_event.dart';
@@ -18,8 +19,9 @@ part 'tour_state.dart';
 class TourBloc extends Bloc<TourEvent, TourState> {
   final OptimizationService optimizationService;
   final MapBloc mapBloc; // Añadimos una referencia al MapBloc para marcadores
+  final EcoCityTourRepository ecoCityTourRepository; // Añadimos el repositorio de tours para carga/guardado
 
-  TourBloc({required this.mapBloc, required this.optimizationService})
+  TourBloc({required this.mapBloc, required this.optimizationService, required this.ecoCityTourRepository,})
       : super(const TourState()) {
     // Manejadores de eventos a continuación
     on<LoadTourEvent>(_onLoadTour);
@@ -209,5 +211,16 @@ Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async
       
       emit(state.copyWithNull());
     }
+  }
+
+// Funciones de carga y guardado de tours:@override
+   Future<void> saveCurrentTour(String tourName) async {
+    if (state.ecoCityTour == null) return;
+    await ecoCityTourRepository.saveTour(state.ecoCityTour!, tourName);
+  }
+
+  Future<void> loadSavedTours(Emitter<TourState> emit) async {
+    final savedTours = await ecoCityTourRepository.getSavedTours();
+    // Emitimos los tours guardados en el estado si lo deseas
   }
 }

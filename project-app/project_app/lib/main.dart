@@ -4,7 +4,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:project_app/blocs/blocs.dart';
+import 'package:project_app/datasets/datasets.dart';
 import 'package:project_app/firebase_options.dart';
+import 'package:project_app/repositories/repositories.dart';
 import 'package:project_app/router/app_router.dart';
 import 'package:project_app/services/services.dart';
 import 'package:project_app/themes/themes.dart';
@@ -29,6 +31,10 @@ void main() async {
     log.e("Error en archivo .env: $e");
   }
 
+    // Instancia de FirestoreDataset y EcoCityTourRepository
+  final firestoreDataset = FirestoreDataset();
+  final ecoCityTourRepository = EcoCityTourRepository(firestoreDataset);
+
   runApp(MultiBlocProvider(
     // En vez de hacer runApp se añade un multiblocprovider para gestionar los blocs de la app.
     providers: [
@@ -46,7 +52,8 @@ void main() async {
           create: (context) => TourBloc(
               optimizationService: OptimizationService(),
               mapBloc: BlocProvider.of<MapBloc>(
-                  context))), // Guarda la información del Tour y sus POIs.
+                  context),
+                  ecoCityTourRepository: ecoCityTourRepository,)), // Guarda la información del Tour y sus POIs.
     ],
     child: const ProjectApp(),
   ));

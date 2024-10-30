@@ -37,9 +37,32 @@ class TourSummary extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.save_as_rounded),
                 tooltip: 'Guardar Eco City Tour',
-                onPressed: () {
-                  //TODO GUARDAR RUTA
-                  CustomSnackbar.show(context, 'Ruta guardada exitosamente');
+                onPressed: () async {
+                  final tourName = await showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      String inputText = '';
+                      return AlertDialog(
+                        title: const Text('Nombre del Tour'),
+                        content: TextField(
+                          onChanged: (value) => inputText = value,
+                          decoration: const InputDecoration(
+                              hintText: "Escribe un nombre"),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, inputText),
+                            child: const Text('Guardar'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  if (tourName != null && tourName.isNotEmpty) {
+                    await BlocProvider.of<TourBloc>(context)
+                        .saveCurrentTour(tourName);
+                    CustomSnackbar.show(context, 'Ruta guardada exitosamente');
+                  }
                 },
               ),
             ],
