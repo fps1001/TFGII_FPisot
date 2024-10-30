@@ -21,4 +21,20 @@ class EcoCityTourRepository {
     log.d('Intentando eliminar el tour: $tourName');
     await _dataset.deleteTour(tourName);
   }
+
+Future<EcoCityTour?> getTourById(String documentId) async {
+  try {
+    final docSnapshot = await _dataset.getTourById(documentId);
+    if (docSnapshot.exists) {
+      return EcoCityTour.fromFirestore(docSnapshot);
+    }
+    log.w('El documento con ID $documentId no existe en Firestore.');
+    return null;
+  } catch (e) {
+    log.e('Error al obtener el tour con ID $documentId: $e');
+    return null;
+  }
+}
+
+
 }

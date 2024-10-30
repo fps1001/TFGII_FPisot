@@ -71,3 +71,14 @@ class LoadSavedToursEvent extends TourEvent {
   @override
   List<Object> get props => [];
 }
+
+// Inicializa el tour cuando se carga desde la pantalla de tours guardados
+// sin haber cargado un tour previamente.
+class LoadTourFromSavedEvent extends TourEvent {
+  final String documentId;
+
+  const LoadTourFromSavedEvent({required this.documentId});
+
+  @override
+  List<Object> get props => [documentId];
+}

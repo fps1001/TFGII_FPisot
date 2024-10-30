@@ -25,7 +25,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   late LocationBloc locationBloc;
 
-  bool _isDialogShown = false; // Nueva bandera para evitar múltiples diálogos
+  bool _isDialogShown = false;
 
   @override
   void initState() {
@@ -36,31 +36,33 @@ class _MapScreenState extends State<MapScreen> {
     // Inicializa la carga de puntos de interés (POIs) cuando se inicia la pantalla
     _initializeRouteAndPois();
 
-    // Log para el inicio del mapa con el tour
-    log.i(
-        'MapScreen: Iniciando la pantalla del mapa para el EcoCityTour en ${widget.tour.city}');
+    log.i('MapScreen: Iniciando la pantalla del mapa para el EcoCityTour en ${widget.tour.city}');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Eco City Tour',
-        tourState: BlocProvider.of<TourBloc>(context)
-            .state, // Pasamos el estado del tour
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: BlocBuilder<TourBloc, TourState>(
+          builder: (context, tourState) {
+            return CustomAppBar(
+              title: 'Eco City Tour',
+              tourState: tourState, // Usamos el estado actual del tour
+            );
+          },
+        ),
       ),
       body: BlocListener<TourBloc, TourState>(
         listener: (context, tourState) {
           // Manejo del diálogo de carga
           if (tourState.isLoading && !_isDialogShown) {
-            // Mostrar el diálogo de carga si no está ya mostrado
-            _isDialogShown = true; // Marcar que el diálogo está mostrado
+            _isDialogShown = true;
             LoadingMessageHelper.showLoadingMessage(context);
           } else if (!tourState.isLoading && _isDialogShown) {
-            // Cerrar el diálogo de carga si ya no está cargando y el diálogo está mostrado
-            _isDialogShown = false; // Marcar que el diálogo ya fue cerrado
+            _isDialogShown = false;
             if (Navigator.canPop(context)) {
-              Navigator.of(context).pop(); // Cerrar el diálogo
+              Navigator.of(context).pop();
             }
           }
         },
@@ -95,18 +97,15 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                     BlocBuilder<TourBloc, TourState>(
                       builder: (context, tourState) {
-                        // Mostrar el CustomSearchBar solo si el tourState no es null
                         if (tourState.ecoCityTour != null) {
                           return const Positioned(
                             top: 10,
                             left: 10,
                             right: 10,
-                            child:
-                                CustomSearchBar(), // Barra de búsqueda personalizada
+                            child: CustomSearchBar(),
                           );
                         }
-                        return const SizedBox
-                            .shrink(); // Retorna un widget vacío si el tourState es null
+                        return const SizedBox.shrink();
                       },
                     ),
                     BlocBuilder<TourBloc, TourState>(
@@ -127,9 +126,7 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                     BlocBuilder<TourBloc, TourState>(
                       builder: (context, tourState) {
-                        // Mostrar el botón solo si el tourState.tour no es null y no está unido
-                        if (tourState.ecoCityTour != null &&
-                            !tourState.isJoined) {
+                        if (tourState.ecoCityTour != null && !tourState.isJoined) {
                           return Positioned(
                             bottom: 20,
                             left: 32,
@@ -142,9 +139,7 @@ class _MapScreenState extends State<MapScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25.0),
                                 ),
-                                onPressed: () {
-                                  _joinEcoCityTour();
-                                },
+                                onPressed: _joinEcoCityTour,
                                 child: const Text(
                                   'Unirme al Eco City Tour',
                                   style: TextStyle(
@@ -157,8 +152,7 @@ class _MapScreenState extends State<MapScreen> {
                             ),
                           );
                         }
-                        return const SizedBox
-                            .shrink(); // Si el usuario ya está unido o el tour es null, oculta el botón
+                        return const SizedBox.shrink();
                       },
                     ),
                   ],
@@ -171,23 +165,18 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  /// Método para cargar la ruta optimizada y los POIs
   Future<void> _initializeRouteAndPois() async {
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
-    // Pinta la nueva polilínea en el mapa usando el MapBloc
     log.i('MapScreen: Dibujando la ruta optimizada en el mapa.');
     await mapBloc.drawEcoCityTour(widget.tour);
-    // Después de dibujar la ruta, mueve la cámara al primer POI si hay POIs
     if (widget.tour.pois.isNotEmpty) {
       final LatLng firstPoiLocation = widget.tour.pois.first.gps;
-      log.i(
-          'MapScreen: Moviendo la cámara al primer POI: ${widget.tour.pois.first.name}');
-      mapBloc.moveCamera(firstPoiLocation); // Mover la cámara al primer POI
+      log.i('MapScreen: Moviendo la cámara al primer POI: ${widget.tour.pois.first.name}');
+      mapBloc.moveCamera(firstPoiLocation);
     }
   }
 
-  /// Función que añade un nuevo POI al Eco City Tour basado en la ubicación actual del usuario
   void _joinEcoCityTour() {
     final lastKnownLocation = locationBloc.state.lastKnownLocation;
 
@@ -195,12 +184,10 @@ class _MapScreenState extends State<MapScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackbar(msg: 'No se encontró la ubicación actual.'),
       );
-      log.w(
-          'MapScreen: Intento fallido de unirse al EcoCityTour, no se encontró la ubicación actual.');
+      log.w('MapScreen: Intento fallido de unirse al EcoCityTour, no se encontró la ubicación actual.');
       return;
     }
 
-    // Crear un PointOfInterest con la ubicación actual
     final newPoi = PointOfInterest(
       gps: lastKnownLocation,
       name: 'Ubicación actual',
@@ -211,19 +198,14 @@ class _MapScreenState extends State<MapScreen> {
     );
 
     log.i('MapScreen: Añadiendo la ubicación actual al EcoCityTour como POI.');
-
-    // Añadir el POI al TourBloc
     BlocProvider.of<TourBloc>(context).add(OnAddPoiEvent(poi: newPoi));
-
-    // Cambiar el estado de isJoined después de añadir el POI
     BlocProvider.of<TourBloc>(context).add(const OnJoinTourEvent());
   }
 
   @override
   void dispose() {
     locationBloc.stopFollowingUser();
-    log.i(
-        'MapScreen: Deteniendo el seguimiento de ubicación y saliendo de la pantalla del mapa.');
+    log.i('MapScreen: Deteniendo el seguimiento de ubicación y saliendo de la pantalla del mapa.');
     super.dispose();
   }
 }

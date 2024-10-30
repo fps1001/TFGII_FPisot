@@ -64,4 +64,8 @@ class FirestoreDataset {
       log.e('Error al eliminar el tour en Firestore: $e');
     }
   }
+
+  Future<DocumentSnapshot> getTourById(String documentId) async {
+    return await _firestore.collection('tours').doc(documentId).get();
+  }
 }

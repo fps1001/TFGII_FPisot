@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/logger/logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_app/screens/screens.dart';
 
 class SavedToursScreen extends StatelessWidget {
   final List<EcoCityTour> savedTours;
@@ -25,12 +25,13 @@ class SavedToursScreen extends StatelessWidget {
               itemCount: savedTours.length,
               itemBuilder: (context, index) {
                 final tour = savedTours[index];
-                
+
                 // Usa el documentId como nombre del tour y luego muestra la ciudad
                 final tourName = '${tour.documentId ?? 'Tour'} - ${tour.city}';
 
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -38,14 +39,17 @@ class SavedToursScreen extends StatelessWidget {
                     contentPadding: const EdgeInsets.all(16),
                     title: Text(
                       tourName,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 8),
-                        Text('Distancia: ${formatDistance(tour.distance ?? 0)}'),
-                        Text('Duración: ${formatDuration((tour.duration ?? 0).toInt())}'),
+                        Text(
+                            'Distancia: ${formatDistance(tour.distance ?? 0)}'),
+                        Text(
+                            'Duración: ${formatDuration((tour.duration ?? 0).toInt())}'),
                         const SizedBox(height: 4),
                         Row(
                           children: tour.userPreferences.map((preference) {
@@ -76,8 +80,22 @@ class SavedToursScreen extends StatelessWidget {
                       onPressed: () => _deleteTour(context, tour.documentId),
                     ),
                     onTap: () {
-                      log.d('Usuario seleccionó el tour: $tourName');
-                      context.pushNamed('map', extra: tour.toJson());
+                      log.d('Usuario seleccionó el tour: ${tour.documentId}');
+
+                      // Añadir el evento para cargar el tour guardado en el TourBloc
+                      BlocProvider.of<TourBloc>(context).add(
+                          LoadTourFromSavedEvent(documentId: tour.documentId!));
+
+                      // Navegar a la pantalla de mapa después de disparar el evento
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider.value(
+                            value: BlocProvider.of<TourBloc>(
+                                context), // Proveer el TourBloc actual
+                            child: MapScreen(tour: tour),
+                          ),
+                        ),
+                      );
                     },
                   ),
                 );
@@ -86,6 +104,7 @@ class SavedToursScreen extends StatelessWidget {
     );
   }
 }
+
 void _deleteTour(BuildContext context, String? documentId) async {
   if (documentId == null) {
     log.e('No se puede eliminar el tour: documentId es null');
@@ -122,7 +141,7 @@ void _deleteTour(BuildContext context, String? documentId) async {
       log.i('Intentando eliminar el tour con documentId: $documentId');
       await tourBloc.ecoCityTourRepository.deleteTour(documentId);
       log.i('Tour eliminado exitosamente con documentId: $documentId');
-      
+
       // Recargar la lista de tours después de eliminar
       tourBloc.add(const LoadSavedToursEvent());
     } catch (e) {
