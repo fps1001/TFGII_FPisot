@@ -63,3 +63,11 @@ class ResetTourEvent extends TourEvent {
   @override
   List<Object> get props => [];
 }
+
+// Evento para cargar los tours guardados después de eliminar uno.
+class LoadSavedToursEvent extends TourEvent {
+  const LoadSavedToursEvent();
+
+  @override
+  List<Object> get props => [];
+}

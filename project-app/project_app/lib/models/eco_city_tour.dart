@@ -20,6 +20,40 @@ class EcoCityTour {
     required this.userPreferences,
   });
 
+// Método para convertir EcoCityTour a JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'city': city,
+      'pois': pois.map((poi) => poi.toJson()).toList(),
+      'mode': mode,
+      'userPreferences': userPreferences,
+      'duration': duration,
+      'distance': distance,
+      'polilynePoints': polilynePoints.map((point) => {
+        'latitude': point.latitude,
+        'longitude': point.longitude,
+      }).toList(),
+    };
+  }
+
+  // Método para crear una instancia de EcoCityTour desde JSON
+  factory EcoCityTour.fromJson(Map<String, dynamic> json) {
+    return EcoCityTour(
+      city: json['city'],
+      pois: (json['pois'] as List)
+          .map((poi) => PointOfInterest.fromJson(poi))
+          .toList(),
+      mode: json['mode'],
+      userPreferences: List<String>.from(json['userPreferences']),
+      duration: (json['duration'] as num?)?.toDouble(),
+      distance: (json['distance'] as num?)?.toDouble(),
+      polilynePoints: (json['polilynePoints'] as List)
+          .map((point) => LatLng(point['latitude'], point['longitude']))
+          .toList(),
+    );
+  }
+
+
   // Getter para el mensaje del logger.
   String get name => city;
 

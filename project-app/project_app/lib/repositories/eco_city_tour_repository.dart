@@ -1,16 +1,24 @@
 import 'package:project_app/datasets/firestore_dataset.dart';
 import 'package:project_app/models/models.dart';
+import 'package:project_app/logger/logger.dart';
 
 class EcoCityTourRepository {
   final FirestoreDataset _dataset;
 
   EcoCityTourRepository(this._dataset);
 
-  Future<void> saveTour(EcoCityTour tour, String tourName) {
-    return _dataset.saveTour(tour, tourName);
+  Future<void> saveTour(EcoCityTour tour, String tourName) async {
+    log.d('Intentando guardar el tour: $tourName');
+    await _dataset.saveTour(tour, tourName);
   }
 
-  Future<List<EcoCityTour>> getSavedTours() {
-    return _dataset.getSavedTours();
+  Future<List<EcoCityTour>> getSavedTours() async {
+    log.d('Intentando recuperar los tours guardados');
+    return await _dataset.getSavedTours();
+  }
+
+  Future<void> deleteTour(String tourName) async {
+    log.d('Intentando eliminar el tour: $tourName');
+    await _dataset.deleteTour(tourName);
   }
 }

@@ -34,6 +34,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
       // Limpia el mapa al resetear el tour
       mapBloc.add(OnClearMapEvent());
     });
+    on<LoadSavedToursEvent>(_onLoadSavedTours);
   }
 
   Future<void> _onLoadTour(LoadTourEvent event, Emitter<TourState> emit) async {
@@ -222,5 +223,20 @@ Future<void> _onRemovePoi(OnRemovePoiEvent event, Emitter<TourState> emit) async
   Future<void> loadSavedTours(Emitter<TourState> emit) async {
     final savedTours = await ecoCityTourRepository.getSavedTours();
     // Emitimos los tours guardados en el estado si lo deseas
+  }
+
+
+// Maneja la lógica de cargar tours guardados
+  Future<void> _onLoadSavedTours(LoadSavedToursEvent event, Emitter<TourState> emit) async {
+    emit(state.copyWith(isLoading: true)); // Estado de carga
+
+    try {
+      final savedTours = await ecoCityTourRepository.getSavedTours();
+      emit(state.copyWith(isLoading: false, savedTours: savedTours));
+      log.i('Tours guardados cargados exitosamente');
+    } catch (e) {
+      log.e('Error al cargar los tours guardados: $e');
+      emit(state.copyWith(isLoading: false, hasError: true));
+    }
   }
 }

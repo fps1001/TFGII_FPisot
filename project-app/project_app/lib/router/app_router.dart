@@ -1,4 +1,3 @@
-// lib/router/app_router.dart
 import 'package:go_router/go_router.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/screens/screens.dart';
@@ -31,7 +30,8 @@ class AppRouter {
         path: '/map',
         name: 'map',
         builder: (context, state) {
-          final ecoCityTour = state.extra as EcoCityTour;
+          final ecoCityTourJson = state.extra as Map<String, dynamic>;
+          final ecoCityTour = EcoCityTour.fromJson(ecoCityTourJson);
           return MapScreen(tour: ecoCityTour);
         },
       ),
@@ -39,8 +39,7 @@ class AppRouter {
         path: '/saved-tours',
         name: 'saved-tours',
         builder: (context, state) {
-          final savedTours =
-              state.extra as List<EcoCityTour>; // Pasamos los tours guardados
+          final savedTours = state.extra as List<EcoCityTour>;
           return SavedToursScreen(savedTours: savedTours);
         },
       ),

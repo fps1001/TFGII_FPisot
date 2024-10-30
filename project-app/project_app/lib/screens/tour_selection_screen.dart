@@ -61,23 +61,20 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
-              icon: const Icon(Icons.drive_file_move_rounded),
-              tooltip: 'Cargar Ruta Guardada',
-              onPressed: () {
-                // Voy a generar una excepción de prueba para comprobar la integración con crashlytics
-                try {
-                  throw Exception(
-                      "Prueba de excepción para Firebase Crashlytics");
-                } catch (e, stackTrace) {
-                  // Registrar la excepción en Crashlytics
-                  FirebaseCrashlytics.instance.recordError(e, stackTrace);
-                }
+  icon: const Icon(Icons.drive_file_move_rounded),
+  tooltip: 'Cargar Ruta Guardada',
+  onPressed: () async {
+    final tours = await BlocProvider.of<TourBloc>(context).ecoCityTourRepository.getSavedTours();
 
-                //TODO Cargar ruta guardada
+    if (tours.isEmpty) {
+      CustomSnackbar.show(context, 'No tienes rutas guardadas');
+    } else {
+      // Navegar a `SavedToursScreen` con `GoRouter`, pasando la lista de tours guardados
+      context.pushNamed('saved-tours', extra: tours);
+    }
+  },
+),
 
-                CustomSnackbar.show(context, 'Cargar una ruta guardada');
-              },
-            ),
           ],
         ),
         body: GestureDetector(
