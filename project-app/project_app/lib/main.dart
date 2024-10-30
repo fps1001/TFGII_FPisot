@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';  // Agregado para la autenticación
 
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/datasets/datasets.dart';
@@ -19,41 +20,31 @@ void main() async {
   await dotenv.load(fileName: ".env");
 
   // Inicializar Firebase usando las variables de entorno
-    await Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Autenticar al usuario de forma anónima
+  final User? user = await _authenticateUser();
+
   Bloc.observer = MyBlocObserver();
 
-  try {
-    log.i('Variables de entorno cargadas');
-  } catch (e) {
-    log.e("Error en archivo .env: $e");
-  }
-
-    // Instancia de FirestoreDataset y EcoCityTourRepository
-  final firestoreDataset = FirestoreDataset();
+  // Instancia de FirestoreDataset y EcoCityTourRepository, pasando userId
+  final firestoreDataset = FirestoreDataset(userId: user?.uid);
   final ecoCityTourRepository = EcoCityTourRepository(firestoreDataset);
 
   runApp(MultiBlocProvider(
-    // En vez de hacer runApp se añade un multiblocprovider para gestionar los blocs de la app.
     providers: [
+      BlocProvider(create: (context) => GpsBloc()),
+      BlocProvider(create: (context) => LocationBloc()),
       BlocProvider(
           create: (context) =>
-              GpsBloc()), // Gestión de permiso de localización y GPS activo.
-      BlocProvider(
-          create: (context) =>
-              LocationBloc()), // Gestión de localización de usuario.
-      BlocProvider(
-          create: (context) => MapBloc(
-              locationBloc: BlocProvider.of<LocationBloc>(
-                  context))), // Gestión del controlador de mapa.
+              MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
       BlocProvider(
           create: (context) => TourBloc(
               optimizationService: OptimizationService(),
-              mapBloc: BlocProvider.of<MapBloc>(
-                  context),
-                  ecoCityTourRepository: ecoCityTourRepository,)), // Guarda la información del Tour y sus POIs.
+              mapBloc: BlocProvider.of<MapBloc>(context),
+              ecoCityTourRepository: ecoCityTourRepository)),
     ],
     child: const ProjectApp(),
   ));
@@ -65,9 +56,28 @@ class ProjectApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'Eco-City Tour',
-        theme: AppTheme.lightTheme,
-        routerConfig: AppRouter.router);
+      debugShowCheckedModeBanner: false,
+      title: 'Eco-City Tour',
+      theme: AppTheme.lightTheme,
+      routerConfig: AppRouter.router,
+    );
+  }
+}
+
+// Función para autenticar al usuario de forma anónima
+Future<User?> _authenticateUser() async {
+  try {
+    final auth = FirebaseAuth.instance;
+    // Si ya hay un usuario autenticado, retorna ese usuario
+    if (auth.currentUser != null) {
+      return auth.currentUser;
+    }
+    // Si no hay usuario autenticado, realiza la autenticación anónima
+    final userCredential = await auth.signInAnonymously();
+    log.i("Usuario autenticado de forma anónima: ${userCredential.user?.uid}");
+    return userCredential.user;
+  } catch (e) {
+    log.e("Error en autenticación anónima: $e");
+    return null;
   }
 }

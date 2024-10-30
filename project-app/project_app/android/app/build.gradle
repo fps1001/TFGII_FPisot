@@ -56,7 +56,7 @@ compileOptions {
 
     defaultConfig {
         applicationId = "com.example.project_app"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 34  // Actualizo el sdk para compatibilidad con firebase
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
