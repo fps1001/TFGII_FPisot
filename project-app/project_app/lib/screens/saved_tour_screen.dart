@@ -11,7 +11,7 @@ class SavedToursScreen extends StatelessWidget {
 
   const SavedToursScreen({super.key, required this.savedTours});
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -26,7 +26,8 @@ class SavedToursScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final tour = savedTours[index];
                 
-                final tourName = '${tour.name} - ${tour.city}';
+                // Usa el documentId como nombre del tour y luego muestra la ciudad
+                final tourName = '${tour.documentId ?? 'Tour'} - ${tour.city}';
 
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -72,7 +73,7 @@ class SavedToursScreen extends StatelessWidget {
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _deleteTour(context, tour.name),
+                      onPressed: () => _deleteTour(context, tour.documentId),
                     ),
                     onTap: () {
                       log.d('Usuario seleccionó el tour: $tourName');
@@ -85,10 +86,15 @@ class SavedToursScreen extends StatelessWidget {
     );
   }
 }
-void _deleteTour(BuildContext context, String tourName) async {
+void _deleteTour(BuildContext context, String? documentId) async {
+  if (documentId == null) {
+    log.e('No se puede eliminar el tour: documentId es null');
+    return;
+  }
+
   final tourBloc = BlocProvider.of<TourBloc>(context);
-  
-  log.d('Usuario intentó eliminar el tour: $tourName');
+
+  log.d('Usuario intentó eliminar el tour con documentId: $documentId');
 
   // Pedir confirmación antes de borrar
   final confirmDelete = await showDialog<bool>(
@@ -113,19 +119,14 @@ void _deleteTour(BuildContext context, String tourName) async {
 
   if (confirmDelete == true) {
     try {
-      log.i('Intentando eliminar el tour con nombre: $tourName');
-      await tourBloc.ecoCityTourRepository.deleteTour(tourName);
-      log.i('Tour eliminado exitosamente: $tourName');
+      log.i('Intentando eliminar el tour con documentId: $documentId');
+      await tourBloc.ecoCityTourRepository.deleteTour(documentId);
+      log.i('Tour eliminado exitosamente con documentId: $documentId');
       
-      // Mostrar notificación de éxito
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tour eliminado correctamente')),
-      );
-
       // Recargar la lista de tours después de eliminar
       tourBloc.add(const LoadSavedToursEvent());
     } catch (e) {
-      log.e('Error al eliminar el tour $tourName: $e');
+      log.e('Error al eliminar el tour con documentId $documentId: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error al eliminar el tour')),
       );

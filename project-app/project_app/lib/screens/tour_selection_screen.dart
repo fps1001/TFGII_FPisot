@@ -1,14 +1,11 @@
 import 'dart:async';
 
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/logger/logger.dart'; // Importar logger para registrar eventos
 import 'package:project_app/helpers/helpers.dart'; // Importar el helper de iconos
-import 'package:project_app/models/eco_city_tour.dart';
 import 'package:project_app/screens/screens.dart';
 import 'package:project_app/ui/ui.dart';
 
