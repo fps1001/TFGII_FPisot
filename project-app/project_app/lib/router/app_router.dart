@@ -39,8 +39,7 @@ class AppRouter {
         path: '/saved-tours',
         name: 'saved-tours',
         builder: (context, state) {
-          final savedTours = state.extra as List<EcoCityTour>;
-          return SavedToursScreen(savedTours: savedTours);
+          return const SavedToursScreen();
         },
       ),
     ],

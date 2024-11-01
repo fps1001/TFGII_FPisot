@@ -12,7 +12,6 @@ class OptimizationService {
   OptimizationService() : _dioOptimization = Dio();
 
   Future<EcoCityTour> getOptimizedRoute({
-    //TODO quizá haya que recolocar en la lista los POI en función del orden que le asigna.
     required List<PointOfInterest> pois,
     required String mode,
     required String city,

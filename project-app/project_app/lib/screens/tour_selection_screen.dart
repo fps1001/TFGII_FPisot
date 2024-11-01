@@ -58,20 +58,21 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
-  icon: const Icon(Icons.drive_file_move_rounded),
-  tooltip: 'Cargar Ruta Guardada',
-  onPressed: () async {
-    final tours = await BlocProvider.of<TourBloc>(context).ecoCityTourRepository.getSavedTours();
+              icon: const Icon(Icons.drive_file_move_rounded),
+              tooltip: 'Cargar Ruta Guardada',
+              onPressed: () async {
+                final tourBloc = BlocProvider.of<TourBloc>(context);
+                // Dispara el evento para cargar los tours guardados
+                tourBloc.add(const LoadSavedToursEvent());
 
-    if (tours.isEmpty) {
-      CustomSnackbar.show(context, 'No tienes rutas guardadas');
-    } else {
-      // Navegar a `SavedToursScreen` con `GoRouter`, pasando la lista de tours guardados
-      context.pushNamed('saved-tours', extra: tours);
-    }
-  },
-),
+                // Esperar un momento para asegurarse de que la lista está cargada antes de navegar
+                await Future.delayed(const Duration(milliseconds: 500));
 
+                if (context.mounted) {
+                  context.pushNamed('saved-tours');
+                }
+              },
+            ),
           ],
         ),
         body: GestureDetector(
@@ -331,16 +332,13 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                       // Si el tour se carga correctamente
                       if (!tourState.isLoading &&
                           !tourState.hasError &&
-                          tourState.ecoCityTour != null) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context)
-                            .pop(); // Cerrar el diálogo de carga
+                          tourState.ecoCityTour != null &&
+                          context.mounted) {
+                        Navigator.of(context).pop();
                         log.i(
                             'TourSelectionScreen: Tour cargado exitosamente, navegando al mapa.');
 
-                        // Navegar a la pantalla del mapa
                         Navigator.push(
-                          // ignore: use_build_context_synchronously
                           context,
                           MaterialPageRoute(
                             builder: (context) =>

@@ -15,8 +15,8 @@
 - Obtener una integración que demuestre calidad en el repositorio: uso de badges...
 
 ### 3. Desarrollo de la Aplicación
-- Guardar/cargar tours.
-- Guardar archivos de logger a un archivo compartido. (google cloude json API? Cloud Starage? Google Drive?)
+- Discutir si realizar logins de usuarios o dejar así.
+- Discutir la interfaz de carga/guardado.
 
 ### A tener en cuenta:
 - Tiempo en recorridos en bicicleta excesivos.

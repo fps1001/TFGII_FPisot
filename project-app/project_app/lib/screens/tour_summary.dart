@@ -58,10 +58,13 @@ class TourSummary extends StatelessWidget {
                       );
                     },
                   );
-                  if (tourName != null && tourName.isNotEmpty) {
+                  if (tourName != null && tourName.isNotEmpty && context.mounted) {
                     await BlocProvider.of<TourBloc>(context)
                         .saveCurrentTour(tourName);
-                    CustomSnackbar.show(context, 'Ruta guardada exitosamente');
+                    if (context.mounted) {
+                      CustomSnackbar.show(
+                          context, 'Ruta guardada exitosamente');
+                    }
                   }
                 },
               ),

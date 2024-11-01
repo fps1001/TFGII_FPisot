@@ -36,7 +36,8 @@ class _MapScreenState extends State<MapScreen> {
     // Inicializa la carga de puntos de interés (POIs) cuando se inicia la pantalla
     _initializeRouteAndPois();
 
-    log.i('MapScreen: Iniciando la pantalla del mapa para el EcoCityTour en ${widget.tour.city}');
+    log.i(
+        'MapScreen: Iniciando la pantalla del mapa para el EcoCityTour en ${widget.tour.city}');
   }
 
   @override
@@ -69,16 +70,7 @@ class _MapScreenState extends State<MapScreen> {
         child: BlocBuilder<LocationBloc, LocationState>(
           builder: (context, locationState) {
             if (locationState.lastKnownLocation == null) {
-              return const Center(
-                child: Text(
-                  'Presentando nuevo Eco City Tour...',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF00A86B),
-                  ),
-                ),
-              );
+              return _buildPresentingNewTourState(context);
             }
 
             return BlocBuilder<MapBloc, MapState>(
@@ -126,7 +118,8 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                     BlocBuilder<TourBloc, TourState>(
                       builder: (context, tourState) {
-                        if (tourState.ecoCityTour != null && !tourState.isJoined) {
+                        if (tourState.ecoCityTour != null &&
+                            !tourState.isJoined) {
                           return Positioned(
                             bottom: 20,
                             left: 32,
@@ -172,9 +165,44 @@ class _MapScreenState extends State<MapScreen> {
     await mapBloc.drawEcoCityTour(widget.tour);
     if (widget.tour.pois.isNotEmpty) {
       final LatLng firstPoiLocation = widget.tour.pois.first.gps;
-      log.i('MapScreen: Moviendo la cámara al primer POI: ${widget.tour.pois.first.name}');
+      log.i(
+          'MapScreen: Moviendo la cámara al primer POI: ${widget.tour.pois.first.name}');
       mapBloc.moveCamera(firstPoiLocation);
     }
+  }
+
+  Widget _buildPresentingNewTourState(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.map_outlined,
+                size: 80, color: Theme.of(context).primaryColor),
+            const SizedBox(height: 20),
+            Text(
+              'Presentando nuevo Eco City Tour...',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Esperando la ubicación para mostrar el tour. Por favor, asegúrate de que el GPS está activado.',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _joinEcoCityTour() {
@@ -184,7 +212,8 @@ class _MapScreenState extends State<MapScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackbar(msg: 'No se encontró la ubicación actual.'),
       );
-      log.w('MapScreen: Intento fallido de unirse al EcoCityTour, no se encontró la ubicación actual.');
+      log.w(
+          'MapScreen: Intento fallido de unirse al EcoCityTour, no se encontró la ubicación actual.');
       return;
     }
 
@@ -205,7 +234,8 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     locationBloc.stopFollowingUser();
-    log.i('MapScreen: Deteniendo el seguimiento de ubicación y saliendo de la pantalla del mapa.');
+    log.i(
+        'MapScreen: Deteniendo el seguimiento de ubicación y saliendo de la pantalla del mapa.');
     super.dispose();
   }
 }
