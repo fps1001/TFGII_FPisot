@@ -20,12 +20,7 @@ El siguiente capítulo presenta las técnicas y herramientas usadas a lo largo d
 		\item \textbf{Optimización y monitorización}: permite observar el rendimiento de los modelos analizando su consumo de GPU, memoria o CPU así como su tiempo de respuesta, lo que permite realizar al usuario ajustes con el fin de mejorar el rendimiento del sistema.
 	\end{itemize}
 	La experimentación con diferentes modelos para decidir cuál usar en Eco City Tours resultó mucho más rápida y eficiente gracias a esta herramienta, en comparación con el uso inicial de un solo modelo a través de Ollama \cite{ollama}.
-	
-	\subsection{LangChain}
-	\todo{pendiente ver si se usa}
-	En el último año LangChain se ha establecido como uno de los marcos de trabajo más populares del mercado. Esta herramienta multiusos aúna aplicaciones tan necesarias para el mundo de los \acrfull{llm} como pueden ser base de datos de vectores, memoria, prompts, herramientas, agentes como ya hemos visto en la sección \ref{sec:agentes} y cadenas de pensamiento (de así su nombre chain). En el prototipo de prompting de este \acrshort{tfg} se puede ver el anidamiento de componentes como son estas cadenas para obtener la mejor entrada posible al modelo y obtener la mejor salida posible, estas cadenas pueden unir componentes como prompts, retrievers, processors, tools o incluso otras cadenas para procesos más complejos.
-	Con todo ello LangChain supone una manera de combinar el poder de los \acrshort{llm} con la lógica de cualquier aplicación.
-	
+		
 	\subsection{LangFlow}
 	LangFlow es una herramienta de código abierto\cite{langflow} que proporciona una \acrfull{gui}, permitiendo la interacción con \acrlong{llm} (Modelos de Lenguaje a Gran Escala) sin necesidad de escribir código. Los usuarios pueden configurar componentes y módulos de forma visual, conectándolos entre sí como si se tratara de un diagrama de flujo, facilitando la creación de aplicaciones complejas de procesamiento de lenguaje.
 	
