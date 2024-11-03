@@ -26,17 +26,20 @@ Los hitos o milestones son puntos de referencia que marcan el final de un conjun
 
 \begin{itemize}
 
-    \item \textbf{Kick-off} Puesta en marcha del proyecto. A partir de las reuniones mantenidas con el tutor, se necesita tener todas las herramientas preparadas para empezar a desarrollar tanto la aplicación como su documentación.
+    \item \textbf{Kick-off} Completado el 30 de julio de 2024. Puesta en marcha del proyecto. A partir de las reuniones mantenidas con el tutor, se necesita tener todas las herramientas preparadas para empezar a desarrollar tanto la aplicación como su documentación.
     
-    \item \textbf{MPV - Mínimo Producto Viable} Se define el MVP como una aplicación móvil que sobre un mapa OSM muestre la ubicación de usuario, obtenga unos \acrshort{pdi} básicos y una ruta que las una.
+    \item \textbf{MPV - Mínimo Producto Viable} Completado el 2 de septiembre de 2024. Se define el MVP como una aplicación móvil que sobre un mapa OSM muestre la ubicación de usuario, obtenga unos \acrshort{pdi} básicos y una ruta que las una.
 
-    \item \textbf{Checkpoint 1 de documentación} Este milestone agrupa las tareas relacionadas con la creación y actualización de la documentación del proyecto hasta la reunión con el tutor el 1 de septiembre de 2024.
+    \item \textbf{Checkpoint 1 de documentación} Completado el 2 de septiembre de 2024. Este milestone agrupa las tareas relacionadas con la creación y actualización de la documentación del proyecto hasta la reunión con el tutor el 1 de septiembre de 2024.
 
     El objetivo es tener una documentación suficiente para que el tutor pueda dar feedback acerca de la misma y poder corregir errores.
 
-    \item \textbf{Prototipo Prompting} Este prototipo se puede realizar en un cuaderno Jupyter y su objetivo es mostrar la evolución en el prompt que dará como resultado unos \acrshort{pdi} de mayor calidad.
+    \item \textbf{Prototipo con tours generados por LLM} Completado el 1 de octubre de 2024. El objetivo es transitar desde una aplicación inicial capaz de mostrar lugares y rutas en un mapa, hacia una aplicación que sea capaz de conseguir que estos mismos marcadores y polilíneas sean generados a través de un LLM. \label{hito:prototipo_llm}
     
-    \item \textbf{Prototipo con tours generados por LLM} El objetivo es transitar desde una aplicación inicial capaz de mostrar lugares y rutas en un mapa, hacia una aplicación que sea capaz de conseguir que estos mismos marcadores y polilíneas sean generados a través de un LLM. \label{hito:prototipo_llm}
+    \item \textbf{Prototipo Prompting} Completado el 15 de octubre de 2024. Este prototipo se puede realizar en un cuaderno Jupyter y su objetivo es mostrar la evolución en el prompt que dará como resultado unos \acrshort{pdi} de mayor calidad.
+    
+    \item \textbf{Desarrollo de aplicación completo} Completado el 12 de noviembre de 2024. Se consideran todas las funcionalidades que debe tener la aplicación a presentar como completadas.
+    
 \end{itemize}
 
 \subsection{Organización en \textit{Sprints}}
@@ -45,40 +48,61 @@ Al comenzar este proyecto durante periodo no lectivo se realizaron los Sprint co
 
 
 \begin{itemize}
-    \item \textbf{Sprint Kick-off(22/07/2024 - 29/07/2024):} Después de las reuniones con el tutor, se establecen los objetivos del proyecto y se comienza a trabajar en la puesta en marcha del proyecto. Se establecen las herramientas a utilizar y se comienza a trabajar en la documentación del proyecto. 33 puntos de historia en 5 tareas.
-    ~\ref{fig:bd-kick-off sprint}
-	\imagen{bd-kick-off sprint}{Figura burndown del Sprint Kick-off.}
+    \item \textbf{Sprint 0 - Kick-off(22/07/2024 - 29/07/2024):} Después de las reuniones con el tutor, se establecen los objetivos del proyecto y se comienza a trabajar en la puesta en marcha del proyecto. Se establecen las herramientas a utilizar y se comienza a trabajar en la documentación del proyecto. 33 puntos de historia en 5 tareas.
     
+    ~\ref{fig:bd-kick-off sprint}
+    \imagen{bd-kick-off sprint}{Figura burndown del Sprint Kick-off.}
 
-    \item \textbf{Sprint 1(29/07/2024 - 05/08/2024):} Con las herramientas y una idea previa establecida, es el momento de empezar a desarrollar.
+    \item \textbf{Sprint 1 - Investigación LLM y desarrollo básico de aplicación con mapa (29/07/2024 - 05/08/2024):} Con las herramientas y una idea previa establecida, es el momento de empezar a desarrollar.
+    
 
     Objetivos: seguir formándome en LLM y las opciones que pueda implementar en el prototipo de prompt.
     Empezar a desarrollar la aplicación móvil con las características básicas.
     Aprender a documentar sprints, indicar elementos que tendré que documentar y aquellos que tenga claro ir documentando para hacer un avance significativo que pueda evaluar mi tutor.
+    ~\ref{fig:bd-s1}
+    \imagen{bd-s1}{Figura burndown del Sprint 1: Investigación LLM y desarrollo básico de aplicación con mapa.}
     
-    \item \textbf{Sprint 2(05/08/2024 - 12/08/2024):} A partir del concepto básico, se añaden pequeñas mejoras en los tres aspectos del proyecto.
+    \item \textbf{Sprint 2 - Implementación solución GIS (05/08/2024 - 12/08/2024):} A partir del concepto básico, se añaden pequeñas mejoras en los tres aspectos del proyecto.
     
     Objetivos: mejorar el prototipo de prompting del cuaderno Jupyter hasta incorporar un sistema RAG, incluir marcadores al mapa en cuanto al desarrollo y continuar con la documentación.
+    ~\ref{fig:bd-s2}
+    \imagen{bd-s2}{Figura burndown del Sprint 2: Implementación solución GIS.}
     
     \textit{Dificultades encontradas}: la documentación me hizo perder mucho tiempo debido a problemas con las librerías, después de mucho tiempo reinicié el proyecto desde la plantilla dada, insertando el texto, lo que solucionó el problema. En cuanto al diseño de la aplicación, el desarrollo fue lento al tener que evaluar diferentes opciones ya que la mayoría de fuentes utilizan mapas de Google, opción que se quería descartar.
+ 
 
-    \item \textbf{Sprint 3(12/08/2024 - 22/08/2024):} Este sprint fue más largo que los anteriores para mejorar el resultado final ya que la intención era dejar el proyecto en un estado de revisión lo más completo posible para afrontar la reunión prevista para inicio de septiembre con el tutor del mismo. Al intentar desarrollar la tecnología de enrutado del usuario se comprendió lo que ya se intuía en el sprint anterior y es que basar el trabajo en servicios de Google iba a reportar en un desarrollo más fácil y un resultado más robusto y fiable como se justifica en la sección 5 de la memoria de este \acrshort{tfg}.
+    \item \textbf{Sprint 3 - MPV(12/08/2024 - 22/08/2024):} Este sprint fue más largo que los anteriores para mejorar el resultado final ya que la intención era dejar el proyecto en un estado de revisión lo más completo posible para afrontar la reunión prevista para inicio de septiembre con el tutor del mismo. Al intentar desarrollar la tecnología de enrutado del usuario se comprendió lo que ya se intuía en el sprint anterior y es que basar el trabajo en servicios de Google iba a reportar en un desarrollo más fácil y un resultado más robusto y fiable como se justifica en la sección 5 de la memoria de este \acrshort{tfg}.
+~\ref{fig:bd-s3}
+\imagen{bd-s3}{Figura burndown del Sprint 3: MPV.}
     
-    \item \textbf{Sprint 4(22/08/2024 - 02/09/2024):} El objetivo es mostrar la versión más completa de la aplicación, la documentación y ahondar en el uso de nuevas herramientas como Figma como herramienta de diseño de aplicaciones y LangFlow a la hora de utilizar otro modelo de prototipo.
+    \item \textbf{Sprint 4 - Servicios MapBox y LLM, preparación reunión inicio curso.(22/08/2024 - 02/09/2024):} El objetivo es mostrar la versión más completa de la aplicación, la documentación y ahondar en el uso de nuevas herramientas como Figma como herramienta de diseño de aplicaciones y LangFlow a la hora de utilizar otro modelo de prototipo.
+    ~\ref{fig:bd-s4}
+    \imagen{bd-s4}{Figura burndown del Sprint 4: Servicios MapBox y LLM, preparación reunión inicio curso.}
     
-\item \textbf{S5 - Aplicación con origen de datos LLM (Preparación y documentación):} Después de la reunión con el tutor de inicio de septiembre y habiendo cumplido los objetivos de los primeros hitos se decide continuar intentando alcanzar el hito \ref{hito:prototipo_llm}. Para ello se prepara y documenta primero en este sprint el desarrollo necesario.
+\item \textbf{Sprint 5 - Aplicación con origen de datos LLM (Preparación y documentación) (04/09/2024 - 14/09/2024):} Después de la reunión con el tutor de inicio de septiembre y habiendo cumplido los objetivos de los primeros hitos se decide continuar intentando alcanzar el hito \ref{hito:prototipo_llm}. Para ello se prepara y documenta primero en este sprint el desarrollo necesario.
+~\ref{fig:bd-s5}
+\imagen{bd-s5}{Figura burndown del Sprint 5: Aplicación con origen de datos LLM (Preparación y documentación).}
 
-\item \textbf{S6 - Desarrollo y Finalización prototipo google\_generative\_ai como LLM} Habiendo encontrado una solución óptima al modelo LLM a utilizar se propone realizar un prototipo que implemente la interfaz de usuario y su conexión con el modelo LLM. En los diferentes apartados encontramos. Se trata de un sprint de prominente desarrollo de la aplicación. Se consiguió reestructurar todo el código centralizando labores de gestión del tour generado y sus \acrshort{pdi} manteniendo la modularidad del código.
+\item \textbf{Sprint 6 - Desarrollo y Finalización prototipo google\_generative\_ai como LLM (18/09/2024-01/10/2024):} Habiendo encontrado una solución óptima al modelo LLM a utilizar se propone realizar un prototipo que implemente la interfaz de usuario y su conexión con el modelo LLM. En los diferentes apartados encontramos. Se trata de un sprint de prominente desarrollo de la aplicación. Se consiguió reestructurar todo el código centralizando labores de gestión del tour generado y sus \acrshort{pdi} manteniendo la modularidad del código.
+~\ref{fig:bd-s6}
+\imagen{bd-s6}{Figura burndown del Sprint 6:  Desarrollo y Finalización prototipo google\_generative\_ai como LLM.}
 	
-\item \textbf{S7 - Consolidación y Calidad} Habiendo cumplido el hito \ref{hito:prototipo_llm} y teniendo una aplicación con muchas funcionalidades buscadas, durante este sprint se busca consolidar el código y dotarlo de una calidad y mantenimiento con herramientas de soporte como Sonar Cloud o Logger.
-    
+\item \textbf{S7 - Consolidación y Calidad (02/10/2024 - 22/10/2024)} Habiendo cumplido el hito \ref{hito:prototipo_llm} y teniendo una aplicación con muchas funcionalidades buscadas, durante este sprint se busca consolidar el código y dotarlo de una calidad y mantenimiento con herramientas de soporte como Sonar Cloud o Logger.
+~\ref{fig:bd-s7}
+\imagen{bd-s7}{Figura burndown del Sprint 7: Consolidación y Calidad.}
+
+\item \textbf{S8 - Cobertura de tests y guardado de rutas (23/10/2024 - 12/11/2024):} Se procede a implementar las últimas funcionalidades del desarrollo de la aplicación. Además, se busca que la integración con sonarcloud confirme que se trabaja con un standard de calidad para lo que se necesita la cobertura de tests y por último se retoma el trabajo de documentación. 
+
 \end{itemize}
 
 \subsection{Métricas Ágiles}
-Gracias al uso de Zube se hace uso de diferentes métricas ágiles que han sido vitales para la evaluación del desarrollo de la aplicación y su organización a través de los sprints citados. Algunos de los artefactos usados son los siguientes:
+Gracias al uso de Zube se emplean fácilmente diferentes métricas ágiles que han sido vitales para la evaluación del desarrollo de la aplicación y su organización a través de los sprints citados. Algunos de los artefactos usados son los siguientes:
 \subsubsection{Gráficos burnup / burndown} 
-Muestran a lo largo del tiempo de un sprint la evolución de tareas realizadas por el equipo de desarrollo.
+Muestran a lo largo del tiempo de un sprint la evolución de tareas realizadas por el equipo de desarrollo. En la explicación de los sprints se pueden ver los gráficos asociados al mismo
 \imagen{burnup-s6}{Gráfico Burnup del Sprint 6}{1}
+\subsubsection{Gráfico de velocidad} 
+Permite comprobar el trabajo realizado en los diferentes sprints de manera que resulte lo más constante posible.
+
 
 \section{Estudio de viabilidad}
 
