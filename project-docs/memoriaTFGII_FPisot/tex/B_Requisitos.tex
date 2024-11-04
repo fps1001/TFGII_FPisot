@@ -57,8 +57,164 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 	\item \textbf{RNF-6 Soporte:} la aplicación debe funcionar en versiones actuales de Android sin problemas de rendimiento o fallos en alguna de sus funcionalidades
 \end{itemize}
 \clearpage
+
 \section{Especificación de requisitos}
-\imagen{diagrama-casos-de-uso}{Diagrama de casos de uso}
+\imagen{casos-de-uso}{Diagrama de casos de uso}
+\subsubsection{Actores}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor-ID}    & A01 \\
+		\toprule
+		\textbf{Nombre del actor} & Usuario \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Persona que interactúa con la aplicación Eco City Tour para generar y gestionar rutas turísticas personalizadas. \\
+		\textbf{Tipo}                 & Usuario \\
+		\textbf{Objetivo}             & Generar, visualizar y navegar por rutas turísticas basadas en puntos de interés y preferencias personales. \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Completar el formulario de preferencias para generar una ruta.
+			\item Visualizar detalles de puntos de interés.
+			\item Añadir o eliminar puntos de interés de la ruta.
+			\item Iniciar y detener el seguimiento de ubicación.
+			\item Guardar y cargar Eco City Tours generados.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU-1, CU-2, CU-3 \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A01 Usuario}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor-ID}    & A02 \\
+		\toprule
+		\textbf{Nombre del actor} & Cloud Firestore \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Sistema que permite guardar y cargar a base de datos un Eco City Tour creado \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Guardar el tour actual o cargar un tour guardado. \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Guardar el tour actual.
+			\item Cargar un tour guardado.
+			\item Gestionar esta información segura.
+			\item Mostrar solo los Eco City Tours del usuario actual.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU04, CU06. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A02 - Cloud Firestore}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor-ID}    & A03 \\
+		\toprule
+		\textbf{Nombre del actor} & Gemini Pro 1.5 \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Modelo LLM externo que proporciona una lista de puntos de interés (POI) basados en las preferencias del usuario. \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Elegir los \acrshort{pdi} que formarán el Eco City Tour \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Generar un prompt a partir de los datos de la aplicación introducida por el usuario.
+			\item Enviar los datos de los \acrshort{pdi} a la aplicación para generar la ruta en el formato necesario.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU01.1.1. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A03 - Gemini Pro 1.5}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor-ID}    & A04 \\
+		\toprule
+		\textbf{Nombre del actor} & Google Places Service \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Servicio externo encargado de mejorar la información sobre los puntos de interés proporcionando detalles adicionales como descripciones, fotos y valoraciones. \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Enriquecer la información de los \acrshort{pdi} para que el usuario obtenga datos detallados y actualizados sobre cada lugar. \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Proveer información detallada sobre los \acrshort{pdi}.
+			\item Enviar las descripciones, fotos y valoraciones de los \acrshort{pdi} a la aplicación.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU01.1.2 \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A04 - Google Places Service}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor-ID}    & A05 \\
+		\toprule
+		\textbf{Nombre del actor} & Google Direction Service \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Servicio de información geográfica \acrfull{sig} que genera una ruta entre diferentes lugares. \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Generar una ruta entre los \acrshort{pdi} lo más corta posible en el medio de transporte elegido por el usuario. \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Proveer información detallada de la ruta generada entre los \acrshort{pdi}.
+			\item Enviar la información al gestor de estado de la aplicación que dibujará la polilínea asociada.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU01.1.2 \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A05 - Google Direction Service}
+\end{table}
+
+\subsubsection{Casos de uso}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor-ID}    & A06 \\
+		\toprule
+		\textbf{Nombre del actor} & Crashlytics \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Servicio de monitorización de fallos en la aplicación \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Generar un seguimiento de las ejecuciones de la aplicación y notificar si se han producido anomalías en las mismas.\\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Contabilizar las ejecuciones de la aplicación para datos estadísticos.
+			\item Notificar y clasificar las incidencias asociadas a las ejecuciones de la aplicación.
+			\item Mostrar la información en el cuadro de mando de Crashlytics (Firebase).
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU01.1.2 \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A06 - Crashlytics}
+\end{table}
+
+\subsubsection{Casos de uso}
 
 
 \begin{table}[p]
