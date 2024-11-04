@@ -52,235 +52,430 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 	\item \textbf{RNF-1 Rendimiento:} la aplicación debe demostrar un tiempo de respuesta aceptable para que su manejo sea fluido y la carga de datos sea razonable al enlazar varios servicios asíncronos, de tal manera que no se perjudique la experiencia de usuario. 
 	\item \textbf{RNF-2 Usabilidad:} Eco City Tours debe ser intuitiva y fácil de entender y utilizar.
 	\item \textbf{RNF-3 Disponibilidad:} la aplicación debe estar disponible independientemente de la localización del usuario.
-	\item \textbf{RNF-4 Mantenibilidad:} la aplicación debe ser fácilmente modificable debido a su carácter modular, permitiendo que sea fácil para el desarrollador su mantenimiento.
+	\item \textbf{RNF-4 Mantenibilidad:} la aplicación debe ser fácilmente modificable debido a su carácter modular, facilitando el mantenimiento para el desarrollador. Además, \textbf{el uso de SonarCloud} ayuda a asegurar la calidad del código mediante el análisis continuo, lo que permite identificar y corregir errores potenciales y optimizar el código, favoreciendo así la mantenibilidad a largo plazo.
+	
 	\item \textbf{RNF-5 Escalabilidad:} Eco City Tours debe ser capaz de gestionar eficientemente un crecimiento continuo en el número de usuarios, adaptándose sin problemas para ofrecer un rendimiento óptimo incluso en situaciones de alta demanda.
 	\item \textbf{RNF-6 Soporte:} la aplicación debe funcionar en versiones actuales de Android sin problemas de rendimiento o fallos en alguna de sus funcionalidades
 \end{itemize}
 \clearpage
 
 \section{Especificación de requisitos}
-\imagen{casos-de-uso}{Diagrama de casos de uso}
-\subsubsection{Actores}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{CU00-Gestión-de-GPS}
+	\caption{Diagrama de caso de uso CU00 - Configuración GPS}
+	\label{fig:CU00-Gestión-de-GPS}
+\end{figure}
+
+
+
+Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación del sensor, el resto de funcionalidades de la aplicación no pueden ejecutarse. Para mayor claridad y facilitar la lectura de los diagramas restantes, se presenta por separado, destacando su papel como requisito previo para las demás operaciones.
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{Actor-ID}    & A01 \\
-		\toprule
-		\textbf{Nombre del actor} & Usuario \\
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Persona que interactúa con la aplicación Eco City Tour para generar y gestionar rutas turísticas personalizadas. \\
-		\textbf{Tipo}                 & Usuario \\
-		\textbf{Objetivo}             & Generar, visualizar y navegar por rutas turísticas basadas en puntos de interés y preferencias personales. \\
-		\textbf{Responsabilidades}    & 
-		\begin{itemize}
-			\tightlist
-			\item Completar el formulario de preferencias para generar una ruta.
-			\item Visualizar detalles de puntos de interés.
-			\item Añadir o eliminar puntos de interés de la ruta.
-			\item Iniciar y detener el seguimiento de ubicación.
-			\item Guardar y cargar Eco City Tours generados.
-		\end{itemize}\\
-		\textbf{Relaciones con casos de uso} & CU-1, CU-2, CU-3 \\
-		\bottomrule
-	\end{tabularx}
-	\caption{A01 Usuario}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{Actor-ID}    & A02 \\
-		\toprule
-		\textbf{Nombre del actor} & Cloud Firestore \\
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Sistema que permite guardar y cargar a base de datos un Eco City Tour creado \\
-		\textbf{Tipo}                 & Sistema \\
-		\textbf{Objetivo}             & Guardar el tour actual o cargar un tour guardado. \\
-		\textbf{Responsabilidades}    & 
-		\begin{itemize}
-			\tightlist
-			\item Guardar el tour actual.
-			\item Cargar un tour guardado.
-			\item Gestionar esta información segura.
-			\item Mostrar solo los Eco City Tours del usuario actual.
-		\end{itemize}\\
-		\textbf{Relaciones con casos de uso} & CU04, CU06. \\
-		\bottomrule
-	\end{tabularx}
-	\caption{A02 - Cloud Firestore}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{Actor-ID}    & A03 \\
-		\toprule
-		\textbf{Nombre del actor} & Gemini Pro 1.5 \\
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Modelo LLM externo que proporciona una lista de puntos de interés (POI) basados en las preferencias del usuario. \\
-		\textbf{Tipo}                 & Sistema \\
-		\textbf{Objetivo}             & Elegir los \acrshort{pdi} que formarán el Eco City Tour \\
-		\textbf{Responsabilidades}    & 
-		\begin{itemize}
-			\tightlist
-			\item Generar un prompt a partir de los datos de la aplicación introducida por el usuario.
-			\item Enviar los datos de los \acrshort{pdi} a la aplicación para generar la ruta en el formato necesario.
-		\end{itemize}\\
-		\textbf{Relaciones con casos de uso} & CU01.1.1. \\
-		\bottomrule
-	\end{tabularx}
-	\caption{A03 - Gemini Pro 1.5}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{Actor-ID}    & A04 \\
-		\toprule
-		\textbf{Nombre del actor} & Google Places Service \\
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Servicio externo encargado de mejorar la información sobre los puntos de interés proporcionando detalles adicionales como descripciones, fotos y valoraciones. \\
-		\textbf{Tipo}                 & Sistema \\
-		\textbf{Objetivo}             & Enriquecer la información de los \acrshort{pdi} para que el usuario obtenga datos detallados y actualizados sobre cada lugar. \\
-		\textbf{Responsabilidades}    & 
-		\begin{itemize}
-			\tightlist
-			\item Proveer información detallada sobre los \acrshort{pdi}.
-			\item Enviar las descripciones, fotos y valoraciones de los \acrshort{pdi} a la aplicación.
-		\end{itemize}\\
-		\textbf{Relaciones con casos de uso} & CU01.1.2 \\
-		\bottomrule
-	\end{tabularx}
-	\caption{A04 - Google Places Service}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{Actor-ID}    & A05 \\
-		\toprule
-		\textbf{Nombre del actor} & Google Direction Service \\
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Servicio de información geográfica \acrfull{sig} que genera una ruta entre diferentes lugares. \\
-		\textbf{Tipo}                 & Sistema \\
-		\textbf{Objetivo}             & Generar una ruta entre los \acrshort{pdi} lo más corta posible en el medio de transporte elegido por el usuario. \\
-		\textbf{Responsabilidades}    & 
-		\begin{itemize}
-			\tightlist
-			\item Proveer información detallada de la ruta generada entre los \acrshort{pdi}.
-			\item Enviar la información al gestor de estado de la aplicación que dibujará la polilínea asociada.
-		\end{itemize}\\
-		\textbf{Relaciones con casos de uso} & CU01.1.2 \\
-		\bottomrule
-	\end{tabularx}
-	\caption{A05 - Google Direction Service}
-\end{table}
-
-\subsubsection{Casos de uso}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{Actor-ID}    & A06 \\
-		\toprule
-		\textbf{Nombre del actor} & Crashlytics \\
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Servicio de monitorización de fallos en la aplicación \\
-		\textbf{Tipo}                 & Sistema \\
-		\textbf{Objetivo}             & Generar un seguimiento de las ejecuciones de la aplicación y notificar si se han producido anomalías en las mismas.\\
-		\textbf{Responsabilidades}    & 
-		\begin{itemize}
-			\tightlist
-			\item Contabilizar las ejecuciones de la aplicación para datos estadísticos.
-			\item Notificar y clasificar las incidencias asociadas a las ejecuciones de la aplicación.
-			\item Mostrar la información en el cuadro de mando de Crashlytics (Firebase).
-		\end{itemize}\\
-		\textbf{Relaciones con casos de uso} & CU01.1.2 \\
-		\bottomrule
-	\end{tabularx}
-	\caption{A06 - Crashlytics}
-\end{table}
-
-\subsubsection{Casos de uso}
-
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-1}    & \textbf{Solicitar permisos de \acrshort{gps}.}\\
+		\textbf{CU00}    & \textbf{Configuración GPS} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & Usuario, Sistema \\
 		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-1 \\
-		\textbf{Descripción}          & Concede permisos de localización al dispositivo \\
-		\textbf{Precondición}         & Acceder a la aplicación \\
+		\textbf{Descripción}          & Configura la aplicación para tener acceso a la ubicación mediante GPS. \\
+		\textbf{Precondición}         & La aplicación está instalada y abierta por primera vez o tras haber revocado permisos anteriormente. \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item El usuario abre la aplicación o ha restringido los accesos a la localización
-			\item Un mensaje del \acrfull{so} solicita conceder permisos.
-			\item El usuario concede los permisos solicitados
+			\item La aplicación solicita permiso para el uso del GPS.
+			\item El usuario concede el permiso.
+			\item La aplicación detecta si el GPS está activado.
+			\item Si el GPS no está activado, solicita al usuario activarlo.
 		\end{enumerate}\\
-		\textbf{Postcondición}        & El permiso de seguimiento del usuario ha sido concedido. Si no es concedido, la aplicación no podrá generar rutas personalizadas basadas en la ubicación. \\
-		\textbf{Excepciones}          & El usuario no concede los permisos. \\
-		\textbf{Importancia}          & Alta  \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-1 Solicitar permisos de \acrshort{gps}.}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-1}    & \textbf{Activar sensor \acrshort{gps}.}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-2 \\
-		\textbf{Descripción}          & Activa el uso de GPS en el dispositivo \\
-		\textbf{Precondición}         & El dispositivo debe tener un sensor \acrshort{gps}. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
+		\textbf{Postcondición}        & La aplicación tiene acceso a la ubicación en tiempo real. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
 			\tightlist
-			\item \item La aplicación detecta que el GPS está desactivado y notifica al usuario.
-			\item El usuario activará el sensor de \acrshort{gps} de su dispositivo a través de cualquier menú o atajo de configuración.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & La aplicación tiene acceso a la posición del dispositivo. \\
-		\textbf{Excepciones}          & Problemas con el sensor \acrshort{gps} del dispositivo. \\
+			\item El usuario no concede el permiso de GPS.
+			\item El usuario no activa el GPS cuando se le solicita.
+		\end{itemize}\\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-2 Activar sensor \acrshort{gps}.}
+	\caption{CU00 Configuración GPS}
+\end{table}
+
+\FloatBarrier
+
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{casos-de-uso}
+	\caption{Diagrama de casos de uso general de Eco City Tours}
+	\label{fig:casos-de-uso}
+\end{figure}
+
+
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU01}    & \textbf{Configuración parámetros Eco City Tour} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Configurar los parámetros necesarios para generar un Eco City Tour personalizado según las preferencias del usuario. \\
+		\textbf{Precondición}         & El usuario accede a la pantalla de configuración. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario completa el formulario de preferencias, incluyendo el lugar, número de POIs, medio de transporte y tiempo máximo.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Los parámetros quedan configurados y listos para generar la ruta. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item El usuario no completa el formulario de configuración.
+			\item Error en la carga de los datos de configuración.
+		\end{itemize}\\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU01 Configuración parámetros Eco City Tour}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-3}    & \textbf{Activar/Desactivar el seguimiento del usuario.}\\
+		\textbf{CU01.1}    & \textbf{Calcular Eco City Tour} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A03, A04, A05 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Generar una ruta optimizada conectando los puntos de interés seleccionados en función de las preferencias del usuario. \\
+		\textbf{Precondición}         & Los parámetros han sido configurados correctamente. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario confirma la configuración de preferencias.
+			\item El sistema consulta un LLM para obtener \acrshort{pdi} basados en las preferencias del usuario.
+			\item El sistema envía los \acrshort{pdi} a Google Places para obtener información mejorada.
+			\item El sistema consulta un servicio de optimización de rutas para generar la ruta optimizada.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La ruta optimizada es calculada y lista para ser visualizada. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Fallo en la conexión con el LLM.
+			\item Error en el servicio de optimización de rutas.
+		\end{itemize}\\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU01.1 Calcular Eco City Tour}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU02}    & \textbf{Navegar Mapa} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-3 \\
-		\textbf{Descripción}          & El usuario puede activar o desactivar el seguimiento de su posición en tiempo real en el mapa, permitiendo ver el trayecto mientras se desplaza. \\
-		\textbf{Precondición}         & La aplicación tiene acceso a la ubicación del usuario y tiene permisos de su uso. \\
+		\textbf{Actor}                & A01 \\
+		\textbf{Descripción}          & El usuario puede desplazarse y explorar el mapa interactivo de la aplicación. \\
+		\textbf{Precondición}         & El mapa está visible. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario explora el mapa desplazándose y haciendo zoom.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & El usuario navega por el mapa para observar los POI y la ruta. \\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU02 Navegar Mapa}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU03}    & \textbf{Ver resumen Eco City Tour} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Muestra un resumen de la ruta generada, incluyendo la distancia, duración y medio de transporte. \\
+		\textbf{Precondición}         & La ruta ha sido generada. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la pantalla de resumen.
+			\item La aplicación muestra los detalles de la ruta, incluyendo distancia total, tiempo estimado y transporte elegido.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & El resumen es visible para el usuario. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en la carga de los datos de la ruta.
+		\end{itemize}\\
+		\textbf{Importancia}          & Baja \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU03 Ver resumen Eco City Tour}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU04}    & \textbf{Guardar Eco City Tour} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01, A02 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Permite al usuario guardar la ruta generada para acceder a ella en el futuro. \\
+		\textbf{Precondición}         & La ruta ha sido generada. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario selecciona la opción de guardar la ruta.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La ruta queda guardada en el sistema. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en el guardado de la ruta.
+			\item Problemas de conexión con la base de datos.
+		\end{itemize}\\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU04 Guardar Eco City Tour}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU05}    & \textbf{Cargar Eco City Tour} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01, A02 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Permite al usuario cargar una ruta guardada previamente. \\
+		\textbf{Precondición}         & El usuario ha guardado al menos una ruta. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario selecciona la opción de cargar una ruta guardada.
+			\item El usuario selecciona un Eco City Tour guardado previamente que será cargado.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La ruta es cargada y visible en el mapa. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en la carga de la ruta guardada.
+			\item Problemas de conexión con la base de datos.
+		\end{itemize}\\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU05 Cargar Eco City Tour}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU06}    & \textbf{Registro de log} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A06 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Registra los eventos y actividades del usuario en la aplicación para fines de monitorización y depuración. \\
+		\textbf{Precondición}         & La aplicación está en funcionamiento. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item La aplicación registra automáticamente los eventos relevantes.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Los eventos quedan registrados en el sistema. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en la conexión con el sistema de registros.
+			\item Fallo en la escritura de los eventos en el log.
+		\end{itemize}\\
+		\textbf{Importancia}          & Baja \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU06 Registro de log}
+\end{table}
+
+
+\FloatBarrier
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{CU02-Navegar-mapa}
+	\caption{Diagrama de caso de uso CU02 - Navegar Mapa}
+	\label{CU02-Navegar-mapa}
+\end{figure}
+
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU02.1}    & \textbf{Visualizar detalles de puntos de interés (PDI)} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & El usuario puede obtener información detallada sobre un punto de interés seleccionado en el mapa. \\
+		\textbf{Precondición}         & La ruta y los puntos de interés están visibles en el mapa. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario selecciona un marcador de punto de interés en el mapa.
+			\item El sistema muestra la información detallada del punto de interés.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La información detallada del punto de interés es visible para el usuario. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Fallo en la carga de información del PDI debido a problemas de conectividad.
+			\item Error en el servicio externo de obtención de información.
+		\end{itemize}\\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU02.1 Visualizar detalles de puntos de interés (PDI)}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU02.2}    & \textbf{Eliminar puntos de interés (PDI)} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01, A05 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & El usuario puede eliminar puntos de interés de la ruta desde el mapa. \\
+		\textbf{Precondición}         & La ruta ha sido generada y los puntos de interés están visibles en el mapa. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario selecciona un punto de interés en el mapa.
+			\item El sistema elimina el punto de interés de la ruta.
+			\item El sistema recalcula la ruta optimizada sin el punto eliminado.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La ruta es recalculada sin el punto de interés eliminado. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en el recálculo de la ruta.
+			\item Problemas de conectividad al intentar actualizar la ruta.
+		\end{itemize}\\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU02.2 Eliminar puntos de interés (PDI)}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU02.3}    & \textbf{Añadir puntos de interés (PDI)} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & El usuario puede añadir manualmente un nuevo \acrshort{pdi} a la ruta introduciendo su nombre en la barra de búsqueda. \\
+		\textbf{Precondición}         & La ruta ha sido generada previamente. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario introduce el nombre de un lugar en la barra de búsqueda.
+			\item El sistema muestra el resultado de la búsqueda y el usuario lo selecciona para añadirlo.
+			\item El sistema recalcula la ruta optimizada incluyendo el nuevo \acrlong{pdi}.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & El nuevo lugar es añadido a la ruta, y la ruta optimizada es recalculada. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item El lugar no se encuentra en el servicio de búsqueda.
+			\item Fallo en el recalculo de la ruta.
+		\end{itemize}\\
+		\textbf{Importancia}          & Baja \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU02.3 Añadir puntos de interés (PDI)}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU02.4}    & \textbf{Unirse a la ruta calculada} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Permite al usuario unirse a una ruta previamente generada desde su ubicación actual. \\
+		\textbf{Precondición}         & Una ruta ya ha sido generada y está activa. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario selecciona la opción para unirse a la ruta desde su ubicación actual.
+			\item El sistema calcula la ruta más corta para conectar la ubicación actual del usuario con la ruta generada.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & El usuario es guiado desde su ubicación actual hasta la ruta generada. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en el cálculo de la ruta de conexión.
+			\item Problemas de conexión con el servicio de optimización de rutas.
+		\end{itemize}\\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU02.4 Unirse a la ruta calculada}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU02.5}    & \textbf{Añadir seguimiento del usuario} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Permite al usuario activar o desactivar el seguimiento de su posición en tiempo real en el mapa. \\
+		\textbf{Precondición}         & La aplicación tiene acceso a la ubicación del usuario. \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
@@ -289,227 +484,15 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 			\item El sistema ajusta el mapa para mostrar o dejar de mostrar el movimiento del usuario en tiempo real.
 		\end{enumerate}\\
 		\textbf{Postcondición}        & El mapa sigue o deja de seguir la posición del usuario en tiempo real. \\
-		\textbf{Excepciones}          & Problemas de conexión con el GPS o pérdida de señal. \\
-		\textbf{Importancia}          & Media  \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-3 Activar/Desactivar el seguimiento del usuario.}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-4}    & \textbf{Centrar mapa en la ubicación actual.}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-4 \\
-		\textbf{Descripción}          & El usuario puede centrar manualmente la vista del mapa en su ubicación actual mediante un botón. \\
-		\textbf{Precondición}         & La aplicación tiene acceso a la ubicación del usuario y tiene permisos de su uso. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
+		\textbf{Excepciones}          & 
+		\begin{itemize}
 			\tightlist
-			\item El usuario pulsa el botón para centrar el mapa en su ubicación actual.
-			\item La aplicación ajusta el mapa para centrar la vista en la posición del usuario.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & El mapa se centra en la ubicación actual del usuario. \\
-		\textbf{Excepciones}          & La ubicación del usuario no está disponible o la señal GPS es débil. \\
+			\item Problemas de conexión con el GPS.
+			\item Pérdida de señal GPS.
+		\end{itemize}\\
 		\textbf{Importancia}          & Baja \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-4 Centrar mapa en la ubicación actual.}
+	\caption{CU02.5 Añadir seguimiento del usuario}
 \end{table}
 
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-5}    & \textbf{Completar formulario de preferencias.}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-5 \\
-		\textbf{Descripción}          & El usuario rellena un formulario indicando el lugar que quiere visitar, el número de puntos de interés, el medio de transporte, sus intereses y el tiempo que quiere dedicar a la ruta. \\
-		\textbf{Precondición}         & La aplicación debe estar activa y mostrar el formulario. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario selecciona el lugar de destino.
-			\item El usuario elige el número de puntos de interés que desea visitar.
-			\item El usuario selecciona el modo de transporte (a pie o en bicicleta).
-			\item El usuario selecciona sus intereses (naturaleza, historia, deportes, etc.).
-			\item El usuario indica el tiempo máximo que quiere dedicar a la ruta.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & El formulario queda completado y la aplicación está lista para generar una ruta personalizada. \\
-		\textbf{Excepciones}          & El usuario no completa el formulario o deja campos vacíos. \\
-		\textbf{Importancia}          & Alta  \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-5 Completar formulario de preferencias.}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-6}    & \textbf{Generar ruta optimizada.}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-5, RF-6, RF-8 \\
-		\textbf{Descripción}          & El sistema genera una ruta optimizada que conecta los puntos de interés basados en las preferencias del usuario, consultando servicios externos como LLM, Google Places, y un servicio de optimización de rutas. \\
-		\textbf{Precondición}         & El formulario de preferencias ha sido completado y la aplicación tiene acceso a los servicios externos. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario envía las preferencias desde el formulario (lugar, número de puntos de interés, transporte, tiempo, etc.).
-			\item El sistema consulta un servicio LLM para obtener los puntos de interés (POI) basados en las preferencias del usuario.
-			\item El sistema envía los POI al servicio Google Places para obtener información mejorada (descripciones, fotos, ratings, etc.).
-			\item El sistema envía la información GPS de los POI a un servicio de optimización de rutas para calcular la ruta más corta.
-			\item El sistema muestra en el mapa la ruta optimizada, conectando los POI según las preferencias del usuario.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & La ruta optimizada es mostrada en el mapa, incluyendo la información mejorada de los POI. \\
-		\textbf{Excepciones}          & Problemas en la conexión con los servicios LLM, Google Places o el servicio de optimización de rutas. \\
-		\textbf{Importancia}          & Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-6 Generar ruta optimizada.}
-\end{table}
-
-
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-7}    & \textbf{Visualizar detalles de puntos de interés.}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-6, RF-11 \\
-		\textbf{Descripción}          & El usuario puede hacer tap en un marcador del mapa para obtener información detallada sobre un punto de interés, como su descripción, fotos, ratings y URL. \\
-		\textbf{Precondición}         & La ruta ha sido generada y los puntos de interés están visibles en el mapa. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario selecciona un marcador de punto de interés en el mapa.
-			\item El sistema muestra la información detallada del punto de interés seleccionado.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & Se muestra la información detallada del punto de interés seleccionado. \\
-		\textbf{Excepciones}          & El sistema no puede obtener detalles del punto de interés seleccionado debido a problemas con los servicios externos. \\
-		\textbf{Importancia}          & Media \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-7 Visualizar detalles de puntos de interés.}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-8}    & \textbf{Eliminar puntos de interés.}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-7 \\
-		\textbf{Descripción}          & El usuario puede eliminar puntos de interés desde el mapa o la pantalla de resumen, lo que recalcula automáticamente la ruta optimizada. \\
-		\textbf{Precondición}         & La ruta ha sido generada y los puntos de interés están visibles. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario selecciona un punto de interés para eliminarlo.
-			\item El sistema elimina el punto de interés seleccionado de la ruta.
-			\item El sistema recalcula la ruta optimizada con los puntos de interés restantes.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & La ruta es recalculada sin el punto de interés eliminado. \\
-		\textbf{Excepciones}          & Problemas en la recalculación de la ruta o eliminación del punto de interés. \\
-		\textbf{Importancia}          & Media  \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-8 Eliminar puntos de interés.}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-9}    & \textbf{Añadir puntos de interés a la ruta.}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-9 \\
-		\textbf{Descripción}          & El usuario puede añadir manualmente nuevos lugares a la ruta existente introduciendo el nombre del lugar en la barra de búsqueda en el mapa. \\
-		\textbf{Precondición}         & La ruta debe haber sido generada previamente. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario introduce el nombre de un lugar en la barra de búsqueda.
-			\item El sistema valida si el lugar existe y lo añade a la ruta.
-			\item El sistema recalcula la ruta optimizada incluyendo el nuevo punto de interés.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & El nuevo lugar es añadido a la ruta y la ruta optimizada es recalculada. \\
-		\textbf{Excepciones}          & El lugar no se encuentra en los servicios de búsqueda o hay problemas al recalcular la ruta. \\
-		\textbf{Importancia}          & Media \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-9 Añadir puntos de interés a la ruta.}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-10}    & \textbf{Unirse a la ruta calculada.}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-10 \\
-		\textbf{Descripción}          & El sistema calcula la ruta más corta para que el usuario se una a una ruta previamente generada, partiendo de su ubicación actual. \\
-		\textbf{Precondición}         & Una ruta ya ha sido generada y está activa. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario solicita unirse a la ruta calculada desde su ubicación actual.
-			\item El sistema calcula la ruta más corta para conectar la ubicación actual del usuario con la ruta generada.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & El usuario es guiado desde su ubicación actual hasta la ruta generada. \\
-		\textbf{Excepciones}          & Problemas con los servicios de generación de rutas. \\
-		\textbf{Importancia}          & Media \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-10 Unirse a la ruta calculada.}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-11}    & \textbf{Visualizar resumen de la ruta.}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Requisitos asociados} & RF-11 \\
-		\textbf{Descripción}          & El usuario puede visualizar un resumen de la ruta generada, incluyendo la distancia total, duración estimada y el medio de transporte seleccionado. \\
-		\textbf{Precondición}         & La ruta ha sido generada. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede a la pantalla de resumen de la ruta.
-			\item El sistema muestra el resumen de la ruta con la distancia total, duración estimada y el medio de transporte.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & El resumen de la ruta es visible para el usuario. \\
-		\textbf{Excepciones}          & Problemas para acceder a la información de la ruta o problemas de conectividad con los servicios externos. \\
-		\textbf{Importancia}          & Baja \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-11 Visualizar resumen de la ruta.}
-\end{table}
