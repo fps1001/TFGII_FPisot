@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0  # Shallow clones should be disabled for better analysis relevancy
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
@@ -36,12 +36,13 @@ jobs:
         working-directory: ./project-app/project_app
         run: flutter test --coverage
 
-      # Subir la cobertura de SonarCloud
+      # Descargar y preparar sonar-scanner
       - name: Download sonar-scanner
         run: |
           curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.2.1.4610-linux-x64.zip
           unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
 
+      # Configurar y ejecutar el análisis con SonarCloud
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -50,7 +51,9 @@ jobs:
           $HOME/.sonar/sonar-scanner-6.2.1.4610-linux-x64/bin/sonar-scanner \
             -Dsonar.projectKey=fps1001_TFGII_FPisot \
             -Dsonar.organization=fps \
-            -Dsonar.sources=. \
+            -Dsonar.sources=./project-app/project_app/lib \
+            -Dsonar.tests=./project-app/project_app/test \
+            -Dsonar.exclusions=**/test/** \
             -Dsonar.javascript.lcov.reportPaths=./project-app/project_app/coverage/lcov.info \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
