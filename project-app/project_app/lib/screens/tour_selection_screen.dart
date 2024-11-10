@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -7,7 +8,6 @@ import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/logger/logger.dart'; // Importar logger para registrar eventos
 import 'package:project_app/helpers/helpers.dart'; // Importar el helper de iconos
 import 'package:project_app/screens/screens.dart';
-import 'package:project_app/ui/ui.dart';
 
 class TourSelectionScreen extends StatefulWidget {
   const TourSelectionScreen({super.key});
@@ -185,7 +185,23 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                     ],
                   ),
                 ),
-
+// Botón para generar una excepción
+                const SizedBox(height: 30),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    onPressed: () {
+                      // Genera una excepción para probar Crashlytics
+                      FirebaseCrashlytics.instance.crash();
+                    },
+                    child: const Text(
+                      'Generar error (Crashlytics)',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
                 //* SELECCIÓN DE PREFERENCIAS DEL USUARIO (CHIPS)
                 const SizedBox(height: 30),
                 Text(

@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';  // Agregado para la autenticación
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/datasets/datasets.dart';
@@ -19,10 +22,19 @@ void main() async {
   // Cargar variables de entorno
   await dotenv.load(fileName: ".env");
 
-  // Inicializar Firebase usando las variables de entorno
+  // Inicializar Firebase usando las opciones predeterminadas de la plataforma
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Configura Crashlytics para capturar errores no controlados de Flutter
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+  // Captura errores no controlados fuera de Flutter (errores de plataforma)
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   // Autenticar al usuario de forma anónima
   final User? user = await _authenticateUser();
@@ -68,11 +80,9 @@ class ProjectApp extends StatelessWidget {
 Future<User?> _authenticateUser() async {
   try {
     final auth = FirebaseAuth.instance;
-    // Si ya hay un usuario autenticado, retorna ese usuario
     if (auth.currentUser != null) {
       return auth.currentUser;
     }
-    // Si no hay usuario autenticado, realiza la autenticación anónima
     final userCredential = await auth.signInAnonymously();
     log.i("Usuario autenticado de forma anónima: ${userCredential.user?.uid}");
     return userCredential.user;
