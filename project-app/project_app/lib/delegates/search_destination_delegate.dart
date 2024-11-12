@@ -39,24 +39,11 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
     );
   }
 
-  @override
-  Widget buildResults(BuildContext context) {
-    // Obtener la ciudad actual desde el TourBloc
-    final tourState = BlocProvider.of<TourBloc>(context).state;
-
-    // Comprobar si el estado tiene un EcoCityTour asignado
-    if (tourState.ecoCityTour == null || tourState.ecoCityTour!.city.isEmpty) {
-      log.w('SearchDestinationDelegate: No se ha seleccionado ninguna ciudad');
-      return const Center(child: Text('No se ha seleccionado ninguna ciudad.'));
-    }
-
-    final String city = tourState.ecoCityTour!.city;
-
+  Widget _buildSearchResults(BuildContext context, String city) {
     log.i('SearchDestinationDelegate: Realizando búsqueda en Google Places para: "$query" en la ciudad: "$city"');
-
-    // Retornar un FutureBuilder para esperar los resultados de la búsqueda
+    
     return FutureBuilder<List<Map<String, dynamic>>?>(
-      future: _placesService.searchPlaces(query, city), // Cambié el método para buscar una lista de lugares
+      future: _placesService.searchPlaces(query, city),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -113,6 +100,20 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
         );
       },
     );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // Obtener la ciudad actual desde el TourBloc
+    final tourState = BlocProvider.of<TourBloc>(context).state;
+
+    // Comprobar si el estado tiene un EcoCityTour asignado
+    if (tourState.ecoCityTour == null || tourState.ecoCityTour!.city.isEmpty) {
+      log.w('SearchDestinationDelegate: No se ha seleccionado ninguna ciudad');
+      return const Center(child: Text('No se ha seleccionado ninguna ciudad.'));
+    }
+
+    return _buildSearchResults(context, tourState.ecoCityTour!.city);
   }
 
   @override
