@@ -185,23 +185,6 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                     ],
                   ),
                 ),
-// Botón para generar una excepción
-                const SizedBox(height: 30),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    onPressed: () {
-                      // Genera una excepción para probar Crashlytics
-                      FirebaseCrashlytics.instance.crash();
-                    },
-                    child: const Text(
-                      'Generar error (Crashlytics)',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
                 //* SELECCIÓN DE PREFERENCIAS DEL USUARIO (CHIPS)
                 const SizedBox(height: 30),
                 Text(
