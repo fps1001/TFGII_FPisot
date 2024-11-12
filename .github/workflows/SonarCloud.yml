@@ -27,7 +27,10 @@ jobs:
           channel: 'stable'
       #4 Install Dependencies
       - name: Install Dependencies
-        run: flutter pub get
+        run: |
+          cd project-app/project_app
+          flutter pub get
+    
       #5 Run flutter tests
       - name: Run Flutter Tests
         run: |
@@ -40,7 +43,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cd project-app/project_app
           export SONAR_SCANNER_VERSION=6.2.1.4610
           export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux-x64
           curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux-x64.zip
@@ -50,5 +52,5 @@ jobs:
           sonar-scanner \
             -Dsonar.organization=fps \
             -Dsonar.projectKey=fps1001_TFGII_FPisot \
-            -Dsonar.sources=./lib \
             -Dsonar.host.url=https://sonarcloud.io
+    
