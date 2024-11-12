@@ -30,14 +30,21 @@ jobs:
         run: |
           cd project-app/project_app
           flutter pub get
-    
-      #5 Run flutter tests
+      #5 Crear archivo .env
+      - name: Create .env file
+        run: |
+          cat <<EOF > project-app/project_app/.env
+          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_DIRECTIONS_API_KEY=${{ secrets.GOOGLE_DIRECTIONS_API_KEY }}
+          GOOGLE_PLACES_API_KEY=${{ secrets.GOOGLE_PLACES_API_KEY }}
+          EOF
+      #6 Run flutter tests
       - name: Run Flutter Tests
         run: |
           cd project-app/project_app
           flutter test --coverage
-    
-      #6 Run Sonar cloud scan
+      #7 Run Sonar cloud scan
       - name: SonarCloud Scan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -53,4 +60,3 @@ jobs:
             -Dsonar.organization=fps \
             -Dsonar.projectKey=fps1001_TFGII_FPisot \
             -Dsonar.host.url=https://sonarcloud.io
-    
