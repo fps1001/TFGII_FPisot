@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "751160432615",
-    "project_id": "eco-city-tour",
-    "storage_bucket": "eco-city-tour.appspot.com"
+    "project_number": "${FIREBASE_PROJECT_NUMBER}",
+    "project_id": "${FIREBASE_PROJECT_ID}",
+    "storage_bucket": "${FIREBASE_STORAGE_BUCKET}"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:751160432615:android:997bcc5c4673f92fd10f42",
+        "mobilesdk_app_id": "${FIREBASE_APP_ID}",
         "android_client_info": {
-          "package_name": "com.example.project_app"
+          "package_name": "${FIREBASE_PACKAGE_NAME}"
         }
       },
       "api_key": [
         {
-          "current_key": "AIzaSyBrUA8z7hC0ZLlgN47_sMKY03SdeASNTsc"
+          "current_key": "${FIREBASE_API_KEY}"
         }
       ],
       "services": {
