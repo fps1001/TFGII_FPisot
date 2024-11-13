@@ -87,7 +87,7 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
     //* VALIDACIÓN E IMPRESIÓN DE RESPUESTA
     final response = await chat.sendMessage(content);
 
-    if (response.text == null) {
+    if (response.text == null || response.text!.isEmpty) {
       // Log si el modelo no da respuesta
       log.w('GeminiService: No se recibió respuesta del modelo.');
       return [];
@@ -117,6 +117,7 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
     } catch (e, stackTrace) {
       log.e('GeminiService: Error al parsear la respuesta JSON',
           error: e, stackTrace: stackTrace);
+          return []; // Devolver lista vacía si hay un error
     }
     return pointsOfInterest;
   }

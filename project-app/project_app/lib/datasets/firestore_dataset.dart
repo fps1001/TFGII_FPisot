@@ -3,15 +3,19 @@ import 'package:project_app/models/models.dart';
 import 'package:project_app/logger/logger.dart';
 
 class FirestoreDataset {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firestore;
   final String? userId;
 
-  FirestoreDataset({required this.userId});
+  // Constructor que permite inyectar una instancia de FirebaseFirestore
+  FirestoreDataset({
+    required this.userId,
+    FirebaseFirestore? firestore,
+  }) : firestore = firestore ?? FirebaseFirestore.instance;
 
   Future<void> saveTour(EcoCityTour tour, String tourName) async {
     try {
       final tourData = {
-        'userId': userId, // Guarda el userId en el tour
+        'userId': userId,
         'city': tour.city,
         'mode': tour.mode,
         'userPreferences': tour.userPreferences,
@@ -35,7 +39,7 @@ class FirestoreDataset {
       };
 
       log.d('Intentando guardar el tour con nombre: $tourName');
-      await _firestore.collection('tours').doc(tourName).set(tourData);
+      await firestore.collection('tours').doc(tourName).set(tourData);
       log.i('Tour guardado con éxito: $tourName');
     } catch (e) {
       log.e('Error al guardar el tour: $e');
@@ -44,9 +48,9 @@ class FirestoreDataset {
 
   Future<List<EcoCityTour>> getSavedTours() async {
     try {
-      final querySnapshot = await _firestore
+      final querySnapshot = await firestore
           .collection('tours')
-          .where('userId', isEqualTo: userId) // Filtra por el userId
+          .where('userId', isEqualTo: userId)
           .get();
       log.i('Tours guardados recuperados: ${querySnapshot.docs.length} tours');
 
@@ -62,7 +66,7 @@ class FirestoreDataset {
   Future<void> deleteTour(String tourName) async {
     try {
       log.d('Intentando eliminar el tour con nombre: $tourName');
-      await _firestore.collection('tours').doc(tourName).delete();
+      await firestore.collection('tours').doc(tourName).delete();
       log.i('Tour eliminado con éxito: $tourName');
     } catch (e) {
       log.e('Error al eliminar el tour: $e');
@@ -70,6 +74,6 @@ class FirestoreDataset {
   }
 
   Future<DocumentSnapshot> getTourById(String documentId) async {
-    return await _firestore.collection('tours').doc(documentId).get();
+    return await firestore.collection('tours').doc(documentId).get();
   }
 }

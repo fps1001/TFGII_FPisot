@@ -27,45 +27,27 @@ class EcoCityTour {
   Map<String, dynamic> toJson() {
     return {
       'city': city,
+      'pois': pois.map((poi) => poi.toJson()).toList(),
       'mode': mode,
       'userPreferences': userPreferences,
       'duration': duration,
       'distance': distance,
-      'polilynePoints': polilynePoints
-          .map((point) => {
-                'lat': point.latitude,
-                'lng': point.longitude,
-              })
-          .toList(),
-      'pois': pois.map((poi) => poi.toJson()).toList(),
+      'polilynePoints': polilynePoints.map((point) => {'latitude': point.latitude, 'longitude': point.longitude}).toList(),
+      'documentId': documentId,
     };
   }
 
-  // Método fromJson para convertir un JSON en EcoCityTour
+  // Método para crear una instancia de EcoCityTour desde JSON
   factory EcoCityTour.fromJson(Map<String, dynamic> json) {
     return EcoCityTour(
       city: json['city'],
+      pois: (json['pois'] as List).map((poi) => PointOfInterest.fromJson(poi)).toList(),
       mode: json['mode'],
       userPreferences: List<String>.from(json['userPreferences']),
       duration: (json['duration'] as num?)?.toDouble(),
       distance: (json['distance'] as num?)?.toDouble(),
-      polilynePoints: (json['polilynePoints'] as List)
-          .map((point) => LatLng(point['lat'],
-              point['lng'])) 
-          .toList(),
-      pois: (json['pois'] as List).map((poiData) {
-        final poiGps = poiData['gps'];
-        return PointOfInterest(
-          gps: LatLng(poiGps['latitude'], poiGps['longitude']),
-          name: poiData['name'],
-          description: poiData['description'],
-          url: poiData['url'],
-          imageUrl: poiData['imageUrl'],
-          rating: (poiData['rating'] as num?)?.toDouble(),
-          address: poiData['address'],
-          userRatingsTotal: poiData['userRatingsTotal'],
-        );
-      }).toList(),
+      polilynePoints: (json['polilynePoints'] as List).map((point) => LatLng(point['latitude'], point['longitude'])).toList(),
+      documentId: json['documentId'],
     );
   }
 

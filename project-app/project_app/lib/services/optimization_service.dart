@@ -9,7 +9,8 @@ import 'package:project_app/models/models.dart';
 class OptimizationService {
   final Dio _dioOptimization;
 
-  OptimizationService() : _dioOptimization = Dio();
+  // Constructor principal, con un parámetro opcional para inyectar un `Dio` diferente solo en los tests
+  OptimizationService({Dio? dio}) : _dioOptimization = dio ?? Dio();
 
   Future<EcoCityTour> getOptimizedRoute({
     required List<PointOfInterest> pois,
