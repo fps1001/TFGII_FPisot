@@ -24,3 +24,6 @@
 ### A tener en cuenta:
 - Tiempo en recorridos en bicicleta excesivos.
 - Web de uso gratuito de servicios Google: https://cloud.google.com/free/docs/free-cloud-features?utm_source=google&utm_medium=email&utm_content=OrigamiC2e&utm_campaign=OrigamiC2&hl=es-419#free-tier-usage-limits 
+
+### Otras issues a realizar: 
+- Documentar el patrón de diseño Bloc utilizando las ideas del artículo https://www.ics.com/blog/building-flutter-discover-bloc-pattern en el anexo C de Diseño y Arquitectura. 

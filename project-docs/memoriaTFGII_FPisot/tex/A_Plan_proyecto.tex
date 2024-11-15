@@ -92,6 +92,10 @@ Al comenzar este proyecto durante periodo no lectivo se realizaron los Sprint co
 \imagen{bd-s7}{Figura burndown del Sprint 7: Consolidación y Calidad.}
 
 \item \textbf{S8 - Cobertura de tests y guardado de rutas (23/10/2024 - 12/11/2024):} Se procede a implementar las últimas funcionalidades del desarrollo de la aplicación. Además, se busca que la integración con sonarcloud confirme que se trabaja con un standard de calidad para lo que se necesita la cobertura de tests y por último se retoma el trabajo de documentación. 
+\imagen{bd-s8}{Figura burndown del Sprint 8: Cobertura de tests y guardado de rutas.}
+
+\item \textbf{S9 - Testing y selección de rol (13/11/2024 - 03/12/2024):} Se estudia la posibilidad de generar diferentes asistentes dandole al modelo distintos roles. Se pretende realizar el test que llevará la aplicación en este sprint. Además, tendrá se realizará el inicio de apartados de anexos en cuanto a documentación. 
+\imagen{bd-s8}{Figura burndown del Sprint 9: Testing y selección de rol.}
 
 \end{itemize}
 
@@ -105,9 +109,47 @@ Permite comprobar el trabajo realizado en los diferentes sprints de manera que r
 
 
 \section{Estudio de viabilidad}
-
+En esta sección se analizan los aspectos clave para determinar si la implementación del proyecto y el desarrollo de la aplicación móvil \textit{Eco City Tours} es viable desde un punto de vista legal y económico. Se destacan los valores positivos de la aplicación, como su independencia de intereses particulares y su enfoque sostenible, que la convierten en una propuesta valiosa en el mercado del fomento del turismo sostenible. \textbf{Se evaluará si los costos de desarrollo, el mantenimiento de los servicios y los posibles problemas legales se compensan con los beneficios esperados, determinando así su viabilidad.}
 \subsection{Viabilidad económica}
+\subsubsection{Costes de personal}
+El desarrollo de la aplicación se realiza con un grupo de trabajo de un solo empleado de categoría profesional equivalente a la de un Ingeniero Informático. Según el XVIII Convenio Colectivo Estatal de Empresas de Consultoría, Tecnologías de la Información y Estudios de Mercado y de la Opinión Pública, publicado en el BOE el 26 de julio de 2023 \cite{boe2023_consultoria} podría estar entorno a los 2.000 € brutos
+\subsubsection{Coste de hardware}
+Para calcular el coste de los equipos se supone un período de amortización de 3 años para todo el hardware. Para realizar la aplicación el Ingeniero Informático usará un ordenador de sobremesa con procesador i7 y 16 Gb de memoria RAM capaz de utilizar los programas necesarios para el desarrollo de manera fluida. Periféricos para dicho equipo y un teléfono móvil Android para pruebas serían también necesarios. Por tanto y a modo resumen tenemos:
+\tablaSmallSinColores
+{Gastos de hardware}
 
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l r}
+		\toprule
+		Elemento & Costo (€) \\
+		\midrule
+		Ordenador & 800 \\
+		Móvil & 500 \\
+		Periféricos & 150 \\
+		Conexión a Internet & 60/mes \\
+		\bottomrule
+	\end{tabular}
+	\caption{Gastos de hardware}
+	\label{tabla:gastos_hardware}
+\end{table}
+
+
+
+
+
+	
+\subsubsection{Coste de software}
+
+\subsubsection{Coste de los Servicios Google}
+\subsubsection{Conclusiones basados en posibles beneficios}
+Una vez analizado los costes devengados de la creación de la aplicación el beneficio de su explotación debe ser mayor al gasto ocasionado por su creación. Además, una vez publicada la aplicación en la \textit{Play Store} el beneficio obtenido por su explotación debe compensar el tiempo requerido por el personal en horas de mantenimiento de los posibles problemas que pueda experimentar como por ejemplo problemas por actualización de los componentes claves como modelos LLM, que puedan quedar obsoletos. El beneficio de la aplicación puede provenir de varias fuentes en función del modelo de explotación que se eligiese:
+\begin{itemize}
+	\item{Ingresos por descarga:} si la aplicación tiene un precio por descarga los ingresos serían el dinero obtenido menos una comisión por cada venta cobrada por Google de un 15\%. \cite{googleplay_commission}.
+	Un precio de lanzamiento razonable podría ser no superior a los 4 euros, donde se obtendría aproximadamente 3,40 euros como beneficio. Tras un periodo de ajuste en función de las descargas, el precio por la misma se podría ajustar.
+	\item{Publicidad:} empresas o entidades colaboradoras podrían financiar el desarrollo con publicidad siempre que ésta no suponga una perdida de independencia en los resultados de los modelos, fomente el turismo ecológico y no sea invasiva ni perjudique la experiencia de usuario.
+	
+\end{itemize}
 \subsection{Viabilidad legal}
 
 
