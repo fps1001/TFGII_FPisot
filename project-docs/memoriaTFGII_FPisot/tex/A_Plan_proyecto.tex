@@ -109,47 +109,161 @@ Permite comprobar el trabajo realizado en los diferentes sprints de manera que r
 
 
 \section{Estudio de viabilidad}
-En esta sección se analizan los aspectos clave para determinar si la implementación del proyecto y el desarrollo de la aplicación móvil \textit{Eco City Tours} es viable desde un punto de vista legal y económico. Se destacan los valores positivos de la aplicación, como su independencia de intereses particulares y su enfoque sostenible, que la convierten en una propuesta valiosa en el mercado del fomento del turismo sostenible. \textbf{Se evaluará si los costos de desarrollo, el mantenimiento de los servicios y los posibles problemas legales se compensan con los beneficios esperados, determinando así su viabilidad.}
+En esta sección se analizan los aspectos clave para determinar si la implementación del proyecto y el desarrollo de la aplicación móvil \textit{Eco City Tours} es viable desde un punto de vista legal y económico. Se destacan los valores positivos de la aplicación, como su independencia de intereses particulares y su enfoque sostenible, que la convierten en una propuesta valiosa en el mercado del fomento del turismo sostenible. Se evaluará si los beneficios esperados compensan los costes de desarrollo, el mantenimiento de los servicios y los posibles problemas legales, determinando así su viabilidad.
 \subsection{Viabilidad económica}
 \subsubsection{Costes de personal}
-El desarrollo de la aplicación se realiza con un grupo de trabajo de un solo empleado de categoría profesional equivalente a la de un Ingeniero Informático. Según el XVIII Convenio Colectivo Estatal de Empresas de Consultoría, Tecnologías de la Información y Estudios de Mercado y de la Opinión Pública, publicado en el BOE el 26 de julio de 2023 \cite{boe2023_consultoria} podría estar entorno a los 2.000 € brutos
-\subsubsection{Coste de hardware}
-Para calcular el coste de los equipos se supone un período de amortización de 3 años para todo el hardware. Para realizar la aplicación el Ingeniero Informático usará un ordenador de sobremesa con procesador i7 y 16 Gb de memoria RAM capaz de utilizar los programas necesarios para el desarrollo de manera fluida. Periféricos para dicho equipo y un teléfono móvil Android para pruebas serían también necesarios. Por tanto y a modo resumen tenemos:
+El desarrollo de la aplicación se realiza con un grupo de trabajo de un solo empleado de categoría profesional equivalente a la de un Ingeniero Informático. Según el XVIII Convenio Colectivo Estatal de Empresas de Consultoría, Tecnologías de la Información y Estudios de Mercado y de la Opinión Pública, publicado en el BOE el 26 de julio de 2023 \cite{boe2023_consultoria} podría estar entorno a los 2.000 € antes de impuestos.
+
 \tablaSmallSinColores
-{Gastos de hardware}
+{Costes de \textit{personal}} % Título de la tabla
+{lc} % Formato de las columnas (l: izquierda, c: centrado)
+{costes-personal} % Etiqueta para referencias cruzadas
+{%
+	\textbf{Concepto} & \textbf{Coste} \\ % Cabecera
+}
+{%
+	Salario Desarrollador & 1.500€  \\ 
+	Retenciones y Seguridad Social & 500 \\
+	\midrule
+	\textbf{Total 4 meses} & \textbf{8.000€} \\ 
+}
 
-\begin{table}[H]
-	\centering
-	\begin{tabular}{l r}
-		\toprule
-		Elemento & Costo (€) \\
-		\midrule
-		Ordenador & 800 \\
-		Móvil & 500 \\
-		Periféricos & 150 \\
-		Conexión a Internet & 60/mes \\
-		\bottomrule
-	\end{tabular}
-	\caption{Gastos de hardware}
-	\label{tabla:gastos_hardware}
-\end{table}
+\subsubsection{Coste de hardware}
+Para calcular el coste de los equipos se supone un período de amortización de 3 años para todo el hardware. Para realizar Eco City Tours se usará un ordenador de sobremesa con procesador i7 y 16 Gb de memoria RAM capaz de utilizar los programas necesarios para el desarrollo de manera fluida. Se tienen en cuenta también periféricos para dicho equipo y un teléfono móvil Android para pruebas de implementación en un dispositivo real no virtualizado. Por tanto y a modo resumen tenemos:
 
+\tablaSmallSinColores
+{Costes de \textit{hardware}} % Título de la tabla
+{lcc} % Formato de las columnas (l: izquierda, c: centrado)
+{costes-hardware} % Etiqueta para referencias cruzadas
+{%
+	\textbf{Concepto} & \textbf{Coste} & \textbf{Coste amortizado} \\ % Cabecera
+}
+{%
+	Ordenador & 1.200€ & 400€ \\ 
+	Periféricos & 240€ & 80€ \\ 
+	Teléfono móvil Android & 300 & 100 \\
+	\midrule
+	\textbf{Total} & \textbf{1.740€} & \textbf{580€} \\ 
+}
 
-
-
-
+Asociado a estos costes también podremos asociar el \textbf{uso de Internet} necesario para poder desarrollar sin problemas buscando información o descargando paquetes necesarios del repositorio de Flutter. Un servicio básico de este tipo \textbf{puede costar 30-60 euros} dependiendo de la velocidad del mismo o de otros productos asociados al cliente.
 	
 \subsubsection{Coste de software}
+El software utilizado para el proyecto es libre. Visual Studio Code como IDE de desarrollo único, libre y gratuito y Android Studio en su versión gratuita para poder instalar emuladores de dispositivos móviles. El paquete SDK de Flutter no supone tampoco ningún gasto por parte del desarrollador.
+Como sistema operativo se sugiere Ubuntu 22.04 LTS ya que tiene soporte a largo plazo, se trata de un entorno estable, confiable y se trata de una versión de código abierto. La herramienta y extensión de Visual Studio Code copilot aunque útil no es imprescindible pudiendo usar . El resto de software para prototipado como Langflow o LMStudio son también gratuitos.
 
 \subsubsection{Coste de los Servicios Google}
-\subsubsection{Conclusiones basados en posibles beneficios}
+Durante el desarrollo de la aplicación la empresa incurrirá en gastos por uso de estos servicios. Una forma de pago tiene que estar asociada al proyecto y sobre el mismo se podrán asociar todas las APIs y servicios asocidos al mismo: Firebase, Google Directions, Google Maps, Generative AI tienen gastos asociados. Sin embargo, el desarrollador tendrá un período de prueba de 3 meses donde no se cargará ningún gasto siempre que no supere los 300 euros. 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{trafico\_google} % Ruta del archivo de la imagen
+	\caption{Tráfico de peticiones durante el desarrollo de \textit{Eco City Tours}} % Pie de la imagen
+	\label{fig:trafico_google} % Etiqueta para referenciar
+\end{figure}
+
+Desde la experiencia durante el desarrollo las peticiones están lejos de incurrir en gastos. En el período de pruebas donde se realizaron las mayores peticiones a los servicios como se puede ver en la imagen \ref{fig:trafico_google} el coste llegó a los 40 euros, muy lejos de los 300 que supondrían un gasto para el desarrollador.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{cloud-console} % Ruta del archivo de la imagen
+	\caption{Interfaz de Facturación de Cloud Console.} % Pie de la imagen
+	\label{fig:cloud_console} % Etiqueta para referenciar
+\end{figure}
+
+Pasado el período de tres meses, la cantidad que supone un umbral de coste se reduce a los 200 euros. En la imagen \ref{fig:cloud_console} se puede ver como se inicia otro proceso de facturación diferente. Supondría por tanto algo a tener en cuenta si se despliega la aplicación en versiones tempranas en el repositorio de aplicaciones de Android puesto que las peticiones no serían solo de una persona, en este caso el desarrollador sino del público en general. La misma consideración habría que hacer si durante el desarrollo se cede el proceso de pruebas a varias personas que puedan hacer la función de beta-testers disparando el consumo de peticiones y por tanto el gasto.
+Para el caso de Eco City Tours se supone que el desarrollo y el mayor volumen de peticiones se concentran en los tres primeros meses donde el umbral de gasto es más alto, las pruebas las realiza el propio desarrollador que tendrá acceso al panel de Google Cloud para controlar los posibles gastos y la publicación de la aplicación será en un momento en el que el propio beneficio generado contrareste los gastos en los que se pueda incurrir.
+\subsubsection{Conclusiones}
+\textbf{El desarrollo de la aplicación se estima en 4 meses} por el equipo autogestionado por un solo desarrollador. No se tienen en cuenta alquileres de oficinas o co-working ya que se plantea la posibilidad de teletrabajar, pudiendo trabajar de manera deslocalizada ahorrando así costes. Teniendo en cuenta lo anteriormente citado obtenemos la siguiente tabla resumen:
+\tablaSmallSinColores
+{Costes totales de Eco City Tours} % Título de la tabla
+{lc} % Formato de las columnas (l: izquierda, c: centrado)
+{costes-totales} % Etiqueta para referencias cruzadas
+{%
+	\textbf{Concepto} & \textbf{Coste}  \\ % Cabecera
+}
+{%
+	Mano de obra & 8.000€ \\
+	Hardware & 580€  \\ 
+	Internet & 135€ \\
+	Sofware & 0€ \\ 
+	Servicios Google & 0€ \\
+	\midrule
+	\textbf{Total} & \textbf{8.715 €} \\ 
+}
+
 Una vez analizado los costes devengados de la creación de la aplicación el beneficio de su explotación debe ser mayor al gasto ocasionado por su creación. Además, una vez publicada la aplicación en la \textit{Play Store} el beneficio obtenido por su explotación debe compensar el tiempo requerido por el personal en horas de mantenimiento de los posibles problemas que pueda experimentar como por ejemplo problemas por actualización de los componentes claves como modelos LLM, que puedan quedar obsoletos. El beneficio de la aplicación puede provenir de varias fuentes en función del modelo de explotación que se eligiese:
 \begin{itemize}
 	\item{Ingresos por descarga:} si la aplicación tiene un precio por descarga los ingresos serían el dinero obtenido menos una comisión por cada venta cobrada por Google de un 15\%. \cite{googleplay_commission}.
-	Un precio de lanzamiento razonable podría ser no superior a los 4 euros, donde se obtendría aproximadamente 3,40 euros como beneficio. Tras un periodo de ajuste en función de las descargas, el precio por la misma se podría ajustar.
+	Un precio de lanzamiento razonable podría ser no superior a los 4 euros, donde se obtendría aproximadamente 3,40 euros como beneficio. Tras un periodo de prueba en función de las descargas, el precio por la misma se podría ajustar.
 	\item{Publicidad:} empresas o entidades colaboradoras podrían financiar el desarrollo con publicidad siempre que ésta no suponga una perdida de independencia en los resultados de los modelos, fomente el turismo ecológico y no sea invasiva ni perjudique la experiencia de usuario.
 	
 \end{itemize}
+
 \subsection{Viabilidad legal}
+Al utilizar los servicios ofrecidos por Google, la compañía se convierte en un socio en el que se delegan muchas de las responsabilidades legales, técnicas y de cumplimiento normativo. Esto simplifica la implementación de Eco City Tours, a la vez que se adquieren ciertos compromisos con el gigante tecnológico. 
+
+\subsubsection{Licencias de uso de las APIs de Google}
+Cada API tiene sus propios términos de uso \cite{google_cloud_terms} y se tiene que tener en cuenta los siguientes aspectos:
+\begin{itemize}
+	\item \textbf{Uso permitido:} Las APIs deben ser utilizadas únicamente para finalidades relacionadas con el proyecto.
+	\item \textbf{Prohibiciones:} Se prohíbe el \textit{scraping}, almacenamiento de datos más allá de los límites permitidos o redistribución no autorizada.
+\end{itemize}
+
+Restricciones específicas:
+\begin{itemize}
+	\item \textit{Generative AI:} Regulada por políticas relacionadas con el uso de datos generados, especialmente en contextos comerciales.
+	\item \textit{Places API y Directions API:} Restringen el almacenamiento y redistribución de los datos obtenidos.
+	\item \textit{Maps SDK for Android:} Requiere incluir el logotipo de Google y atribuciones visibles en la interfaz.
+\end{itemize}
+
+Los servicios de Google tienen modelos de precios basados en uso para lo que es legalmente\textbf{ obligatorio registrar un método de pago válido} en tu cuenta de Google Cloud para garantizar la continuidad del servicio.
+
+\subsubsection{Privacidad de datos}
+
+El cumplimiento de normativas sobre protección de datos es fundamental:
+
+\begin{itemize}
+	\item \textbf{GDPR:} Si se cumplen algunos de los trabajos futuros de la aplicación, ésta recogería datos del usuario, si es un ciudadano europeo debe:
+	\begin{itemize}
+		\item Firmar un \textit{Acuerdo de Procesamiento de Datos} (DPA) con Google.
+		\item La aplicación debe mostrar cómo se manejan los datos obtenidos.
+	\end{itemize}
+\end{itemize}
+
+Se debe informar a los usuarios que los datos están sujetos a las Políticas de privacidad de Google.
+
+\subsubsection{Restricciones geográficas}
+
+Algunas APIs tienen restricciones en determinados países debido a leyes locales o sanciones internacionales. 
 
 
+\subsubsection{Propiedad intelectual}
+
+Los datos obtenidos a través de las APIs de Google (como mapas y lugares) son propiedad intelectual de Google.
+
+
+\begin{itemize}
+	\item \textbf{Prohibiciones:}
+	\begin{itemize}
+		\item No se puede almacenar ni redistribuir datos más allá de los límites permitidos.
+		\item No se puede usar los datos para minería o análisis masivo sin autorización.
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Cumplimiento con normas de publicación}
+
+Para poder publicar la aplicación en el repositorio de aplicaciones Android hay que especificar claramente la política de privacidad y detallar el uso de los servicios.
+
+
+\subsubsection{Checklist para viabilidad legal}
+
+\begin{enumerate}
+	\item Revisar términos de uso de cada API.
+	\item Registrar método de pago.
+	\item Cumplir con las normativas de privacidad (GDPR, CCPA).
+	\item Incluir atribuciones visibles en la interfaz de usuario.
+	\item Respetar las restricciones de almacenamiento y uso de datos.
+	\item Desarrollar y publicar una política de privacidad clara para los usuarios.
+\end{enumerate}
+
+Respetando con un uso ético de la aplicación y cumpliendo con estos requisitos la viabilidad legal de Eco City Tours estaría cumplida y no supondría un impedimento para su ejecución.
