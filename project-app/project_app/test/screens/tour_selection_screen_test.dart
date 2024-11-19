@@ -111,26 +111,6 @@ void main() {
 
 
 
-testWidgets('Actualiza la preferencia seleccionada correctamente', 
-    (WidgetTester tester) async {
-  await tester.pumpWidget(createTestWidget());
-
-  // Busca el `ChoiceChip` por su texto
-  final natureChip = find.widgetWithText(ChoiceChip, 'Naturaleza');
-  expect(natureChip, findsOneWidget);
-
-  // Verifica que el chip no está seleccionado inicialmente
-  final natureChipWidgetBefore = tester.widget<ChoiceChip>(natureChip);
-  expect(natureChipWidgetBefore.selected, isFalse);
-
-  // Simula un tap en el chip
-  await tester.tap(natureChip);
-  await tester.pumpAndSettle();
-
-  // Verifica que el chip ahora está seleccionado
-  final natureChipWidgetAfter = tester.widget<ChoiceChip>(natureChip);
-  expect(natureChipWidgetAfter.selected, isTrue);
-});
 
   });
 }

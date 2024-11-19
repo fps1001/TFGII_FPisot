@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SelectAIAssistant extends StatefulWidget {
-  final ValueChanged<int> onAssistantSelected;
+  final ValueChanged<int?> onAssistantSelected;
 
   const SelectAIAssistant({super.key, required this.onAssistantSelected});
 
@@ -10,26 +10,26 @@ class SelectAIAssistant extends StatefulWidget {
 }
 
 class _SelectAIAssistantState extends State<SelectAIAssistant> {
-  int selectedAssistant = 0;
+  int? selectedAssistant; // Ahora es `null` por defecto para iniciar sin selección
 
   final List<Map<String, dynamic>> assistants = [
     {
       'title': 'Turismo en familia',
       'description':
-          'Estás asistiendo a un progenitor, buscando lugares seguros, accesibles y entretenidos para los más pequeños, que también sean de interés para los adultos.',
-      'image': 'assets/images/family.png', // Ruta del asset
+          'Snarblin cuida de 7 adorables trolecitos, cuando hace turismo siempre tiene en cuenta lugares seguros y accesibles, entretenidos y para toda la familia.',
+      'image': 'assets/images/family2.png',
     },
     {
       'title': 'Turismo romántico',
       'description':
-          'Asiste a una pareja en busca de experiencias románticas. Descripciones que buscan la complicidad y ambientes íntimos.',
-      'image': 'assets/images/romantic.png', // Ruta del asset
+          'Fizzzwick es un romántico empedernido, viajaría al fin del mundo en busca de una puesta de sol. Este trol prefiere lugares íntimos y acogedores.',
+      'image': 'assets/images/romantic2.png',
     },
     {
       'title': 'Turismo aventurero',
       'description':
-          'Pudieran ser grupos de amigos o personas con gustos más atrevidos. Respuestas más dinámicas y activas que sugieran lugares vibrantes.',
-      'image': 'assets/images/adventure.png', // Ruta del asset
+          'Grimbold no puede estar quieta. Está en 30 grupos de aventura diferente. Conoce los sitios más vibrantes de cada lugar.',
+      'image': 'assets/images/adventure2.png',
     },
   ];
 
@@ -39,7 +39,7 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Seleccione guía turístico:',
+          'Selecciona guía turístico:',
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 10),
@@ -50,9 +50,13 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
             return GestureDetector(
               onTap: () {
                 setState(() {
-                  selectedAssistant = index;
+                  if (selectedAssistant == index) {
+                    selectedAssistant = null; // Deselecciona si se toca nuevamente
+                  } else {
+                    selectedAssistant = index;
+                  }
                 });
-                widget.onAssistantSelected(index);
+                widget.onAssistantSelected(selectedAssistant);
               },
               child: Container(
                 width: 90,
@@ -62,7 +66,7 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
                     color: selectedAssistant == index
                         ? Theme.of(context).primaryColor
                         : Colors.grey,
-                    width: 2,
+                    width: 4,
                   ),
                   borderRadius: BorderRadius.circular(12.0),
                   image: DecorationImage(
@@ -76,8 +80,11 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
         ),
         const SizedBox(height: 20),
         Text(
-          assistants[selectedAssistant]['description'],
+          selectedAssistant != null
+              ? assistants[selectedAssistant!]['description']
+              : 'No se ha seleccionado ningún asistente. No importa. Las sugerencias seguirán teniendo en cuenta tus preferencias.',
           style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.center,
         ),
       ],
     );

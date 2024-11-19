@@ -25,7 +25,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
     false
   ]; // Estado del ToggleButton del transporte
   double maxTimeInMinutes = 90;
-  int selectedAssistant = 0;
+  int? selectedAssistant; // Puede ser nulo si no se selecciona asistente
 
   // **Mapa para almacenar el estado de selección de preferencias**
   final Map<String, bool> selectedPreferences = {
@@ -156,13 +156,14 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                 const SizedBox(height: 20),
                 SelectAIAssistant(
                   onAssistantSelected: (index) {
-                    setState(() {
-                      selectedAssistant = index;
-                    });
-                    log.i(
-                        'TourSelectionScreen: Asistente seleccionado: $index');
-                  },
-                ),
+                setState(() {
+                  selectedAssistant = index; // Permite `null`
+                });
+                log.i(
+                    'TourSelectionScreen: Asistente seleccionado: ${index ?? "Sin selección"}');
+              },
+            ),
+                
 
                 //* SELECCIÓN DE MEDIO DE TRANSPORTE
                 const SizedBox(height: 20),
@@ -320,6 +321,9 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                       'Asiste a una pareja en busca de experiencias románticas. Descripciones que buscan la complicidad y ambientes íntimos.',
                       'Pudieran ser grupos de amigos o personas con gustos más atrevidos. Respuestas más dinámicas y activas que sugieran lugares vibrantes.',
                     ];
+
+                    final systemInstruction =
+                    selectedAssistant == null ? '' : assistants[selectedAssistant!];
                     // Mostrar diálogo de carga
                     LoadingMessageHelper.showLoadingMessage(context);
                     log.i(
@@ -335,8 +339,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                           .map((entry) => entry.key)
                           .toList(),
                       maxTime: maxTimeInMinutes,
-                      systemInstruction: assistants[
-                          selectedAssistant], //TODO Cambiar por instrucciones del sistema
+                      systemInstruction: systemInstruction,
                     ));
 
                     // Declaro el listener que se encargará de navegar al mapa cuando el tour se cargue
