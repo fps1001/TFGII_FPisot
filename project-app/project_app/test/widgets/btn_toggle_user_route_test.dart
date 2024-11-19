@@ -45,7 +45,7 @@ void main() {
     });
 
     testWidgets('Cambia el ícono cuando cambia el estado', (tester) async {
-  final initialState = MapState(showUserRoute: false);
+  const initialState = MapState(showUserRoute: false);
 
   // Configura el mock para devolver un flujo de estados
   when(() => mockMapBloc.state).thenReturn(initialState);

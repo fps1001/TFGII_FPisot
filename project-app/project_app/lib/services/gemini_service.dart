@@ -12,6 +12,7 @@ class GeminiService {
     required List<String> userPreferences,
     required double maxTime,
     required String mode,
+    required String systemInstruction,
   }) async {
     // Fetch data from Gemini API
     await dotenv.load();
@@ -23,7 +24,8 @@ class GeminiService {
           'GeminiService: No se encontró la variable de entorno \$GEMINI_API_KEY');
       return [];
     }
-
+    String baserol = 'Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo';
+    
     //* DEFINICIÓN DEL MODELO
     final model = GenerativeModel(
       model: 'gemini-1.5-pro',
@@ -52,8 +54,7 @@ class GeminiService {
         ),
       ),
       //* Role prompting: Se define el rol del modelo
-      systemInstruction: Content.system(
-          'Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo'),
+      systemInstruction: Content.system(baserol + systemInstruction),
     );
 
     //* CONSTRUCCIÓN DE PETICIÓN
@@ -117,7 +118,7 @@ Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')
     } catch (e, stackTrace) {
       log.e('GeminiService: Error al parsear la respuesta JSON',
           error: e, stackTrace: stackTrace);
-          return []; // Devolver lista vacía si hay un error
+      return []; // Devolver lista vacía si hay un error
     }
     return pointsOfInterest;
   }

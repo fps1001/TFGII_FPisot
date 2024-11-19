@@ -82,6 +82,7 @@ flutter:
     - .env
     - assets/
     - assets/icon/
+    - assets/images/
 
 #dart run flutter_native_splash:create --path=path/to/my/file.yaml
 #dart run flutter_native_splash:create --path=pubspec.yaml

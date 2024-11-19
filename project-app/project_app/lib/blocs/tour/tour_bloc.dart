@@ -55,7 +55,8 @@ class TourBloc extends Bloc<TourEvent, TourState> {
           nPoi: event.numberOfSites,
           userPreferences: event.userPreferences,
           maxTime: event.maxTime,
-          mode: event.mode);
+          mode: event.mode,
+          systemInstruction: event.systemInstruction);
       log.d('TourBloc: Fetched ${pois.length} POIs for ${event.city}');
 
       //* 2. **Recuperar información adicional de Google Places**

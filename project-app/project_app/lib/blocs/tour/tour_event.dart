@@ -14,10 +14,12 @@ class LoadTourEvent extends TourEvent {
   final List<String> userPreferences;
   final String mode;
   final double maxTime;
+  final String systemInstruction;
 
   const LoadTourEvent(
       {required this.city,
       required this.numberOfSites,
+      required this.systemInstruction,
       required this.userPreferences,
       required this.mode,
       required this.maxTime});

@@ -31,7 +31,7 @@ void main() {
         nPoi: nPoi,
         userPreferences: userPreferences,
         maxTime: maxTime,
-        mode: mode,
+        mode: mode, systemInstruction: '',
       );
 
       expect(result, isA<List<PointOfInterest>>());

@@ -4,3 +4,4 @@ export 'package:project_app/widgets/custom_app_bar.dart';
 export 'package:project_app/widgets/custom_bottom_sheet.dart';
 export 'package:project_app/widgets/custom_search_bar.dart';
 export 'package:project_app/widgets/poi_list_item.dart';
+export 'package:project_app/widgets/select_ai_assistant.dart';

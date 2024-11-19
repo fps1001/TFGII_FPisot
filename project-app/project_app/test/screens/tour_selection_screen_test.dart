@@ -21,7 +21,7 @@ void main() {
       city: '',
       numberOfSites: 2,
       userPreferences: [],
-      maxTime: 90,
+      maxTime: 90, systemInstruction: '',
     ));
     registerFallbackValue(const LoadSavedToursEvent());
   });
