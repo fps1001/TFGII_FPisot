@@ -52,4 +52,5 @@ app.*.map.json
 .scannerwork/
 sonar-report.json
 
-project-app\project_app\android\app\google-services.json
+
+/android/app/google-services.json
