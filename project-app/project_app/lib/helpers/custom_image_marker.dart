@@ -54,7 +54,7 @@ Future<BitmapDescriptor> getNetworkImageMarker(String imageUrl) async {
     final frame = await codec.getNextFrame();
     final ui.Image image = frame.image;
 
-    final markerBytes = await _createCircularImageWithBorder(image);
+    final markerBytes = await createCircularImageWithBorder(image);
     log.d(
         'getNetworkImageMarker: Marcador con imagen de red creado con éxito.');
     return BitmapDescriptor.bytes(markerBytes);
@@ -65,31 +65,54 @@ Future<BitmapDescriptor> getNetworkImageMarker(String imageUrl) async {
   }
 }
 
-Future<Uint8List> _createCircularImageWithBorder(ui.Image image,
+Future<Uint8List> createCircularImageWithBorder(ui.Image image,
     {Color borderColor = Colors.green, double borderWidth = 4}) async {
-  final double imageSize = image.width.toDouble();
-  final double size = imageSize + borderWidth * 2;
+  try {
+    log.d('createCircularImageWithBorder: Iniciando creación de imagen circular.');
 
-  final recorder = ui.PictureRecorder();
-  final canvas = Canvas(recorder);
+    final double imageSize = image.width.toDouble();
+    final double size = imageSize + borderWidth * 2;
 
-  final center = Offset(size / 2, size / 2);
-  final radius = imageSize / 2;
+    log.d('createCircularImageWithBorder: Dimensiones calculadas. Tamaño: $size');
 
-  final Paint borderPaint = Paint()
-    ..color = borderColor
-    ..style = PaintingStyle.fill;
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
 
-  canvas.drawCircle(center, radius + borderWidth, borderPaint);
+    final center = Offset(size / 2, size / 2);
+    final radius = imageSize / 2;
 
-  final Rect imageRect = Rect.fromCircle(center: center, radius: radius);
-  canvas.clipPath(Path()..addOval(imageRect));
-  canvas.drawImage(image, imageRect.topLeft, Paint());
+    final Paint borderPaint = Paint()
+      ..color = borderColor
+      ..style = PaintingStyle.fill;
 
-  final picture = recorder.endRecording();
-  final img = await picture.toImage(size.toInt(), size.toInt());
-  final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
+    log.d('createCircularImageWithBorder: Dibujando el círculo de borde.');
 
-  log.d('getCustomMarker: Imagen circular con borde creada con éxito.');
-  return byteData!.buffer.asUint8List();
+    canvas.drawCircle(center, radius + borderWidth, borderPaint);
+
+    final Rect imageRect = Rect.fromCircle(center: center, radius: radius);
+    canvas.clipPath(Path()..addOval(imageRect));
+    canvas.drawImage(image, imageRect.topLeft, Paint());
+
+    log.d('createCircularImageWithBorder: Imagen dibujada sobre el lienzo.');
+
+    final picture = recorder.endRecording();
+    final img = await picture.toImage(size.toInt(), size.toInt());
+    final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
+
+    if (byteData == null) {
+      log.e('createCircularImageWithBorder: Fallo al convertir la imagen a bytes.');
+      throw Exception('Error al convertir la imagen a bytes.');
+    }
+
+    log.d('createCircularImageWithBorder: Imagen circular creada con éxito.');
+
+    return byteData.buffer.asUint8List();
+  } catch (e, stackTrace) {
+    log.e('createCircularImageWithBorder: Error durante la creación de la imagen circular.',
+        error: e, stackTrace: stackTrace);
+    throw Exception('Error al crear imagen circular: $e');
+  }
 }
+
+
+
