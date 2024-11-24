@@ -46,6 +46,67 @@ void main() {
     });
 
     blocTest<TourBloc, TourState>(
+  'removes a POI and updates the tour',
+  build: () {
+    final poi = PointOfInterest(
+      gps: const LatLng(10.0, 10.0),
+      name: 'Remove POI',
+      description: 'A point to remove',
+    );
+
+    // Pre-configurar el estado inicial con un tour que tiene este POI
+    return TourBloc(
+      mapBloc: mapBloc,
+      optimizationService: optimizationService,
+      ecoCityTourRepository: ecoCityTourRepository,
+    )..emit(TourState(ecoCityTour: EcoCityTour(
+      city: 'Test City',
+      mode: 'walking',
+      userPreferences: ['Scenic'],
+      polilynePoints: [const LatLng(0.0, 0.0)],
+      pois: [poi],
+    )));
+  },
+  act: (bloc) {
+    final poiToRemove = PointOfInterest(
+      gps: const LatLng(10.0, 10.0),
+      name: 'Remove POI',
+      description: 'A point to remove',
+    );
+    bloc.add(OnRemovePoiEvent(poi: poiToRemove));
+  },
+  wait: const Duration(milliseconds: 500),
+  verify: (bloc) {
+    final state = bloc.state;
+    expect(state.ecoCityTour?.pois.any((poi) => poi.name == 'Remove POI'), false);
+  },
+);
+
+blocTest<TourBloc, TourState>(
+  'adds a POI and updates the tour',
+  build: () {
+    return TourBloc(
+      mapBloc: mapBloc,
+      optimizationService: optimizationService,
+      ecoCityTourRepository: ecoCityTourRepository,
+    );
+  },
+  act: (bloc) {
+    final poi = PointOfInterest(
+      gps: const LatLng(10.0, 10.0),
+      name: 'New POI',
+      description: 'A new point of interest',
+    );
+    bloc.add(OnAddPoiEvent(poi: poi));
+  },
+  wait: const Duration(milliseconds: 500),
+  verify: (bloc) {
+    final state = bloc.state;
+    expect(state.ecoCityTour?.pois.any((poi) => poi.name == 'New POI'), true);
+  },
+);
+
+    blocTest<TourBloc, TourState>(
       'saves and loads a tour from FirestoreDataset',
       build: () {
         return TourBloc(

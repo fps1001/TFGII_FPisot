@@ -59,13 +59,12 @@ class GeminiService {
 
     //* CONSTRUCCIÓN DE PETICIÓN
 
-    final medioTransporte = (mode == 'walking' ? 'andando' : 'en bicicleta');
+    //final medioTransporte = (mode == 'walking' ? 'andando' : 'en bicicleta');
 
     final chat = model.startChat();
 
     final message =
         '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city. 
-Además, no sirve cualquier lugar, puesto que el tiempo que se tarde en viajar entre ellos no debe ser superior en ningún momento a $maxTime minutos $medioTransporte.
 Cada objeto debe incluir:
 * nombre (string)
 * descripción (string)
@@ -79,7 +78,9 @@ Cada objeto debe incluir:
     "descripcion": "La Plaza Mayor de Salamanca, del siglo XVIII, es una de las más bellas plazas monumentales urbanas de Europa. Comenzó a construirse en 1729 a instancias del corregidor Rodrigo Caballero Llanes. El proyecto fue a cargo del arquitecto Alberto de Churriguera, al que siguió su sobrino Manuel de Lara Churriguera y fue finalizado por Andrés García de Quiñones en 1755. ...",
     "coordenadas": [40.965027795465176, -5.664062074092496],
 }
-Ten en cuenta los siguientes intereses del usuario: ${userPreferences.join(', ')}.
+Ten en cuenta el tipo de cliente al que le ofreces información y los siguientes intereses del usuario: ${userPreferences.join(', ')}.  
+El recorrido debe hacerse en menos de 2 horas. Prioriza lugares que estén cerca del lugar de inicio. 
+Si algún punto está a más de 10 km. de cualquier otro, no lo incluyas en la lista.
 
 ''';
 

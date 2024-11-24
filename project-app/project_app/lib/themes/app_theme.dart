@@ -47,25 +47,5 @@ class AppTheme {
     );
   }
 
-  // Tema oscuro
-  static ThemeData get darkTheme {
-    return ThemeData(
-      brightness: Brightness.dark,
-      colorScheme: const ColorScheme.dark(
-        primary: Colors.blueGrey, // Azul oscuro
-        secondary: Colors.blue, // Color de acento
-        surface: Colors.black, // Fondo negro
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blueGrey, // Fondo del botón
-          foregroundColor: Colors.white, // Texto en blanco
-        ),
-      ),
-    );
-  }
+  
 }
