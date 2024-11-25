@@ -64,7 +64,9 @@ class GeminiService {
     final chat = model.startChat();
 
     final message =
-        '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city. 
+        '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city.
+        Además, no sirve cualquier lugar, puesto que el tiempo que se tarde en viajar entre ellos no debe ser superior en ningún momento a $maxTime minutos $mode.
+        Elige lugares que conozcas bien y que no estén muy separados unos de otros.
 Cada objeto debe incluir:
 * nombre (string)
 * descripción (string)
@@ -79,8 +81,6 @@ Cada objeto debe incluir:
     "coordenadas": [40.965027795465176, -5.664062074092496],
 }
 Ten en cuenta el tipo de cliente al que le ofreces información y los siguientes intereses del usuario: ${userPreferences.join(', ')}.  
-El recorrido debe hacerse en menos de $maxTime horas $mode.
-Calcula la distancia entre puntos con sus coordenadas, estima la distancia entre los puntos y si algún punto está a más de 10 km. de cualquier otro, no lo incluyas en la lista. Tampoco incluyas lugares de los que desconozcas sus coordenadas.
 
 ''';
 
