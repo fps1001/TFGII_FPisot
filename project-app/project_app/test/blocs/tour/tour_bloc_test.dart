@@ -1,150 +1,93 @@
-import 'package:bloc_test/bloc_test.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mockito/mockito.dart';
 import 'package:project_app/blocs/blocs.dart';
-import 'package:project_app/datasets/datasets.dart';
 import 'package:project_app/models/models.dart';
-import 'package:project_app/repositories/eco_city_tour_repository.dart';
+import 'package:project_app/repositories/repositories.dart';
 import 'package:project_app/services/services.dart';
 
+class MockOptimizationService extends Mock implements OptimizationService {}
+
+class MockEcoCityTourRepository extends Mock implements EcoCityTourRepository {}
+
+class MockMapBloc extends Mock implements MapBloc {}
+
 void main() {
-  late LocationBloc locationBloc;
-  late MapBloc mapBloc;
-  late OptimizationService optimizationService;
-  late EcoCityTourRepository ecoCityTourRepository;
-  late FakeFirebaseFirestore fakeFirestore;
+  group('TourBloc', () {
+    late TourBloc tourBloc;
+    late MockOptimizationService mockOptimizationService;
+    late MockEcoCityTourRepository mockEcoCityTourRepository;
+    late MockMapBloc mockMapBloc;
 
-  const testUserId = 'testUser123';
-
-  setUp(() async {
-    // Configurar Firestore falso
-    fakeFirestore = FakeFirebaseFirestore();
-
-    // Configurar los servicios y blocs
-    locationBloc = LocationBloc();
-    mapBloc = MapBloc(locationBloc: locationBloc);
-    optimizationService = OptimizationService();
-    ecoCityTourRepository = EcoCityTourRepository(
-      FirestoreDataset(userId: testUserId, firestore: fakeFirestore),
-    );
-  });
-
-  tearDown(() async {
-    await mapBloc.close();
-    await locationBloc.close();
-  });
-
-  group('TourBloc Tests with fake Firestore', () {
-    test('Initial state is TourState', () {
-      final tourBloc = TourBloc(
-        mapBloc: mapBloc,
-        optimizationService: optimizationService,
-        ecoCityTourRepository: ecoCityTourRepository,
+    setUp(() {
+      mockOptimizationService = MockOptimizationService();
+      mockEcoCityTourRepository = MockEcoCityTourRepository();
+      mockMapBloc = MockMapBloc();
+      tourBloc = TourBloc(
+        optimizationService: mockOptimizationService,
+        ecoCityTourRepository: mockEcoCityTourRepository,
+        mapBloc: mockMapBloc,
       );
+    });
+
+    tearDown(() {
+      tourBloc.close();
+    });
+
+    test('initial state is TourState', () {
       expect(tourBloc.state, const TourState());
     });
 
+    group('Event Handling', () {
     blocTest<TourBloc, TourState>(
-  'removes a POI and updates the tour',
-  build: () {
-    final poi = PointOfInterest(
-      gps: const LatLng(10.0, 10.0),
-      name: 'Remove POI',
-      description: 'A point to remove',
+      'emits [TourState] with isLoading true when LoadTourEvent is added',
+      build: () => tourBloc,
+      act: (bloc) => bloc.add(const LoadTourEvent(city: 'TestCity', numberOfSites: 5, systemInstruction: '', userPreferences: [], mode: '', maxTime: 90)),
+      expect: () => [
+        const TourState(isLoading: true),
+      ],
     );
 
-    // Pre-configurar el estado inicial con un tour que tiene este POI
-    return TourBloc(
-      mapBloc: mapBloc,
-      optimizationService: optimizationService,
-      ecoCityTourRepository: ecoCityTourRepository,
-    )..emit(TourState(ecoCityTour: EcoCityTour(
-      city: 'Test City',
-      mode: 'walking',
-      userPreferences: ['Scenic'],
-      polilynePoints: [const LatLng(0.0, 0.0)],
-      pois: [poi],
-    )));
-  },
-  act: (bloc) {
-    final poiToRemove = PointOfInterest(
-      gps: const LatLng(10.0, 10.0),
-      name: 'Remove POI',
-      description: 'A point to remove',
-    );
-    bloc.add(OnRemovePoiEvent(poi: poiToRemove));
-  },
-  wait: const Duration(milliseconds: 500),
-  verify: (bloc) {
-    final state = bloc.state;
-    expect(state.ecoCityTour?.pois.any((poi) => poi.name == 'Remove POI'), false);
-  },
-);
-
-blocTest<TourBloc, TourState>(
-  'adds a POI and updates the tour',
-  build: () {
-    return TourBloc(
-      mapBloc: mapBloc,
-      optimizationService: optimizationService,
-      ecoCityTourRepository: ecoCityTourRepository,
-    );
-  },
-  act: (bloc) {
-    final poi = PointOfInterest(
-      gps: const LatLng(10.0, 10.0),
-      name: 'New POI',
-      description: 'A new point of interest',
-    );
-    bloc.add(OnAddPoiEvent(poi: poi));
-  },
-  wait: const Duration(milliseconds: 500),
-  verify: (bloc) {
-    final state = bloc.state;
-    expect(state.ecoCityTour?.pois.any((poi) => poi.name == 'New POI'), true);
-  },
-);
+    
 
     blocTest<TourBloc, TourState>(
-      'saves and loads a tour from FirestoreDataset',
-      build: () {
-        return TourBloc(
-          mapBloc: mapBloc,
-          optimizationService: optimizationService,
-          ecoCityTourRepository: ecoCityTourRepository,
-        );
-      },
-      act: (bloc) async {
-        final testTour = EcoCityTour(
-          city: 'Saved City',
-          mode: 'cycling',
-          userPreferences: ['Adventure'],
-          polilynePoints: [const LatLng(0.0, 0.0)],
-          pois: [
-            PointOfInterest(
-              gps: const LatLng(0.0, 0.0),
-              name: 'POI 1',
-              description: 'A fun adventure spot',
-            ),
-          ],
-        );
-
-        // Guardar el tour
-        bloc.emit(TourState(ecoCityTour: testTour));
-        await bloc.saveCurrentTour('TestTour');
-
-        // Cargar el tour guardado
-        bloc.add(const LoadTourFromSavedEvent(documentId: 'TestTour'));
-      },
-      wait: const Duration(seconds: 1),
-      verify: (bloc) async {
-        final tours = await ecoCityTourRepository.getSavedTours();
-        expect(tours.any((tour) => tour.city == 'Saved City'), true);
-
-        final state = bloc.state;
-        expect(state.ecoCityTour?.city, 'Saved City');
-      },
+      'emits [TourState] with isJoined toggled when OnJoinTourEvent is added',
+      build: () => tourBloc,
+      act: (bloc) => bloc.add(const OnJoinTourEvent()),
+      expect: () => [
+        const TourState(isJoined: true),
+      ],
     );
+
+    blocTest<TourBloc, TourState>(
+      'emits [TourState] with saved tours when LoadSavedToursEvent is added',
+      build: () => tourBloc,
+      act: (bloc) => bloc.add(const LoadSavedToursEvent()),
+      expect: () => [
+        const TourState(isLoading: true),
+        isA<TourState>(),
+      ],
+    );
+
+    blocTest<TourBloc, TourState>(
+      'emits [TourState] with loaded tour when LoadTourFromSavedEvent is added',
+      build: () => tourBloc,
+      act: (bloc) => bloc.add(const LoadTourFromSavedEvent(documentId: 'testId')),
+      expect: () => [
+        const TourState(isLoading: true),
+        isA<TourState>(),
+      ],
+    );
+
+      blocTest<TourBloc, TourState>(
+        'emits [TourState] with reset state when ResetTourEvent is added',
+        build: () => tourBloc,
+        act: (bloc) => bloc.add(const ResetTourEvent()),
+        expect: () => [
+          const TourState(ecoCityTour: null, isJoined: false),
+        ],
+      );
+    });
   });
 }

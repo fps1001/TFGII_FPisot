@@ -79,8 +79,8 @@ Cada objeto debe incluir:
     "coordenadas": [40.965027795465176, -5.664062074092496],
 }
 Ten en cuenta el tipo de cliente al que le ofreces información y los siguientes intereses del usuario: ${userPreferences.join(', ')}.  
-El recorrido debe hacerse en menos de 2 horas. Prioriza lugares que estén cerca del lugar de inicio. 
-Si algún punto está a más de 10 km. de cualquier otro, no lo incluyas en la lista.
+El recorrido debe hacerse en menos de $maxTime horas $mode.
+Calcula la distancia entre puntos con sus coordenadas, estima la distancia entre los puntos y si algún punto está a más de 10 km. de cualquier otro, no lo incluyas en la lista.
 
 ''';
 
