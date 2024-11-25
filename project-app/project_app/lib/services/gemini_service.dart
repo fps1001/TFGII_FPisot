@@ -80,7 +80,7 @@ Cada objeto debe incluir:
 }
 Ten en cuenta el tipo de cliente al que le ofreces información y los siguientes intereses del usuario: ${userPreferences.join(', ')}.  
 El recorrido debe hacerse en menos de $maxTime horas $mode.
-Calcula la distancia entre puntos con sus coordenadas, estima la distancia entre los puntos y si algún punto está a más de 10 km. de cualquier otro, no lo incluyas en la lista.
+Calcula la distancia entre puntos con sus coordenadas, estima la distancia entre los puntos y si algún punto está a más de 10 km. de cualquier otro, no lo incluyas en la lista. Tampoco incluyas lugares de los que desconozcas sus coordenadas.
 
 ''';
 
