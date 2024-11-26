@@ -1,11 +1,11 @@
 \capitulo{4}{Técnicas y herramientas}
 
-El siguiente capítulo presenta las técnicas y herramientas usadas a lo largo del desarrollo de la aplicación Eco City Tours. Se detallarán los aspectos más destacados de cada una de ellas, justificando el porqué de su utilización sobre otras alternativas si las hubiera. Se ha seguido una división en función de su 
+El siguiente capítulo presenta las técnicas y herramientas usadas a lo largo del desarrollo de la aplicación \textit{Eco City Tours}. Se detallarán los aspectos más destacados de cada una de ellas, justificando el porqué de su utilización sobre otras alternativas si las hubiera. Para mejorar la comprensión de la sección las herramientas se han agrupado en tres subsecciones. La primera relacionadas con el desarrollo con modelos \acrshort{llm}, la segunda con las herramientas utilizadas en el desarrollo de la aplicación móvil, y la tercera con las empleadas para la gestión del proyecto.
 
 
 \section{Desarrollo relacionado con LLM}
 	\subsection{LM Studio}
-	LM Studio \cite{lmstudio_ai} es una aplicación enfocada en el despliegue de modelos de lenguaje. Su principal objetivo es facilitar la experimentación con \acrlong{llm} ofreciendo un entorno completo y que integra funcionalidades en el procesamiento de lenguaje natural.
+	LM Studio~\cite{lmstudio_ai} es una aplicación enfocada en el despliegue de modelos de lenguaje. Su principal objetivo es facilitar la experimentación con \acrlong{llm} ofreciendo un entorno completo y que integra funcionalidades en el procesamiento de lenguaje natural.
 	Estas son algunas de las más destacadas:
 	
 	
@@ -19,10 +19,10 @@ El siguiente capítulo presenta las técnicas y herramientas usadas a lo largo d
 		
 		\item \textbf{Optimización y monitorización}: permite observar el rendimiento de los modelos analizando su consumo de GPU, memoria o CPU así como su tiempo de respuesta, lo que permite realizar al usuario ajustes con el fin de mejorar el rendimiento del sistema.
 	\end{itemize}
-	La experimentación con diferentes modelos para decidir cuál usar en Eco City Tours resultó mucho más rápida y eficiente gracias a esta herramienta, en comparación con el uso inicial de un solo modelo a través de Ollama \cite{ollama}.
+	La experimentación con diferentes modelos para decidir cuál usar en \textit{Eco City Tours} resultó mucho más rápida y eficiente gracias a esta herramienta, en comparación con el uso inicial de un solo modelo a través de Ollama~\cite{ollama}.
 		
 	\subsection{LangFlow}
-	LangFlow es una herramienta de código abierto\cite{langflow} que proporciona una \acrfull{gui}, permitiendo la interacción con \acrlong{llm} (Modelos de Lenguaje a Gran Escala) sin necesidad de escribir código. Los usuarios pueden configurar componentes y módulos de forma visual, conectándolos entre sí como si se tratara de un diagrama de flujo, facilitando la creación de aplicaciones complejas de procesamiento de lenguaje.
+	LangFlow es una herramienta de código abierto~\cite{langflow} que proporciona una \acrfull{gui}, permitiendo la interacción con \acrlong{llm} (Modelos de Lenguaje a Gran Escala) sin necesidad de escribir código. Los usuarios pueden configurar componentes y módulos de forma visual, conectándolos entre sí como si se tratara de un diagrama de flujo, facilitando la creación de aplicaciones complejas de procesamiento de lenguaje.
 	
 	La aplicación se puede instalar localmente, donde se ejecuta como un servicio en un puerto específico del localhost, permitiendo interactuar con la interfaz a través de un navegador web, como si fuera una aplicación web estándar.
 	\begin{itemize}
@@ -37,30 +37,32 @@ El siguiente capítulo presenta las técnicas y herramientas usadas a lo largo d
 	En resumen, la principal característica que hace a esta herramienta tan potente es que favorece la experimentación y configuración personal de los elementos que componen un prototipo que usa interacciones con modelos \acrshort{llm}. Esto la convierte en una herramienta ideal para desarrolladores que están empezando a explorar el mundo de los \acrshort{llm}, ya que su enfoque visual ofrece una ventaja significativa frente a alternativas más técnicas, como los cuadernos Jupyter. Además, en el futuro próximo se presenta como una herramienta docente donde presentar a los alumnos los \acrlong{llm} llevando su utilización a campos como el tratamiento de la información, machine-learning o automatización de procesos.
 
 \section{Desarrollo aplicación móvil}
-Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. El entorno de desarrollo elegido fue Visual Studio Code, que ofrece una amplia gama de extensiones y herramientas que facilitan el proceso de desarrollo.
+Se utilizó el framework Flutter~\cite{flutter} para desarrollar \textit{Eco City Tours}. El entorno de desarrollo elegido fue Visual Studio Code, que ofrece una amplia gama de extensiones y herramientas que facilitan el proceso de desarrollo.
 	
-	\subsection{Bloc como gestor de actualización de estados}
-	Un aspecto fundamental en una aplicación móvil reactiva es la gestión del estado, cuyo propósito es automatizar la actualización de las vistas cuando los valores de la lógica de control cambian. Flutter ofrece diversos gestores de estado, como \textit{Provider, Cubit, GetX}, entre otros. Sin embargo, Bloc destaca como un paquete \textbf{Flutter Favorite}, lo que lo sitúa como una opción preferida debido a su soporte activo, calidad de código, seguridad y frecuencia de actualizaciones.
+	\subsection{Patrón de diseño \acrfull{bloc}}
+	Un aspecto fundamental en una aplicación móvil reactiva es la gestión del estado, cuyo propósito es automatizar la actualización de las vistas cuando los valores de la lógica de control cambian. Flutter ofrece diversos gestores de estado, como \textit{Provider, Cubit, GetX}, entre otros. Sin embargo, BLoC destaca como un paquete \textbf{Flutter Favorite}~\cite{bloc_package}, lo que lo sitúa como una opción preferida debido a su soporte activo, calidad de código, seguridad y frecuencia de actualizaciones.
 	
-	Entre todos los gestores aprendidos durante mi formación, Bloc resultó ser una opción muy robusta. Una vez comprendida su sintaxis, se aprecia su facilidad de uso y la modularidad de sus elementos, que se estructuran en eventos, estados y definiciones de blocs.
+	Entre todos los gestores aprendidos durante mi formación, BLoC resultó ser una opción muy robusta. Una vez comprendida su sintaxis, se aprecia su facilidad de uso y la modularidad de sus elementos, que se estructuran en eventos, estados y definiciones de BLoCs.
 	\begin{itemize}
 		
-		\item \textbf{Gestión clara del estado}: Bloc proporciona una manera estructurada de gestionar los diferentes estados de la aplicación. Cada cambio de estado es manejado a través de eventos, lo que permite una clara separación entre la lógica de negocio y la presentación visual.
+		\item \textbf{Gestión clara del estado}: BLoC proporciona una manera estructurada de gestionar los diferentes estados de la aplicación. Cada cambio de estado es manejado a través de eventos, lo que permite una clara separación entre la lógica de negocio y la presentación visual.
 		
-		\item \textbf{Escalabilidad y mantenibilidad}: con las extensiones de Visual Studio Code, es posible generar nuevos blocs fácilmente, lo que facilita la creación de nuevas funcionalidades sin añadir complejidad innecesaria al código. Cada nueva funcionalidad de la aplicación puede estar controlada por un bloc independiente, lo que resulta en un código escalable y altamente mantenible.
+		\item \textbf{Escalabilidad}: el uso del diseño reactivo orientado a eventos, característico del patrón BLoC, facilita la gestión del estado de la aplicación y permite que esta crezca en funcionalidad sin comprometer su rendimiento. Cada nueva funcionalidad puede ser controlada por un BLoC independiente, lo que asegura que el sistema se incremente de manera estructurada.
+
+		\item \textbf{Mantenibilidad}: gracias a las extensiones de Visual Studio Code, es posible generar nuevos BLoCs fácilmente. Esto simplifica el desarrollo de nuevas funcionalidades. La clara separación de responsabilidades entre los BLoCs individuales contribuye a un código modular y fácilmente mantenible.
 				
-		\item \textbf{Reutilización de lógica}: Uno de los beneficios clave de Bloc es que la lógica de negocio se puede reutilizar fácilmente en diferentes partes de la aplicación. Esto facilita la implementación de componentes que comparten comportamientos similares sin duplicar código. Para lograrlo, se utiliza el \textit{BlocProvider}, un widget que comparte el Bloc y permite que los widgets hijos accedan a su lógica de estado. De esta manera, cualquier widget dentro del contexto del BlocProvider puede interactuar con el Bloc correspondiente.
+		\item \textbf{Reutilización de lógica}: Uno de los beneficios clave de BLoC es que la lógica de negocio se puede reutilizar fácilmente en diferentes partes de la aplicación. Esto facilita la implementación de componentes que comparten comportamientos similares sin duplicar código. Para lograrlo, se utiliza el \textit{BLoCProvider}, un widget que comparte el BLoC y permite que los widgets hijos accedan a su lógica de estado. De esta manera, cualquier widget dentro del contexto del BLoCProvider puede interactuar con el BLoC correspondiente.
 						
 	\end{itemize}
 	
-	\subsubsection{Ejemplo de uso de Bloc en Eco City Tours}
-	El Bloc ubicado en \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-app/project_app/lib/blocs/gps/gps_bloc.dart}{gps\_bloc.dart} gestiona el permiso de uso del GPS de la aplicación y la activación del sensor GPS del móvil. 
-	Se aplica el patrón de diseño Observador, estudiado en la asignatura \textit{Diseño y Mantenimiento del Software}, que es uno de los patrones fundamentales descritos por Gamma et al. \cite{gamma2002}.
-	El Bloc actúa como el Sujeto del patrón Observador, gestionando el estado de si el GPS está activado y si los permisos de ubicación han sido concedidos.
+	\subsubsection{Ejemplo de uso de \acrshort{bloc} en \textit{Eco City Tours}}
+	El \acrshort{bloc} ubicado en \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-app/project_app/lib/blocs/gps/gps_bloc.dart}{gps\_bloc.dart} gestiona el permiso de uso del GPS de la aplicación y la activación del sensor GPS del móvil. 
+	Se aplica el patrón de diseño Observador, estudiado en la asignatura \textit{Diseño y Mantenimiento del Software}, que es uno de los patrones fundamentales descritos por Gamma et al.~\cite{gamma2002}.
+	El \acrshort{bloc} actúa como el Sujeto del patrón Observador, gestionando el estado de si el GPS está activado y si los permisos de ubicación han sido concedidos.
 	
 	\begin{figure}[htbp] % Usamos figure para el flotador
 		\centering
-		\begin{lstlisting}[caption={Definición de variables de control en el Bloc}]
+		\begin{lstlisting}[caption={Definición de variables de control en el BLoC}]
 			// Indicates whether GPS is enabled
 			final bool isGpsEnabled;
 			
@@ -73,8 +75,8 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 			isGpsPermissionGranted;
 		\end{lstlisting}
 	\end{figure}
-	Los Widgets que dependen de esta información, como los mapas o botones de la interfaz de usuario, actúan como Observadores. Cada vez que el estado del Bloc cambia, estos Widgets son notificados y se actualizan automáticamente, permitiendo que la interfaz reaccione en tiempo real a los cambios en el estado del GPS o los permisos.
-	Cada vez que el estado del GPS o de los permisos cambia, se dispara un evento \textit{OnGpsAndPermissionEvent}, que actualiza el estado y notifica a los Widgets correspondientes. Esto permite que la interfaz de usuario reaccione dinámicamente y muestre la información correcta según el estado actual.
+	Los widgets que dependen de esta información, como los mapas o botones de la interfaz de usuario, actúan como Observadores. Cada vez que el estado del \acrshort{bloc} cambia, estos widgets son notificados y se actualizan automáticamente, permitiendo que la interfaz reaccione en tiempo real a los cambios en el estado del GPS o los permisos.
+	Cada vez que el estado del GPS o de los permisos cambia, se dispara un evento \textit{OnGpsAndPermissionEvent}, que actualiza el estado y notifica a los widgets correspondientes. Esto permite que la interfaz de usuario reaccione dinámicamente y muestre la información correcta según el estado actual.
 	
 	\begin{lstlisting}[caption={Carga en función del estado}]
 	class LoadingScreen extends StatelessWidget {
@@ -95,7 +97,7 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 		}
 	}
 	\end{lstlisting}	
-	Este ejemplo muestra la comunicación entre lógica de control e interfaz gráfica usando el patrón Observador con Bloc.
+	Este ejemplo muestra la comunicación entre lógica de control e interfaz gráfica usando el patrón Observador con BLoC.
 	
 	\subsection{Extensiones de Visual Studio Code más destacadas}
 		Se citan a continuación brevemente algunas de las extensiones que facilitaron el desarrollo de la aplicación aumentando la producción:
@@ -109,25 +111,25 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 		\end{itemize}
 
 	\subsection{Github Copilot}
-	Github Copilot y Github Copilot Chat\cite{vscode_copilot} son dos extensiones de Visual Studio Code que se obtienen gratuitamente entre otras ventajas al identificarse como estudiante en GitHub. Dado que este \acrshort{tfg} promueve el uso de \acrfull{ia} y de los \acrshort{llm}, se decidió incorporar GitHub Copilot para mejorar la eficiencia en el desarrollo.
-	Copilot es una herramienta que ofrece sugerencias automáticas mientras se escribe código (Ver Fig.\ref{fig:copilot}), previendo las próximas líneas y ofreciendo opciones que ahorran tiempo al programador.
+	Github Copilot y Github Copilot Chat~\cite{vscode_copilot} son dos extensiones de Visual Studio Code que se obtienen gratuitamente entre otras ventajas al identificarse como estudiante en GitHub. Dado que este \acrshort{tfg} promueve el uso de \acrfull{ia} y de los \acrshort{llm}, se decidió incorporar GitHub Copilot para mejorar la eficiencia en el desarrollo.
+	Copilot es una herramienta que ofrece sugerencias automáticas mientras se escribe código (ver Fig.~\ref{fig:copilot}), previendo las próximas líneas y ofreciendo opciones que ahorran tiempo al programador.
 	La extensión Copilot Chat permite la interacción directa con la IA, de manera que se pueden hacer preguntas sobre el código sin necesidad de copiarlo en el chat, ya que el código del archivo abierto se incluye automáticamente en el contexto de la comunicación con Copilot.
 	
 	\imagen{copilot}{Ejemplo de Ghost Text de Copilot}{0.8}
 	
-	La ventaja principal es el incremento de productividad: como se muestra en la imagen \ref{fig:copilot}, Copilot es capaz de generar prácticamente una clase entera o un widget al interpretar correctamente las primeras líneas de código, evitando escribir manualmente un fragmento largo de texto.
+	La ventaja principal es el incremento de productividad: como se muestra en la Figura~\ref{fig:copilot}, Copilot es capaz de generar prácticamente una clase entera o un widget al interpretar correctamente las primeras líneas de código, evitando escribir manualmente un fragmento largo de texto.
 	
 	\textbf{Expectativas vs Realidad.}\\
 	Es responsabilidad del programador mantener el control total sobre su código. Aunque en ocasiones Copilot acierta completamente, solucionando problemas de forma eficiente, también puede provocar inconsistencias si se aplican sugerencias sin la supervisión adecuada. En algunos casos, las sugerencias automáticas pueden alterar partes del código que no estaban relacionadas con el problema original, introduciendo nuevos errores.
 	
 	\imagen{copilot_real}{Código real a utilizar en vez de propuesta Copilot}{1}
-	Evidentemente es una tecnología en evolución que irá mejorando pero sirva de ejemplo la figura \ref{fig:copilot_real} para ilustrar el código real usado de apenas unas líneas frente a la propuesta de Copilot de la figura \ref{fig:copilot}.
+	Evidentemente es una tecnología en evolución que irá mejorando pero sirva de ejemplo la Figura~\ref{fig:copilot_real} para ilustrar el código real usado de apenas unas líneas frente a la propuesta de Copilot de la Figura~\ref{fig:copilot}.
 	
 	En resumen, por el momento Copilot resulta muy útil en escenarios donde se trabaja con patrones de código comunes o tareas repetitivas, pero es menos efectivo cuando se trata de resolver problemas más específicos. Aunque no representa un cambio en el paradigma de la programación, sí puede convertirse en una herramienta habitual que, con el tiempo, aumente la productividad del desarrollador.
 
 \section{Gestión de proyectos}
 	\subsection{GitHub}
-	GitHub es una plataforma en la nube para el alojamiento y gestión de código fuente, que se basa en el sistema de control de versiones Git. A lo largo de la carrera de Ingeniería Informática, ha sido utilizada en diversas asignaturas, lo que la convierte en una herramienta fundamental para el desarrollo de proyectos. En el contexto de este \acrshort{tfg}, GitHub ha sido esencial para centralizar y gestionar el código generado en varios \acrshort{ide}, permitiendo un control de versiones eficiente, la conservación del trabajo y una colaboración estructurada en la nube. Algunas de sus características principales usadas en el desarrollo de Eco City Tours fueron las siguientes: 
+	GitHub es una plataforma en la nube para el alojamiento y gestión de código fuente, que se basa en el sistema de control de versiones Git. A lo largo de la carrera de Ingeniería Informática, ha sido utilizada en diversas asignaturas, lo que la convierte en una herramienta fundamental para el desarrollo de proyectos. En el contexto de este \acrshort{tfg}, GitHub ha sido esencial para centralizar y gestionar el código generado en varios \acrshort{ide}, permitiendo un control de versiones eficiente, la conservación del trabajo y una colaboración estructurada en la nube. Algunas de sus características principales usadas en el desarrollo de \textit{Eco City Tours} fueron las siguientes: 
 	
 	\begin{itemize}
 		
@@ -141,18 +143,18 @@ Se utilizó el framework Flutter\cite{flutter} para desarrollar Eco City Tours. 
 		
 		
 	\end{itemize}
-	Al trabajar desde diferentes equipos GitHub fue especialmente útil en el desarrollo del proyecto: se utilizó la integración de Visual Studio Code con Github para los cambios en la programación de la aplicación y los prototipos en cuadernos Jupyter y se usó la extensión Git Graph para comprobar el funcionamiento y navegación a través de los commits cuando fue necesario. Para realizar commits en los cambios de la documentación se usó GitHub Desktop una vez realizados los cambios con la \acrshort{ide} TeXstudio.
+	Al trabajar desde diferentes equipos GitHub fue especialmente útil en el desarrollo del proyecto: se utilizó la integración de Visual Studio Code con Github para los cambios en la programación de la aplicación y los prototipos en cuadernos Jupyter y se usó la extensión Git Graph (ver Fig.~\ref{fig:git_graph}) para comprobar el funcionamiento y navegación a través de los commits cuando fue necesario. Para realizar commits en los cambios de la documentación se usó GitHub Desktop una vez realizados los cambios con la \acrshort{ide} TeXstudio.
 		\imagen{git_graph}{Uso de GitHub con la extensión de VSCode Git Graph}{1}
 	
 	\subsection{Zube}
-	Zube \cite{zube} es una plataforma de gestión de proyectos con un enfoque colaborativo durante el seguimiento del desarrollo del mismo. Las características principales que lo hacen la herramienta usada son:
+	Zube~\cite{zube} es una plataforma de gestión de proyectos con un enfoque colaborativo durante el seguimiento del desarrollo del mismo. Las características principales son:
 	\begin{itemize}
 		
 		\item Versión gratuita: Zube ofrece un plan gratuito que cubre las necesidades básicas de gestión de proyectos autogestionados.
 		
 		\item Conexión con GitHub: su integración con el repositorio del proyecto para su seguimiento es una condición indispensable. Además, La sincronización es inmediata lo que produce por ejemplo que al crear una tarea, inmediatamente esté disponible para su gestión desde Zube.
 		
-		\item Tableros Kanban: se facilita la visualización del flujo de trabajo. Las tarjetas de tareas pueden moverse fácilmente entre columnas como \textit{Pendiente, En progreso y Completado}, lo que permite un seguimiento claro y eficaz del estado de cada tarea..
+		\item Tableros Kanban: se facilita la visualización del flujo de trabajo. Las tarjetas de tareas pueden moverse fácilmente entre columnas como \textit{Pendiente, En progreso y Completado}, lo que permite un seguimiento claro y eficaz del estado de cada tarea.
 		
 		\item Herramientas gráficas para control de los sprints: otra manera de consultar el flujo de trabajo durante los sprints con gráficos burndown, burnup, throughput o de velocidad.
 	 
