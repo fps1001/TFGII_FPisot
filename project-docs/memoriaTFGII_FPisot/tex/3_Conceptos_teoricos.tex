@@ -8,8 +8,8 @@ En este capítulo se describen los conceptos necesarios para comprender el funci
 	 
 	Estas herramientas están cada vez más presentes en diversos campos de la ciencia y la informática. Facilitan la toma de decisiones en áreas como el desarrollo urbano o la optimización de rutas. Además, son capaces de mejorar la gestión de empresas que ofrecen servicios descentralizados, como el suministro de agua o energía. Es por ello que su aplicación es clave también en el análisis del cambio climático y otros desafíos globales como los \acrlong{ods}.
 	
-	\subsection{Servicios GIS empleados en Eco City Tours}
-	Los sistemas o herramientas con referencias geográficas son comúnmente utilizadas como servicios en el desarrollo de aplicaciones con componentes de información geográfica. Los proveedores de estos servicios facilitan datos georreferenciados según las peticiones del usuario. Eco City Tours utiliza varios servicios GIS para su funcionamiento. Entre ellos se incluyen:
+	\subsection{Servicios GIS empleados en \textit{Eco City Tours}}
+	Los sistemas o herramientas con referencias geográficas son comúnmente utilizadas como servicios en el desarrollo de aplicaciones con componentes de información geográfica. Los proveedores de estos servicios facilitan datos georreferenciados según las peticiones del usuario. \textit{Eco City Tours} utiliza varios servicios GIS para su funcionamiento. Entre ellos se incluyen:
 	\begin{itemize}
 		\item \textbf{Servicio de mapas}: con Google como proveedor~\cite{google_maps} se usa este servicio para proveer a la aplicación de un mapa para mostrar de fondo así como marcadores y polilíneas de rutas.
 		
@@ -121,7 +121,7 @@ Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que
 	Son aplicaciones que alimentarán al modelo con un conjunto de herramientas tales como motores de búsqueda, bases de datos, páginas web, etc. Una vez provisto con esta información, el modelo es capaz de razonar acerca de las acciones que debe cumplir para obtener el mejor resultado.
 
 	
-	\subsection{Uso de \acrlong{llm} en Eco City Tours}
+	\subsection{Uso de \acrlong{llm} en \textit{Eco City Tours}}
 	En este proyecto, los \acrlong{llm} se han empleado para obtener los \acrfull{pdi} a través de un diálogo interactivo entre la \acrlong{ia} y el usuario, donde este último solicita recomendaciones de lugares enfocados en el turismo sostenible. En la sección de \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-prototypes/README.md}{prototipos}, además de un prototipo con Langflow, se implementa un cuaderno de Python que evalúa las mejoras en las respuestas aplicando diversas técnicas de prompting~\cite{promptingguide}. Inicialmente, el prototipo presenta una conversación básica con respuestas de baja calidad o incluso alucinadas, que progresivamente mejoran al incluir estructuras de datos predefinidas en las respuestas. Este enfoque permite que la aplicación aproveche el aprendizaje, generando recomendaciones más precisas y acordes al código requerido en la aplicación móvil.
 	
 	En cuanto a los \acrfull{rag}, su mayor utilidad suele encontrarse en la mejora de chatbots empresariales, donde se busca ofrecer una atención al cliente más eficiente y precisa. En el contexto de los prototipos desarrollados para este \acrshort{tfg}, se realizaron pruebas con sistemas \acrshort{rag} que recopilaban información a partir de búsquedas en Internet. Las páginas web resultado de las búsquedas eran después tratadas para, una vez procesada su información,  incluirla en el contexto del prompt, lo que permitía al modelo generar respuestas más completas y actualizadas. Sin embargo, los resultados de estas pruebas revelaron que, aunque el sistema proporciona un contexto enriquecido y relevante, los tiempos de respuesta se incrementan significativamente, lo que podría afectar negativamente la experiencia del usuario. Por esta razón,\textbf{ se decidió no implementar estas herramientas en la versión final de la aplicación}, aunque los prototipos quedan disponibles como experimentos, con el fin de inspirar a otros desarrolladores interesados en explorar esta tecnología.
@@ -139,7 +139,7 @@ El Manifiesto Ágil (2001) establece cuatro valores fundamentales:
 
 \textbf{SCRUM} es un marco de trabajo ágil que facilita la auto-organización del equipo, promueve la transparencia y mejora la capacidad de adaptación del proyecto.
 
-Este enfoque es particularmente valioso en el desarrollo de Eco City Tours, iterando rápidamente sobre incrementos funcionales de la aplicación, validando con pruebas de usuario con prototipos funcionales y ajustando el desarrollo a las necesidades que surgían durante el proceso. El tutor ha jugado los tres roles definidos en SCRUM: usuario para validar los incrementos funcionales, equipo cuando revisa contenido de las tareas y SCRUM master para ayudar ha aplicar la agilidad. El rol principal del estudiante y autor de trabajo es el de equipo. Ambos participantes se han reunido para:
+Este enfoque es particularmente valioso en el desarrollo de \textit{Eco City Tours}, iterando rápidamente sobre incrementos funcionales de la aplicación, validando con pruebas de usuario con prototipos funcionales y ajustando el desarrollo a las necesidades que surgían durante el proceso. El tutor ha jugado los tres roles definidos en SCRUM: usuario para validar los incrementos funcionales, equipo cuando revisa contenido de las tareas y SCRUM master para ayudar ha aplicar la agilidad. El rol principal del estudiante y autor de trabajo es el de equipo. Ambos participantes se han reunido para:
 
 \begin{itemize}
 	\item \textbf{Planificación de Sprint}: consiste en la creación y asignación de tareas que se realizarán durante el período de tiempo en que consiste el sprint. En este \acrshort{tfg} la duración de los sprints ha sido entre dos y tres semanas. A cada tarea se le asigna unos puntos de historia que reflejan el tiempo planificado para realizar dicha tarea. También se planifican etiquetas e hitos para los que las diferentes tareas ayudan a lograr.
@@ -147,4 +147,4 @@ Este enfoque es particularmente valioso en el desarrollo de Eco City Tours, iter
 	
 \end{itemize}
 
-El uso de la metodología ágil y el marco SCRUM fue esencial para el éxito del desarrollo de Eco City Tours. La agilidad permitió una colaboración constante y una entrega continua de valor, mientras que SCRUM proporcionó la estructura necesaria para gestionar eficazmente el trabajo, resolver problemas y optimizar el proceso de desarrollo en cada iteración.
+El uso de la metodología ágil y el marco SCRUM fue esencial para el éxito del desarrollo de \textit{Eco City Tours}. La agilidad permitió una colaboración constante y una entrega continua de valor, mientras que SCRUM proporcionó la estructura necesaria para gestionar eficazmente el trabajo, resolver problemas y optimizar el proceso de desarrollo en cada iteración.
