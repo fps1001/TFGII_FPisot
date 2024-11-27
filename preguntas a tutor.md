@@ -10,6 +10,10 @@
 - Tema de archivo de licencia? Licencia del proyecto?
 - Imagenes de fondo negro se ven muy bien al imprimirlas.
 
+- Revisión de conclusiones.
+- Revisión de integración continua en conceptos teóricos y herramientas.
+- Mención a David en aspectos relevantes.
+
 ### 2. Calidad del código.
 
 - 70% de cobertura? No puedo alcanzarlo 😒

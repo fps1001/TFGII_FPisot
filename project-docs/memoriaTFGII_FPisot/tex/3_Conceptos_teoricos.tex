@@ -143,8 +143,11 @@ Este enfoque es particularmente valioso en el desarrollo de \textit{Eco City Tou
 
 \begin{itemize}
 	\item \textbf{Planificación de Sprint}: consiste en la creación y asignación de tareas que se realizarán durante el período de tiempo en que consiste el sprint. En este \acrshort{tfg} la duración de los sprints ha sido entre dos y tres semanas. A cada tarea se le asigna unos puntos de historia que reflejan el tiempo planificado para realizar dicha tarea. También se planifican etiquetas e hitos para los que las diferentes tareas ayudan a lograr.
-	\item \textbf{Sprint review y sprint retrospective}: después de cada sprint y con la ayuda del tutor del \acrshort{tfg} se presenta el incremento y se revisan las tareas del sprint.
+	\item \textbf{Sprint review y sprint retrospective}: después de cada sprint y con la ayuda del tutor del \acrshort{tfg}, se presenta el incremento funcional y se revisan las tareas realizadas durante el sprint. Además, estas reuniones incluyen una evaluación continua de la calidad del desarrollo y los procesos asociados.
+	\item \textbf{Integración continua con pruebas y compilación}: como parte del enfoque de calidad continua, se integraron prácticas de \acrfull{ci} durante el ciclo de desarrollo. Estas prácticas incluyen la \textbf{automatización de pruebas y la compilación del software} utilizando GitHub Actions. En particular, se ejecutaron flujos de trabajo que realizan análisis automatizados del código con SonarCloud~\cite{sonarcloud}, garantizando la detección temprana de errores y problemas de estilo o rendimiento en el código como se muestra en la figura~\ref{fig:sonarcloud}. Esto asegura que cada incremento funcional presentado en la \textit{sprint review} sea estable y cumpla con los estándares de calidad establecidos.
+	\imagen{sonarcloud}{Resumen de la compilación del proyecto en SonarCloud}{1}
 	
-\end{itemize}
+	La combinación de la sprint review con prácticas de integración y calidad continua refuerza el principio ágil de entrega de valor constante y garantiza que el software presentado al finalizar cada sprint sea de calidad, estable y funcional.
+	\end{itemize}
 
 El uso de la metodología ágil y el marco SCRUM fue esencial para el éxito del desarrollo de \textit{Eco City Tours}. La agilidad permitió una colaboración constante y una entrega continua de valor, mientras que SCRUM proporcionó la estructura necesaria para gestionar eficazmente el trabajo, resolver problemas y optimizar el proceso de desarrollo en cada iteración.

@@ -115,7 +115,7 @@ Se utilizó el framework Flutter~\cite{flutter} para desarrollar \textit{Eco Cit
 	Copilot es una herramienta que ofrece sugerencias automáticas mientras se escribe código (ver Fig.~\ref{fig:copilot}), previendo las próximas líneas y ofreciendo opciones que ahorran tiempo al programador.
 	La extensión Copilot Chat permite la interacción directa con la IA, de manera que se pueden hacer preguntas sobre el código sin necesidad de copiarlo en el chat, ya que el código del archivo abierto se incluye automáticamente en el contexto de la comunicación con Copilot.
 	
-	\imagen{copilot}{Ejemplo de Ghost Text de Copilot}{0.8}
+	\imagen{copilot}{Ejemplo de \textit{Ghost Text de Copilot}}{0.8}
 	
 	La ventaja principal es el incremento de productividad: como se muestra en la Figura~\ref{fig:copilot}, Copilot es capaz de generar prácticamente una clase entera o un widget al interpretar correctamente las primeras líneas de código, evitando escribir manualmente un fragmento largo de texto.
 	
@@ -135,11 +135,12 @@ Se utilizó el framework Flutter~\cite{flutter} para desarrollar \textit{Eco Cit
 		
 		\item \textbf{Control de versiones con Git}: gracias a los commits realizados a lo largo del desarrollo se permite comprobar la evolución de un proyecto así como volver a estados del trabajo gestionados en sus ramas. Otras herramientas como pull-requests permiten solicitar cambios al código facilitando un uso colaborativo durante la gestión del proyecto.
 		
-		\item \textbf{Integración con herramientas de terceros}: GitHub se integra fácilmente con una amplia variedad de herramientas de desarrollo, como servicios de CI/CD, plataformas de despliegue y gestores de proyectos como Zube, lo que permite automatizar tareas y mejorar el flujo de trabajo.
+		\item \textbf{Integración continua y análisis de calidad}: GitHub se integra fácilmente con una amplia variedad de herramientas de desarrollo, como servicios de CI/CD y plataformas de despliegue, lo que permite automatizar tareas y mejorar el flujo de trabajo. En este proyecto, se definieron acciones en \textit{GitHub Actions} que ejecutan pruebas automatizadas y análisis de calidad del código mediante \textit{SonarCloud}. Estas acciones garantizan un estándar elevado de calidad del software, detectando errores, problemas de estilo y optimización como se observa en la Figura~\ref{fig:sonarcloud-issues}. 
+		\imagen{sonarcloud-issues}{Control de calidad de SonarCloud respecto a issues abiertas.}{1}
 		
 		\item \textbf{Documentación y wikis}: GitHub permite mantener documentación clara y estructurada directamente en el repositorio, facilitando la creación de archivos README para proporcionar información detallada sobre el proyecto.
 		
-		\item \textbf{Gestión de tareas y entrega de releases}: GitHub facilita la planificación y el seguimiento del progreso del proyecto mediante el uso de issues y milestones. Estas herramientas permiten gestionar tareas asignándoles prioridades y etiquetas, lo que proporciona una vista clara del flujo de trabajo. Además, GitHub ofrece una funcionalidad de releases que permite empaquetar y distribuir versiones finales o intermedias del software de forma eficiente, asegurando una entrega organizada y documentada.
+		\item \textbf{Gestión de tareas y entrega de releases}: GitHub facilita la planificación y el seguimiento del progreso del proyecto mediante el uso de issues y milestones. Estas herramientas permiten gestionar tareas asignándoles prioridades y etiquetas, lo que proporciona una vista clara del flujo de trabajo. GitHub ofrece también una funcionalidad de releases que permite empaquetar y distribuir versiones finales o intermedias del software de forma eficiente, asegurando una entrega organizada y documentada.
 		
 		
 	\end{itemize}
