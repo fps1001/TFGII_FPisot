@@ -11,7 +11,7 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 	
 	\item \textbf{Optimización de experiencias turísticas personalizadas:} Ofrecer a los usuarios rutas personalizadas que se ajusten a sus intereses y preferencias, proporcionando información detallada y relevante sobre los puntos de interés seleccionados.
 	
-	\item \textbf{Promover el uso de tecnologías inteligentes en el turismo:} Utilizar tecnologías avanzadas como servicios GIS, Google Places y LLMs para mejorar la experiencia del usuario, facilitando la generación automática de rutas y la obtención de información actualizada sobre los destinos turísticos.
+	\item \textbf{Promover el uso de tecnologías inteligentes en el turismo:} Utilizar tecnologías avanzadas como servicios GIS, Google Places y LLM para mejorar la experiencia del usuario, facilitando la generación automática de rutas y la obtención de información actualizada sobre los destinos turísticos.
 	
 	\item \textbf{Mejorar la accesibilidad a la información turística:} Proporcionar una plataforma fácil de usar que permita a los usuarios acceder rápidamente a descripciones, fotos y otros datos sobre los puntos de interés, mejorando su experiencia de exploración en las ciudades.
 	
@@ -31,13 +31,13 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 	
 	\item \textbf{RF-5 Selección de Tour:} El usuario rellenará un formulario indicando el lugar que desea visitar, la cantidad de puntos de interés que quiere ver, sus preferencias de transporte (a pie o bicicleta), sus intereses, y el tiempo máximo que quiere dedicar a la ruta.
 	
-	\item \textbf{RF-6 Cálculo de información a través de un LLM:} La aplicación usará un servicio Gemini para generar los puntos de interés de acuerdo con las preferencias del usuario. Además, un servicio Google Places mejorará los datos proporcionando descripciones, fotos, URLs, ratings y número de votos de los POI.
+	\item \textbf{RF-6 Cálculo de información a través de un LLM:} La aplicación usará un servicio Gemini para generar los puntos de interés de acuerdo con las preferencias del usuario. Además, un servicio Google Places mejorará los datos proporcionando descripciones, fotos, URL, ratings y número de votos de los \acrshort{pdi}.
 	
-	\item \textbf{RF-7 Eliminación de POI:} El usuario podrá eliminar puntos de interés tanto desde la pantalla del mapa como desde el resumen de la ruta. Cada vez que un POI es eliminado o añadido, la ruta se recalcula automáticamente para ofrecer el trayecto más óptimo.
+	\item \textbf{RF-7 Eliminación de \acrshort{pdi}:} El usuario podrá eliminar puntos de interés tanto desde la pantalla del mapa como desde el resumen de la ruta. Cada vez que un \acrshort{pdi} es eliminado o añadido, la ruta se recalcula automáticamente para ofrecer el trayecto más óptimo.
 	
 	\item \textbf{RF-8 Cálculo de ruta optimizada:} La aplicación calculará la ruta más corta que conecte los puntos de interés seleccionados por el usuario, adaptándose al medio de transporte elegido (a pie o bicicleta).
 	
-	\item \textbf{RF-9 Capacidad de añadir un POI:} El usuario podrá agregar manualmente un lugar introduciendo su nombre en la barra de búsqueda. Si el lugar existe en los servicios de Google, será añadido automáticamente a la ruta; de lo contrario, no se tomará ninguna acción.
+	\item \textbf{RF-9 Capacidad de añadir un \acrshort{pdi}:} El usuario podrá agregar manualmente un lugar introduciendo su nombre en la barra de búsqueda. Si el lugar existe en los servicios de Google, será añadido automáticamente a la ruta; de lo contrario, no se tomará ninguna acción.
 	
 	\item \textbf{RF-10 Unirse a Eco City Tour:} El usuario podrá unirse a la ruta existente en cualquier momento. La aplicación calculará la ruta más corta para conectarlo con el tour.
 	
@@ -133,7 +133,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item El usuario completa el formulario de preferencias, incluyendo el lugar, número de POIs, medio de transporte y tiempo máximo.
+			\item El usuario completa el formulario de preferencias, incluyendo el lugar, número de \acrshort{pdi}, medio de transporte y tiempo máximo.
 		\end{enumerate}\\
 		\textbf{Postcondición}        & Los parámetros quedan configurados y listos para generar la ruta. \\
 		\textbf{Excepciones}          & 
@@ -198,7 +198,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\tightlist
 			\item El usuario explora el mapa desplazándose y haciendo zoom.
 		\end{enumerate}\\
-		\textbf{Postcondición}        & El usuario navega por el mapa para observar los POI y la ruta. \\
+		\textbf{Postcondición}        & El usuario navega por el mapa para observar los \acrshort{pdi} y la ruta. \\
 		\textbf{Importancia}          & Media \\
 		\bottomrule
 	\end{tabularx}
@@ -343,7 +343,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU02.1}    & \textbf{Visualizar detalles de puntos de interés (PDI)} \\
+		\textbf{CU02.1}    & \textbf{Visualizar detalles de \acrfull{pdi}} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 \\
@@ -361,20 +361,20 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Excepciones}          & 
 		\begin{itemize}
 			\tightlist
-			\item Fallo en la carga de información del PDI debido a problemas de conectividad.
+			\item Fallo en la carga de información del \acrlong{pdi} debido a problemas de conectividad.
 			\item Error en el servicio externo de obtención de información.
 		\end{itemize}\\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU02.1 Visualizar detalles de puntos de interés (PDI)}
+	\caption{CU02.1 Visualizar detalles de los \acrfull{pdi}}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU02.2}    & \textbf{Eliminar puntos de interés (PDI)} \\
+		\textbf{CU02.2}    & \textbf{Eliminar \acrlong{pdi}} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01, A05 \\
@@ -399,14 +399,14 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Importancia}          & Media \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU02.2 Eliminar puntos de interés (PDI)}
+	\caption{CU02.2 Eliminar \acrlong{pdi}}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU02.3}    & \textbf{Añadir puntos de interés (PDI)} \\
+		\textbf{CU02.3}    & \textbf{Añadir \acrfull{pdi}} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 \\
@@ -431,7 +431,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Importancia}          & Baja \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU02.3 Añadir puntos de interés (PDI)}
+	\caption{CU02.3 Añadir \acrfull{pdi}}
 \end{table}
 
 \begin{table}[p]

@@ -1,9 +1,58 @@
 \apendice{Especificación de diseño}
 
 \section{Introducción}
-En este anexo, se detallan las especificaciones de diseño del proyecto, enfocadas en los aspectos fundamentales para el desarrollo de la aplicación. Se describen cómo se organizan los datos que lo componen, el diseño arquitectónico, y los procedimientos empleados. Estas especificaciones son clave para asegurar el correcto funcionamiento y la estructuración adecuada de cada uno de los elementos que componen Eco City Tours.
+En este anexo, se detallan las especificaciones de diseño del proyecto, enfocadas en los aspectos fundamentales para el desarrollo de la aplicación. Se describen cómo se organizan los datos que lo componen, el diseño arquitectónico, y los procedimientos empleados. Estas especificaciones son clave para asegurar el correcto funcionamiento y la estructuración adecuada de cada uno de los elementos que componen \textit{Eco City Tours}.
 \section{Diseño de datos}
+
+El diseño de datos de la aplicación \textit{Eco City Tours} se fundamenta en una arquitectura modular que organiza las diferentes responsabilidades del sistema en paquetes específicos. A continuación, se presenta un diagrama de clases en la Figura~\ref{fig:clases} que detalla la estructura del sistema y sus relaciones. Este diagrama ilustra cómo interactúa la aplicación usando de servicios, modelos y repositorios.
+
+La organización en paquetes garantiza un diseño cohesivo, con bajo acoplamiento y alta cohesión, la extensibilidad del sistema coincidiendo también con cada carpeta dentro de la estructura del proyecto Flutter lo que garantiza también una fácil mantenibilidad.
+
 \imagen{clases}{Diagrama de clases de la aplicación}
+
+A continuación, se describen los paquetes y componentes principales representados en el diagrama de clases:
+
+\begin{itemize}
+	\item \textbf{Services}:
+	\begin{itemize}
+		\item \textbf{GeminiService}: Servicio encargado de interactuar con el modelo LLM \textit{Gemini} para obtener información sobre \acrlong{pdi} y generar recomendaciones personalizadas.
+		\item \textbf{PlacesService}: Proporciona datos relacionados con lugares de interés mediante la integración con la API de \textit{Google Places}.
+		\item \textbf{OptimizationService}: Se encarga de calcular rutas optimizadas entre puntos de interés, teniendo en cuenta las preferencias del usuario y criterios sostenibles.
+	\end{itemize}
+	
+	\item \textbf{google maps flutter}:
+	\begin{itemize}
+		\item Clase que administra la interacción con los mapas en la interfaz de usuario, permitiendo mostrar las rutas generadas.
+	\end{itemize}
+	
+	\item \textbf{models}: existen dos clases principales en las que se basa el diseño de la aplicación.
+	\begin{itemize}
+		\item \textbf{PointOfInterest}: Clase que modela un \acrlong{pdi}, almacenando información relevante como nombre, ubicación y descripción. 
+		\item \textbf{EcoCityTour}: Clase que representa un tour turístico completo, que incluye una lista del modelo anterior y datos como duración, distancia y nombre del lugar donde se ha generado la ruta turística.
+	\end{itemize}
+	
+	\item \textbf{blocs}: este paquete gestionará la lógica del gestor de estados de la aplicación.
+	\begin{itemize}
+		\item \textbf{TourBloc}: Responsable de la gestión del estado relacionado con los tours, incluyendo la generación y modificación de rutas.
+		\item \textbf{MapBloc}: Administra el estado relacionado con la visualización en el mapa, como el trazado de rutas.
+	\end{itemize}
+	
+	\item \textbf{repositories}:
+	\begin{itemize}
+		\item \textbf{EcoCityTourRepository}: Implementa la lógica necesaria para, guardar y cargar información de un \textit{EcoCityTour}.
+	\end{itemize}
+	
+	\item \textbf{datasets}:
+	\begin{itemize}
+		\item \textbf{FirestoreDataset}: Clase que gestiona la persistencia de datos en la base de datos en este caso concreto de Firestore.
+	\end{itemize}
+\end{itemize}
+
+Con esta organización, el diseño asegura que cada componente tenga una responsabilidad clara, permitiendo la integración fluida de servicios externos, la manipulación eficiente de datos y la presentación interactiva de la información en la interfaz de usuario. 
+
+Cabe destacar que al ser modular cualquier modificación por ejemplo de un gestor de estado o un dataset diferente se facilita enormemente.
+
+
 
 \section{Diseño procedimental}
 

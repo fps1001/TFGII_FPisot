@@ -114,7 +114,7 @@ El proyecto utiliza los siguientes servicios de Google:
 \subsubsection{Pasos para configurar Google Cloud}
 \begin{enumerate}
 	\item Regístrate en \href{https://cloud.google.com/}{Google Cloud Platform} y crea un nuevo proyecto.
-	\item Activa las siguientes APIs desde la consola de Google Cloud:
+	\item Activa las siguientes API desde la consola de Google Cloud:
 	\begin{itemize}
 		\item \texttt{Maps SDK for Android}.
 		\item \texttt{Places API}.
@@ -184,7 +184,7 @@ El sistema fue sometido a diversas pruebas para garantizar su correcto funcionam
 
 \subsection{Control de calidad del código con SonarCloud}
 
-Para evaluar la calidad del código, se utilizó \textbf{SonarCloud}, una herramienta que permite analizar métricas clave como complejidad ciclomática, mantenibilidad, duplicación de código y cobertura de tests. El análisis de calidad se automatizó a través del flujo de trabajo definido en el archivo \href{https://github.com/fps1001/TFGII_FPisot/tree/main/.github/workflows}{\texttt{.github/workflows}}, donde se configuraron los siguientes pasos:
+Para evaluar la calidad del código, se utilizó \textbf{SonarCloud}, una herramienta que permite analizar métricas clave como complejidad, mantenibilidad, duplicación de código y cobertura de tests. El análisis de calidad se automatizó a través del flujo de trabajo definido en el archivo \href{https://github.com/fps1001/TFGII_FPisot/tree/main/.github/workflows}{\texttt{.github/workflows}}, donde se configuraron los siguientes pasos:
 \begin{itemize}
 	\item Ejecución de las pruebas automatizadas para garantizar que no existan errores en el código.
 	\item Generación del archivo \texttt{lcov.info}, que contiene los datos de cobertura del proyecto.
@@ -196,7 +196,7 @@ Este flujo de trabajo se ejecuta automáticamente cada vez que se realiza un \te
 
 \subsection{Pruebas funcionales y análisis inicial}
 
-Dada la naturaleza del proyecto y el uso de Modelos de Lenguaje de Gran Escala (LLMs), inicialmente se realizaron pruebas manuales para evaluar la calidad de los resultados. Estas pruebas se centraron en generar rutas y puntos de interés en la ciudad donde resido, verificando la precisión y relevancia de las recomendaciones generadas.
+Dada la naturaleza del proyecto y el uso de Modelos de Lenguaje de Gran Escala (LLM), inicialmente se realizaron pruebas manuales para evaluar la calidad de los resultados. Estas pruebas se centraron en generar rutas y puntos de interés en la ciudad donde resido, verificando la precisión y relevancia de las recomendaciones generadas.
 
 \subsection{Pruebas automatizadas}
 
@@ -225,7 +225,7 @@ El sistema fue sometido a un conjunto completo de pruebas funcionales y de calid
 \begin{itemize}
 	\item Identificar y corregir errores en fases tempranas del desarrollo.
 	\item Garantizar una alta cobertura del código, reflejada en los reportes de SonarCloud.
-	\item Validar la precisión y relevancia de las recomendaciones generadas por los LLMs en contextos reales.
+	\item Validar la precisión y relevancia de las recomendaciones generadas por los LLM en contextos reales.
 \end{itemize}
 
 Estas pruebas aseguran que el proyecto \textbf{Eco City Tours} cumple con los estándares de calidad necesarios para un entorno de producción.
