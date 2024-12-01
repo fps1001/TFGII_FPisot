@@ -27,3 +27,31 @@
 
 ### Otras issues a realizar: 
 - Documentar el patrón de diseño Bloc utilizando las ideas del artículo https://www.ics.com/blog/building-flutter-discover-bloc-pattern en el anexo C de Diseño y Arquitectura. 
+
+# Calendario de Tareas
+
+| Lunes          | Martes         | Miércoles      | Jueves         | Viernes        | Sábado         | Domingo        |
+|----------------|----------------|----------------|----------------|----------------|----------------|----------------|
+| **2**          | **3**          | **4**          | **5**          | **6**          | **7**          | **8**          |
+|  | 🟦 SPRINT REVIEW <br> (17:00) |                |                |                |                | 🟩 BISON          |
+| **9**          | **10**         | **11**         | **12**         | **13**         | **14**         | **15**         |
+|                |                | 🟧 EX. PRO LENG <br> (16:00) | 🟧 EX. GESTIÓN INFO <br> (19:30) |                |                |                |
+| **16**         | **17**         | **18**         | **19**         | **20**         | **21**         | **22**         |
+|                |                |                |                |    vacaciones            |                |                |
+| **23**         | **24**         | **25**         | **26**         | **27**         | **28**         | **29**         |
+|                |                |                |                |                |                |                |
+| **30**         | **31**         | **1**          | **2**          | **3**          | **4**          | **5**          |
+|                |                |                |                |                |                |                |
+| **6**          | **7**          | **8**          | **9**          | **10**         | **11**         | **12**         |
+|                |                | 🟩 KAGGLE       |                |                |                |                |
+| **13**         | **14**         | **15**         | **16**         | **17**         | **18**         | **19**         |
+|                |                | 📝 ENTREGA TFG  | 🟠 EX 2 PRO LENG |                |                |                |
+| **20**         | **21**         | **22**         | **23**         | **24**         | **25**         | **26**         |
+| 📊 EX 2 GEST. INFO |                |                |                |                |                |                |
+
+### Leyenda de Colores
+- 🟩 **Verde**: Prácticas
+- 🟦 **Azul**: Revisión de Sprint
+- 🟧 **Naranja**: Exámenes
+- 🟠 **Anaranjado**: Segunda convocatoria
+

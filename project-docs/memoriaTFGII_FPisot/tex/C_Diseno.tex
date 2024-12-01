@@ -27,7 +27,7 @@ A continuación, se describen los paquetes y componentes principales representad
 	
 	\item \textbf{models}: existen dos clases principales en las que se basa el diseño de la aplicación.
 	\begin{itemize}
-		\item \textbf{PointOfInterest}: Clase que modela un \acrlong{pdi}, almacenando información relevante como nombre, ubicación y descripción. 
+		\item \textbf{\acrshort{pdi}ntOfInterest}: Clase que modela un \acrlong{pdi}, almacenando información relevante como nombre, ubicación y descripción. 
 		\item \textbf{EcoCityTour}: Clase que representa un tour turístico completo, que incluye una lista del modelo anterior y datos como duración, distancia y nombre del lugar donde se ha generado la ruta turística.
 	\end{itemize}
 	
@@ -55,10 +55,88 @@ Cabe destacar que al ser modular cualquier modificación por ejemplo de un gesto
 
 
 \section{Diseño procedimental}
+En esta sección se explicará el flujo de trabajo relacionado con una de las tareas más importantes de la aplicación.
+La generación de un nuevo tour turístico una vez que el usuario ha definido sus preferencias es el proceso fundamental que mostraremos en la siguiente Figura~\ref{fig:secuence} que mostrará la interacción entre los distintos usuarios y las partes de la aplicación con las que se comunica.
 
-\section{Diseño arquitectónico}
-\imagen{components-diagram}{Diagrama de componentes de la aplicación}
-\imagen{components-simple}{Diagrama de componentes a nivel de paquetes de la aplicación}
+El proceso comienza con el evento \texttt{loadTourEvent()}, disparado por el usuario desde la pantalla de selección (\textit{TourSelectionScreen}). Este evento desencadena la siguiente secuencia de interacciones:
+\begin{enumerate}
+	\item El \textit{TourBloc} inicia la generación del tour solicitando a \textit{ServicioLLM} una lista inicial de \acrlong{pdi} basados en las preferencias del usuario.
+	\item \textit{ServicioLLM} devuelve un conjunto de \acrlong{pdi}, que luego se enriquecen con información adicional obtenida a través de \textit{Google Places} mediante el método \texttt{searchPlacePOI}.
+	\item La información enriquecida de los \acrlong{pdi} es enviada a \textit{OptimizationService}, que calcula una ruta optimizada utilizando criterios de sostenibilidad y las preferencias del usuario. Esto se realiza a través del método \texttt{optimizedRoute()}.
+	\item La ruta optimizada es devuelta como \texttt{OptimizedRoute} y se envía al \textit{MapBloc}, que se encarga de gestionar la actualización del mapa en la interfaz de usuario.
+	\item Finalmente, el \textit{MapBloc} utiliza la ruta optimizada para invocar el método \texttt{updateMap()}, mostrando el tour generado en \textit{MapScreen} y permitiendo al usuario interactuar con los puntos de interés.
+\end{enumerate}
 \imagen{secuence}{Diagrama de secuencia - Generación de Eco City Tour}
+Además de este proceso principal de obtención de \acrlong{pdi} existen otros casos de uso cuyos procedimientos se explican a continuación.
+\subsection{Añadir un Punto de Interés (\acrshort{pdi})}
+En esta sección se detalla el flujo de trabajo relacionado con la funcionalidad de añadir un nuevo Punto de Interés (\acrshort{pdi}) a un tour ya existente. Este proceso permite al usuario personalizar aún más su experiencia turística al incorporar \acrshort{pdi}s que considere relevantes.
+
+El flujo comienza cuando el usuario selecciona la opción de añadir un \acrshort{pdi} desde la interfaz de usuario (\textit{MapScreen}). Este evento desencadena una serie de interacciones entre los componentes principales, como el \textit{MapBloc}, que gestiona el estado del mapa, y el \textit{TourBloc}, que actualiza la lista de \acrshort{pdi}s en el tour actual. Finalmente, el sistema actualiza la vista del mapa con el \acrshort{pdi} añadido y guarda los cambios en el repositorio correspondiente.
+
+En el diagrama de secuencia representado en la Figura~\ref{fig:add_poi}, se describen los pasos necesarios para completar esta funcionalidad.
+
+\imagen{add_poi}{Diagrama de secuencia - Añadir un \acrshort{pdi}}
+\subsection{Eliminar un \acrshort{pdi}}
+El flujo para eliminar un \acrshort{pdi} permite al usuario depurar o ajustar su ruta turística eliminando aquellos \acrshort{pdi} que no sean relevantes. Este proceso garantiza que la experiencia turística sea completamente personalizada.
+
+El usuario inicia este flujo seleccionando el \acrshort{pdi} a eliminar desde la interfaz de usuario (\textit{MapScreen}). Este evento es gestionado por el \textit{MapBloc}, que actualiza el estado del mapa. A su vez, el \textit{TourBloc} actualiza la lista de \acrshort{pdi}s en el tour, eliminando el elemento correspondiente. Finalmente, el sistema guarda el estado actualizado del tour y refleja los cambios en la vista del mapa.
+
+La Figura~\ref{fig:remove_poi} muestra el diagrama de secuencia para esta funcionalidad.
+
+\imagen{remove_poi}{Diagrama de secuencia - Eliminar un \acrshort{pdi}}
+\subsection{Guardar un Eco City Tour}
+Esta funcionalidad permite a los usuarios guardar un Eco City Tour generado, asegurando que puedan acceder a sus rutas personalizadas en el futuro. 
+
+El flujo comienza cuando el usuario selecciona la opción de guardar desde la interfaz de usuario (\textit{MapScreen}). Este evento activa el \textit{MapBloc}, que recopila los datos actuales del tour desde el \textit{TourBloc}. Los datos son entonces enviados al repositorio, donde son almacenados de manera persistente en Firestore. Una vez completado el proceso, se notifica al usuario que el tour ha sido guardado exitosamente.
+
+El diagrama de secuencia para esta funcionalidad se ilustra en la Figura~\ref{fig:save_tour}.
+
+\imagen{save_tour}{Diagrama de secuencia - Guardar un Eco City Tour}
+\subsection{Cargar un Eco City Tour}
+Esta funcionalidad permite a los usuarios cargar un tour previamente guardado para continuar utilizándolo o editarlo.
+
+El flujo inicia cuando el usuario selecciona un tour desde la lista de tours guardados en la interfaz de usuario (\textit{TourSelectionScreen}). Este evento activa el \textit{TourBloc}, que recupera los datos del tour desde el repositorio correspondiente. Una vez recuperados los datos, el \textit{MapBloc} actualiza la vista del mapa para mostrar el tour cargado. 
+
+La Figura~\ref{fig:load_tour} muestra el diagrama de secuencia para este proceso.
+
+\imagen{load_tour}{Diagrama de secuencia - Cargar un Eco City Tour}
+
+
+\subsection{Reportar un error para Crashlytics}
+Esta funcionalidad permite registrar errores inesperados o problemas técnicos detectados en la aplicación en Firebase Crashlytics para facilitar su análisis y resolución.
+
+Cuando ocurre un error, la aplicación automáticamente captura los detalles técnicos relevantes, como el estado actual de los datos y la pila de llamadas. Estos datos son enviados al servicio de Crashlytics mediante un módulo dedicado. Una vez registrado el error, Crashlytics genera un informe que estará disponible para su análisis en la consola de Firebase.
+
+El diagrama de secuencia para este flujo se describe en la Figura~\ref{fig:report_error}.
+
+\imagen{report_error}{Diagrama de secuencia - Reportar un error para Crashlytics}
+
+
+\subsection{Diseño arquitectónico}
+
+El diseño arquitectónico de \textit{Eco City Tours} sigue un enfoque modular que organiza el sistema en tres capas principales: \textbf{Interfaz de usuario}, \textbf{Lógica de negocio} y \textbf{Servicios externos}. Esta separación garantiza la escalabilidad, mantenibilidad y claridad del sistema, facilitando futuras mejoras o adaptaciones.
+
+\begin{itemize}
+	\item \textbf{Interfaz de usuario}: Representa la capa con la que interactúa el usuario. Incluye componentes como \textit{MapScreen}, \textit{TourSummary} y \textit{TourSelectionScreen}, que se encargan de capturar las acciones del usuario y mostrar la información relevante en una interfaz intuitiva.
+	
+	\item \textbf{Lógica de negocio}: Se encarga de gestionar los procesos centrales de la aplicación. Los principales bloques funcionales son:
+	\begin{itemize}
+		\item \textit{MapBloc}: Gestiona el estado y las interacciones relacionadas con el mapa, como la visualización de las rutas o la actualización del mapa en tiempo real.
+		\item \textit{TourBloc}: Responsable de la generación y modificación de tours, así como de la interacción con los datos necesarios para personalizar las rutas.
+	\end{itemize}
+	
+	\item \textbf{Servicios externos}: Contiene los módulos que interactúan con servicios de terceros para obtener información necesaria para el funcionamiento de la aplicación. Los servicios externos principales son:
+	\begin{itemize}
+		\item \textit{Servicio LLM}: Se utiliza para generar datos iniciales de puntos de interés turísticos basados en las preferencias del usuario.
+		\item \textit{Google Places}: Proporciona información enriquecida sobre los puntos de interés.
+		\item \textit{Optimizador de Rutas}: Calcula la mejor ruta posible basándose en criterios como sostenibilidad y tiempo.
+	\end{itemize}
+\end{itemize}
+
+Esta arquitectura asegura un sistema robusto y flexible, con componentes que tienen responsabilidades claramente definidas y un bajo acoplamiento entre ellos.
+
+\imagen{components-diagram}{Diagrama de componentes}
+
+
 
 
