@@ -56,7 +56,8 @@ Cabe destacar que al ser modular cualquier modificación por ejemplo de un gesto
 
 \section{Diseño procedimental}
 En esta sección se explicará el flujo de trabajo relacionado con una de las tareas más importantes de la aplicación.
-La generación de un nuevo tour turístico una vez que el usuario ha definido sus preferencias es el proceso fundamental que mostraremos en la siguiente Figura~\ref{fig:secuence} que mostrará la interacción entre los distintos usuarios y las partes de la aplicación con las que se comunica.
+\subsection{Carga de \textit{EcoCityTour} desde pantalla de selección de preferencias}
+La generación de un nuevo tour turístico una vez que el usuario ha definido sus preferencias es el proceso fundamental que mostraremos en la siguiente Figura~\ref{fig:secuence} que mostrará la interacción entre los distintos actores y sus comunicaciones.
 
 El proceso comienza con el evento \texttt{loadTourEvent()}, disparado por el usuario desde la pantalla de selección (\textit{TourSelectionScreen}). Este evento desencadena la siguiente secuencia de interacciones:
 \begin{enumerate}
@@ -68,48 +69,39 @@ El proceso comienza con el evento \texttt{loadTourEvent()}, disparado por el usu
 \end{enumerate}
 \imagen{secuence}{Diagrama de secuencia - Generación de Eco City Tour}
 Además de este proceso principal de obtención de \acrlong{pdi} existen otros casos de uso cuyos procedimientos se explican a continuación.
-\subsection{Añadir un Punto de Interés (\acrshort{pdi})}
-En esta sección se detalla el flujo de trabajo relacionado con la funcionalidad de añadir un nuevo Punto de Interés (\acrshort{pdi}) a un tour ya existente. Este proceso permite al usuario personalizar aún más su experiencia turística al incorporar \acrshort{pdi}s que considere relevantes.
+\subsection{Añadir un \acrfull{pdi}}
 
-El flujo comienza cuando el usuario selecciona la opción de añadir un \acrshort{pdi} desde la interfaz de usuario (\textit{MapScreen}). Este evento desencadena una serie de interacciones entre los componentes principales, como el \textit{MapBloc}, que gestiona el estado del mapa, y el \textit{TourBloc}, que actualiza la lista de \acrshort{pdi}s en el tour actual. Finalmente, el sistema actualiza la vista del mapa con el \acrshort{pdi} añadido y guarda los cambios en el repositorio correspondiente.
+El flujo comienza cuando el usuario selecciona la opción de añadir un \acrshort{pdi} desde la interfaz de usuario \textit{MapScreen}. Este evento desencadena una serie de interacciones entre los componentes principales, como el \textit{MapBloc}, que gestiona el estado del mapa, y el \textit{TourBloc}, que actualiza la lista de \acrshort{pdi} en el tour actual. Finalmente, el sistema actualiza la vista del mapa con el \acrshort{pdi} añadido y guarda los cambios en el repositorio correspondiente.
 
-En el diagrama de secuencia representado en la Figura~\ref{fig:add_poi}, se describen los pasos necesarios para completar esta funcionalidad.
+En el diagrama de secuencia representado en la Figura~\ref{fig:add-poi-secuence}, se describen los pasos necesarios para completar esta funcionalidad.
 
-\imagen{add_poi}{Diagrama de secuencia - Añadir un \acrshort{pdi}}
+\imagen{add-poi-secuence}{Diagrama de secuencia - Añadir un \acrshort{pdi}}
+
+La lógica de la pantalla de búsqueda se beneficia de una clase de \textit{Flutter} llamada \textit{Delegate}~\cite{flutter_search_delegate}. En esta clase se pueden configurar los comportamientos típicos de una barra de búsqueda fácilmente sin tener que programar cada interacción manualmente como por ejemplo la impresión de resultados, las sugerencias de lugares o los iconos mostrados.
+
 \subsection{Eliminar un \acrshort{pdi}}
-El flujo para eliminar un \acrshort{pdi} permite al usuario depurar o ajustar su ruta turística eliminando aquellos \acrshort{pdi} que no sean relevantes. Este proceso garantiza que la experiencia turística sea completamente personalizada.
+El flujo para eliminar un \acrshort{pdi} permite al usuario ajustar su ruta turística eliminando aquellos \acrshort{pdi} que no le resulten  relevantes. 
 
-El usuario inicia este flujo seleccionando el \acrshort{pdi} a eliminar desde la interfaz de usuario (\textit{MapScreen}). Este evento es gestionado por el \textit{MapBloc}, que actualiza el estado del mapa. A su vez, el \textit{TourBloc} actualiza la lista de \acrshort{pdi}s en el tour, eliminando el elemento correspondiente. Finalmente, el sistema guarda el estado actualizado del tour y refleja los cambios en la vista del mapa.
+El usuario inicia este flujo seleccionando el \acrshort{pdi} a eliminar desde la interfaz de usuario \textit{MapScreen} a través del custom\_bottom\_sheet o desde la pantalla de resumen en poi\_list\_item, ambos van a lanzar un evento al TourBloc que actualizará su información usando el actor 5 que es el servicio de Google que optimizará la ruta con la actualización del tour. Por último delegará como siempre la actualización visual del mapa al \textit{MapBloc}. 
 
-La Figura~\ref{fig:remove_poi} muestra el diagrama de secuencia para esta funcionalidad.
+La Figura~\ref{fig:remove-poi-secuence} muestra el diagrama de secuencia para esta funcionalidad.
 
-\imagen{remove_poi}{Diagrama de secuencia - Eliminar un \acrshort{pdi}}
+\imagen{remove-poi-secuence}{Diagrama de secuencia - Eliminar un \acrshort{pdi}}
+
 \subsection{Guardar un Eco City Tour}
 Esta funcionalidad permite a los usuarios guardar un Eco City Tour generado, asegurando que puedan acceder a sus rutas personalizadas en el futuro. 
 
-El flujo comienza cuando el usuario selecciona la opción de guardar desde la interfaz de usuario (\textit{MapScreen}). Este evento activa el \textit{MapBloc}, que recopila los datos actuales del tour desde el \textit{TourBloc}. Los datos son entonces enviados al repositorio, donde son almacenados de manera persistente en Firestore. Una vez completado el proceso, se notifica al usuario que el tour ha sido guardado exitosamente.
+El flujo comienza como se puede observar en la Figura~\ref{fig:save-tour-secuence} cuando el usuario selecciona la opción de guardar desde la interfaz de usuario en la pantalla \textit{SummaryScreen}. Este evento activa el \textit{TourBloc}. Los datos son entonces enviados al repositorio, donde son almacenados de manera persistente a través de las funciones del Datasource de Firestore y por último este actor realizará la acción persistente. Una vez completado el proceso, se notifica al usuario que el tour ha sido guardado exitosamente a través de un \textit{Snackbar}, un mensaje en la parte inferior de la pantalla que servirá para su confirmación.
+\imagen{save-tour-secuence}{Diagrama de secuencia - Guardar un Eco City Tour}
 
-El diagrama de secuencia para esta funcionalidad se ilustra en la Figura~\ref{fig:save_tour}.
-
-\imagen{save_tour}{Diagrama de secuencia - Guardar un Eco City Tour}
 \subsection{Cargar un Eco City Tour}
 Esta funcionalidad permite a los usuarios cargar un tour previamente guardado para continuar utilizándolo o editarlo.
 
 El flujo inicia cuando el usuario selecciona un tour desde la lista de tours guardados en la interfaz de usuario (\textit{TourSelectionScreen}). Este evento activa el \textit{TourBloc}, que recupera los datos del tour desde el repositorio correspondiente. Una vez recuperados los datos, el \textit{MapBloc} actualiza la vista del mapa para mostrar el tour cargado. 
 
-La Figura~\ref{fig:load_tour} muestra el diagrama de secuencia para este proceso.
+La Figura~\ref{fig:load-tour-secuence} muestra el diagrama de secuencia para este proceso.
 
-\imagen{load_tour}{Diagrama de secuencia - Cargar un Eco City Tour}
-
-
-\subsection{Reportar un error para Crashlytics}
-Esta funcionalidad permite registrar errores inesperados o problemas técnicos detectados en la aplicación en Firebase Crashlytics para facilitar su análisis y resolución.
-
-Cuando ocurre un error, la aplicación automáticamente captura los detalles técnicos relevantes, como el estado actual de los datos y la pila de llamadas. Estos datos son enviados al servicio de Crashlytics mediante un módulo dedicado. Una vez registrado el error, Crashlytics genera un informe que estará disponible para su análisis en la consola de Firebase.
-
-El diagrama de secuencia para este flujo se describe en la Figura~\ref{fig:report_error}.
-
-\imagen{report_error}{Diagrama de secuencia - Reportar un error para Crashlytics}
+\imagen{load-tour-secuence}{Diagrama de secuencia - Cargar un Eco City Tour}
 
 
 \subsection{Diseño arquitectónico}
@@ -133,10 +125,43 @@ El diseño arquitectónico de \textit{Eco City Tours} sigue un enfoque modular q
 	\end{itemize}
 \end{itemize}
 
-Esta arquitectura asegura un sistema robusto y flexible, con componentes que tienen responsabilidades claramente definidas y un bajo acoplamiento entre ellos.
+Esta arquitectura asegura un sistema robusto y flexible, con componentes que tienen responsabilidades claramente definidas y un bajo acoplamiento entre ellos lo que permitiría un remplazo de uno de los componentes sin gran dificultad.
 
 \imagen{components-diagram}{Diagrama de componentes}
 
+\subsection{Patrón de diseño \acrfull{bloc}}
+El patrón de diseño \acrshort{bloc}~\cite{flutter_bloc} es fundamental en la arquitectura de la aplicación \textit{Eco City Tours}. Este patrón separa la lógica de negocio de la interfaz de usuario, facilitando el mantenimiento, la escalabilidad.
 
+En el contexto de Flutter, el patrón \acrlong{bloc} utiliza un enfoque basado en flujos o \textit{streams} y eventos (ver Fig.~\ref{fig:bloc-diagram}), permitiendo que los estados y eventos fluyan entre los componentes sin acoplar directamente la lógica de negocio con la interfaz gráfica. 
 
+La aplicación \textit{Eco City Tours} implementa este patrón de diseño a través de los componentes principales, cada uno con una funcionalidad clara y única.
+\begin{itemize}
+	\item \textbf{\textit{GpsBloc}}: Gestiona tanto los permisos de uso de GPS como su activación actual en el dispositivo donde esté funcionando la aplicación.
+	\item \textbf{\textit{LocationBloc}}: Gestiona la localización del usuario a través de un stream que guarda la posición GPS por la que va circulando.
+	\item \textbf{\textit{TourBloc}}: Gestiona toda la lógica relacionada con los tours, desde la generación y modificación de rutas hasta la interacción con los servicios externos como \textit{Servicio LLM} y \textit{Google Places}.
+	\item \textbf{\textit{MapBloc}}: Gestiona el estado y las interacciones del mapa, como la visualización de rutas generadas, la actualización de puntos de interés.
+\end{itemize}
 
+Un aspecto importante en la implementación del patrón \acrshort{bloc} en \textit{Eco City Tours} es el uso de la clase \texttt{Equatable}, que permite simplificar la comparación de estados y eventos. En Flutter, cada vez que un estado cambia, se debe notificar a la interfaz de usuario para que se actualice. La clase \texttt{Equatable} facilita este proceso al definir de manera eficiente si dos instancias de estado o evento son equivalentes, evitando notificaciones redundantes y mejorando el rendimiento del sistema.
+
+En el caso de \textit{Eco City Tours}, todos los \acrshort{bloc} usados extienden de \texttt{Equatable}, asegurando que la lógica de comparación sea precisa y que la interfaz de usuario solo se actualice cuando sea necesario. 
+
+\subsubsection{Principios clave del patrón \acrshort{bloc}}
+	El patrón \acrfull{bloc} sigue los siguientes principios:
+	\begin{itemize}
+		\item \textbf{Eventos y estados}: La interacción entre la interfaz de usuario y la lógica de negocio se realiza mediante el envío de eventos (\texttt{Event}) y la emisión de estados (\texttt{State}). Los eventos representan acciones realizadas por el usuario, mientras que los estados reflejan el resultado de procesar esos eventos.
+		\item \textbf{Flujos (\textit{Streams})}: El patrón utiliza \textit{streams} de datos reactivos para manejar la comunicación entre la interfaz de usuario y la lógica de negocio.
+		\item \textbf{Inmutabilidad}: Tanto los eventos como los estados son inmutables, lo que asegura un comportamiento predecible y simplifica el manejo del flujo de datos.
+	\end{itemize}
+	
+	\imagen{bloc-diagram}{Diagrama de interacción del patrón \acrshort{bloc} en la aplicación}
+
+\subsubsection{Ejemplo de implementación en \textit{Eco City Tours}}
+A continuación, se muestra un ejemplo simplificado de cómo se utiliza el patrón \acrshort{bloc} para gestionar la generación de un tour:
+\begin{itemize}
+	\item El usuario selecciona sus preferencias y dispara un evento \texttt{loadTourEvent()} desde la interfaz de usuario.
+	\item El \textit{TourBloc} recibe este evento, interactúa con los servicios externos (\textit{Servicio LLM} y \textit{Google Places}) para obtener y enriquecer los puntos de interés, y calcula una ruta optimizada.
+	\item El \textit{TourBloc} emite un nuevo estado (\texttt{TourLoadedState}) con la información del tour generado, que es recibido por el componente \textit{MapBloc}.
+	\item El \textit{MapBloc} utiliza esta información para actualizar el mapa, invocando el método \texttt{updateMap()}.
+\end{itemize}
+Como se puede ver la lógica del tour generado y su representación son dos partes diferenciadas aunque MapBloc dependa del contenido del TourBloc, su codificación no se recarga delegando responsabilidades.
