@@ -23,14 +23,25 @@ jobs:
           cd project-app/project_app
           flutter pub get
 
+      - name: Debug Secrets (Temporary)
+        run: |
+          echo "Checking secrets..."
+          echo "GEMINI_API_KEY is set? ${{ secrets.GEMINI_API_KEY != '' }}"
+          echo "GOOGLE_API_KEY is set? ${{ secrets.GOOGLE_API_KEY != '' }}"
+          echo "GOOGLE_DIRECTIONS_API_KEY is set? ${{ secrets.GOOGLE_DIRECTIONS_API_KEY != '' }}"
+          echo "GOOGLE_PLACES_API_KEY is set? ${{ secrets.GOOGLE_PLACES_API_KEY != '' }}"
+
       - name: Create .env file
         run: |
-          cat <<EOF > project-app/project_app/.env
-          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
-          GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
-          GOOGLE_DIRECTIONS_API_KEY=${{ secrets.GOOGLE_DIRECTIONS_API_KEY }}
-          GOOGLE_PLACES_API_KEY=${{ secrets.GOOGLE_PLACES_API_KEY }}
-          EOF
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> project-app/project_app/.env
+          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> project-app/project_app/.env
+          echo "GOOGLE_DIRECTIONS_API_KEY=${{ secrets.GOOGLE_DIRECTIONS_API_KEY }}" >> project-app/project_app/.env
+          echo "GOOGLE_PLACES_API_KEY=${{ secrets.GOOGLE_PLACES_API_KEY }}" >> project-app/project_app/.env
+
+      - name: Verify .env content (Temporary)
+        run: |
+          echo "Content of .env file:"
+          cat project-app/project_app/.env
 
       - name: Run Flutter Tests
         run: |
