@@ -8,6 +8,7 @@ import 'package:project_app/logger/logger.dart';
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/screens/screens.dart';
 import 'package:project_app/widgets/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TourSelectionScreen extends StatefulWidget {
   const TourSelectionScreen({super.key});
@@ -80,6 +81,12 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                 }
               },
             ),
+            IconButton(
+            icon: const Icon(Icons.info_outline_rounded),
+            tooltip: 'Ir al Wiki de la Aplicación',
+            onPressed: () {
+              _launchWikiURL(); // Llama a la función que abre el enlace
+            },),
           ],
         ),
         body: GestureDetector(
@@ -289,5 +296,12 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
         ),
       ),
     );
+  }
+}
+// Nueva función para abrir el enlace de la wiki
+Future<void> _launchWikiURL() async {
+  final Uri url = Uri.parse('https://github.com/fps1001/TFGII_FPisot/wiki');
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw Exception('No se pudo abrir el enlace al Wiki: $url');
   }
 }

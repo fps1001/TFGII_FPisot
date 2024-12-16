@@ -7,7 +7,7 @@ abstract class TourEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Cargar un EcoCityTour.
+// Evento que se dispara cuando se carga el EcoCityTour.
 class LoadTourEvent extends TourEvent {
   final String city;
   final int numberOfSites;
@@ -16,20 +16,20 @@ class LoadTourEvent extends TourEvent {
   final double maxTime;
   final String systemInstruction;
 
-  const LoadTourEvent({
-    required this.city,
-    required this.numberOfSites,
-    required this.userPreferences,
-    required this.mode,
-    required this.maxTime,
-    required this.systemInstruction,
-  });
+  const LoadTourEvent(
+      {required this.city,
+      required this.numberOfSites,
+      required this.systemInstruction,
+      required this.userPreferences,
+      required this.mode,
+      required this.maxTime});
 
   @override
-  List<Object> get props => [city, numberOfSites, userPreferences, mode, maxTime];
+  List<Object> get props =>
+      [city, numberOfSites, userPreferences, mode, maxTime];
 }
 
-// Añadir un POI.
+// Evento que se dispara cuando se añade un punto de interés al recorrido.
 class OnAddPoiEvent extends TourEvent {
   final PointOfInterest poi;
 
@@ -39,18 +39,18 @@ class OnAddPoiEvent extends TourEvent {
   List<Object> get props => [poi];
 }
 
-// Eliminar un POI.
+// Evento que se dispara cuando se elimina un punto de interés del recorrido.
 class OnRemovePoiEvent extends TourEvent {
   final PointOfInterest poi;
-  final bool shouldUpdateMap;
+  final bool shouldUpdateMap; // Añadimos un booleano para actualizar el mapa o no en función de donde se emita.
 
   const OnRemovePoiEvent({required this.poi, this.shouldUpdateMap = true});
 
   @override
-  List<Object> get props => [poi, shouldUpdateMap];
+  List<Object> get props => [poi];
 }
 
-// Unirse a un tour.
+// Evento para indicar que el usuario se ha unido al tour.
 class OnJoinTourEvent extends TourEvent {
   const OnJoinTourEvent();
 
@@ -58,7 +58,7 @@ class OnJoinTourEvent extends TourEvent {
   List<Object> get props => [];
 }
 
-// Resetear el tour.
+// Evento para resetear el tour al volver a pantalla de carga.
 class ResetTourEvent extends TourEvent {
   const ResetTourEvent();
 
@@ -66,7 +66,7 @@ class ResetTourEvent extends TourEvent {
   List<Object> get props => [];
 }
 
-// Cargar tours guardados.
+// Evento para cargar los tours guardados después de eliminar uno.
 class LoadSavedToursEvent extends TourEvent {
   const LoadSavedToursEvent();
 
@@ -74,7 +74,8 @@ class LoadSavedToursEvent extends TourEvent {
   List<Object> get props => [];
 }
 
-// Cargar un tour desde el repositorio guardado.
+// Inicializa el tour cuando se carga desde la pantalla de tours guardados
+// sin haber cargado un tour previamente.
 class LoadTourFromSavedEvent extends TourEvent {
   final String documentId;
 
@@ -82,14 +83,4 @@ class LoadTourFromSavedEvent extends TourEvent {
 
   @override
   List<Object> get props => [documentId];
-}
-
-// Guardar el tour actual.
-class SaveTourEvent extends TourEvent {
-  final String tourName;
-
-  const SaveTourEvent({required this.tourName});
-
-  @override
-  List<Object> get props => [tourName];
 }
