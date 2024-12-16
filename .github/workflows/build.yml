@@ -1,0 +1,36 @@
+name: Build Project
+
+on:
+  push:
+    branches:
+      - main
+  workflow_call: # Permite que otros workflows llamen a este archivo
+
+jobs:
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Setup Java
+      - name: Set Up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'oracle'
+          java-version: '17'
+
+      # Setup Flutter
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.3'
+          channel: 'stable'
+
+      # Install Dependencies
+      - name: Install Dependencies
+        run: |
+          cd project-app/project_app
+          flutter pub get
