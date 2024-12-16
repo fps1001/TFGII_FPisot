@@ -1,7 +1,0 @@
-{
-    "java.compile.nullAnalysis.mode": "automatic",
-    "coverage-gutters.showLineCoverage": true,
-    "coverage-gutters.coverageFilePaths": [
-        "coverage/lcov.info"
-    ]
-}
