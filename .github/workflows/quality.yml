@@ -29,6 +29,12 @@ jobs:
           cd project-app/project_app
           flutter pub get
 
+      - name: Download Coverage Report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: project-app/project_app/coverage
+
       - name: SonarCloud Scan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,7 +46,13 @@ jobs:
           unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
           export PATH=$SONAR_SCANNER_HOME/bin:$PATH
           export SONAR_SCANNER_OPTS="-server"
+
+          # Ejecutar el escáner de SonarCloud con configuración directa
           sonar-scanner \
             -Dsonar.organization=fps \
             -Dsonar.projectKey=fps1001_TFGII_FPisot \
-            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.sources=project-app/project_app/lib \
+            -Dsonar.exclusions=**/*.g.dart,**/*.freezed.dart \
+            -Dsonar.tests=project-app/project_app/test \
+            -Dsonar.dart.lcov.reportPaths=project-app/project_app/coverage/lcov.info

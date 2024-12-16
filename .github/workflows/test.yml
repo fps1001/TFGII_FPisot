@@ -23,14 +23,6 @@ jobs:
           cd project-app/project_app
           flutter pub get
 
-      - name: Debug Secrets (Temporary)
-        run: |
-          echo "Checking secrets..."
-          echo "GEMINI_API_KEY is set? ${{ secrets.GEMINI_API_KEY != '' }}"
-          echo "GOOGLE_API_KEY is set? ${{ secrets.GOOGLE_API_KEY != '' }}"
-          echo "GOOGLE_DIRECTIONS_API_KEY is set? ${{ secrets.GOOGLE_DIRECTIONS_API_KEY != '' }}"
-          echo "GOOGLE_PLACES_API_KEY is set? ${{ secrets.GOOGLE_PLACES_API_KEY != '' }}"
-
       - name: Create .env file
         run: |
           echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> project-app/project_app/.env
@@ -38,12 +30,13 @@ jobs:
           echo "GOOGLE_DIRECTIONS_API_KEY=${{ secrets.GOOGLE_DIRECTIONS_API_KEY }}" >> project-app/project_app/.env
           echo "GOOGLE_PLACES_API_KEY=${{ secrets.GOOGLE_PLACES_API_KEY }}" >> project-app/project_app/.env
 
-      - name: Verify .env content (Temporary)
-        run: |
-          echo "Content of .env file:"
-          cat project-app/project_app/.env
-
       - name: Run Flutter Tests
         run: |
           cd project-app/project_app
           flutter test --coverage
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: project-app/project_app/coverage/lcov.info

@@ -13,7 +13,14 @@
 Este repositorio contiene el código fuente de **Eco City Tours**, una aplicación móvil que propone rutas turísticas generadas con tecnologías GIS, enriquecidas mediante modelos de lenguaje (LLM). La aplicación promueve rutas no motorizadas optimizadas para ciclistas y peatones, contribuyendo a los Objetivos de Desarrollo Sostenible (ODS11).
 
 ---
+## 🎓 Información Académica
+Este proyecto forma parte del Trabajo de Fin de Grado (TFG) de Ingeniería Informática bajo la supervisión de:
 
+- **Carlos López Nozal** <p>
+    Departamento de Ingeniería Informática, Universidad de Burgos
+    - Contacto: clopezno@ubu.es
+
+---
 ## 📌 Objetivos del Proyecto
 
 - **Promoción de Rutas No Motorizadas**: Fomentar el uso de rutas sostenibles.
@@ -131,7 +138,8 @@ El sistema fue sometido a diversas pruebas para garantizar su calidad y funciona
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](./LICENSE) para más detalles.
+Este proyecto está licenciado bajo los términos de la GNU General Public License v3.0. Consulta el archivo [LICENSE](LICENSE) para más detalles o a través del siguiente enlace:  
+[https://www.gnu.org/licenses/gpl-3.0.txt](https://www.gnu.org/licenses/gpl-3.0.txt).
 
 ---
 
