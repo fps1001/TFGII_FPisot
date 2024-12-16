@@ -1,9 +1,6 @@
 name: Code Quality Analysis
 
 on:
-  push:
-    branches:
-      - main
   workflow_call:
 
 jobs:
@@ -15,27 +12,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Setup Java
       - name: Set Up Java
         uses: actions/setup-java@v3
         with:
           distribution: 'oracle'
           java-version: '17'
 
-      # Setup Flutter
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.3'
           channel: 'stable'
 
-      # Install Dependencies
       - name: Install Dependencies
         run: |
           cd project-app/project_app
           flutter pub get
 
-      # Run SonarCloud Scan
       - name: SonarCloud Scan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

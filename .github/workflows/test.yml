@@ -1,9 +1,6 @@
 name: Run Tests
 
 on:
-  push:
-    branches:
-      - main
   workflow_call:
 
 jobs:
@@ -15,20 +12,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Setup Flutter
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.3'
           channel: 'stable'
 
-      # Install Dependencies
       - name: Install Dependencies
         run: |
           cd project-app/project_app
           flutter pub get
 
-      # Create .env File
       - name: Create .env file
         run: |
           cat <<EOF > project-app/project_app/.env
@@ -38,7 +32,6 @@ jobs:
           GOOGLE_PLACES_API_KEY=${{ secrets.GOOGLE_PLACES_API_KEY }}
           EOF
 
-      # Run Tests
       - name: Run Flutter Tests
         run: |
           cd project-app/project_app
