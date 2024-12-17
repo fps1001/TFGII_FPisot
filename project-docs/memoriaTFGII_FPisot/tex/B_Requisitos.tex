@@ -60,14 +60,92 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 \clearpage
 
 \section{Especificación de requisitos}
+
+\subsection{Actores del sistema}
+
+\section{Actores del sistema}
+
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor} & \textbf{Descripción} \\
+		\midrule
+		\textbf{A01 - Usuario} & Usuario final que interactúa con la aplicación Eco City Tour. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A01 - Usuario}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor} & \textbf{Descripción} \\
+		\midrule
+		\textbf{A02 - Sistema} & Sistema encargado de gestionar rutas y conexiones con servicios externos. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A02 - Sistema}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor} & \textbf{Descripción} \\
+		\midrule
+		\textbf{A03 - LLM} & Modelo de lenguaje que proporciona la información de los puntos de interés (PDI) de acuerdo a las preferencias del usuario. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A03 - LLM}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor} & \textbf{Descripción} \\
+		\midrule
+		\textbf{A04 - Google Places} & Servicio externo que proporciona información detallada sobre los puntos de interés, como fotos, descripciones y calificaciones. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A04 - Google Places}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor} & \textbf{Descripción} \\
+		\midrule
+		\textbf{A05 - Optimización de rutas} & Servicio encargado de calcular la ruta más corta entre los puntos de interés, adaptándose al medio de transporte seleccionado. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A05 - Optimización de rutas}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor} & \textbf{Descripción} \\
+		\midrule
+		\textbf{A06 - Log} & Registro de actividades del usuario y eventos relevantes para fines de monitorización, análisis y depuración del sistema. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{A06 - Log}
+\end{table}
+
+
+
+\subsection{CU00 - Configuración GPS}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{CU00-Gestión-de-GPS}
 	\caption{Diagrama de caso de uso CU00 - Configuración GPS}
 	\label{fig:CU00-Gestión-de-GPS}
 \end{figure}
-
-
 
 Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación del sensor, el resto de funcionalidades de la aplicación no pueden ejecutarse. Para mayor claridad y facilitar la lectura de los diagramas restantes, se presenta por separado, destacando su papel como requisito previo para las demás operaciones.
 
@@ -106,7 +184,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 
 \FloatBarrier
 
-
+\subsection{Casos de uso general}
 
 \begin{figure}[H]
 	\centering
@@ -116,7 +194,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 \end{figure}
 
 
-
+\subsection{CU01 - Configuración de parametros Eco City Tour}
 
 \begin{table}[p]
 	\centering
@@ -148,6 +226,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 	\caption{CU01 Configuración parámetros Eco City Tour}
 \end{table}
 
+\subsection{CU01.1 - Calcular Eco City Tour}
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
@@ -181,6 +260,9 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 	\caption{CU01.1 Calcular Eco City Tour}
 \end{table}
 
+\subsection{CU02 - Navegar Mapa}
+
+
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
@@ -204,130 +286,6 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 	\end{tabularx}
 	\caption{CU02 Navegar Mapa}
 \end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU03}    & \textbf{Ver resumen Eco City Tour} \\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01 \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Muestra un resumen de la ruta generada, incluyendo la distancia, duración y medio de transporte. \\
-		\textbf{Precondición}         & La ruta ha sido generada. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede a la pantalla de resumen.
-			\item La aplicación muestra los detalles de la ruta, incluyendo distancia total, tiempo estimado y transporte elegido.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & El resumen es visible para el usuario. \\
-		\textbf{Excepciones}          & 
-		\begin{itemize}
-			\tightlist
-			\item Error en la carga de los datos de la ruta.
-		\end{itemize}\\
-		\textbf{Importancia}          & Baja \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU03 Ver resumen Eco City Tour}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU04}    & \textbf{Guardar Eco City Tour} \\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01, A02 \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Permite al usuario guardar la ruta generada para acceder a ella en el futuro. \\
-		\textbf{Precondición}         & La ruta ha sido generada. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario selecciona la opción de guardar la ruta.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & La ruta queda guardada en el sistema. \\
-		\textbf{Excepciones}          & 
-		\begin{itemize}
-			\tightlist
-			\item Error en el guardado de la ruta.
-			\item Problemas de conexión con la base de datos.
-		\end{itemize}\\
-		\textbf{Importancia}          & Media \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU04 Guardar Eco City Tour}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU05}    & \textbf{Cargar Eco City Tour} \\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01, A02 \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Permite al usuario cargar una ruta guardada previamente. \\
-		\textbf{Precondición}         & El usuario ha guardado al menos una ruta. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario selecciona la opción de cargar una ruta guardada.
-			\item El usuario selecciona un Eco City Tour guardado previamente que será cargado.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & La ruta es cargada y visible en el mapa. \\
-		\textbf{Excepciones}          & 
-		\begin{itemize}
-			\tightlist
-			\item Error en la carga de la ruta guardada.
-			\item Problemas de conexión con la base de datos.
-		\end{itemize}\\
-		\textbf{Importancia}          & Media \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU05 Cargar Eco City Tour}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU06}    & \textbf{Registro de log} \\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A06 \\
-		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Registra los eventos y actividades del usuario en la aplicación para fines de monitorización y depuración. \\
-		\textbf{Precondición}         & La aplicación está en funcionamiento. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item La aplicación registra automáticamente los eventos relevantes.
-		\end{enumerate}\\
-		\textbf{Postcondición}        & Los eventos quedan registrados en el sistema. \\
-		\textbf{Excepciones}          & 
-		\begin{itemize}
-			\tightlist
-			\item Error en la conexión con el sistema de registros.
-			\item Fallo en la escritura de los eventos en el log.
-		\end{itemize}\\
-		\textbf{Importancia}          & Baja \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU06 Registro de log}
-\end{table}
-
-
-\FloatBarrier
 
 
 \begin{figure}[H]
@@ -495,4 +453,134 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 	\end{tabularx}
 	\caption{CU02.5 Añadir seguimiento del usuario}
 \end{table}
+
+
+\subsection{CU03 - Ver resumen Eco City Tour}
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU03}    & \textbf{Ver resumen Eco City Tour} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Muestra un resumen de la ruta generada, incluyendo la distancia, duración y medio de transporte. \\
+		\textbf{Precondición}         & La ruta ha sido generada. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la pantalla de resumen.
+			\item La aplicación muestra los detalles de la ruta, incluyendo distancia total, tiempo estimado y transporte elegido.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & El resumen es visible para el usuario. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en la carga de los datos de la ruta.
+		\end{itemize}\\
+		\textbf{Importancia}          & Baja \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU03 Ver resumen Eco City Tour}
+\end{table}
+
+\subsection{CU04 - Guardar Eco City Tour}
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU04}    & \textbf{Guardar Eco City Tour} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01, A02 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Permite al usuario guardar la ruta generada para acceder a ella en el futuro. \\
+		\textbf{Precondición}         & La ruta ha sido generada. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario selecciona la opción de guardar la ruta.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La ruta queda guardada en el sistema. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en el guardado de la ruta.
+			\item Problemas de conexión con la base de datos.
+		\end{itemize}\\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU04 Guardar Eco City Tour}
+\end{table}
+
+\subsection{CU05 - Cargar Eco City Tour}
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU05}    & \textbf{Cargar Eco City Tour} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A01, A02 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Permite al usuario cargar una ruta guardada previamente. \\
+		\textbf{Precondición}         & El usuario ha guardado al menos una ruta. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario selecciona la opción de cargar una ruta guardada.
+			\item El usuario selecciona un Eco City Tour guardado previamente que será cargado.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La ruta es cargada y visible en el mapa. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en la carga de la ruta guardada.
+			\item Problemas de conexión con la base de datos.
+		\end{itemize}\\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU05 Cargar Eco City Tour}
+\end{table}
+
+\subsection{CU06 - Registro de log}
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU06}    & \textbf{Registro de log} \\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Actor}                & A06 \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Registra los eventos y actividades del usuario en la aplicación para fines de monitorización y depuración. \\
+		\textbf{Precondición}         & La aplicación está en funcionamiento. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item La aplicación registra automáticamente los eventos relevantes.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Los eventos quedan registrados en el sistema. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item Error en la conexión con el sistema de registros.
+			\item Fallo en la escritura de los eventos en el log.
+		\end{itemize}\\
+		\textbf{Importancia}          & Baja \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU06 Registro de log}
+\end{table}
+
+
+\FloatBarrier
+
 
