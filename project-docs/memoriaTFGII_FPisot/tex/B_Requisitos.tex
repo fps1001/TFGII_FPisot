@@ -259,12 +259,19 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item El usuario no activa el GPS cuando se le solicita.
 		\end{itemize}\\
 		\textbf{Importancia}          & Alta \\
+		\textbf{Casos de Prueba}      & 
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Prueba 1 - Permiso concedido:} La aplicación solicita y obtiene acceso al GPS cuando el usuario concede el permiso.\vspace{2pt}
+			\item \textbf{Prueba 2 - Permiso denegado:} El usuario deniega el permiso. La aplicación no avanza al mapa y no permite operar sobre la aplicación. \vspace{2pt}
+			\item \textbf{Prueba 3 - GPS desactivado:} El GPS está apagado. La aplicación solicita activación y detecta si el usuario lo enciende.
+		\end{itemize}\\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU00 Configuración GPS}
 \end{table}
 
-\FloatBarrier
+
 
 \subsection{Casos de uso general}
 
@@ -276,8 +283,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 	\label{fig:casos-de-uso}
 \end{figure}
 
-
-\subsection{CU01 - Configuración de parametros Eco City Tour}
+\subsection{CU01 - Configuración de parámetros Eco City Tour}
 
 \begin{table}[H]
 	\centering
@@ -304,13 +310,23 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Error en la carga de los datos de configuración.
 		\end{itemize}\\
 		\textbf{Importancia}          & Alta \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Configuración correcta:} El usuario completa el formulario correctamente con todos los campos requeridos. El sistema guarda los parámetros y los muestra confirmados en el log del modo debug.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Campos vacíos:} El usuario deja el formulario sin modificar. El sistema muestra un \textit{Eco City Tour} en la mejor ciudad del mundo: Salamanca.
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Valores límites:} El usuario introduce valores límite en los campos. El sistema valida los parámetros y los procesa correctamente.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU01 Configuración parámetros Eco City Tour}
 	\label{cu:config-parametros}
 \end{table}
 
+
 \subsection{CU01.1 - Calcular Eco City Tour}
+
 \begin{table}[H]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
@@ -318,7 +334,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{CU01.1}    & \textbf{Calcular Eco City Tour} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A03 (\ref{actor:gemini}), A04 (\ref{actor:google-places}), A05(\ref{actor:google-directions}) \\
+		\textbf{Actor}                & A03 (\ref{actor:gemini}), A04 (\ref{actor:google-places}), A05 (\ref{actor:google-directions}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Generar una ruta optimizada conectando los puntos de interés seleccionados en función de las preferencias del usuario. \\
 		\textbf{Precondición}         & Los parámetros han sido configurados correctamente. \\
@@ -339,18 +355,28 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Error en el servicio de optimización de rutas.
 		\end{itemize}\\
 		\textbf{Importancia}          & Alta \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Configuración correcta:} El usuario confirma los parámetros correctamente. El sistema calcula la ruta sin errores y muestra los \acrlong{pdi} optimizados.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Fallo en el LLM:} El sistema no obtiene respuesta del LLM. Se muestra un mensaje de error y se sugiere reintentar la consulta.
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Servicio de rutas inalcanzable:} El sistema no puede conectarse al servicio de optimización de rutas (Google Directions). El sistema notifica el fallo al usuario y permite volver a intentarlo.
+			\vspace{2pt}
+			\item \textbf{Prueba 4 - Valores límite en parámetros:} El usuario configura un número mínimo y máximo de \acrshort{pdi}. El sistema muestra correctamente estos valores calculando la ruta.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU01.1 Calcular Eco City Tour}
 	\label{cu:calcular-tour}
 \end{table}
 
+
 \subsection{CU02 - Navegar Mapa}
 
 
 \begin{table}[H]
 	\centering
-
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02}    & \textbf{Navegar Mapa} \\
@@ -368,11 +394,22 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\end{enumerate}\\
 		\textbf{Postcondición}        & El usuario navega por el mapa para observar los \acrshort{pdi} y la ruta. \\
 		\textbf{Importancia}          & Media \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Desplazamiento funcional:} El usuario desplaza el mapa arrastrando la pantalla con un gesto táctil. El sistema responde correctamente mostrando las áreas correspondientes sin retraso injustificado.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Zoom funcional:} El usuario realiza gestos de zoom in y zoom out en el mapa. El sistema aumenta y reduce el nivel de zoom de manera fluida.
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Carga de marcadores (\acrshort{pdi}):} Al navegar, los puntos de interés (\acrshort{pdi}) se cargan dinámicamente y son visibles sin retrasos en la interfaz.
+			\vspace{2pt}
+			\item \textbf{Prueba 4 - Valores límites de zoom:} El sistema limita correctamente el nivel de zoom máximo y mínimo, evitando desplazamientos inválidos.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02 Navegar Mapa}
 	\label{cu:navegar-mapa}
 \end{table}
+
 
 
 \begin{figure}[H]
@@ -386,13 +423,12 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 
 \begin{table}[H]
 	\centering
-	
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.1}    & \textbf{Visualizar detalles de \acrfull{pdi}} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01 Usuario \ref{actor:usuario} \\
+		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & El usuario puede obtener información detallada sobre un punto de interés seleccionado en el mapa. \\
 		\textbf{Precondición}         & La ruta y los puntos de interés están visibles en el mapa. \\
@@ -411,15 +447,21 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Error en el servicio externo de obtención de información.
 		\end{itemize}\\
 		\textbf{Importancia}          & Alta \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Información accesible:} El usuario selecciona un marcador de \acrshort{pdi} en el mapa. El sistema carga y muestra correctamente el nombre, descripción, imagen y detalles del \acrlong{pdi}.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Punto sin detalles:} El marcador seleccionado corresponde a un \acrshort{pdi} que no tiene información asociada. El sistema muestra la imagen por defecto y el texto en blanco.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.1 Visualizar detalles de los \acrfull{pdi}}
 	\label{cu:visualizar-detalles}
 \end{table}
 
+
 \begin{table}[H]
 	\centering
-	
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.2}    & \textbf{Eliminar \acrlong{pdi}} \\
@@ -445,15 +487,22 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Problemas de conectividad al intentar actualizar la ruta.
 		\end{itemize}\\
 		\textbf{Importancia}          & Media \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Eliminación exitosa:} El usuario selecciona un \acrshort{pdi} y el sistema lo elimina correctamente de la ruta. El recálculo de la ruta es exitoso.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Error en el recálculo:} El sistema no logra recalcular la ruta después de la eliminación del \acrshort{pdi}. Se muestra un mensaje de error y la ruta previa se mantiene visible.
+			\vspace{2pt}
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.2 Eliminar \acrlong{pdi}}
 	\label{cu:eliminar-pdi}
 \end{table}
 
+
 \begin{table}[H]
 	\centering
-
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.3}    & \textbf{Añadir \acrfull{pdi}} \\
@@ -479,15 +528,23 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Fallo en el recalculo de la ruta.
 		\end{itemize}\\
 		\textbf{Importancia}          & Baja \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Añadir \acrshort{pdi} exitoso:} El usuario introduce el nombre del lugar, el sistema lo encuentra y lo añade correctamente. La ruta es recalculada y optimizada.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Lugar no encontrado:} El usuario introduce un nombre de lugar inexistente. El sistema muestra el listado de lugares vacío pero permite al usuario volver a buscar otro lugar o volver al mapa.
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Cálculo de ruta muy larga:} El usuario selecciona un lugar válido, pero no es el que se esperaba al encontrarse muy lejos. El sistema es capaz de ejecutar el cálculo aunque le lleve más tiempo al ser una tarea síncrona. El \acrshort{pdi} se puede eliminar manualmente por el usuario.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.3 Añadir \acrfull{pdi}}
-		\label{cu:añadir-pdi}
+	\label{cu:añadir-pdi}
 \end{table}
+
 
 \begin{table}[H]
 	\centering
-
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.4}    & \textbf{Unirse a la ruta calculada} \\
@@ -509,18 +566,27 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\begin{itemize}
 			\tightlist
 			\item Error en el cálculo de la ruta de conexión.
-			\item Problemas de conexión con el servicio de optimización de rutas.
 		\end{itemize}\\
 		\textbf{Importancia}          & Media \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Unirse a la ruta exitosa:} El usuario selecciona la opción para unirse y el sistema calcula correctamente la ruta de conexión.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Ubicación inválida:} El sistema no puede determinar la ubicación actual del usuario. Se muestra la unión al punto más cercano viable del usuario. p.e. si está en mitad del mar lo situaría en la costa.
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Ruta previa no generada:} El usuario intenta unirse sin que exista una ruta activa pues es el único punto de la ruta. No se muestra ninguna ruta pero la ubicación formará parte de ella si se añade otra ruta.
+			\vspace{2pt}
+			\item \textbf{Prueba 4 - Unirse a ruta si está ya unido:} El usuario no puede tener activado el botón de unirse a ruta para evitar el conflicto de unirse múltiples veces.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.4 Unirse a la ruta calculada}
-		\label{cu:unirse-ruta}
+	\label{cu:unirse-ruta}
 \end{table}
+
 
 \begin{table}[H]
 	\centering
-
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.5}    & \textbf{Añadir seguimiento del usuario} \\
@@ -545,17 +611,25 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Pérdida de señal GPS.
 		\end{itemize}\\
 		\textbf{Importancia}          & Baja \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Seguimiento activado:} El usuario activa el seguimiento. El mapa ajusta su vista en tiempo real conforme a la ubicación del usuario.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Seguimiento desactivado:} El usuario desactiva el seguimiento. El mapa deja de ajustarse a la posición del usuario.
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Señal GPS débil:} La señal del GPS se pierde temporalmente. El sistema mantendrá la ubicación del usuario en la última ubicación proporcionada (realizado por el Sistema).
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.5 Añadir seguimiento del usuario}
-		\label{cu:añadir-seguimiento}
+	\label{cu:añadir-seguimiento}
 \end{table}
+
 
 
 \subsection{CU03 - Ver resumen Eco City Tour}
 \begin{table}[H]
 	\centering
-
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU03}    & \textbf{Ver resumen Eco City Tour} \\
@@ -579,22 +653,31 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Error en la carga de los datos de la ruta.
 		\end{itemize}\\
 		\textbf{Importancia}          & Baja \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Resumen completo visible:} El usuario accede a la pantalla de resumen y todos los detalles (distancia, duración y transporte) se muestran correctamente.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Valores límite de distancia y tiempo:} Validar que el sistema maneja correctamente valores grandes (e.g., rutas muy largas) y pequeños (e.g., rutas cortas de menos de 1 km).
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Eco City Tour vacío:} Desde la pantalla se eliminan todos los \acrshort{pdi} lo que devuelve al usuario a la pantalla del mapa pues no tiene información útil que mostrar.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU03 Ver resumen Eco City Tour}
-		\label{cu:resumen}
+	\label{cu:resumen}
 \end{table}
+
 
 \subsection{CU04 - Guardar Eco City Tour}
 \begin{table}[H]
 	\centering
-
+	
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU04}    & \textbf{Guardar Eco City Tour} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01\ref{actor:usuario}, A02\ref{actor:firestore} \\
+		\textbf{Actor}                & A01~\ref{actor:usuario}, A02~\ref{actor:firestore} \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Permite al usuario guardar la ruta generada para acceder a ella en el futuro. \\
 		\textbf{Precondición}         & La ruta ha sido generada. \\
@@ -612,11 +695,20 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Problemas de conexión con la base de datos.
 		\end{itemize}\\
 		\textbf{Importancia}          & Media \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Guardado exitoso:} El usuario guarda una ruta y verifica que esta aparece correctamente en el sistema.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Valores límite:} Comprobar el guardado de rutas con diferentes tamaños (e.g., desde una ruta vacía hasta rutas con el número máximo permitido).
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Error en la conexión:} Simular la pérdida de conexión (al limitar los permisos de escritura en Firestore) al intentar guardar una ruta y verificar que el sistema muestra un mensaje de error claro sin comprometer la estabilidad.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU04 Guardar Eco City Tour}
-		\label{cu:guardar-tour}
+	\label{cu:guardar-tour}
 \end{table}
+
 
 \subsection{CU05 - Cargar Eco City Tour}
 \begin{table}[H]
@@ -645,11 +737,20 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Problemas de conexión con la base de datos.
 		\end{itemize}\\
 		\textbf{Importancia}          & Media \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Carga exitosa:} El usuario selecciona y carga una ruta guardada, verificando que esta aparece correctamente en el mapa.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Valores límite:} Validar la carga de rutas guardadas vacías y rutas con el número máximo de \acrshort{pdi}.
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Rutas no existente:} La pantalla de carga solo muestra los Eco City Tour asociados al usuarios y no todos los creados por todos los usuarios y si no tiene ninguno es capaz de mostrar la pantalla vacía con un mensaje amigable.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU05 Cargar Eco City Tour}
-		\label{cu:cargar-tour}
+	\label{cu:cargar-tour}
 \end{table}
+
 
 \subsection{CU06 - Registro de log}
 \begin{table}[H]
@@ -677,10 +778,18 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item Fallo en la escritura de los eventos en el log.
 		\end{itemize}\\
 		\textbf{Importancia}          & Baja \\
+		\textbf{Casos de Prueba}      &
+		\begin{itemize}
+			\item \textbf{Prueba 1 - Registro exitoso:} Verificar que los eventos importantes (inicio de sesión, selección de ruta, activación del GPS) se registran correctamente en el sistema de logs.
+			\vspace{2pt}
+			\item \textbf{Prueba 2 - Evento límite:} Validar que se registran eventos con mensajes largos o múltiples detalles (e.g., error detallado con trazas largas).
+			\vspace{2pt}
+			\item \textbf{Prueba 3 - Registro de una caída de la aplicación:} Se puede simular un cierre inesperado que debe ser notificado y visible desde la consola de Crashlytics.
+		\end{itemize} \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU06 Registro de log}
-		\label{cu:registro-log}
+	\label{cu:registro-log}
 \end{table}
 
 
