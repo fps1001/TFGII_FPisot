@@ -191,7 +191,8 @@ Para evaluar la calidad del código, se utilizó \textbf{SonarCloud}, una herram
 	\item Envío automático de la cobertura de código y otros resultados a SonarCloud para su análisis.
 \end{itemize}
 
-Este flujo de trabajo se ejecuta automáticamente cada vez que se realiza un \texttt{push} al repositorio o se abre una \texttt{pull request}, permitiendo un control continuo de la calidad del proyecto.
+Este flujo de trabajo se ejecuta automáticamente desde tres archivos, cada uno realizando una labor concreta: compilación, testing y calidad. Cada vez que se realiza un \texttt{push} al repositorio o se abre una \texttt{pull request} se valida la calidad del código incrementado, permitiendo un control continuo.
+
 
 
 \subsection{Pruebas funcionales y análisis inicial}
@@ -209,6 +210,13 @@ Se implementaron pruebas automatizadas en la carpeta \texttt{test/} del proyecto
 \end{itemize}
 
 Cada archivo \texttt{.dart} cuenta con un conjunto de tests que validan su comportamiento esperado. Estos incluyen pruebas unitarias para funciones específicas y pruebas de integración para verificar el correcto flujo entre los componentes.
+En la Figura \ref{fig:sonarcloud} se puede ver el resumen que Sonar Cloud realizó a uno de los cambios en el repositorio del proyecto.
+\imagen{sonarcloud}{Resumen de análisis de la rama principal en SonarCloud}
+Como se puede ver en el resumen se indica la cobertura y aparece una nueva \textit{issue} correspondiente al nuevo código.
+
+Para poder replicar la configuración llevada a cabo en este \acrlong{tfg}, el programador debería crear o iniciar cuenta en SonarCloud~\cite{sonarcloud} y crear una nueva organización. A continuación indicar que se quiere crear un nuevo proyecto. Como se puede ver en la Figura~\ref{fig:sonarcloud-new-project} si la cuenta está asociada a Github aparecen automáticamente los repositorios del programador.
+\imagen{sonarcloud-new-project}{Creación de nuevo proyecto en SonarCloud}
+Los proyectos creados en SonarCloud deben ser públicos para cumplir con los criterios de gratuidad. Si se desea analizar proyectos de forma privada, es necesario contratar un plan de pago mensual. Como alternativa, se puede instalar un servidor local de SonarQube, lo que permite realizar análisis directamente en la máquina del desarrollador.
 
 \subsubsection{Ejecución de los tests}
 
@@ -218,7 +226,7 @@ Para ejecutar las pruebas automatizadas y generar un reporte de cobertura, es ne
 \end{verbatim}
 
 Este comando ejecuta todos los tests definidos y genera un archivo \texttt{lcov.info} con los datos de cobertura. Estos datos son posteriormente utilizados por SonarCloud para generar un reporte detallado sobre qué partes del código están cubiertas por los tests y cuáles no.
-\imagen{sonarcloud}{Resumen de análisis de la rama principal en SonarCloud}
+\imagen{sonarcloud-issues}{Evolución de casos abiertos en SonarCloud}
 \subsection{Conclusiones de las pruebas}
 
 El sistema fue sometido a un conjunto completo de pruebas funcionales y de calidad, logrando:
