@@ -4,10 +4,23 @@ import 'package:go_router/go_router.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/logger/logger.dart';
 
+/// Una barra de navegación personalizada para gestionar la navegación y opciones del EcoCityTour.
+///
+/// Incluye un botón de retroceso con confirmación opcional y, si el tour está activo,
+/// un botón para acceder al resumen. Se adapta al tema actual de la aplicación.
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  /// El título que se muestra en el centro de la barra de navegación.
   final String title;
+
+  /// El estado actual del tour, utilizado para determinar si mostrar opciones
+  /// relacionadas con el EcoCityTour.
   final TourState tourState;
 
+  /// Crea una instancia de [CustomAppBar].
+  ///
+  /// - [title] es el texto que se muestra como título.
+  /// - [tourState] es el estado actual del EcoCityTour.
   const CustomAppBar({
     super.key,
     required this.title,
@@ -32,14 +45,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back), // Icono de retroceso
         onPressed: () async {
-          // Si ecoCityTour es null, no mostramos el diálogo y simplemente navegamos
+          // Si ecoCityTour es null, no mostramos el diálogo y simplemente navegamos.
           if (tourState.ecoCityTour == null) {
-            log.i('MapScreen: ecoCityTour es null, navegando sin confirmación.');
+            log.i(
+                'MapScreen: ecoCityTour es null, navegando sin confirmación.');
             context.push('/tour-selection');
             return;
           }
 
-          // Mostrar diálogo de confirmación antes de regresar
+          // Mostrar diálogo de confirmación antes de regresar.
           final shouldReset = await showDialog<bool>(
             context: context,
             builder: (context) => AlertDialog(
@@ -47,24 +61,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               content: const Text('Se borrará el tour actual. ¿Estás seguro?'),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.of(context).pop(false), // Cerrar sin acción
+                  onPressed: () =>
+                      Navigator.of(context).pop(false), // Cerrar sin acción.
                   child: const Text('Cancelar'),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.of(context).pop(true), // Confirmar acción
+                  onPressed: () =>
+                      Navigator.of(context).pop(true), // Confirmar acción.
                   child: const Text('Sí'),
                 ),
               ],
             ),
           );
 
-          // Verifica si el widget sigue montado antes de usar el contexto
+          // Verifica si el widget sigue montado antes de usar el contexto.
           if (!context.mounted || shouldReset != true) return;
 
           log.i('MapScreen: Regresando a la selección de EcoCityTour.');
-          // Reiniciar el estado del tour antes de volver
+          // Reiniciar el estado del tour antes de volver.
           BlocProvider.of<TourBloc>(context).add(const ResetTourEvent());
-          // Navegar a la pantalla de selección de tours
+          // Navegar a la pantalla de selección de tours.
           context.push('/tour-selection');
         },
       ),
@@ -74,7 +90,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: const Icon(Icons.list),
             onPressed: () {
               log.i('MapScreen: Abriendo resumen del EcoCityTour');
-              context.push('/tour-summary'); // Abrir resumen del tour
+              context.push('/tour-summary'); // Abrir resumen del tour.
             },
           ),
       ],

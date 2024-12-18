@@ -3,10 +3,27 @@ import 'package:project_app/logger/logger.dart'; // Importar logger para registr
 import 'package:project_app/models/models.dart';
 import 'package:project_app/blocs/blocs.dart';
 
+/// Widget que muestra un elemento expandible con información de un punto de interés (POI).
+///
+/// Este widget incluye:
+/// - Imagen del POI (cargada desde la red o un asset predeterminado en caso de error).
+/// - Título, calificación y descripción del POI.
+/// - Funcionalidad para expandir/colapsar la descripción.
+/// - Botón para eliminar el POI del tour.
+///
+/// Utiliza un `FutureBuilder` para gestionar la carga de imágenes y permite alternar
+/// entre la vista expandida y colapsada con un clic.
 class ExpandablePoiItem extends StatefulWidget {
+  /// El punto de interés que se representará.
   final PointOfInterest poi;
+
+  /// Bloc encargado de manejar los eventos relacionados con el tour.
   final TourBloc tourBloc;
 
+  /// Crea una instancia de [ExpandablePoiItem].
+  ///
+  /// - [poi] es el punto de interés que se mostrará.
+  /// - [tourBloc] es el bloc que gestionará eventos como la eliminación del POI.
   const ExpandablePoiItem({
     super.key,
     required this.poi,
@@ -18,18 +35,21 @@ class ExpandablePoiItem extends StatefulWidget {
 }
 
 class ExpandablePoiItemState extends State<ExpandablePoiItem> {
+  /// Indica si la descripción del POI está expandida.
   bool isExpanded = false;
+
+  /// Future que representa la imagen del POI.
   late Future<Widget> _imageWidget;
 
   @override
   void initState() {
     super.initState();
-    _imageWidget = _loadImage(); // Cargar la imagen del POI o de un asset
+    // Cargar la imagen del POI al iniciar el widget
+    _imageWidget = _loadImage();
   }
 
-  // Método para cargar la imagen del POI o usar un asset en caso de error
+  /// Carga la imagen del POI o utiliza una predeterminada en caso de error.
   Future<Widget> _loadImage() async {
-    // Si la imagen URL no está disponible, cargar la imagen desde assets
     if (widget.poi.imageUrl == null) {
       log.w(
           'ExpandablePoiItem: No se encontró imagen para el POI ${widget.poi.name}, usando imagen predeterminada');
@@ -45,6 +65,7 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
         loadingBuilder:
             (BuildContext context, Widget child, ImageChunkEvent? progress) {
           if (progress == null) return child;
+          // Indicador de progreso durante la carga de la imagen
           return Center(
             child: CircularProgressIndicator(
               strokeWidth: 2,
@@ -57,7 +78,6 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
           );
         },
         errorBuilder: (context, error, stackTrace) {
-          // En caso de error de carga, registrar el error y usar la imagen del troll
           log.e(
               'ExpandablePoiItem: Error al cargar la imagen desde ${widget.poi.imageUrl}',
               error: error,
@@ -77,17 +97,17 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         children: [
-          // Imagen circular con borde verde
+          // Imagen circular con borde
           Container(
-            margin: const EdgeInsets.all(8), // Espaciado alrededor de la imagen
+            margin: const EdgeInsets.all(8),
             width: 60,
             height: 60,
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.green, // Borde verde
-                width: 3, // Grosor del borde
+                color: Colors.green,
+                width: 3,
               ),
-              shape: BoxShape.circle, // Forma circular
+              shape: BoxShape.circle,
             ),
             child: ClipOval(
               child: FutureBuilder<Widget>(
@@ -97,7 +117,6 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
                       snapshot.hasData) {
                     return snapshot.data!;
                   }
-                  // Mostrar indicador de carga mientras se resuelve
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
@@ -105,7 +124,7 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
               ),
             ),
           ),
-          // Expansión del texto del POI y botón eliminar al final
+          // Información del POI y opciones
           Expanded(
             child: ListTile(
               contentPadding: const EdgeInsets.only(left: 8),
@@ -117,6 +136,7 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Mostrar calificación del POI si está disponible
                   if (widget.poi.rating != null)
                     Row(
                       children: [
@@ -126,28 +146,27 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
                             style: const TextStyle(fontSize: 14)),
                       ],
                     ),
-                  // Mostrar solo una parte de la descripción si no está expandido
+                  // Descripción expandida o colapsada
                   if (!isExpanded && widget.poi.description != null)
                     Text(
                       widget.poi.description!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  // Mostrar la descripción completa si está expandido
                   if (isExpanded && widget.poi.description != null)
                     Text(widget.poi.description!),
                 ],
               ),
               onTap: () {
                 setState(() {
-                  isExpanded = !isExpanded; // Alternar expansión
+                  isExpanded = !isExpanded;
                   log.i(
                       'ExpandablePoiItem: Descripción de ${widget.poi.name} ${isExpanded ? "expandida" : "colapsada"}');
                 });
               },
             ),
           ),
-          // Botón de eliminar ajustado a la derecha
+          // Botón de eliminar el POI
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
             padding: const EdgeInsets.all(0),
@@ -155,7 +174,6 @@ class ExpandablePoiItemState extends State<ExpandablePoiItem> {
             onPressed: () {
               log.i(
                   'ExpandablePoiItem: Eliminando POI ${widget.poi.name} del EcoCityTour');
-              // Eliminar el POI sin actualizar el mapa
               widget.tourBloc.add(
                   OnRemovePoiEvent(poi: widget.poi, shouldUpdateMap: false));
             },

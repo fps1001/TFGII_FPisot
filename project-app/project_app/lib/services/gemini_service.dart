@@ -5,7 +5,22 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/logger/logger.dart'; // Importar logger para registrar errores
 import 'package:project_app/models/models.dart';
 
+/// Servicio para interactuar con la API de Gemini y generar puntos de interés turísticos.
+///
+/// Este servicio utiliza un modelo generativo de Gemini para obtener una lista de puntos
+/// de interés (POIs) en formato JSON, basándose en la ciudad, preferencias del usuario,
+/// tiempo máximo de trayecto y el modo de transporte.
 class GeminiService {
+  /// Obtiene puntos de interés turísticos basados en los parámetros proporcionados.
+  ///
+  /// - [city]: Nombre de la ciudad para la búsqueda de POIs.
+  /// - [nPoi]: Número de puntos de interés a generar.
+  /// - [userPreferences]: Lista de intereses del usuario.
+  /// - [maxTime]: Tiempo máximo permitido para moverse entre POIs en minutos.
+  /// - [mode]: Modo de transporte ("walking" o "cycling").
+  /// - [systemInstruction]: Instrucción personalizada para ajustar el comportamiento del modelo.
+  ///
+  /// Retorna una lista de [PointOfInterest] o una lista vacía si ocurre algún error.
   static Future<List<PointOfInterest>> fetchGeminiData({
     required String city,
     required int nPoi,
@@ -14,34 +29,33 @@ class GeminiService {
     required String mode,
     required String systemInstruction,
   }) async {
-    // Fetch data from Gemini API
+    // Cargar las variables de entorno
     await dotenv.load();
     String geminiApi = dotenv.env['GEMINI_API_KEY'] ?? '';
 
+    // Validar si la clave de API está disponible
     if (geminiApi.isEmpty) {
-      // Se registra el error si no se encuentra la clave API
       log.e(
           'GeminiService: No se encontró la variable de entorno \$GEMINI_API_KEY');
       return [];
     }
-    String baserol = 'Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo';
-    
-    //* DEFINICIÓN DEL MODELO
+
+    // Instrucción básica para el modelo
+    String baserol =
+        'Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo';
+
+    // Configuración del modelo generativo
     final model = GenerativeModel(
       model: 'gemini-1.5-pro',
       apiKey: geminiApi,
-      // safetySettings: Adjust safety settings
-      // See https://ai.google.dev/gemini-api/docs/safety-settings
       generationConfig: GenerationConfig(
         temperature: 1,
         topK: 64,
         topP: 0.95,
         maxOutputTokens: 8192,
-        //* TOOL CALLING: Se solicita la respuesta en formato JSON
-        responseMimeType: 'application/json',
-
+        responseMimeType: 'application/json', // Respuesta en formato JSON
         responseSchema: Schema(
-          SchemaType.array, // Cambiamos a array porque esperamos múltiples POIs
+          SchemaType.array, // Esperamos un array de POIs
           items: Schema(
             SchemaType.object,
             properties: {
@@ -49,20 +63,15 @@ class GeminiService {
               "name": Schema(SchemaType.string),
               "description": Schema(SchemaType.string),
             },
-            requiredProperties: ['gps', 'name'],
+            requiredProperties: ['gps', 'name'], // Propiedades obligatorias
           ),
         ),
       ),
-      //* Role prompting: Se define el rol del modelo
       systemInstruction: Content.system(baserol + systemInstruction),
     );
 
-    //* CONSTRUCCIÓN DE PETICIÓN
-
-    //final medioTransporte = (mode == 'walking' ? 'andando' : 'en bicicleta');
-
+    // Configuración del mensaje al modelo
     final chat = model.startChat();
-
     final message =
         '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city.
         Además, no sirve cualquier lugar, puesto que el tiempo que se tarde en viajar entre ellos no debe ser superior en ningún momento a $maxTime minutos $mode.
@@ -86,24 +95,20 @@ Ten en cuenta el tipo de cliente al que le ofreces información y los siguientes
 
     final content = Content.text(message);
 
-    //* VALIDACIÓN E IMPRESIÓN DE RESPUESTA
+    // Enviar mensaje al modelo y obtener respuesta
     final response = await chat.sendMessage(content);
 
     if (response.text == null || response.text!.isEmpty) {
-      // Log si el modelo no da respuesta
       log.w('GeminiService: No se recibió respuesta del modelo.');
       return [];
     }
 
-    // Parsear la respuesta JSON para crear la lista de PointOfInterest
+    // Procesar la respuesta y convertirla a objetos [PointOfInterest]
     List<PointOfInterest> pointsOfInterest = [];
-
     try {
-      // Decodificar el JSON como una lista de mapas
-      List<dynamic> jsonResponse =
-          json.decode(response.text!); // Decodificar el JSON como lista
-
-      // Mapear los datos del JSON a una lista de objetos PointOfInterest
+      // Decodifica el JSON como una lista de mapas
+      List<dynamic> jsonResponse = json.decode(response.text!);
+      // Mapea los datos del JSON a una lista de objetos PointOfInterest
       pointsOfInterest = jsonResponse.map((poiJson) {
         List<dynamic> gps = poiJson['gps'];
         LatLng gpsPoint = LatLng(gps[0].toDouble(), gps[1].toDouble());
@@ -114,13 +119,15 @@ Ten en cuenta el tipo de cliente al que le ofreces información y los siguientes
           description: poiJson['description'],
         );
       }).toList();
+
       log.i(
           'GeminiService: Se obtuvieron ${pointsOfInterest.length} puntos de interés en $city');
     } catch (e, stackTrace) {
       log.e('GeminiService: Error al parsear la respuesta JSON',
           error: e, stackTrace: stackTrace);
-      return []; // Devolver lista vacía si hay un error
+      return []; // Devuelve lista vacía si hay un error para no generar crashes.
     }
+
     return pointsOfInterest;
   }
 }

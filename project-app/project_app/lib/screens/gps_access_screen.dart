@@ -4,6 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import 'package:project_app/blocs/blocs.dart';
 
+/// Pantalla que solicita acceso al GPS.
+///
+/// Esta pantalla se muestra si el acceso al GPS no está habilitado y permite
+/// al usuario habilitarlo para continuar con la aplicación.
 class GpsAccessScreen extends StatelessWidget {
   const GpsAccessScreen({super.key});
 
@@ -11,15 +15,16 @@ class GpsAccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<GpsBloc, GpsState>(
+        /// Escucha los cambios en el estado del GPS.
         listener: (context, state) {
           if (state.isGpsEnabled) {
-            // Si el GPS está habilitado, navegamos a la siguiente pantalla
-            context.go(
-                '/tour-selection'); // Cambia la ruta a la pantalla de selección de tour
+            // Si el GPS está habilitado, navega a la pantalla de selección de tour.
+            context.go('/tour-selection');
           }
         },
         child: Center(
           child: BlocBuilder<GpsBloc, GpsState>(
+            /// Construye la interfaz basada en el estado del GPS.
             builder: (context, state) {
               if (state.isGpsEnabled) {
                 return const _AccessButton();
@@ -34,6 +39,9 @@ class GpsAccessScreen extends StatelessWidget {
   }
 }
 
+/// Botón que solicita acceso al GPS.
+///
+/// Muestra un mensaje y un botón para solicitar acceso al GPS si aún no está habilitado.
 class _AccessButton extends StatelessWidget {
   const _AccessButton();
 
@@ -47,19 +55,20 @@ class _AccessButton extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontSize: 18,
                 color: Theme.of(context).primaryColor, // Color del tema
-              ), // Aplicar el estilo del tema
+              ),
         ),
         const SizedBox(height: 20), // Espacio entre el texto y el botón
         MaterialButton(
-          minWidth: MediaQuery.of(context).size.width -
-              120, // Ancho como el botón de "Confirmar destino"
-          color: Theme.of(context).primaryColor, // Color de fondo del tema
+          minWidth:
+              MediaQuery.of(context).size.width - 120, // Ancho personalizado
+          color: Theme.of(context).primaryColor, // Color del botón
           elevation: 0,
           height: 50,
           shape: const StadiumBorder(), // Bordes redondeados
           onPressed: () {
+            // Solicita acceso al GPS
             final gpsBloc = BlocProvider.of<GpsBloc>(context);
-            gpsBloc.askGpsAccess(); // Solicitamos acceso al GPS
+            gpsBloc.askGpsAccess();
           },
           child: const Text(
             'Solicitar acceso al GPS',
@@ -74,6 +83,9 @@ class _AccessButton extends StatelessWidget {
   }
 }
 
+/// Mensaje que indica al usuario que habilite el GPS.
+///
+/// Este widget se muestra si el GPS no está habilitado.
 class _EnableGpsMessage extends StatelessWidget {
   const _EnableGpsMessage();
 

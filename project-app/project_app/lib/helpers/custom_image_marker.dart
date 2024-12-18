@@ -5,6 +5,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:project_app/logger/logger.dart'; // Importar logger
 
+/// Obtiene un marcador personalizado a partir de una imagen local.
+///
+/// La imagen se redimensiona a un tamaño específico antes de ser convertida
+/// en un objeto [BitmapDescriptor].
+///
+/// Retorna un marcador personalizado o el marcador predeterminado en caso de error.
 Future<BitmapDescriptor> getCustomMarker() async {
   try {
     final ByteData data =
@@ -32,6 +38,13 @@ Future<BitmapDescriptor> getCustomMarker() async {
   }
 }
 
+/// Obtiene un marcador personalizado desde una imagen de red.
+///
+/// Descarga la imagen desde una URL, la procesa para que sea compatible
+/// con Google Maps, y la convierte en un marcador personalizado.
+/// Si ocurre un error, retorna un marcador predeterminado.
+///
+/// - [imageUrl]: URL de la imagen que se usará para el marcador.
 Future<BitmapDescriptor> getNetworkImageMarker(String imageUrl) async {
   try {
     Uri uri = Uri.parse(imageUrl);
@@ -65,15 +78,25 @@ Future<BitmapDescriptor> getNetworkImageMarker(String imageUrl) async {
   }
 }
 
+/// Crea una imagen circular con un borde alrededor.
+///
+/// - [image]: Imagen original que se transformará en un círculo.
+/// - [borderColor]: Color del borde (por defecto, verde).
+/// - [borderWidth]: Grosor del borde (por defecto, 4).
+///
+/// Retorna un [Uint8List] con la imagen transformada o lanza una excepción
+/// en caso de error.
 Future<Uint8List> createCircularImageWithBorder(ui.Image image,
     {Color borderColor = Colors.green, double borderWidth = 4}) async {
   try {
-    log.d('createCircularImageWithBorder: Iniciando creación de imagen circular.');
+    log.d(
+        'createCircularImageWithBorder: Iniciando creación de imagen circular.');
 
     final double imageSize = image.width.toDouble();
     final double size = imageSize + borderWidth * 2;
 
-    log.d('createCircularImageWithBorder: Dimensiones calculadas. Tamaño: $size');
+    log.d(
+        'createCircularImageWithBorder: Dimensiones calculadas. Tamaño: $size');
 
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
@@ -100,7 +123,8 @@ Future<Uint8List> createCircularImageWithBorder(ui.Image image,
     final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
 
     if (byteData == null) {
-      log.e('createCircularImageWithBorder: Fallo al convertir la imagen a bytes.');
+      log.e(
+          'createCircularImageWithBorder: Fallo al convertir la imagen a bytes.');
       throw Exception('Error al convertir la imagen a bytes.');
     }
 
@@ -108,11 +132,10 @@ Future<Uint8List> createCircularImageWithBorder(ui.Image image,
 
     return byteData.buffer.asUint8List();
   } catch (e, stackTrace) {
-    log.e('createCircularImageWithBorder: Error durante la creación de la imagen circular.',
-        error: e, stackTrace: stackTrace);
+    log.e(
+        'createCircularImageWithBorder: Error durante la creación de la imagen circular.',
+        error: e,
+        stackTrace: stackTrace);
     throw Exception('Error al crear imagen circular: $e');
   }
 }
-
-
-

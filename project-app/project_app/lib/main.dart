@@ -16,42 +16,55 @@ import 'package:project_app/services/services.dart';
 import 'package:project_app/themes/themes.dart';
 import 'package:project_app/logger/logger.dart';
 
+/// Punto de entrada principal de la aplicación.
+///
+/// Esta función inicializa servicios esenciales como Firebase, Crashlytics,
+/// autenticación anónima, y configura los blocs necesarios para la lógica de la aplicación.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Cargar variables de entorno
+  // Carga variables de entorno desde el archivo .env
   await dotenv.load(fileName: ".env");
 
-  // Inicializar Firebase usando las opciones predeterminadas de la plataforma
+  // Inicializa Firebase con las opciones predeterminadas según la plataforma
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Configura Crashlytics para capturar errores no controlados de Flutter
+  // Configura Firebase Crashlytics para capturar errores de Flutter
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-  // Captura errores no controlados fuera de Flutter (errores de plataforma)
+  // Configura Crashlytics para capturar errores fuera del framework de Flutter
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
 
-  // Autenticar al usuario de forma anónima
+  // Autentica al usuario de forma anónima y obtener su instancia
   final User? user = await _authenticateUser();
 
+  // Establece el observador de blocs para depuración
   Bloc.observer = MyBlocObserver();
 
-  // Instancia de FirestoreDataset y EcoCityTourRepository, pasando userId
+  // Crea instancias de repositorios y datasets necesarios
   final firestoreDataset = FirestoreDataset(userId: user?.uid);
   final ecoCityTourRepository = EcoCityTourRepository(firestoreDataset);
 
+  // Ejecuta la aplicación con los blocs configurados
   runApp(MultiBlocProvider(
     providers: [
+      // Bloc para manejar el estado del GPS
       BlocProvider(create: (context) => GpsBloc()),
+
+      // Bloc para manejar la ubicación del usuario
       BlocProvider(create: (context) => LocationBloc()),
+
+      // Bloc para la lógica del mapa, dependiente del Bloc de ubicación
       BlocProvider(
           create: (context) =>
               MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
+
+      // Bloc para manejar la lógica de tours, dependiente de otros blocs y repositorios
       BlocProvider(
           create: (context) => TourBloc(
               optimizationService: OptimizationService(),
@@ -62,6 +75,9 @@ void main() async {
   ));
 }
 
+/// Widget principal de la aplicación.
+///
+/// Configura la interfaz gráfica, tema y rutas de navegación mediante [MaterialApp.router].
 class ProjectApp extends StatelessWidget {
   const ProjectApp({super.key});
 
@@ -70,19 +86,28 @@ class ProjectApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Eco-City Tour',
-      theme: AppTheme.lightTheme,
-      routerConfig: AppRouter.router,
+      theme: AppTheme.lightTheme, // Tema de la aplicación
+      routerConfig: AppRouter.router, // Configuración de rutas
     );
   }
 }
 
-// Función para autenticar al usuario de forma anónima
+/// Autentica al usuario de forma anónima utilizando Firebase Authentication.
+///
+/// Si ya existe un usuario autenticado, lo retorna. Si no, realiza un inicio
+/// de sesión anónimo y registra el usuario en el logger.
+///
+/// Retorna la instancia del [User] autenticado, o `null` si ocurre un error.
 Future<User?> _authenticateUser() async {
   try {
     final auth = FirebaseAuth.instance;
+
+    // Verifica si el usuario ya está autenticado
     if (auth.currentUser != null) {
       return auth.currentUser;
     }
+
+    // Realiza inicio de sesión anónimo
     final userCredential = await auth.signInAnonymously();
     log.i("Usuario autenticado de forma anónima: ${userCredential.user?.uid}");
     return userCredential.user;

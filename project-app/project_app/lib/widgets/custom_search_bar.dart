@@ -3,8 +3,13 @@ import 'package:project_app/delegates/delegates.dart';
 
 import '../models/models.dart';
 
-
+/// Un widget que muestra una barra de búsqueda personalizada.
+///
+/// Al interactuar con esta barra, se abre un [SearchDelegate] para buscar y seleccionar
+/// un punto de interés ([PointOfInterest]). El diseño está optimizado para encajar
+/// de forma limpia en la interfaz general.
 class CustomSearchBar extends StatelessWidget {
+  /// Crea una instancia de [CustomSearchBar].
   const CustomSearchBar({super.key});
 
   @override
@@ -16,15 +21,14 @@ class CustomSearchBar extends StatelessWidget {
         width: double.infinity,
         child: GestureDetector(
           onTap: () async {
-            // Abrir el SearchDelegate y manejar el resultado
+            // Abre el SearchDelegate y espera el resultado
             final result = await showSearch<PointOfInterest?>(
               context: context,
               delegate: SearchDestinationDelegate(),
             );
 
-            // No necesitamos hacer nada más aquí ya que el resultado se maneja en el SearchDelegate
+            // Si no se selecciona un resultado, no se realiza ninguna acción
             if (result == null) return;
-
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
@@ -39,6 +43,7 @@ class CustomSearchBar extends StatelessWidget {
                 ),
               ],
             ),
+            // Texto que invita al usuario a interactuar con la barra de búsqueda
             child: const Text(
               '¿Quieres añadir algún lugar?',
               style: TextStyle(color: Colors.black87),

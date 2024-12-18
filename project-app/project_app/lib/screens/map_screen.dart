@@ -9,7 +9,15 @@ import 'package:project_app/ui/ui.dart';
 import 'package:project_app/views/views.dart';
 import 'package:project_app/widgets/widgets.dart';
 
+/// Pantalla principal que muestra el mapa y la información del EcoCityTour.
+///
+/// Esta pantalla incluye funcionalidades como:
+/// - Mostrar el mapa con la ruta del tour.
+/// - Añadir puntos de interés (POIs) al tour.
+/// - Unirse al tour.
+/// - Manejar el estado del GPS y la ubicación en tiempo real.
 class MapScreen extends StatefulWidget {
+  /// Datos del tour a ser mostrados en el mapa.
   final EcoCityTour tour;
 
   const MapScreen({
@@ -22,14 +30,17 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  /// Bloc que gestiona el estado de la ubicación.
   late LocationBloc locationBloc;
+
+  /// Bandera para evitar mostrar múltiples diálogos de carga.
   bool _isDialogShown = false;
 
   @override
   void initState() {
     super.initState();
     locationBloc = BlocProvider.of<LocationBloc>(context);
-    locationBloc.startFollowingUser();
+    locationBloc.startFollowingUser(); // Comienza a seguir al usuario
     _initializeRouteAndPois();
     log.i('MapScreen: Inicializado para el EcoCityTour en ${widget.tour.city}');
   }
@@ -56,6 +67,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  /// Construye la barra de navegación personalizada.
   PreferredSizeWidget _buildAppBar() {
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -70,6 +82,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  /// Maneja el estado de carga del [TourBloc].
   void _handleLoadingState(TourState state) {
     if (state.isLoading && !_isDialogShown) {
       _isDialogShown = true;
@@ -80,6 +93,7 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  /// Construye la vista principal del mapa.
   Widget _buildMapView(LocationState locationState) {
     return BlocBuilder<MapBloc, MapState>(
       builder: (context, mapState) {
@@ -99,6 +113,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  /// Construye la barra de búsqueda en el mapa.
   Widget _buildSearchBar() {
     return BlocBuilder<TourBloc, TourState>(
       builder: (context, state) {
@@ -115,56 +130,58 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
- Widget _buildMapButtons() {
-  return const Positioned(
-    bottom: 90, // Aumentamos el valor para separar los botones del botón principal
-    right: 10,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        BtnToggleUserRoute(),
-        SizedBox(height: 15), // Más espacio entre los botones
-        BtnFollowUser(),
-      ],
-    ),
-  );
-}
+  /// Construye los botones flotantes en el mapa.
+  Widget _buildMapButtons() {
+    return const Positioned(
+      bottom: 90, // Espaciado del botón principal
+      right: 10,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          BtnToggleUserRoute(),
+          SizedBox(height: 15), // Espacio entre botones
+          BtnFollowUser(),
+        ],
+      ),
+    );
+  }
 
-Widget _buildJoinTourButton() {
-  return BlocBuilder<TourBloc, TourState>(
-    builder: (context, state) {
-      if (state.ecoCityTour != null && !state.isJoined) {
-        return Positioned(
-          bottom: 40, // Ajustamos el valor para no solapar con los otros botones
-          left: 32,
-          right: 32,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: MaterialButton(
-              color: Theme.of(context).primaryColor,
-              height: 50,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              onPressed: _joinEcoCityTour,
-              child: const Text(
-                'Unirme al Eco City Tour',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+  /// Construye el botón para unirse al EcoCityTour.
+  Widget _buildJoinTourButton() {
+    return BlocBuilder<TourBloc, TourState>(
+      builder: (context, state) {
+        if (state.ecoCityTour != null && !state.isJoined) {
+          return Positioned(
+            bottom: 40,
+            left: 32,
+            right: 32,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: MaterialButton(
+                color: Theme.of(context).primaryColor,
+                height: 50,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+                onPressed: _joinEcoCityTour,
+                child: const Text(
+                  'Unirme al Eco City Tour',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      }
-      return const SizedBox.shrink();
-    },
-  );
-}
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
 
-
+  /// Construye un mensaje mientras se espera la ubicación.
   Widget _buildLoadingTourMessage(BuildContext context) {
     return Center(
       child: Padding(
@@ -192,6 +209,7 @@ Widget _buildJoinTourButton() {
     );
   }
 
+  /// Inicializa la ruta y mueve la cámara al primer POI.
   Future<void> _initializeRouteAndPois() async {
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
@@ -203,6 +221,7 @@ Widget _buildJoinTourButton() {
     }
   }
 
+  /// Añade la ubicación actual al tour y activa el evento de unión al tour.
   void _joinEcoCityTour() {
     final lastKnownLocation = locationBloc.state.lastKnownLocation;
 
@@ -225,6 +244,7 @@ Widget _buildJoinTourButton() {
     BlocProvider.of<TourBloc>(context).add(const OnJoinTourEvent());
   }
 
+  /// Muestra un Snackbar con un mensaje.
   void _showSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(CustomSnackbar(msg: message));
   }

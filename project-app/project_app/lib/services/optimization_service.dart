@@ -6,31 +6,47 @@ import 'package:project_app/logger/logger.dart';
 import 'package:project_app/exceptions/exceptions.dart';
 import 'package:project_app/models/models.dart';
 
+/// Servicio para optimizar rutas turísticas utilizando la API de Google Directions.
+///
+/// Este servicio genera rutas optimizadas entre múltiples puntos de interés (POIs),
+/// teniendo en cuenta el modo de transporte y devolviendo un [EcoCityTour] que incluye
+/// distancia, duración y los puntos necesarios para dibujar la ruta.
 class OptimizationService {
+  /// Cliente HTTP para realizar solicitudes.
   final Dio _dioOptimization;
 
-  // Constructor principal, con un parámetro opcional para inyectar un `Dio` diferente solo en los tests
+  /// Constructor del servicio, con la opción de inyectar un cliente [Dio] personalizado.
+  ///
+  /// Ideal para pruebas unitarias, donde un cliente simulado puede reemplazar al real.
   OptimizationService({Dio? dio}) : _dioOptimization = dio ?? Dio();
 
+  /// Solicita una ruta optimizada entre múltiples POIs.
+  ///
+  /// - [pois]: Lista de puntos de interés a incluir en la ruta.
+  /// - [mode]: Modo de transporte ("walking", "driving", etc.).
+  /// - [city]: Nombre de la ciudad para fines descriptivos.
+  /// - [userPreferences]: Preferencias del usuario (se incluyen pero no afectan la optimización).
+  ///
+  /// Retorna un objeto [EcoCityTour] con los detalles de la ruta optimizada.
+  /// Lanza [AppException] si no se encuentra la clave API o si no se pueden obtener rutas.
   Future<EcoCityTour> getOptimizedRoute({
     required List<PointOfInterest> pois,
     required String mode,
     required String city,
-    // Aunque no se necesitan para optimizar la ruta se dejan inalteradas para no perderlas.
     required List<String> userPreferences,
   }) async {
+    // Cargar la clave API desde las variables de entorno
     String apiKey = dotenv.env['GOOGLE_DIRECTIONS_API_KEY'] ?? '';
     if (apiKey.isEmpty) {
-      // Si la clave de la API está vacía, lanzamos un error y lo registramos
       log.e(
           'OptimizationService: No se encontró la clave API de Google Directions');
       throw AppException("Google API Key not found");
     }
 
-    // Mapear los POIs a coordenadas LatLng
+    // Convertir los POIs en coordenadas LatLng
     final List<LatLng> points = pois.map((poi) => poi.gps).toList();
 
-    // Formatear los puntos de interés para la solicitud a la API de Google
+    // Formatear las coordenadas para la solicitud a la API
     final coorsString =
         points.map((point) => '${point.latitude},${point.longitude}').join('|');
 
@@ -40,31 +56,31 @@ class OptimizationService {
       log.i(
           'OptimizationService: Solicitando optimización de ruta para $city con modo $mode y ${pois.length} POIs');
 
+      // Realizar la solicitud a la API de Google Directions
       final response = await _dioOptimization.get(url, queryParameters: {
         'origin': '${points.first.latitude},${points.first.longitude}',
         'destination': '${points.last.latitude},${points.last.longitude}',
-        'waypoints':
-            'optimize:true|$coorsString', // Puedes eliminar 'optimize:true' si no es necesario
+        'waypoints': 'optimize:true|$coorsString',
         'mode': mode,
         'key': apiKey,
       });
 
       log.d('Response data: ${response.data}');
 
-      // Verificar si la respuesta contiene rutas
+      // Verifica si se encontraron rutas en la respuesta
       if (response.data['routes'] == null || response.data['routes'].isEmpty) {
         log.w('OptimizationService: No se encontraron rutas en la respuesta');
         throw AppException("No routes found in response");
       }
 
-      // Decodificar la polilínea
+      // Extrae y decodifica la polilínea de la ruta
       final route = response.data['routes'][0];
       final polyline = route['overview_polyline']['points'];
       final polilynePoints = decodePolyline(polyline, accuracyExponent: 5)
           .map((coor) => LatLng(coor[0].toDouble(), coor[1].toDouble()))
           .toList();
 
-      // Sumar la distancia y duración de todas las 'legs'
+      // Calcula distancia y duración total de las rutas (legs)
       final double distance = route['legs']
           .fold(0, (sum, leg) => sum + leg['distance']['value'])
           .toDouble();
@@ -75,7 +91,7 @@ class OptimizationService {
       log.d(
           'OptimizationService: Ruta optimizada recibida. Distancia total: $distance m, Duración total: $duration segundos.');
 
-      // Crear un EcoCityTour y retornarlo
+      // Crea y retorna el objeto EcoCityTour
       final ecoCityTour = EcoCityTour(
         city: city,
         pois: pois,

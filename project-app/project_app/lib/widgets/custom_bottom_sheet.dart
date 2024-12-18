@@ -7,9 +7,22 @@ import 'package:project_app/logger/logger.dart'; // Importar logger para registr
 import 'package:project_app/models/models.dart';
 import 'package:project_app/blocs/tour/tour_bloc.dart'; // Importa el bloc correcto
 
+/// Muestra un cuadro inferior con información detallada sobre un punto de interés (POI).
+///
+/// Este widget incluye:
+/// - Título, imagen, dirección, calificación y descripción del POI (si están disponibles).
+/// - Un enlace al sitio web del POI.
+/// - Un botón para eliminar el POI del EcoCityTour.
+///
+/// Además, utiliza `BlocProvider` para gestionar eventos relacionados con el tour
+/// y registra eventos importantes mediante el logger.
 class CustomBottomSheet extends StatelessWidget {
+  /// Punto de interés (POI) que se mostrará en el cuadro inferior.
   final PointOfInterest poi;
 
+  /// Crea una instancia de [CustomBottomSheet].
+  ///
+  /// - [poi] es el punto de interés del que se mostrarán los detalles.
   const CustomBottomSheet({super.key, required this.poi});
 
   @override
@@ -20,7 +33,7 @@ class CustomBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Título con el nombre del lugar (POI)
+          // Título del POI
           Text(
             poi.name,
             style: const TextStyle(
@@ -31,7 +44,7 @@ class CustomBottomSheet extends StatelessWidget {
           ),
           const SizedBox(height: 10.0),
 
-          // Imagen del POI si está disponible
+          // Imagen del POI
           if (poi.imageUrl != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
@@ -41,7 +54,6 @@ class CustomBottomSheet extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 ),
                 errorWidget: (context, url, error) {
-                  // Registrar si hay un error al cargar la imagen
                   log.e(
                       'CustomBottomSheet: Error al cargar la imagen desde $url');
                   return const Icon(Icons.error);
@@ -53,7 +65,7 @@ class CustomBottomSheet extends StatelessWidget {
             ),
           const SizedBox(height: 10.0),
 
-          // Dirección si está disponible
+          // Dirección del POI
           if (poi.address != null)
             Row(
               children: [
@@ -72,7 +84,7 @@ class CustomBottomSheet extends StatelessWidget {
             ),
           const SizedBox(height: 10.0),
 
-          // Rating del POI si está disponible
+          // Calificación del POI
           if (poi.rating != null && poi.rating! > 0) ...[
             Row(
               children: [
@@ -97,7 +109,7 @@ class CustomBottomSheet extends StatelessWidget {
             const SizedBox(height: 10.0),
           ],
 
-          // Descripción del POI si está disponible
+          // Descripción del POI
           if (poi.description != null) ...[
             const Text(
               'Descripción:',
@@ -111,12 +123,11 @@ class CustomBottomSheet extends StatelessWidget {
             const SizedBox(height: 10.0),
           ],
 
-          // Enlace al sitio web del POI si está disponible
+          // Enlace al sitio web
           if (poi.url != null) ...[
             GestureDetector(
               onTap: () async {
                 final Uri url = Uri.parse(poi.url!);
-                // Intentar abrir el enlace y registrar los errores si ocurren
                 try {
                   if (await canLaunchUrl(url)) {
                     log.i('CustomBottomSheet: Abriendo enlace $url');
@@ -142,18 +153,15 @@ class CustomBottomSheet extends StatelessWidget {
             const SizedBox(height: 10.0),
           ],
 
-          // Botón para eliminar el POI del EcoCityTour
+          // Botón para eliminar el POI
           const SizedBox(height: 20.0),
           Center(
             child: ElevatedButton(
               onPressed: () {
-                // Dispara el evento para eliminar el POI
                 log.i(
                     'CustomBottomSheet: Eliminando POI ${poi.name} del EcoCityTour');
                 BlocProvider.of<TourBloc>(context)
                     .add(OnRemovePoiEvent(poi: poi));
-
-                // Cierra el bottom sheet
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(

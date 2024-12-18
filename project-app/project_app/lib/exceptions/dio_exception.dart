@@ -2,7 +2,17 @@ import 'app_exception.dart';
 import 'package:dio/dio.dart';
 import 'package:project_app/logger/logger.dart'; // Importar logger
 
+/// Clase que maneja las excepciones generadas por Dio.
+///
+/// Proporciona métodos para traducir errores de Dio en excepciones específicas
+/// de la aplicación, facilitando su manejo y registro.
 class DioExceptions {
+  /// Maneja un error generado por Dio y lo convierte en una excepción personalizada.
+  ///
+  /// - [error]: Excepción generada por Dio.
+  /// - [url]: URL asociada a la solicitud, si está disponible.
+  ///
+  /// Retorna una subclase de [AppException] según el tipo de error.
   static AppException handleDioError(DioException error, {String? url}) {
     // Log del error recibido por Dio antes de procesarlo
     log.e(
@@ -26,6 +36,12 @@ class DioExceptions {
     }
   }
 
+  /// Maneja errores de respuesta HTTP específicos.
+  ///
+  /// - [error]: Excepción generada por Dio con un código de estado HTTP.
+  /// - [url]: URL asociada a la solicitud, si está disponible.
+  ///
+  /// Retorna una subclase de [AppException] según el código de estado.
   static AppException _handleHttpResponseError(DioException error,
       {String? url}) {
     int? statusCode = error.response?.statusCode;
@@ -45,8 +61,10 @@ class DioExceptions {
       case 500:
         return AppException("Error interno del servidor", url: url);
       default:
-        return AppException("Código de estado inválido recibido: $statusCode",
-            url: url);
+        return AppException(
+          "Código de estado inválido recibido: $statusCode",
+          url: url,
+        );
     }
   }
 }

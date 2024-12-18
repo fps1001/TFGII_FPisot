@@ -1,58 +1,68 @@
 import 'package:flutter/material.dart';
 
+/// Clase que proporciona un mensaje de carga modal.
+///
+/// Esta clase permite mostrar un cuadro de diálogo con un mensaje de carga y un
+/// indicador de progreso circular, ideal para operaciones que requieren esperar.
 class LoadingMessageHelper {
+  /// Muestra un cuadro de diálogo de carga en la pantalla.
+  ///
+  /// - [context]: El contexto de la aplicación donde se mostrará el cuadro de diálogo.
+  ///
+  /// Este método presenta un mensaje modal que el usuario no puede cerrar
+  /// accidentalmente mientras se realiza una operación en segundo plano.
   static void showLoadingMessage(BuildContext context) {
     showDialog(
         context: context,
-        barrierDismissible:
-            false, // Evita que el usuario lo cierre accidentalmente.
+        barrierDismissible: false, // Evita que el usuario cierre el diálogo
         builder: (context) => AlertDialog(
-            title: Text(
-              'Espere por favor',
-              textAlign: TextAlign.center, // Centrar el título
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
+              title: Text(
+                'Espere por favor',
+                textAlign: TextAlign.center, // Centrar el título
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
-            ),
-            content: IntrinsicHeight(
-              // Dejar que el contenido se ajuste a su tamaño natural
-              child: Column(
-                mainAxisSize:
-                    MainAxisSize.min, // Adaptar la altura según el contenido
-                mainAxisAlignment: MainAxisAlignment
-                    .center, // Centrar el contenido verticalmente
-                crossAxisAlignment:
-                    CrossAxisAlignment.center, // Centrar horizontalmente
-                children: [
-                  Text(
-                    'Generando información para tu Eco City Tour.\n\n',
-                    textAlign: TextAlign.center, // Centrar el texto
-                    style: TextStyle(
-                      fontSize:
-                          16, // Ajusta el tamaño del texto si es necesario
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  Text(                    
-                    'Tenga en cuenta que los datos pueden contener errores '
-                    'debido a la naturaleza del procesamiento automático. '
-                    'Revise la información cuidadosamente.',
+              content: IntrinsicHeight(
+                // Ajusta el tamaño del contenido al espacio necesario
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, // Altura mínima necesaria
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Centra verticalmente
+                  crossAxisAlignment:
+                      CrossAxisAlignment.center, // Centra horizontalmente
+                  children: [
+                    Text(
+                      'Generando información para tu Eco City Tour.\n\n',
                       textAlign: TextAlign.center, // Centrar el texto
                       style: TextStyle(
-                        fontSize: 14, // Ajusta el tamaño del texto si es necesario
+                        fontSize: 16, // Ajusta el tamaño del texto
+                        fontWeight: FontWeight.bold,
                         color: Theme.of(context).primaryColor,
-                      )),
-                  const SizedBox(
-                    height: 20, // Espacio entre el texto y el indicador
-                  ),
-                  CircularProgressIndicator(
-                    strokeWidth: 3,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ],
+                      ),
+                    ),
+                    Text(
+                      'Tenga en cuenta que los datos pueden contener errores '
+                      'debido a la naturaleza del procesamiento automático. '
+                      'Revise la información cuidadosamente.',
+                      textAlign: TextAlign.center, // Centrar el texto
+                      style: TextStyle(
+                        fontSize: 14, // Ajusta el tamaño del texto
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20, // Espacio entre el texto y el indicador
+                    ),
+                    CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color:
+                          Theme.of(context).primaryColor, // Color del indicador
+                    ),
+                  ],
+                ),
               ),
-            )));
+            ));
   }
 }

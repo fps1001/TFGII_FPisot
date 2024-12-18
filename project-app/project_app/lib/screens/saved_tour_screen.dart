@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project_app/screens/screens.dart';
 
+/// Pantalla que muestra los Eco City Tours guardados del usuario.
+///
+/// Permite visualizar, cargar y eliminar tours guardados.
 class SavedToursScreen extends StatelessWidget {
   const SavedToursScreen({super.key});
 
@@ -19,7 +22,8 @@ class SavedToursScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.go('/tour-selection');
+            context.go(
+                '/tour-selection'); // Navega a la pantalla de selección de tours
           },
         ),
       ),
@@ -28,7 +32,8 @@ class SavedToursScreen extends StatelessWidget {
           final savedTours = state.savedTours;
 
           if (savedTours.isEmpty) {
-            return _buildEmptyState(context); // Mostrar estado vacío cuando no hay tours
+            return _buildEmptyState(
+                context); // Muestra un mensaje si no hay tours guardados
           }
 
           return ListView.builder(
@@ -56,7 +61,8 @@ class SavedToursScreen extends StatelessWidget {
                     children: [
                       const SizedBox(height: 8),
                       Text('Distancia: ${formatDistance(tour.distance ?? 0)}'),
-                      Text('Duración: ${formatDuration((tour.duration ?? 0).toInt())}'),
+                      Text(
+                          'Duración: ${formatDuration((tour.duration ?? 0).toInt())}'),
                       const SizedBox(height: 4),
                       Row(
                         children: tour.userPreferences.map((preference) {
@@ -109,6 +115,7 @@ class SavedToursScreen extends StatelessWidget {
     );
   }
 
+  /// Construye la interfaz para el estado vacío (sin tours guardados).
   Widget _buildEmptyState(BuildContext context) {
     return Center(
       child: Padding(
@@ -145,14 +152,16 @@ class SavedToursScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 backgroundColor: Theme.of(context).primaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
               onPressed: () {
-                context.go('/tour-selection');
+                context.go(
+                    '/tour-selection'); // Navega a la pantalla de selección de tours
               },
             ),
           ],
@@ -161,6 +170,10 @@ class SavedToursScreen extends StatelessWidget {
     );
   }
 
+  /// Maneja la eliminación de un tour guardado.
+  ///
+  /// - [context]: El contexto de la aplicación.
+  /// - [documentId]: ID del documento del tour a eliminar.
   void _deleteTour(BuildContext context, String? documentId) async {
     if (documentId == null) {
       log.e('No se puede eliminar el tour: documentId es null');
@@ -175,7 +188,8 @@ class SavedToursScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Eliminar Tour'),
-          content: const Text('¿Estás seguro de que deseas eliminar este tour?'),
+          content:
+              const Text('¿Estás seguro de que deseas eliminar este tour?'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, false),
@@ -183,7 +197,8 @@ class SavedToursScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+              child:
+                  const Text('Eliminar', style: TextStyle(color: Colors.red)),
             ),
           ],
         );
