@@ -63,81 +63,163 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 
 \subsection{Actores del sistema}
 
-\section{Actores del sistema}
-
 \begin{table}[H]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{Actor} & \textbf{Descripción} \\
-		\midrule
-		\textbf{A01 - Usuario} & Usuario final que interactúa con la aplicación Eco City Tour. \\
+		\textbf{Actor}    & A01 \\
+		\toprule
+		\textbf{Nombre:} 			  & \textbf{Usuario} \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Persona que interactúa con la aplicación Eco City Tour para generar y gestionar rutas turísticas personalizadas. \\
+		\textbf{Tipo}                 & Usuario \\
+		\textbf{Objetivo}             & Generar, visualizar y personalizar rutas turísticas basadas en puntos de interés y preferencias personales. \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Completar el formulario de preferencias para generar una ruta.
+			\item Visualizar detalles de puntos de interés.
+			\item Añadir o eliminar puntos de interés de la ruta.
+			\item Iniciar y detener el seguimiento de ubicación.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU01(\ref{cu:config-parametros}), CU02.1(\ref{cu:visualizar-detalles}), CU2.2(\ref{cu:eliminar-pdi}), CU04(\ref{cu:guardar-tour}), CU05(\ref{cu:cargar-tour}). \\
 		\bottomrule
 	\end{tabularx}
 	\caption{A01 - Usuario}
+	\label{actor:usuario}
 \end{table}
 
 \begin{table}[H]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{Actor} & \textbf{Descripción} \\
-		\midrule
-		\textbf{A02 - Sistema} & Sistema encargado de gestionar rutas y conexiones con servicios externos. \\
+		\textbf{Actor}    & A02 \\
+		\toprule
+		\textbf{Nombre:} 			  & \textbf{Cloud Firestore} \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Servicio que posibilita el guardado y carga de las rutas obtenidas por la aplicación. \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Guardar y cargar Eco City Tours generados por el Usuario~(\ref{actor:usuario}). \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Guardar ruta generada.
+			\item Cargar en el mapa el Eco City Tour guardado en base de datos.
+			\item Borrar los Eco City Tour almacenados.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU04(\ref{cu:guardar-tour}), CU05(\ref{cu:cargar-tour}) \\
 		\bottomrule
 	\end{tabularx}
-	\caption{A02 - Sistema}
+	\caption{A02 - Cloud Firestore}
+	\label{actor:firestore}
+\end{table}
+
+
+\begin{table}[H]
+	\centering
+
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{Actor-ID}    & A03 \\
+		\toprule
+		\textbf{Nombre: } 			  & \textbf{Gemini-pro 1.5} \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Servicio externo que proporciona una lista de puntos de interés (POI) basados en las preferencias del usuario. \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Suministrar información relevante sobre puntos de interés en función de los criterios del usuario. \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Consultar la información de \acrshort{pdi} según las preferencias de búsqueda del usuario.
+			\item Enviar los datos de los \acrfull{pdi} a la aplicación para generar la ruta.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU01.1(\ref{cu:calcular-tour})\\
+		\bottomrule
+	\end{tabularx}
+	\caption{A03 - Gemini Pro 1.5}
+	\label{actor:gemini}
 \end{table}
 
 \begin{table}[H]
 	\centering
+
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{Actor} & \textbf{Descripción} \\
-		\midrule
-		\textbf{A03 - LLM} & Modelo de lenguaje que proporciona la información de los puntos de interés (PDI) de acuerdo a las preferencias del usuario. \\
+		\textbf{Actor-ID}    & A04 \\
+		\toprule
+		\textbf{Nombre: } 			  & \textbf{Google Places Service} \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Servicio externo encargado de mejorar la información sobre los puntos de interés proporcionando detalles adicionales como descripciones, fotos y valoraciones. \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Enriquecer la información de los \acrlong{pdi} para que el usuario obtenga datos detallados y actualizados sobre cada lugar. \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Proveer información detallada sobre los \acrshort{pdi}.
+			\item Enviar las descripciones, fotos y valoraciones de los \acrshort{pdi} a la aplicación.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU01.1 (\ref{cu:calcular-tour})\\
 		\bottomrule
 	\end{tabularx}
-	\caption{A03 - LLM}
+	\caption{A04 - Google Places Service}
+	\label{actor:google-places}
 \end{table}
 
 \begin{table}[H]
 	\centering
+
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{Actor} & \textbf{Descripción} \\
-		\midrule
-		\textbf{A04 - Google Places} & Servicio externo que proporciona información detallada sobre los puntos de interés, como fotos, descripciones y calificaciones. \\
+		\textbf{Actor-ID}    & A05 \\
+		\toprule
+		\textbf{Nombre: } 			  & \textbf{Google Direction Service} \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Servicio externo encargado de generar una ruta actualizada entre los \acrshort{pdi} que componen el Eco City Tour. \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Proveer la mejor ruta a mostrar en el mapa que conecte los \acrshort{pdi} de cada \textit{Eco City Tour} en cada momento. \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Generar el camino que ha de seguir el usuario de manera más corta según el medio de transporte elegido.
+			\item Actualizar en cada momento el camino más corto entre los distintos lugares.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU01.1 (\ref{cu:calcular-tour})CU02 (\ref{cu:navegar-mapa}) \\
 		\bottomrule
 	\end{tabularx}
-	\caption{A04 - Google Places}
+	\caption{A05 - Google Direction Service}
+	\label{actor:google-directions}
 \end{table}
 
 \begin{table}[H]
 	\centering
+
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{Actor} & \textbf{Descripción} \\
-		\midrule
-		\textbf{A05 - Optimización de rutas} & Servicio encargado de calcular la ruta más corta entre los puntos de interés, adaptándose al medio de transporte seleccionado. \\
-		\bottomrule
-	\end{tabularx}
-	\caption{A05 - Optimización de rutas}
-\end{table}
-
-\begin{table}[H]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\textbf{Actor-ID}    & A06 \\
 		\toprule
-		\textbf{Actor} & \textbf{Descripción} \\
-		\midrule
-		\textbf{A06 - Log} & Registro de actividades del usuario y eventos relevantes para fines de monitorización, análisis y depuración del sistema. \\
+		\textbf{Nombre: }			  & \textbf{Crashlytics} \\
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & \autor \\
+		\textbf{Descripción}          & Servicio externo encargado de registrar en todo momento si se produce un error en la ejecución de la aplicación. \\
+		\textbf{Tipo}                 & Sistema \\
+		\textbf{Objetivo}             & Dejar constancia en un log de los errores que se puedan llevar a cabo en la ejecución. \\
+		\textbf{Responsabilidades}    & 
+		\begin{itemize}
+			\tightlist
+			\item Detectar errores fatales en la ejecución de la aplicación.
+			\item Registrar en la nube los detalles que formaron la excepción, para posterior análisis.
+		\end{itemize}\\
+		\textbf{Relaciones con casos de uso} & CU06 (\ref{cu:registro-log}) \\
 		\bottomrule
 	\end{tabularx}
-	\caption{A06 - Log}
+	\caption{A06 - Crashlytics}
+		\label{actor:crashlytics}
 \end{table}
-
-
 
 \subsection{CU00 - Configuración GPS}
 \begin{figure}[H]
@@ -149,14 +231,14 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 
 Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación del sensor, el resto de funcionalidades de la aplicación no pueden ejecutarse. Para mayor claridad y facilitar la lectura de los diagramas restantes, se presenta por separado, destacando su papel como requisito previo para las demás operaciones.
 
-\begin{table}[p]
+\begin{table}[H]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU00}    & \textbf{Configuración GPS} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & Usuario, Sistema \\
+		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Configura la aplicación para tener acceso a la ubicación mediante GPS. \\
 		\textbf{Precondición}         & La aplicación está instalada y abierta por primera vez o tras haber revocado permisos anteriormente. \\
@@ -188,6 +270,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 
 \begin{figure}[H]
 	\centering
+	\hspace*{-2cm}
 	\includegraphics[scale=0.6]{casos-de-uso}
 	\caption{Diagrama de casos de uso general de Eco City Tours}
 	\label{fig:casos-de-uso}
@@ -196,14 +279,14 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 
 \subsection{CU01 - Configuración de parametros Eco City Tour}
 
-\begin{table}[p]
+\begin{table}[H]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU01}    & \textbf{Configuración parámetros Eco City Tour} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01 \\
+		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Configurar los parámetros necesarios para generar un Eco City Tour personalizado según las preferencias del usuario. \\
 		\textbf{Precondición}         & El usuario accede a la pantalla de configuración. \\
@@ -224,17 +307,18 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU01 Configuración parámetros Eco City Tour}
+	\label{cu:config-parametros}
 \end{table}
 
 \subsection{CU01.1 - Calcular Eco City Tour}
-\begin{table}[p]
+\begin{table}[H]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU01.1}    & \textbf{Calcular Eco City Tour} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A03, A04, A05 \\
+		\textbf{Actor}                & A03 (\ref{actor:gemini}), A04 (\ref{actor:google-places}), A05(\ref{actor:google-directions}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Generar una ruta optimizada conectando los puntos de interés seleccionados en función de las preferencias del usuario. \\
 		\textbf{Precondición}         & Los parámetros han sido configurados correctamente. \\
@@ -258,20 +342,22 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU01.1 Calcular Eco City Tour}
+	\label{cu:calcular-tour}
 \end{table}
 
 \subsection{CU02 - Navegar Mapa}
 
 
-\begin{table}[p]
+\begin{table}[H]
 	\centering
+
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02}    & \textbf{Navegar Mapa} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & \autor \\
-		\textbf{Actor}                & A01 \\
+		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Descripción}          & El usuario puede desplazarse y explorar el mapa interactivo de la aplicación. \\
 		\textbf{Precondición}         & El mapa está visible. \\
 		\textbf{Acciones}             &
@@ -285,6 +371,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02 Navegar Mapa}
+	\label{cu:navegar-mapa}
 \end{table}
 
 
@@ -297,14 +384,15 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 
 
 
-\begin{table}[p]
+\begin{table}[H]
 	\centering
+	
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.1}    & \textbf{Visualizar detalles de \acrfull{pdi}} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01 \\
+		\textbf{Actor}                & A01 Usuario \ref{actor:usuario} \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & El usuario puede obtener información detallada sobre un punto de interés seleccionado en el mapa. \\
 		\textbf{Precondición}         & La ruta y los puntos de interés están visibles en el mapa. \\
@@ -326,16 +414,18 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.1 Visualizar detalles de los \acrfull{pdi}}
+	\label{cu:visualizar-detalles}
 \end{table}
 
-\begin{table}[p]
+\begin{table}[H]
 	\centering
+	
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.2}    & \textbf{Eliminar \acrlong{pdi}} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01, A05 \\
+		\textbf{Actor}                & A01 (\ref{actor:usuario}), A05 (\ref{actor:google-directions}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & El usuario puede eliminar puntos de interés de la ruta desde el mapa. \\
 		\textbf{Precondición}         & La ruta ha sido generada y los puntos de interés están visibles en el mapa. \\
@@ -358,16 +448,18 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.2 Eliminar \acrlong{pdi}}
+	\label{cu:eliminar-pdi}
 \end{table}
 
-\begin{table}[p]
+\begin{table}[H]
 	\centering
+
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.3}    & \textbf{Añadir \acrfull{pdi}} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01 \\
+		\textbf{Actor}                & A01 Usuario \ref{actor:usuario} \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & El usuario puede añadir manualmente un nuevo \acrshort{pdi} a la ruta introduciendo su nombre en la barra de búsqueda. \\
 		\textbf{Precondición}         & La ruta ha sido generada previamente. \\
@@ -390,16 +482,18 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.3 Añadir \acrfull{pdi}}
+		\label{cu:añadir-pdi}
 \end{table}
 
-\begin{table}[p]
+\begin{table}[H]
 	\centering
+
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.4}    & \textbf{Unirse a la ruta calculada} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01 \\
+		\textbf{Actor}                & A01 Usuario \ref{actor:usuario} \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Permite al usuario unirse a una ruta previamente generada desde su ubicación actual. \\
 		\textbf{Precondición}         & Una ruta ya ha sido generada y está activa. \\
@@ -421,16 +515,18 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.4 Unirse a la ruta calculada}
+		\label{cu:unirse-ruta}
 \end{table}
 
-\begin{table}[p]
+\begin{table}[H]
 	\centering
+
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU02.5}    & \textbf{Añadir seguimiento del usuario} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01 \\
+		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Permite al usuario activar o desactivar el seguimiento de su posición en tiempo real en el mapa. \\
 		\textbf{Precondición}         & La aplicación tiene acceso a la ubicación del usuario. \\
@@ -452,18 +548,20 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU02.5 Añadir seguimiento del usuario}
+		\label{cu:añadir-seguimiento}
 \end{table}
 
 
 \subsection{CU03 - Ver resumen Eco City Tour}
-\begin{table}[p]
+\begin{table}[H]
 	\centering
+
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU03}    & \textbf{Ver resumen Eco City Tour} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01 \\
+		\textbf{Actor}                & A01 Usuario \ref{actor:usuario} \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Muestra un resumen de la ruta generada, incluyendo la distancia, duración y medio de transporte. \\
 		\textbf{Precondición}         & La ruta ha sido generada. \\
@@ -484,17 +582,19 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU03 Ver resumen Eco City Tour}
+		\label{cu:resumen}
 \end{table}
 
 \subsection{CU04 - Guardar Eco City Tour}
-\begin{table}[p]
+\begin{table}[H]
 	\centering
+
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU04}    & \textbf{Guardar Eco City Tour} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01, A02 \\
+		\textbf{Actor}                & A01\ref{actor:usuario}, A02\ref{actor:firestore} \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Permite al usuario guardar la ruta generada para acceder a ella en el futuro. \\
 		\textbf{Precondición}         & La ruta ha sido generada. \\
@@ -515,17 +615,18 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU04 Guardar Eco City Tour}
+		\label{cu:guardar-tour}
 \end{table}
 
 \subsection{CU05 - Cargar Eco City Tour}
-\begin{table}[p]
+\begin{table}[H]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU05}    & \textbf{Cargar Eco City Tour} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A01, A02 \\
+		\textbf{Actor}                & A01~\ref{actor:usuario}, A02~\ref{actor:firestore} \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Permite al usuario cargar una ruta guardada previamente. \\
 		\textbf{Precondición}         & El usuario ha guardado al menos una ruta. \\
@@ -547,17 +648,18 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU05 Cargar Eco City Tour}
+		\label{cu:cargar-tour}
 \end{table}
 
 \subsection{CU06 - Registro de log}
-\begin{table}[p]
+\begin{table}[H]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{CU06}    & \textbf{Registro de log} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A06 \\
+		\textbf{Actor}                & A06~\ref{actor:crashlytics} \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Registra los eventos y actividades del usuario en la aplicación para fines de monitorización y depuración. \\
 		\textbf{Precondición}         & La aplicación está en funcionamiento. \\
@@ -578,9 +680,8 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\bottomrule
 	\end{tabularx}
 	\caption{CU06 Registro de log}
+		\label{cu:registro-log}
 \end{table}
 
-
-\FloatBarrier
 
 
