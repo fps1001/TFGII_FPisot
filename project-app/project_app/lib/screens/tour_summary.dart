@@ -5,17 +5,24 @@ import 'package:project_app/ui/ui.dart';
 import 'package:project_app/widgets/widgets.dart';
 import 'package:project_app/blocs/blocs.dart';
 
+/// Pantalla que muestra un resumen del **Eco City Tour** actual.
+///
+/// Permite visualizar información como la ciudad seleccionada, distancia,
+/// duración, medio de transporte y los puntos de interés (POIs) del tour.
+/// Además, ofrece la opción de **guardar el tour** con un nombre personalizado.
 class TourSummary extends StatelessWidget {
   const TourSummary({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final cardWidth = screenWidth * 0.9;
+    final cardWidth = screenWidth * 0.9; // Define el ancho de la tarjeta principal.
 
     return BlocBuilder<TourBloc, TourState>(
       builder: (context, state) {
+        // Verifica si el Eco City Tour no existe en el estado actual.
         if (state.ecoCityTour == null) {
+          // Muestra un Snackbar y navega atrás cuando el tour es nulo.
           WidgetsBinding.instance.addPostFrameCallback((_) {
             CustomSnackbar.show(
                 context, 'Eco City Tour vacío, genera uno nuevo');
@@ -24,20 +31,23 @@ class TourSummary extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
+        // Construcción de la pantalla principal
         return Scaffold(
           appBar: AppBar(
-            iconTheme: const IconThemeData(color: Colors.white),
+            iconTheme: const IconThemeData(color: Colors.white), // Iconos en blanco
             centerTitle: true,
             title: const Text(
               'Resumen de tu Eco City Tour',
               style: TextStyle(color: Colors.white),
             ),
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Theme.of(context).primaryColor, // Color del AppBar
             actions: [
+              // Botón para guardar el tour
               IconButton(
                 icon: const Icon(Icons.save_as_rounded),
                 tooltip: 'Guardar Eco City Tour',
                 onPressed: () async {
+                  // Abre un diálogo para solicitar el nombre del tour
                   final tourName = await showDialog<String>(
                     context: context,
                     builder: (BuildContext context) {
@@ -58,6 +68,8 @@ class TourSummary extends StatelessWidget {
                       );
                     },
                   );
+
+                  // Guarda el tour si el nombre es válido
                   if (tourName != null && tourName.isNotEmpty && context.mounted) {
                     await BlocProvider.of<TourBloc>(context)
                         .saveCurrentTour(tourName);
@@ -72,11 +84,12 @@ class TourSummary extends StatelessWidget {
           ),
           body: Column(
             children: [
+              // Tarjeta que muestra los detalles principales del tour
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 child: Center(
                   child: SizedBox(
-                    width: cardWidth,
+                    width: cardWidth, // Ajusta el tamaño al 90% del ancho de la pantalla
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -86,6 +99,7 @@ class TourSummary extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Información de la ciudad
                             Text(
                               'Ciudad: ${state.ecoCityTour!.city}',
                               style: const TextStyle(
@@ -94,16 +108,22 @@ class TourSummary extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 8),
+
+                            // Información de la distancia total
                             Text(
                               'Distancia: ${formatDistance(state.ecoCityTour!.distance ?? 0)}',
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(height: 4),
+
+                            // Información de la duración total
                             Text(
                               'Duración: ${formatDuration((state.ecoCityTour!.duration ?? 0).toInt())}',
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(height: 4),
+
+                            // Información del medio de transporte
                             Row(
                               children: [
                                 const Text('Medio de transporte:',
@@ -124,6 +144,8 @@ class TourSummary extends StatelessWidget {
                   ),
                 ),
               ),
+
+              // Lista de puntos de interés (POIs)
               Expanded(
                 child: ListView.builder(
                   itemCount: state.ecoCityTour!.pois.length,

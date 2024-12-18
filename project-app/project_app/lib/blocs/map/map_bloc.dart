@@ -14,13 +14,14 @@ part 'map_event.dart';
 part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
-  GoogleMapController? _mapController;
-  final LocationBloc locationBloc;
-  StreamSubscription<LocationState>? locationSubscription;
+  GoogleMapController? _mapController; // Controlador del mapa
+  final LocationBloc locationBloc; // Bloc de ubicación para obtener la posición del usuario
+  StreamSubscription<LocationState>? locationSubscription; // Suscripción al estado de ubicación
 
-  LatLng? mapCenter;
+  LatLng? mapCenter; // Coordenadas del centro del mapa
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
+    // Manejar eventos del MapBloc
     on<OnMapInitializedEvent>(_onInitMap);
     on<OnStartFollowingUserEvent>(_onStartFollowingUser);
     on<OnStopFollowingUserEvent>(
@@ -32,9 +33,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         emit(state.copyWith(showUserRoute: !state.showUserRoute)));
     on<OnRemovePoiMarkerEvent>(_onRemovePoiMarker);
     on<OnAddPoiMarkerEvent>(_onAddPoiMarker);
-    // Añadir el manejador de evento en el constructor del MapBloc
-    on<OnClearMapEvent>(_onClearMap);
+    on<OnClearMapEvent>(_onClearMap); // Maneja el evento de limpiar el mapa
 
+    // Suscribirse al LocationBloc para obtener actualizaciones de ubicación
     locationSubscription = locationBloc.stream.listen((locationState) {
       if (locationState.lastKnownLocation != null) {
         log.i(
@@ -44,35 +45,37 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
       if (!state.isFollowingUser) return;
       if (locationState.lastKnownLocation == null) return;
-
-      //moveCamera(locationState.lastKnownLocation!);
     });
   }
 
-  void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
+  // Inicializa el mapa con el controlador y el contexto
+  Future<void> _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) async {
     _mapController = event.mapController;
     log.i('Mapa inicializado. Controlador del mapa establecido.');
     emit(state.copyWith(isMapInitialized: true, mapContext: event.mapContext));
   }
 
-  void moveCamera(LatLng latLng) {
+  // Mueve la cámara a una ubicación específica
+  Future<void> moveCamera(LatLng latLng) async {
     if (_mapController == null) {
       log.w('El controlador del mapa aún no está listo.');
       return;
     }
     log.i('Moviendo cámara a la posición: $latLng');
     final cameraUpdate = CameraUpdate.newLatLng(latLng);
-    _mapController?.animateCamera(cameraUpdate);
+    await _mapController?.animateCamera(cameraUpdate);
   }
 
-  void _onStartFollowingUser(
-      OnStartFollowingUserEvent event, Emitter<MapState> emit) {
+  // Comienza a seguir la ubicación del usuario
+  Future<void> _onStartFollowingUser(
+      OnStartFollowingUserEvent event, Emitter<MapState> emit) async {
     emit(state.copyWith(isFollowingUser: true));
     log.i('Comenzando a seguir al usuario.');
     if (locationBloc.state.lastKnownLocation == null) return;
-    moveCamera(locationBloc.state.lastKnownLocation!);
+    await moveCamera(locationBloc.state.lastKnownLocation!);
   }
 
+  // Añade un nuevo punto a la polilínea de la ruta del usuario
   void _onPolylineNewPoint(
       OnUpdateUserPolylinesEvent event, Emitter<MapState> emit) {
     log.i('Añadiendo nuevo punto a la polilínea.');
@@ -89,6 +92,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(polylines: currentPolylines));
   }
 
+  // Dibuja un EcoCityTour en el mapa, añadiendo polilíneas y marcadores
   Future<void> drawEcoCityTour(EcoCityTour tour) async {
     log.i('Dibujando EcoCityTour en el mapa: ${tour.name}');
     final myRoute = Polyline(
@@ -127,17 +131,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentPolylines['route'] = myRoute;
     currentMarkers.addAll(poiMarkers);
 
-    // Mandar a mostrar las polilíneas y marcadores
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
 
-    // Centramos la cámara en el primer POI del tour
     if (tour.pois.isNotEmpty) {
       final LatLng firstPoiLocation = tour.pois.first.gps;
       log.i('Moviendo la cámara al primer POI: ${tour.pois.first.name}');
-      moveCamera(firstPoiLocation);
+      await moveCamera(firstPoiLocation);
     }
   }
 
+  // Muestra los detalles de un lugar en un BottomSheet
   void showPlaceDetails(BuildContext context, PointOfInterest poi) {
     log.i('Mostrando detalles del POI: ${poi.name}');
     showModalBottomSheet(
@@ -154,6 +157,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
   }
 
+  // Elimina un marcador de POI del mapa
   void _onRemovePoiMarker(
       OnRemovePoiMarkerEvent event, Emitter<MapState> emit) {
     log.i('Eliminando marcador de POI: ${event.poiName}');
@@ -162,7 +166,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(markers: updatedMarkers));
   }
 
-  void _onAddPoiMarker(
+  // Añade un marcador de POI al mapa
+  Future<void> _onAddPoiMarker(
       OnAddPoiMarkerEvent event, Emitter<MapState> emit) async {
     log.i('Añadiendo marcador de POI: ${event.poi.name}');
     final updatedMarkers = Map<String, Marker>.from(state.markers);
@@ -185,19 +190,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(markers: updatedMarkers));
   }
 
-// Modificar el MapBloc para manejar el evento de limpiar el mapa
+  // Limpia todos los marcadores y polilíneas del mapa
   void _onClearMap(OnClearMapEvent event, Emitter<MapState> emit) {
     log.i('MapBloc: Limpiando todos los marcadores y polilíneas del mapa.');
     emit(state.copyWith(
-      polylines: {}, // Limpiamos todas las polilíneas
-      markers: {}, // Limpiamos todos los marcadores
+      polylines: {},
+      markers: {},
     ));
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     log.i('Cerrando MapBloc y cancelando suscripción de localización.');
-    locationSubscription?.cancel();
-    return super.close();
+    await locationSubscription?.cancel();
+    await super.close();
   }
 }

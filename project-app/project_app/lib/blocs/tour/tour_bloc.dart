@@ -16,12 +16,23 @@ import 'package:project_app/services/services.dart';
 part 'tour_event.dart';
 part 'tour_state.dart';
 
+/// [TourBloc] es el Bloc encargado de gestionar el estado de los tours.
+/// 
+/// Gestiona la lógica relacionada con la creación, modificación, y visualización
+/// de tours turísticos, además de interactuar con servicios como Gemini, Google
+/// Places y un servicio de optimización de rutas.
 class TourBloc extends Bloc<TourEvent, TourState> {
+  /// Servicio utilizado para optimizar rutas entre puntos de interés (POIs).
   final OptimizationService optimizationService;
-  final MapBloc mapBloc; // Añadimos una referencia al MapBloc para marcadores
-  final EcoCityTourRepository
-      ecoCityTourRepository; // Añadimos el repositorio de tours para carga/guardado
+  /// Bloc utilizado para gestionar los marcadores y rutas en el mapa.
+  final MapBloc mapBloc; 
+  /// Repositorio utilizado para la carga y guardado de tours.
+  final EcoCityTourRepository ecoCityTourRepository; 
 
+  /// Constructor de [TourBloc].
+  /// 
+  /// Requiere instancias de [MapBloc], [OptimizationService], y
+  /// [EcoCityTourRepository].
   TourBloc({
     required this.mapBloc,
     required this.optimizationService,
@@ -35,14 +46,17 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     // Reset de Tour. Emite estado con EcoCityTour y POI's a null.
     on<ResetTourEvent>((event, emit) {
       emit(state.copyWith(ecoCityTour: null, isJoined: false));
-      // Limpia el mapa al resetear el tour
-      mapBloc.add(OnClearMapEvent());
+      mapBloc.add(const OnClearMapEvent()); // Limpia el mapa al resetear el tour
     });
     on<LoadSavedToursEvent>(_onLoadSavedTours);
     on<LoadTourFromSavedEvent>(_onLoadTourFromSaved);
 
   }
 
+  /// Maneja la lógica para cargar un nuevo tour basado en las preferencias del usuario.
+  /// 
+  /// Obtiene POIs desde Gemini, mejora su información con Google Places, y
+  /// optimiza la ruta utilizando el servicio de optimización.
   Future<void> _onLoadTour(LoadTourEvent event, Emitter<TourState> emit) async {
     log.i(
         'TourBloc: Loading tour for city: ${event.city}, with ${event.numberOfSites} sites');
@@ -126,6 +140,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     emit(state.copyWith(isJoined: !state.isJoined));
   }
 
+  /// Maneja la lógica para unirse al tour. Cambia el estado [isJoined].
   Future<void> _onAddPoi(OnAddPoiEvent event, Emitter<TourState> emit) async {
     log.i('TourBloc: Añadiendo POI: ${event.poi.name}');
 
@@ -134,7 +149,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
       return;
     }
 
-    // Iniciar la carga
+    // Inicia la carga
     emit(state.copyWith(isLoading: true)); // Aquí ponemos el loading en true
 
     try {
@@ -157,6 +172,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     }
   }
 
+  /// Maneja la lógica para eliminar un POI del tour actual.
   Future<void> _onRemovePoi(
       OnRemovePoiEvent event, Emitter<TourState> emit) async {
     log.i('TourBloc: Eliminando POI: ${event.poi.name}');
@@ -187,8 +203,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     }
   }
 
-  // Método para optimizar el tour que ha sufrido algún cambio de POIs y
-  // llamar a pintarlo -> MapBloc
+  /// Recalcula y optimiza un tour basado en una lista actualizada de POIs.
   Future<void> _updateTourWithPois(
     List<PointOfInterest> pois,
     Emitter<TourState> emit,
@@ -219,13 +234,13 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     }
   }
 
-// Funciones de carga y guardado de tours:@override
+  /// Guarda el tour actual en el repositorio con el nombre proporcionado.
   Future<void> saveCurrentTour(String tourName) async {
     if (state.ecoCityTour == null) return;
     await ecoCityTourRepository.saveTour(state.ecoCityTour!, tourName);
   }
 
-// Maneja la lógica de cargar tours guardados
+  /// Maneja la lógica para cargar los tours guardados desde el repositorio.
   Future<void> _onLoadSavedTours(
       LoadSavedToursEvent event, Emitter<TourState> emit) async {
     emit(state.copyWith(isLoading: true)); // Estado de carga
@@ -240,7 +255,7 @@ class TourBloc extends Bloc<TourEvent, TourState> {
     }
   }
 
-  // Carga un tour guardado en repositorio en el estado del bloc
+  /// Maneja la lógica para cargar un tour guardado específico desde el repositorio.
   Future<void> _onLoadTourFromSaved(LoadTourFromSavedEvent event, Emitter<TourState> emit) async {
   emit(state.copyWith(isLoading: true, hasError: false));
 

@@ -9,48 +9,62 @@ import 'package:project_app/logger/logger.dart'; // Importamos logger para usarl
 part 'gps_event.dart';
 part 'gps_state.dart';
 
+/// **GpsBloc**: Gestiona el estado del GPS y los permisos de localización.
+///
+/// Este Bloc se encarga de:
+/// - Comprobar si el GPS está habilitado.
+/// - Solicitar permisos de localización al usuario.
+/// - Escuchar cambios en el estado del GPS.
+/// - Emitir estados actualizados a través de eventos.
 class GpsBloc extends Bloc<GpsEvent, GpsState> {
-  StreamSubscription? _gpsSubscription; // Para cerrar el stream
+  /// Suscripción al stream que escucha cambios en el estado del GPS.
+  StreamSubscription? _gpsSubscription;
 
+  /// Constructor del GpsBloc.
+  ///
+  /// Inicializa el estado con `isGpsEnabled` y `isGpsPermissionGranted` en `false`.
   GpsBloc()
       : super(const GpsState(
             isGpsEnabled: false, isGpsPermissionGranted: false)) {
-    // Se dispara al recibir un evento de tipo OnGpsAndPermissionEvent
+    // Manejo del evento `OnGpsAndPermissionEvent`
     on<OnGpsAndPermissionEvent>((event, emit) {
       log.i(
           'GpsBloc: Recibido evento OnGpsAndPermissionEvent - GPS habilitado: ${event.isGpsEnabled}, Permisos: ${event.isGpsPermissionGranted}');
       emit(state.copyWith(
-        isGpsEnabled: event.isGpsEnabled, // Cambia el estado del GPS
-        isGpsPermissionGranted:
-            event.isGpsPermissionGranted, // Cambia el estado de los permisos
+        isGpsEnabled: event.isGpsEnabled,
+        isGpsPermissionGranted: event.isGpsPermissionGranted,
       ));
     });
 
-    _init(); // Se llama a la función para obtener el estado del GPS y los permisos
+    _init(); // Inicializa el estado del GPS y los permisos.
   }
 
+  /// Inicializa el estado del GPS y los permisos de localización.
+  ///
+  /// Combina el resultado de `checkGpsStatus` y `isPermissionGranted`
+  /// para emitir el estado inicial.
   Future<void> _init() async {
     try {
       log.i('GpsBloc: Inicializando estado del GPS y permisos.');
-      // Se obtienen los estados del GPS y los permisos
+
       final gpsInitStatus =
           await Future.wait([checkGpsStatus(), isPermissionGranted()]);
 
       log.d(
           'GpsBloc: Estado inicial - GPS habilitado: ${gpsInitStatus[0]}, Permisos concedidos: ${gpsInitStatus[1]}');
 
-      // Emitir el nuevo estado
       add(OnGpsAndPermissionEvent(
-          isGpsEnabled: gpsInitStatus[0], // Mando el estado del GPS
-          isGpsPermissionGranted:
-              gpsInitStatus[1])); // Mando el estado de los permisos
+          isGpsEnabled: gpsInitStatus[0],
+          isGpsPermissionGranted: gpsInitStatus[1]));
     } catch (e, stackTrace) {
       log.e('GpsBloc: Error al inicializar GPS o permisos',
           error: e, stackTrace: stackTrace);
     }
   }
 
-  // Se comprueba si el permiso de localización está concedido
+  /// Comprueba si los permisos de localización están concedidos.
+  ///
+  /// Devuelve `true` si los permisos están concedidos, de lo contrario `false`.
   Future<bool> isPermissionGranted() async {
     try {
       final isGranted = await Permission.location.isGranted;
@@ -63,16 +77,17 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     }
   }
 
-  // Se comprueba si el GPS está habilitado
+  /// Comprueba si el GPS está habilitado en el dispositivo.
+  ///
+  /// Escucha cambios en el estado del GPS usando `Geolocator.getServiceStatusStream`.
+  /// Devuelve `true` si el GPS está habilitado.
   Future<bool> checkGpsStatus() async {
     try {
       final isEnable = await Geolocator.isLocationServiceEnabled();
       log.d('GpsBloc: GPS habilitado: $isEnable');
 
-      // Usando la librería geolocator se obtiene el stream del estado del GPS
       _gpsSubscription = Geolocator.getServiceStatusStream().listen((event) {
-        final isEnabled =
-            (event.index == 1) ? true : false; // Se obtiene el estado del GPS
+        final isEnabled = (event.index == 1);
         log.d('GpsBloc: Cambió el estado del GPS - Habilitado: $isEnabled');
         add(OnGpsAndPermissionEvent(
             isGpsEnabled: isEnabled,
@@ -87,11 +102,14 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     }
   }
 
-  // Se solicita el permiso de localización al usuario
+  /// Solicita permisos de localización al usuario.
+  ///
+  /// Dependiendo del estado del permiso, emite un evento para actualizar el estado:
+  /// - `PermissionStatus.granted`: Permiso concedido.
+  /// - Otros estados: Permiso denegado y se abre la configuración de la app.
   Future<void> askGpsAccess() async {
     try {
-      final status = await Permission.location
-          .request(); // Se solicita el permiso de localización al usuario
+      final status = await Permission.location.request();
       log.i('GpsBloc: Solicitando acceso al GPS, estado: $status');
 
       switch (status) {
@@ -106,7 +124,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
           log.w('GpsBloc: Permiso de GPS denegado o restringido.');
           add(OnGpsAndPermissionEvent(
               isGpsEnabled: state.isGpsEnabled, isGpsPermissionGranted: false));
-          openAppSettings(); // Se abre la configuración de la app para que el usuario pueda dar permisos
+          openAppSettings();
           break;
         default:
           break;
@@ -117,10 +135,11 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     }
   }
 
+  /// Cierra el GpsBloc y cancela la suscripción al stream de cambios en el GPS.
   @override
   Future<void> close() {
     log.i('GpsBloc: Cerrando GpsBloc y cancelando suscripciones.');
-    _gpsSubscription?.cancel(); // Se cancela la suscripción al stream
+    _gpsSubscription?.cancel();
     return super.close();
   }
 }

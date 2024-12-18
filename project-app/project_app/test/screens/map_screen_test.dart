@@ -46,7 +46,7 @@ void main() {
 
     when(() => mockLocationBloc.startFollowingUser()).thenAnswer((_) async {});
     when(() => mockMapBloc.drawEcoCityTour(any())).thenAnswer((_) async {});
-    when(() => mockMapBloc.moveCamera(any())).thenAnswer((_) {});
+    when(() => mockMapBloc.moveCamera(any())).thenAnswer((_) async{});
   });
 
   tearDown(() {

@@ -1,46 +1,69 @@
 part of 'map_bloc.dart';
 
+/// Representa el estado del mapa en el `MapBloc`.
+///
+/// Este estado contiene información sobre:
+/// - Inicialización del mapa.
+/// - Seguimiento de la ubicación del usuario.
+/// - Visibilidad de rutas.
+/// - Polilíneas y marcadores que se deben mostrar en el mapa.
+/// - Contexto del mapa para interactuar con la interfaz de usuario.
 class MapState extends Equatable {
-  // Indica si el mapa ha sido inicializado o no.
+  /// Indica si el mapa ha sido inicializado.
   final bool isMapInitialized;
 
-  // Indica si el mapa está siguiendo la ubicación del usuario.
+  /// Indica si el mapa está siguiendo la ubicación del usuario.
   final bool isFollowingUser;
 
-  // Indica si se debe mostrar la ruta del usuario o no.
+  /// Indica si la ruta del usuario debe ser visible en el mapa.
   final bool showUserRoute;
 
-  // Contiene las polilíneas (rutas) que se deben mostrar en el mapa.
+  /// Mapa que contiene las polilíneas que se deben renderizar en el mapa.
   final Map<String, Polyline> polylines;
 
-  // Contiene los marcadores que se deben mostrar en el mapa.
+  /// Mapa que contiene los marcadores que se deben renderizar en el mapa.
   final Map<String, Marker> markers;
 
-  // El contexto del mapa, que nos permitirá mostrar un BottomSheet o interactuar con la UI desde el bloc.
+  /// Contexto del mapa, útil para interactuar con la UI desde el bloc.
   final BuildContext? mapContext;
 
-  // Constructor de MapState.
+  /// Constructor de `MapState`.
+  ///
+  /// Inicializa los parámetros del estado con valores predeterminados o proporcionados.
+  /// - `isMapInitialized`: `false` por defecto.
+  /// - `isFollowingUser`: `false` por defecto.
+  /// - `showUserRoute`: `false` por defecto.
+  /// - `polylines` y `markers`: Mapas vacíos si no se especifican.
+  /// - `mapContext`: Nulo por defecto.
   const MapState({
-    this.mapContext, // El contexto puede ser nulo al inicio.
+    this.mapContext,
     this.isMapInitialized = false,
     this.isFollowingUser = false,
     this.showUserRoute = false,
     Map<String, Polyline>? polylines,
     Map<String, Marker>? markers,
-  })  : polylines = polylines ?? const {}, // Inicializamos las polilíneas como un mapa vacío si no se pasa ningún valor.
-        markers = markers ?? const {};     // Inicializamos los marcadores como un mapa vacío si no se pasa ningún valor.
+  })  : polylines = polylines ?? const {},
+        markers = markers ?? const {};
 
-  // Método que permite copiar el estado actual y reemplazar solo los valores que se deseen modificar.
+  /// Retorna una copia del estado actual con valores opcionalmente modificados.
+  ///
+  /// Parámetros:
+  /// - `isMapInitialized`: Indica si el mapa ha sido inicializado.
+  /// - `isFollowingUser`: Indica si el mapa sigue la ubicación del usuario.
+  /// - `showUserRoute`: Indica si la ruta del usuario es visible.
+  /// - `polylines`: Nuevas polilíneas para el mapa.
+  /// - `markers`: Nuevos marcadores para el mapa.
+  /// - `mapContext`: Contexto actualizado del mapa.
   MapState copyWith({
     bool? isMapInitialized,
     bool? isFollowingUser,
     bool? showUserRoute,
     Map<String, Polyline>? polylines,
     Map<String, Marker>? markers,
-    BuildContext? mapContext, // Añadimos la capacidad de copiar el contexto.
+    BuildContext? mapContext,
   }) =>
       MapState(
-        mapContext: mapContext ?? this.mapContext, // Usamos el contexto actual si no se pasa uno nuevo.
+        mapContext: mapContext ?? this.mapContext,
         isMapInitialized: isMapInitialized ?? this.isMapInitialized,
         isFollowingUser: isFollowingUser ?? this.isFollowingUser,
         showUserRoute: showUserRoute ?? this.showUserRoute,
@@ -48,6 +71,7 @@ class MapState extends Equatable {
         markers: markers ?? this.markers,
       );
 
+  /// Propiedades utilizadas para determinar si dos instancias de `MapState` son iguales.
   @override
   List<Object?> get props => [
         isMapInitialized,
@@ -55,6 +79,6 @@ class MapState extends Equatable {
         showUserRoute,
         polylines,
         markers,
-        mapContext, // Aseguramos que mapContext sea parte de la comparación de estados.
+        mapContext,
       ];
 }
