@@ -4,7 +4,110 @@
 En este anexo, se detallan las especificaciones de diseño del proyecto, enfocadas en los aspectos fundamentales para el desarrollo de la aplicación. Se describen cómo se organizan los datos que lo componen, el diseño arquitectónico, y los procedimientos empleados. Estas especificaciones son clave para asegurar el correcto funcionamiento y la estructuración adecuada de cada uno de los elementos que componen \textit{Eco City Tours}.
 \section{Diseño de datos}
 
-El diseño de datos de la aplicación \textit{Eco City Tours} se fundamenta en una arquitectura modular que organiza las diferentes responsabilidades del sistema en paquetes específicos. A continuación, se presenta un diagrama de clases en la Figura~\ref{fig:clases} que detalla la estructura del sistema y sus relaciones. Este diagrama ilustra cómo interactúa la aplicación usando de servicios, modelos y repositorios.
+En esta sección se presenta el diseño de datos del sistema a un alto nivel de abstracción. Para explicar dicho diseño se usarán varios diagramas donde se muestran las dos principales entidades del sistema y las relaciones entre ellas, centrándose en su estructura y atributos relevantes. 
+
+\imagen{diagrama-entidades}{Diagrama de entidades. Eco City Tour y \acrlong{pdi}}
+\imagen{diagrama-relacional}{Diagrama relacional.}
+A continuación, se describen las entidades, sus atributos y las relaciones que existen entre ellas.
+\subsection{Entidades del Sistema}
+\begin{itemize}
+	\item \textbf{EcoCityTour}: Representa una ruta turística generada por la aplicación. Incluye la información general sobre el recorrido.
+	\begin{itemize}
+		\item \textbf{city}: Ciudad, pueblo o lugar en el que se realiza la ruta.
+		\item \textbf{mode}: Medio de transporte elegido por el usuario (a pie o bicicleta).
+		\item \textbf{duration}: Duración estimada del recorrido.
+		\item \textbf{distance}: Distancia total de la ruta.
+		\item \textbf{userPreferences}: Preferencias del usuario (naturaleza, museos, etc.).
+	\end{itemize}
+	
+	\item {\textbf{PointOfInterest}}: Representa un \acrlong{pdi} dentro de la ruta.
+	\begin{itemize}
+		\item \textbf{name}: Nombre del lugar.
+		\item \textbf{gps}: Coordenadas GPS del sitio (latitud y longitud).
+		\item \textbf{description}: Breve descripción del lugar.
+		\item \textbf{url}: Enlace a información adicional sobre el lugar.
+		\item \textbf{imageUrl}: URL de la imagen representativa del lugar.
+		\item \textbf{rating}: Calificación promedio del punto de interés.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Relaciones entre Entidades}
+\begin{itemize}
+	\item \textbf{EcoCityTour -- PointOfInterest}: Una relación  donde:
+	\begin{itemize}
+		\item Un \textbf{EcoCityTour} posee \textbf{0..n} puntos de interés (\textbf{PointOfInterest}).
+		\item Cada \textbf{PointOfInterest} pertenece a exactamente un \textbf{EcoCityTour}.
+	\end{itemize}
+\end{itemize}
+
+
+\section{Diseño procedimental}
+En esta sección se explicará el flujo de trabajo relacionado con las tareas más importantes de la aplicación, asociando cada proceso a sus respectivos \textbf{Casos de Uso (CU)} descritos en la subsección~\ref{subsec:casos-uso}.
+
+\subsection{Carga de \textit{EcoCityTour} desde pantalla de selección de preferencias (CU01.1)}
+La generación de un nuevo tour turístico una vez que el usuario ha definido sus preferencias es el proceso fundamental que se muestra en la Figura~\ref{fig:secuence}, correspondiente al \textbf{CU01.1 Calcular Eco City Tour}.
+
+El proceso comienza con el evento \texttt{loadTourEvent()}, disparado por el usuario desde la pantalla de selección (\textit{TourSelectionScreen}). Este evento desencadena la siguiente secuencia de interacciones:
+\begin{enumerate}
+	\item El \textit{TourBloc} inicia la generación del tour solicitando a \textit{ServicioLLM} una lista inicial de \acrlong{pdi} basados en las preferencias del usuario.
+	\item \textit{ServicioLLM} devuelve un conjunto de \acrlong{pdi}, que luego se enriquecen con información adicional obtenida a través de \textit{Google Places} mediante el método \texttt{searchPlacePOI}.
+	\item La información enriquecida de los \acrlong{pdi} es enviada a \textit{OptimizationService}, que calcula una ruta optimizada utilizando criterios de sostenibilidad y las preferencias del usuario. Esto se realiza a través del método \texttt{optimizedRoute()}.
+	\item La ruta optimizada es devuelta como \texttt{OptimizedRoute} y se envía al \textit{MapBloc}, que se encarga de gestionar la actualización del mapa en la interfaz de usuario.
+	\item Finalmente, el \textit{MapBloc} utiliza la ruta optimizada para invocar el método \texttt{updateMap()}, mostrando el tour generado en \textit{MapScreen} y permitiendo al usuario interactuar con los puntos de interés.
+\end{enumerate}
+\imagen{secuence}{Diagrama de secuencia - Generación de Eco City Tour}
+
+\subsection{Añadir un \acrfull{pdi} (CU02.3)}
+El flujo para añadir un nuevo \acrshort{pdi} corresponde al \textbf{CU02.3 Añadir PDI}. El proceso se inicia cuando el usuario selecciona la opción de añadir un \acrshort{pdi} desde la interfaz de usuario \textit{MapScreen}. 
+
+Este evento desencadena una serie de interacciones entre los componentes principales:
+\begin{itemize}
+	\item El \textit{MapBloc} gestiona el estado del mapa.
+	\item El \textit{TourBloc} actualiza la lista de \acrshort{pdi} en el tour actual.
+\end{itemize}
+Finalmente, el sistema actualiza la vista del mapa con el \acrshort{pdi} añadido y guarda los cambios en el repositorio correspondiente.
+
+La Figura~\ref{fig:add-poi-secuence} muestra el diagrama de secuencia de esta funcionalidad.
+
+\imagen{add-poi-secuence}{Diagrama de secuencia - Añadir un \acrshort{pdi}}
+
+\subsection{Eliminar un \acrshort{pdi} (CU02.2)}
+El flujo para eliminar un \acrshort{pdi}, relacionado con el \textbf{CU02.2 Eliminar PDI}, permite al usuario ajustar su ruta eliminando aquellos \acrshort{pdi} que no sean relevantes.
+
+El usuario inicia este flujo seleccionando el \acrshort{pdi} a eliminar desde:
+\begin{itemize}
+	\item \textit{MapScreen} a través del \textit{custom\_bottom\_sheet}.
+	\item La pantalla de resumen (\textit{poi\_list\_item}).
+\end{itemize}
+Ambos eventos lanzan una actualización en el \textit{TourBloc}, que solicita al \textit{Google Directions Service} recalcular la ruta optimizada. Finalmente, el \textit{MapBloc} actualiza la vista del mapa.
+
+La Figura~\ref{fig:remove-poi-secuence} muestra el diagrama de secuencia correspondiente.
+
+\imagen{remove-poi-secuence}{Diagrama de secuencia - Eliminar un \acrshort{pdi}}
+
+\subsection{Guardar un Eco City Tour (CU04)}
+La funcionalidad de guardar un Eco City Tour, asociada al \textbf{CU04 Guardar Eco City Tour}, asegura que los usuarios puedan acceder a sus rutas en el futuro.
+
+El flujo comienza cuando el usuario selecciona la opción de guardar desde la interfaz \textit{SummaryScreen}. Este evento activa el \textit{TourBloc}, que envía los datos al repositorio, donde se almacenan a través del \textit{FirestoreDataset}. Una vez completado el guardado, se notifica al usuario mediante un \textit{Snackbar}.
+
+La Figura~\ref{fig:save-tour-secuence} muestra el diagrama de secuencia correspondiente.
+
+\imagen{save-tour-secuence}{Diagrama de secuencia - Guardar un Eco City Tour}
+
+\subsection{Cargar un Eco City Tour (CU05)}
+La funcionalidad de cargar un tour previamente guardado está relacionada con el \textbf{CU05 Cargar Eco City Tour}.
+
+El flujo inicia cuando el usuario selecciona un tour desde la lista de tours guardados en la interfaz \textit{TourSelectionScreen}. Este evento activa el \textit{TourBloc}, que recupera los datos del tour desde el repositorio (\textit{FirestoreDataset}). Una vez recuperada la información, el \textit{MapBloc} actualiza la vista del mapa para mostrar el tour cargado.
+
+La Figura~\ref{fig:load-tour-secuence} describe el diagrama de secuencia para este proceso.
+
+\imagen{load-tour-secuence}{Diagrama de secuencia - Cargar un Eco City Tour}
+
+
+
+\subsection{Diseño arquitectónico}
+
+El diseño de datos de la aplicación \textit{Eco City Tours} se fundamenta en una arquitectura modular que organiza las diferentes responsabilidades del sistema en paquetes específicos. A continuación, se presenta un diagrama de clases en la Figura~\ref{fig:clases} que detalla la estructura del sistema y sus relaciones. Este diagrama ilustra cómo interactúa la aplicación usando servicios, modelos y repositorios.
 
 La organización en paquetes garantiza un diseño cohesivo, con bajo acoplamiento y alta cohesión, la extensibilidad del sistema coincidiendo también con cada carpeta dentro de la estructura del proyecto Flutter lo que garantiza también una fácil mantenibilidad.
 
@@ -27,7 +130,7 @@ A continuación, se describen los paquetes y componentes principales representad
 	
 	\item \textbf{models}: existen dos clases principales en las que se basa el diseño de la aplicación.
 	\begin{itemize}
-		\item \textbf{\acrshort{pdi}ntOfInterest}: Clase que modela un \acrlong{pdi}, almacenando información relevante como nombre, ubicación y descripción. 
+		\item \textbf{\acrlong{pdi}}: Clase que modela un \acrshort{pdi}, almacenando información relevante como nombre, ubicación y descripción. 
 		\item \textbf{EcoCityTour}: Clase que representa un tour turístico completo, que incluye una lista del modelo anterior y datos como duración, distancia y nombre del lugar donde se ha generado la ruta turística.
 	\end{itemize}
 	
@@ -52,59 +155,6 @@ Con esta organización, el diseño asegura que cada componente tenga una respons
 
 Cabe destacar que al ser modular cualquier modificación por ejemplo de un gestor de estado o un dataset diferente se facilita enormemente.
 
-
-
-\section{Diseño procedimental}
-En esta sección se explicará el flujo de trabajo relacionado con una de las tareas más importantes de la aplicación.
-\subsection{Carga de \textit{EcoCityTour} desde pantalla de selección de preferencias}
-La generación de un nuevo tour turístico una vez que el usuario ha definido sus preferencias es el proceso fundamental que mostraremos en la siguiente Figura~\ref{fig:secuence} que mostrará la interacción entre los distintos actores y sus comunicaciones.
-
-El proceso comienza con el evento \texttt{loadTourEvent()}, disparado por el usuario desde la pantalla de selección (\textit{TourSelectionScreen}). Este evento desencadena la siguiente secuencia de interacciones:
-\begin{enumerate}
-	\item El \textit{TourBloc} inicia la generación del tour solicitando a \textit{ServicioLLM} una lista inicial de \acrlong{pdi} basados en las preferencias del usuario.
-	\item \textit{ServicioLLM} devuelve un conjunto de \acrlong{pdi}, que luego se enriquecen con información adicional obtenida a través de \textit{Google Places} mediante el método \texttt{searchPlacePOI}.
-	\item La información enriquecida de los \acrlong{pdi} es enviada a \textit{OptimizationService}, que calcula una ruta optimizada utilizando criterios de sostenibilidad y las preferencias del usuario. Esto se realiza a través del método \texttt{optimizedRoute()}.
-	\item La ruta optimizada es devuelta como \texttt{OptimizedRoute} y se envía al \textit{MapBloc}, que se encarga de gestionar la actualización del mapa en la interfaz de usuario.
-	\item Finalmente, el \textit{MapBloc} utiliza la ruta optimizada para invocar el método \texttt{updateMap()}, mostrando el tour generado en \textit{MapScreen} y permitiendo al usuario interactuar con los puntos de interés.
-\end{enumerate}
-\imagen{secuence}{Diagrama de secuencia - Generación de Eco City Tour}
-Además de este proceso principal de obtención de \acrlong{pdi} existen otros casos de uso cuyos procedimientos se explican a continuación.
-\subsection{Añadir un \acrfull{pdi}}
-
-El flujo comienza cuando el usuario selecciona la opción de añadir un \acrshort{pdi} desde la interfaz de usuario \textit{MapScreen}. Este evento desencadena una serie de interacciones entre los componentes principales, como el \textit{MapBloc}, que gestiona el estado del mapa, y el \textit{TourBloc}, que actualiza la lista de \acrshort{pdi} en el tour actual. Finalmente, el sistema actualiza la vista del mapa con el \acrshort{pdi} añadido y guarda los cambios en el repositorio correspondiente.
-
-En el diagrama de secuencia representado en la Figura~\ref{fig:add-poi-secuence}, se describen los pasos necesarios para completar esta funcionalidad.
-
-\imagen{add-poi-secuence}{Diagrama de secuencia - Añadir un \acrshort{pdi}}
-
-La lógica de la pantalla de búsqueda se beneficia de una clase de \textit{Flutter} llamada \textit{Delegate}~\cite{flutter_search_delegate}. En esta clase se pueden configurar los comportamientos típicos de una barra de búsqueda fácilmente sin tener que programar cada interacción manualmente como por ejemplo la impresión de resultados, las sugerencias de lugares o los iconos mostrados.
-
-\subsection{Eliminar un \acrshort{pdi}}
-El flujo para eliminar un \acrshort{pdi} permite al usuario ajustar su ruta turística eliminando aquellos \acrshort{pdi} que no le resulten  relevantes. 
-
-El usuario inicia este flujo seleccionando el \acrshort{pdi} a eliminar desde la interfaz de usuario \textit{MapScreen} a través del custom\_bottom\_sheet o desde la pantalla de resumen en poi\_list\_item, ambos van a lanzar un evento al TourBloc que actualizará su información usando el actor 5 que es el servicio de Google que optimizará la ruta con la actualización del tour. Por último delegará como siempre la actualización visual del mapa al \textit{MapBloc}. 
-
-La Figura~\ref{fig:remove-poi-secuence} muestra el diagrama de secuencia para esta funcionalidad.
-
-\imagen{remove-poi-secuence}{Diagrama de secuencia - Eliminar un \acrshort{pdi}}
-
-\subsection{Guardar un Eco City Tour}
-Esta funcionalidad permite a los usuarios guardar un Eco City Tour generado, asegurando que puedan acceder a sus rutas personalizadas en el futuro. 
-
-El flujo comienza como se puede observar en la Figura~\ref{fig:save-tour-secuence} cuando el usuario selecciona la opción de guardar desde la interfaz de usuario en la pantalla \textit{SummaryScreen}. Este evento activa el \textit{TourBloc}. Los datos son entonces enviados al repositorio, donde son almacenados de manera persistente a través de las funciones del Datasource de Firestore y por último este actor realizará la acción persistente. Una vez completado el proceso, se notifica al usuario que el tour ha sido guardado exitosamente a través de un \textit{Snackbar}, un mensaje en la parte inferior de la pantalla que servirá para su confirmación.
-\imagen{save-tour-secuence}{Diagrama de secuencia - Guardar un Eco City Tour}
-
-\subsection{Cargar un Eco City Tour}
-Esta funcionalidad permite a los usuarios cargar un tour previamente guardado para continuar utilizándolo o editarlo.
-
-El flujo inicia cuando el usuario selecciona un tour desde la lista de tours guardados en la interfaz de usuario (\textit{TourSelectionScreen}). Este evento activa el \textit{TourBloc}, que recupera los datos del tour desde el repositorio correspondiente. Una vez recuperados los datos, el \textit{MapBloc} actualiza la vista del mapa para mostrar el tour cargado. 
-
-La Figura~\ref{fig:load-tour-secuence} muestra el diagrama de secuencia para este proceso.
-
-\imagen{load-tour-secuence}{Diagrama de secuencia - Cargar un Eco City Tour}
-
-
-\subsection{Diseño arquitectónico}
 
 El diseño arquitectónico de \textit{Eco City Tours} sigue un enfoque modular que organiza el sistema en tres capas principales: \textbf{Interfaz de usuario}, \textbf{Lógica de negocio} y \textbf{Servicios externos}. Esta separación garantiza la escalabilidad, mantenibilidad y claridad del sistema, facilitando futuras mejoras o adaptaciones.
 

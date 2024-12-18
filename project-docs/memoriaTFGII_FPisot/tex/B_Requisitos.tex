@@ -197,7 +197,6 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 
 \begin{table}[H]
 	\centering
-
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
 		\textbf{Actor-ID}    & A06 \\
@@ -220,7 +219,8 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 	\caption{A06 - Crashlytics}
 		\label{actor:crashlytics}
 \end{table}
-
+\subsection{Casos de uso}
+\label{subsec:casos-uso}
 \subsection{CU00 - Configuración GPS}
 \begin{figure}[H]
 	\centering
@@ -240,6 +240,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-1, RF-2 \\
 		\textbf{Descripción}          & Configura la aplicación para tener acceso a la ubicación mediante GPS. \\
 		\textbf{Precondición}         & La aplicación está instalada y abierta por primera vez o tras haber revocado permisos anteriormente. \\
 		\textbf{Acciones}             &
@@ -294,6 +295,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-5 \\
 		\textbf{Descripción}          & Configurar los parámetros necesarios para generar un Eco City Tour personalizado según las preferencias del usuario. \\
 		\textbf{Precondición}         & El usuario accede a la pantalla de configuración. \\
 		\textbf{Acciones}             &
@@ -336,6 +338,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A03 (\ref{actor:gemini}), A04 (\ref{actor:google-places}), A05 (\ref{actor:google-directions}) \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-6, RF-8 \\
 		\textbf{Descripción}          & Generar una ruta optimizada conectando los puntos de interés seleccionados en función de las preferencias del usuario. \\
 		\textbf{Precondición}         & Los parámetros han sido configurados correctamente. \\
 		\textbf{Acciones}             &
@@ -384,6 +387,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
+		\textbf{Requisitos asociados} & RF-4 \\
 		\textbf{Descripción}          & El usuario puede desplazarse y explorar el mapa interactivo de la aplicación. \\
 		\textbf{Precondición}         & El mapa está visible. \\
 		\textbf{Acciones}             &
@@ -430,6 +434,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-6, RF-11 \\
 		\textbf{Descripción}          & El usuario puede obtener información detallada sobre un punto de interés seleccionado en el mapa. \\
 		\textbf{Precondición}         & La ruta y los puntos de interés están visibles en el mapa. \\
 		\textbf{Acciones}             &
@@ -469,6 +474,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 (\ref{actor:usuario}), A05 (\ref{actor:google-directions}) \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-7, RF-8 \\
 		\textbf{Descripción}          & El usuario puede eliminar puntos de interés de la ruta desde el mapa. \\
 		\textbf{Precondición}         & La ruta ha sido generada y los puntos de interés están visibles en el mapa. \\
 		\textbf{Acciones}             &
@@ -510,6 +516,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 Usuario \ref{actor:usuario} \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-8, RF-9 \\
 		\textbf{Descripción}          & El usuario puede añadir manualmente un nuevo \acrshort{pdi} a la ruta introduciendo su nombre en la barra de búsqueda. \\
 		\textbf{Precondición}         & La ruta ha sido generada previamente. \\
 		\textbf{Acciones}             &
@@ -552,6 +559,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 Usuario \ref{actor:usuario} \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-10 \\
 		\textbf{Descripción}          & Permite al usuario unirse a una ruta previamente generada desde su ubicación actual. \\
 		\textbf{Precondición}         & Una ruta ya ha sido generada y está activa. \\
 		\textbf{Acciones}             &
@@ -594,6 +602,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-3 \\
 		\textbf{Descripción}          & Permite al usuario activar o desactivar el seguimiento de su posición en tiempo real en el mapa. \\
 		\textbf{Precondición}         & La aplicación tiene acceso a la ubicación del usuario. \\
 		\textbf{Acciones}             &
@@ -637,6 +646,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01 Usuario \ref{actor:usuario} \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-4, RF-8 \\
 		\textbf{Descripción}          & Muestra un resumen de la ruta generada, incluyendo la distancia, duración y medio de transporte. \\
 		\textbf{Precondición}         & La ruta ha sido generada. \\
 		\textbf{Acciones}             &
@@ -679,6 +689,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01~\ref{actor:usuario}, A02~\ref{actor:firestore} \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-12 \\
 		\textbf{Descripción}          & Permite al usuario guardar la ruta generada para acceder a ella en el futuro. \\
 		\textbf{Precondición}         & La ruta ha sido generada. \\
 		\textbf{Acciones}             &
@@ -720,6 +731,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Actor}                & A01~\ref{actor:usuario}, A02~\ref{actor:firestore} \\
 		\textbf{Autor}                & \autor \\
+		\textbf{Requisitos asociados} & RF-12 \\
 		\textbf{Descripción}          & Permite al usuario cargar una ruta guardada previamente. \\
 		\textbf{Precondición}         & El usuario ha guardado al menos una ruta. \\
 		\textbf{Acciones}             &
@@ -760,7 +772,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{CU06}    & \textbf{Registro de log} \\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Actor}                & A06~\ref{actor:crashlytics} \\
+		\textbf{Actor}                & A06~(\ref{actor:crashlytics}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Descripción}          & Registra los eventos y actividades del usuario en la aplicación para fines de monitorización y depuración. \\
 		\textbf{Precondición}         & La aplicación está en funcionamiento. \\
