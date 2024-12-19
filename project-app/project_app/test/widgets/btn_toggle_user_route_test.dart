@@ -82,7 +82,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verificar que se envió el evento al bloc
-      verify(() => mockMapBloc.add(OnToggleShowUserRouteEvent())).called(1);
+      verify(() => mockMapBloc.add(const OnToggleShowUserRouteEvent())).called(1);
     });
   });
 }

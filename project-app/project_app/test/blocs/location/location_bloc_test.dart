@@ -16,7 +16,7 @@ class MockLocationBloc extends LocationBloc {
   @override
   void startFollowingUser() {
     if (!isClosed) {
-      add(OnStartFollowingUser());
+      add(const OnStartFollowingUser());
       for (final position in mockPositions) {
         add(OnNewUserLocationEvent(position));
       }
@@ -26,7 +26,7 @@ class MockLocationBloc extends LocationBloc {
   @override
   void stopFollowingUser() {
     if (!isClosed) {
-      add(OnStopFollowingUser());
+      add(const OnStopFollowingUser());
     }
   }
 }

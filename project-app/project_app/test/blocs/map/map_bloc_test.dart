@@ -59,7 +59,7 @@ void main() {
     blocTest<MapBloc, MapState>(
       'emits [isFollowingUser: true] when OnStartFollowingUserEvent is added',
       build: () => mapBloc,
-      act: (bloc) => bloc.add(OnStartFollowingUserEvent()),
+      act: (bloc) => bloc.add(const OnStartFollowingUserEvent()),
       expect: () => [
         isA<MapState>()
           .having((state) => state.isFollowingUser, 'isFollowingUser', true),

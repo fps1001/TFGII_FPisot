@@ -34,7 +34,7 @@ class BtnFollowUser extends StatelessWidget {
               ),
               // Envía un evento para comenzar a seguir al usuario al presionar el botón.
               onPressed: () {
-                mapBloc.add(OnStartFollowingUserEvent());
+                mapBloc.add(const OnStartFollowingUserEvent());
               },
             );
           },

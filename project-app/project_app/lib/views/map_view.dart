@@ -54,7 +54,7 @@ class MapView extends StatelessWidget {
       // Listener para eventos del puntero en el mapa
       child: Listener(
         // Detiene el seguimiento del usuario al mover el mapa
-        onPointerMove: (event) => mapBloc.add(OnStopFollowingUserEvent()),
+        onPointerMove: (event) => mapBloc.add(const OnStopFollowingUserEvent()),
         child: GoogleMap(
           initialCameraPosition: initialCameraPosition,
           compassEnabled: false,

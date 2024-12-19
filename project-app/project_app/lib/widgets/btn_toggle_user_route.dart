@@ -31,7 +31,7 @@ class BtnToggleUserRoute extends StatelessWidget {
               ),
               // Envía un evento para alternar la visualización de la ruta del usuario.
               onPressed: () {
-                mapBloc.add(OnToggleShowUserRouteEvent());
+                mapBloc.add(const OnToggleShowUserRouteEvent());
               },
             );
           },

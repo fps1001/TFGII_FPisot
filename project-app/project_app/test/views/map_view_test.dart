@@ -116,6 +116,6 @@ void main() {
     listener.onPointerMove!(const PointerMoveEvent());
 
     // Verifica que el evento OnStopFollowingUserEvent sea añadido al Bloc
-    verify(() => mockMapBloc.add(OnStopFollowingUserEvent())).called(1);
+    verify(() => mockMapBloc.add(const OnStopFollowingUserEvent())).called(1);
   });
 }

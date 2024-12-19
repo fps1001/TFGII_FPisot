@@ -51,7 +51,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verifica que el evento OnStartFollowingUserEvent es emitido
-      verify(() => mockMapBloc.add(OnStartFollowingUserEvent())).called(1);
+      verify(() => mockMapBloc.add(const OnStartFollowingUserEvent())).called(1);
     });
   });
 }
