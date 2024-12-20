@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/datasets/datasets.dart';
@@ -22,6 +23,7 @@ import 'package:project_app/logger/logger.dart';
 /// autenticación anónima, y configura los blocs necesarios para la lógica de la aplicación.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   // Carga variables de entorno desde el archivo .env
   await dotenv.load(fileName: ".env");
@@ -51,27 +53,32 @@ void main() async {
   final ecoCityTourRepository = EcoCityTourRepository(firestoreDataset);
 
   // Ejecuta la aplicación con los blocs configurados
-  runApp(MultiBlocProvider(
-    providers: [
-      // Bloc para manejar el estado del GPS
-      BlocProvider(create: (context) => GpsBloc()),
+  runApp(EasyLocalization(
+    supportedLocales: const [Locale('en'), Locale('es')],
+    path: 'assets/translations', // Ruta a los archivos JSON
+    fallbackLocale: const Locale('es'),
+    child: MultiBlocProvider(
+      providers: [
+        // Bloc para manejar el estado del GPS
+        BlocProvider(create: (context) => GpsBloc()),
 
-      // Bloc para manejar la ubicación del usuario
-      BlocProvider(create: (context) => LocationBloc()),
+        // Bloc para manejar la ubicación del usuario
+        BlocProvider(create: (context) => LocationBloc()),
 
-      // Bloc para la lógica del mapa, dependiente del Bloc de ubicación
-      BlocProvider(
-          create: (context) =>
-              MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
+        // Bloc para la lógica del mapa, dependiente del Bloc de ubicación
+        BlocProvider(
+            create: (context) =>
+                MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
 
-      // Bloc para manejar la lógica de tours, dependiente de otros blocs y repositorios
-      BlocProvider(
-          create: (context) => TourBloc(
-              optimizationService: OptimizationService(),
-              mapBloc: BlocProvider.of<MapBloc>(context),
-              ecoCityTourRepository: ecoCityTourRepository)),
-    ],
-    child: const ProjectApp(),
+        // Bloc para manejar la lógica de tours, dependiente de otros blocs y repositorios
+        BlocProvider(
+            create: (context) => TourBloc(
+                optimizationService: OptimizationService(),
+                mapBloc: BlocProvider.of<MapBloc>(context),
+                ecoCityTourRepository: ecoCityTourRepository)),
+      ],
+      child: const ProjectApp(),
+    ),
   ));
 }
 
@@ -85,8 +92,11 @@ class ProjectApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Eco-City Tour',
+      title: 'Eco City Tours',
       theme: AppTheme.lightTheme, // Tema de la aplicación
+      locale: context.locale, // Configura el idioma actual
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
       routerConfig: AppRouter.router, // Configuración de rutas
     );
   }

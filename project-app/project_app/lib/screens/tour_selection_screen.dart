@@ -7,8 +7,8 @@ import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/logger/logger.dart';
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/screens/screens.dart';
+import 'package:project_app/widgets/custom_selection_app_bar.dart';
 import 'package:project_app/widgets/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Pantalla de selección de tour Eco City.
 ///
@@ -64,39 +64,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
     return PopScope(
       canPop: false, // Desactiva el botón de retroceso
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'Eco City Tours',
-            style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          iconTheme: const IconThemeData(color: Colors.white),
-          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-          automaticallyImplyLeading: false, // Oculta el botón de retroceso
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.drive_file_move_rounded),
-              tooltip: 'Cargar Ruta Guardada',
-              onPressed: () async {
-                BlocProvider.of<TourBloc>(context)
-                    .add(const LoadSavedToursEvent());
-                await Future.delayed(const Duration(milliseconds: 500));
-                if (context.mounted) {
-                  context.pushNamed('saved-tours');
-                }
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.info_outline_rounded),
-              tooltip: 'Ir al Wiki de la Aplicación',
-              onPressed: _launchWikiURL,
-            ),
-          ],
-        ),
+        appBar: const CustomSelectionAppBar(),
         body: GestureDetector(
           onTap: () => FocusScope.of(context)
               .unfocus(), // Oculta el teclado al tocar fuera
@@ -200,31 +168,79 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // Botón para realizar la petición del tour
-                MaterialButton(
-                  minWidth: MediaQuery.of(context).size.width - 60,
-                  color: Theme.of(context).primaryColor,
-                  elevation: 0,
-                  height: 50,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  onPressed: _requestTour,
-                  child: const Text(
-                    'REALIZAR ECO-CITY TOUR',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Botón para realizar un Eco-City Tour
+                    MaterialButton(
+                      minWidth: MediaQuery.of(context).size.width - 60,
+                      color: Theme.of(context).primaryColor,
+                      elevation: 0,
+                      height: 50, // Altura consistente
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      onPressed: _requestTour,
+                      child: const Text(
+                        'REALIZAR ECO-CITY TOUR',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 20), // Espaciado entre los botones
+
+                    // Botón para cargar una ruta guardada
+                    MaterialButton(
+                      minWidth: MediaQuery.of(context).size.width - 60,
+                      color: Colors.grey[400],
+                      elevation: 0,
+                      height: 50, // Altura consistente
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      onPressed: _loadSavedTours, // Nueva función
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.folder_open, color: Colors.white),
+                          SizedBox(width: 10),
+                          Text(
+                            'CARGAR RUTA GUARDADA',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 40),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  /// Lógica para cargar una ruta guardada.
+  void _loadSavedTours() async {
+    // Lógica para cargar el evento
+    BlocProvider.of<TourBloc>(context).add(const LoadSavedToursEvent());
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    // Verifica si el widget sigue montado antes de usar el contexto
+    if (!mounted) return;
+
+    // Usa el contexto de la clase State con la verificación correcta
+    context.pushNamed('saved-tours');
   }
 
   /// Realiza la petición del tour con los datos seleccionados.
@@ -281,13 +297,5 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
         listener.cancel();
       }
     });
-  }
-
-  /// Abre la URL del wiki en el navegador.
-  Future<void> _launchWikiURL() async {
-    final Uri url = Uri.parse('https://github.com/fps1001/TFGII_FPisot/wiki');
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception('No se pudo abrir el enlace al Wiki: $url');
-    }
   }
 }
