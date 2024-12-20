@@ -56,8 +56,8 @@ class CustomSelectionAppBar extends StatelessWidget
               value: const Locale('en'),
               child: Row(
                 children: [
-                  SvgPicture.network(
-                    'https://hatscripts.github.io/circle-flags/flags/gb.svg',
+                  SvgPicture.asset(
+                    'assets/flags/gb.svg',
                     width: 20,
                     height: 20,
                   ),
@@ -70,8 +70,8 @@ class CustomSelectionAppBar extends StatelessWidget
               value: const Locale('es'),
               child: Row(
                 children: [
-                  SvgPicture.network(
-                    'https://hatscripts.github.io/circle-flags/flags/es.svg',
+                  SvgPicture.asset(
+                    'assets/flags/es.svg',
                     width: 20,
                     height: 20,
                   ),

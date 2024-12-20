@@ -21,7 +21,8 @@ void main() {
       city: '',
       numberOfSites: 2,
       userPreferences: [],
-      maxTime: 90, systemInstruction: '',
+      maxTime: 90,
+      systemInstruction: '',
     ));
     registerFallbackValue(const LoadSavedToursEvent());
   });
@@ -97,20 +98,31 @@ void main() {
 
     testWidgets('Navega a SavedToursScreen al pulsar "Cargar Ruta Guardada"',
         (WidgetTester tester) async {
+      // Simula el estado inicial del Bloc
       when(() => mockTourBloc.state).thenReturn(const TourState());
 
+      // Construye el widget de prueba
       await tester.pumpWidget(createTestWidget());
-      final loadSavedToursButton = find.byTooltip('Cargar Ruta Guardada');
+
+      // Encuentra el botón "Cargar Ruta Guardada" usando su texto
+      final loadSavedToursButton = find.text('CARGAR RUTA GUARDADA');
       expect(loadSavedToursButton, findsOneWidget);
 
+      // Asegúrate de que el botón sea visible desplazando hacia abajo si es necesario
+      await tester.ensureVisible(loadSavedToursButton);
+
+      // Simula el tap en el botón
       await tester.tap(loadSavedToursButton);
+
+      // Espera a que se complete cualquier animación o navegación
       await tester.pumpAndSettle();
 
-      verify(() => mockTourBloc.add(any(that: isA<LoadSavedToursEvent>()))).called(1);
+      // Verifica que el evento LoadSavedToursEvent fue agregado al Bloc
+      verify(() => mockTourBloc.add(any(that: isA<LoadSavedToursEvent>())))
+          .called(1);
+
+      // Verifica que se navega a 'saved-tours'
+      expect(find.byType(SavedToursScreen), findsOneWidget);
     });
-
-
-
-
   });
 }
