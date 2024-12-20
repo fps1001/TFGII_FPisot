@@ -14,27 +14,27 @@ final Map<String, IconData> transportIcons = {
 /// - Un icono representativo de Material Design.
 /// - Un color que se utiliza para personalizar la interfaz según la preferencia.
 final Map<String, Map<String, dynamic>> userPreferences = {
-  'Naturaleza': {
+  'nature': {
     'icon': Icons.park, // Icono representativo de naturaleza
     'color': Colors.lightBlue, // Color asociado
   },
-  'Museos': {
+  'museums': {
     'icon': Icons.museum, // Icono representativo de museos
     'color': Colors.purple, // Color asociado
   },
-  'Gastronomía': {
+  'gastronomy': {
     'icon': Icons.restaurant, // Icono representativo de gastronomía
     'color': Colors.green, // Color asociado
   },
-  'Deportes': {
+  'sports': {
     'icon': Icons.sports_soccer, // Icono representativo de deportes
     'color': Colors.red, // Color asociado
   },
-  'Compras': {
+  'shopping': {
     'icon': Icons.shopping_bag, // Icono representativo de compras
     'color': Colors.teal, // Color asociado
   },
-  'Historia': {
+  'history': {
     'icon': Icons.history_edu, // Icono representativo de historia
     'color': Colors.orange, // Color asociado
   },

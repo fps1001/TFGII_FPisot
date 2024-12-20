@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -42,12 +43,12 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
 
   /// Preferencias seleccionadas por el usuario.
   final Map<String, bool> selectedPreferences = {
-    'Naturaleza': false,
-    'Museos': false,
-    'Gastronomía': false,
-    'Deportes': false,
-    'Compras': false,
-    'Historia': false,
+    'nature': false,
+    'museums': false,
+    'gastronomy': false,
+    'sports': false,
+    'shopping': false,
+    'history': false,
   };
 
   /// Método para alternar el estado de las preferencias.
@@ -80,7 +81,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
               children: [
                 // Selección de lugar
                 Text(
-                  '¿Qué lugar quieres visitar?',
+                  'place_to_visit'.tr(),
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 20),
@@ -92,7 +93,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                     log.i('Lugar seleccionado: $selectedPlace');
                   },
                   decoration: InputDecoration(
-                    hintText: 'Introduce un lugar',
+                    hintText: 'enter_place'.tr(),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.0),
                     ),
@@ -142,7 +143,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
 
                 // Preferencias del usuario (Chips)
                 Text(
-                  '¿Cuáles son tus intereses?',
+                  'your_interests'.tr(),
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 10),
@@ -181,9 +182,9 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       onPressed: _requestTour,
-                      child: const Text(
-                        'REALIZAR ECO-CITY TOUR',
-                        style: TextStyle(
+                      child: Text(
+                        'eco_city_tour'.tr(),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -202,14 +203,14 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       onPressed: _loadSavedTours, // Nueva función
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.folder_open, color: Colors.white),
-                          SizedBox(width: 10),
+                          const Icon(Icons.folder_open, color: Colors.white),
+                          const SizedBox(width: 10),
                           Text(
-                            'CARGAR RUTA GUARDADA',
-                            style: TextStyle(
+                            'load_saved_route'.tr(),
+                            style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -251,9 +252,9 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
     }
 
     final assistants = [
-      'Lugares seguros y accesibles para familias.',
-      'Experiencias románticas para parejas.',
-      'Lugares vibrantes para aventureros.',
+      'family_safe_places'.tr(),
+      'romantic_experiences'.tr(),
+      'vibrant_places'.tr(),
     ];
     final systemInstruction =
         selectedAssistant == null ? '' : assistants[selectedAssistant!];
@@ -292,7 +293,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
       if (tourState.hasError) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error al cargar el tour')),
+          SnackBar(content: Text('load_tour_error'.tr())),
         );
         listener.cancel();
       }

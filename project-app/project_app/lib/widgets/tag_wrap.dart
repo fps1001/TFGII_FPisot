@@ -1,4 +1,5 @@
 // FILE: widgets/tag_wrap.dart
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project_app/helpers/icon_helpers.dart'; // Importar icon_helpers.dart
 
@@ -36,7 +37,6 @@ class TagWrap extends StatelessWidget {
       runSpacing: 8.0, // Espaciado vertical entre filas
       alignment: WrapAlignment.center, // Alineación centrada
       children: userPreferences.keys.map((String key) {
-        final preference = userPreferences[key];
         final bool isSelected = selectedPreferences[key] ?? false;
 
         return ChoiceChip(
@@ -45,14 +45,14 @@ class TagWrap extends StatelessWidget {
             children: [
               // Ícono de la etiqueta
               Icon(
-                preference?['icon'],
+                userPreferences[key]?['icon'],
                 size: 20.0,
                 color: isSelected ? Colors.white : Colors.black54,
               ),
               const SizedBox(width: 6.0),
               // Texto de la etiqueta
               Text(
-                key,
+                key.tr(),
                 style: TextStyle(
                   color: isSelected ? Colors.white : Colors.black87,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -64,13 +64,16 @@ class TagWrap extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.0),
             side: BorderSide(
-              color: isSelected ? preference!['color'] : Colors.grey.shade400,
+              color: isSelected
+                  ? userPreferences[key]!['color']
+                  : Colors.grey.shade400,
             ),
           ),
-          selectedColor: preference!['color'], // Color cuando está seleccionado
+          selectedColor:
+              userPreferences[key]!['color'], // Color cuando está seleccionado
           backgroundColor: isSelected
-              ? preference['color']
-              : preference['color']!
+              ? userPreferences[key]!['color']
+              : userPreferences[key]!['color']!
                   .withOpacity(0.1), // Fondo cuando no está seleccionado
           elevation: isSelected ? 4.0 : 1.0, // Sombra según el estado
           shadowColor: Colors.grey.shade300, // Color de la sombra

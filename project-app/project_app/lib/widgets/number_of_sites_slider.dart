@@ -1,4 +1,4 @@
-// FILE: widgets/number_of_sites_slider.dart
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 /// Un widget que muestra un control deslizante para seleccionar la cantidad de sitios a visitar.
@@ -30,7 +30,7 @@ class NumberOfSitesSlider extends StatelessWidget {
         const SizedBox(height: 10),
         // Título que explica la función del control deslizante
         Text(
-          '¿Cuántos sitios te gustaría visitar?',
+          'number_of_sites'.tr(), // Clave para el título
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 10),

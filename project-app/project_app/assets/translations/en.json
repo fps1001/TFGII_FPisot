@@ -1,5 +1,28 @@
 {
-    "title": "Eco City Tours in english",
-    "language_test" : "The selected language is English"
-
-}
+    "place_to_visit": "What place do you want to visit?",
+    "enter_place": "Enter a place",
+    "your_interests": "What are your interests?",
+    "eco_city_tour": "START ECO-CITY TOUR",
+    "load_saved_route": "LOAD SAVED ROUTE",
+    "family_safe_places": "Family-safe and accessible places.",
+    "romantic_experiences": "Romantic experiences for couples.",
+    "vibrant_places": "Vibrant places for adventurers.",
+    "load_tour_error": "Error loading the tour",
+    "nature": "Nature",
+    "museums": "Museums",
+    "gastronomy": "Gastronomy",
+    "sports": "Sports",
+    "shopping": "Shopping",
+    "history": "History",
+    "select_ai_assistant": "Select a travel guide:",
+    "family_tour": "Family Tour",
+    "family_tour_description": "Snarblin takes care of 7 adorable troll kids. When traveling, they always choose safe and accessible places, entertaining for the whole family.",
+    "romantic_tour": "Romantic Tour",
+    "romantic_tour_description": "Fizzzwick is a hopeless romantic, willing to travel to the world's end to find the perfect sunset. They prefer cozy and intimate places.",
+    "adventure_tour": "Adventure Tour",
+    "adventure_tour_description": "Grimbold can't stay still. They are in 30 different adventure groups and know the most vibrant places in every city.",
+    "no_assistant_selected": "No assistant has been selected. Don't worry, suggestions will still consider your preferences.",
+     "number_of_sites": "How many sites would you like to visit?"
+  
+  }
+  

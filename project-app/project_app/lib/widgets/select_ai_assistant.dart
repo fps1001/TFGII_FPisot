@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 /// Widget para seleccionar un asistente turístico basado en diferentes estilos de viaje.
@@ -26,21 +27,18 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
   /// Lista de asistentes turísticos con sus propiedades.
   final List<Map<String, dynamic>> assistants = [
     {
-      'title': 'Turismo en familia',
-      'description':
-          'Snarblin cuida de 7 adorables trolecitos, cuando hace turismo siempre tiene en cuenta lugares seguros y accesibles, entretenidos y para toda la familia.',
+      'title': 'family_tour'.tr(),
+      'description': 'family_tour_description'.tr(),
       'image': 'assets/images/family2.png',
     },
     {
-      'title': 'Turismo romántico',
-      'description':
-          'Fizzzwick es un romántico empedernido, viajaría al fin del mundo en busca de una puesta de sol. Este trol prefiere lugares íntimos y acogedores.',
+      'title': 'romantic_tour'.tr(),
+      'description': 'romantic_tour_description'.tr(),
       'image': 'assets/images/romantic2.png',
     },
     {
-      'title': 'Turismo aventurero',
-      'description':
-          'Grimbold no puede estar quieta. Está en 30 grupos de aventura diferente. Conoce los sitios más vibrantes de cada lugar.',
+      'title': 'adventure_tour'.tr(),
+      'description': 'adventure_tour_description'.tr(),
       'image': 'assets/images/adventure2.png',
     },
   ];
@@ -52,7 +50,7 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
       children: [
         // Título de la sección
         Text(
-          'Selecciona guía turístico:',
+          'select_ai_assistant'.tr(),
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 10),
@@ -99,7 +97,7 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
         Text(
           selectedAssistant != null
               ? assistants[selectedAssistant!]['description']
-              : 'No se ha seleccionado ningún asistente. No importa. Las sugerencias seguirán teniendo en cuenta tus preferencias.',
+              : 'no_assistant_selected'.tr(),
           style: Theme.of(context).textTheme.bodyMedium,
           textAlign: TextAlign.center,
         ),
