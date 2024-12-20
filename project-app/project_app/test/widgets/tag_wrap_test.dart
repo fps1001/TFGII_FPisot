@@ -9,12 +9,12 @@ void main() {
       (WidgetTester tester) async {
     // Define the initial state of selectedPreferences
     final Map<String, bool> selectedPreferences = {
-      'Naturaleza': false,
-      'Museos': false,
-      'Gastronomía': false,
-      'Deportes': false,
-      'Compras': false,
-      'Historia': false,
+      'nature': false,
+      'museums': false,
+      'gastronomy': false,
+      'sports': false,
+      'shopping': false,
+      'history': false,
     };
 
     // Define a function to handle tag selection
@@ -40,9 +40,9 @@ void main() {
     }
 
     // Tap on the first tag and verify that the selection state changes
-    await tester.tap(find.text('Naturaleza'));
+    await tester.tap(find.text('nature'));
     await tester.pumpAndSettle();
 
-    expect(selectedPreferences['Naturaleza'], true);
+    expect(selectedPreferences['nature'], true);
   });
 }

@@ -1,4 +1,4 @@
-// FILE: test/widgets/transport_mode_selector_test.dart
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_app/widgets/transport_mode_selector.dart';
@@ -6,22 +6,32 @@ import 'package:project_app/helpers/icon_helpers.dart'; // Asegúrate de que est
 
 void main() {
   group('TransportModeSelector Widget Tests', () {
+    Widget createTestWidget(Widget child) {
+      return EasyLocalization(
+        supportedLocales: const [Locale('en'), Locale('es')],
+        path: 'assets/translations', // Ruta de tus archivos de traducción
+        fallbackLocale: const Locale('en'),
+        startLocale: const Locale('en'), // Localización inicial para los tests
+        child: MaterialApp(
+          home: Scaffold(body: child),
+        ),
+      );
+    }
+
     testWidgets('Displays correct header and icons', (WidgetTester tester) async {
       final List<bool> isSelected = [true, false];
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TransportModeSelector(
-              isSelected: isSelected,
-              onPressed: (_) {},
-            ),
+        createTestWidget(
+          TransportModeSelector(
+            isSelected: isSelected,
+            onPressed: (_) {},
           ),
         ),
       );
 
       // Verifica que el encabezado esté presente
-      expect(find.text('Selecciona tu modo de transporte'), findsOneWidget);
+      expect(find.text('your_transport_mode'.tr()), findsOneWidget);
 
       // Verifica que los íconos estén presentes
       expect(find.byIcon(transportIcons['walking']!), findsOneWidget);
@@ -33,15 +43,13 @@ void main() {
       int pressedIndex = -1;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TransportModeSelector(
-              isSelected: isSelected,
-              onPressed: (index) {
-                pressedIndex = index;
-                isSelected = List.generate(isSelected.length, (i) => i == index);
-              },
-            ),
+        createTestWidget(
+          TransportModeSelector(
+            isSelected: isSelected,
+            onPressed: (index) {
+              pressedIndex = index;
+              isSelected = List.generate(isSelected.length, (i) => i == index);
+            },
           ),
         ),
       );

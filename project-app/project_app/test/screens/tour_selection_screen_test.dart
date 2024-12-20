@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -59,8 +60,14 @@ void main() {
   });
 
   Widget createTestWidget() {
-    return MaterialApp.router(
-      routerConfig: goRouter,
+    return EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('es')],
+      path: 'assets/translations', // Ruta de tus archivos de traducción
+      fallbackLocale: const Locale('en'),
+      startLocale: const Locale('en'), // Localización inicial para los tests
+      child: MaterialApp.router(
+        routerConfig: goRouter,
+      ),
     );
   }
 
@@ -69,24 +76,24 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget());
 
-      expect(find.text('¿Qué lugar quieres visitar?'), findsOneWidget);
+      expect(find.text('place_to_visit'.tr()), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
-      expect(find.text('¿Cuántos sitios te gustaría visitar?'), findsOneWidget);
+      expect(find.text('number_of_sites'.tr()), findsOneWidget);
       expect(find.byType(Slider), findsNWidgets(2));
-      expect(find.text('Selecciona tu modo de transporte'), findsOneWidget);
+      expect(find.text('your_transport_mode'.tr()), findsOneWidget);
       expect(find.byType(ToggleButtons), findsOneWidget);
-      expect(find.text('¿Cuáles son tus intereses?'), findsOneWidget);
+      expect(find.text('your_interests'.tr()), findsOneWidget);
       expect(find.byType(ChoiceChip), findsNWidgets(6));
-      expect(find.text('REALIZAR ECO-CITY TOUR'), findsOneWidget);
+      expect(find.text('eco_city_tour'.tr()), findsOneWidget);
     });
 
     testWidgets(
-        'Dispara LoadTourEvent al pulsar el botón "REALIZAR ECO-CITY TOUR"',
+        'Dispara LoadTourEvent al pulsar el botón "eco_city_tour"',
         (WidgetTester tester) async {
       when(() => mockTourBloc.state).thenReturn(const TourState());
 
       await tester.pumpWidget(createTestWidget());
-      final requestButton = find.text('REALIZAR ECO-CITY TOUR');
+      final requestButton = find.text('eco_city_tour'.tr());
       expect(requestButton, findsOneWidget);
 
       await tester.ensureVisible(requestButton);
@@ -96,7 +103,7 @@ void main() {
       verify(() => mockTourBloc.add(any(that: isA<LoadTourEvent>()))).called(1);
     });
 
-    testWidgets('Navega a SavedToursScreen al pulsar "Cargar Ruta Guardada"',
+    testWidgets('Navega a SavedToursScreen al pulsar "load_saved_route"',
         (WidgetTester tester) async {
       // Simula el estado inicial del Bloc
       when(() => mockTourBloc.state).thenReturn(const TourState());
@@ -104,8 +111,8 @@ void main() {
       // Construye el widget de prueba
       await tester.pumpWidget(createTestWidget());
 
-      // Encuentra el botón "Cargar Ruta Guardada" usando su texto
-      final loadSavedToursButton = find.text('CARGAR RUTA GUARDADA');
+      // Encuentra el botón "load_saved_route" usando su texto
+      final loadSavedToursButton = find.text('load_saved_route'.tr());
       expect(loadSavedToursButton, findsOneWidget);
 
       // Asegúrate de que el botón sea visible desplazando hacia abajo si es necesario
@@ -118,8 +125,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verifica que el evento LoadSavedToursEvent fue agregado al Bloc
-      verify(() => mockTourBloc.add(any(that: isA<LoadSavedToursEvent>())))
-          .called(1);
+      verify(() => mockTourBloc.add(any(that: isA<LoadSavedToursEvent>()))).called(1);
 
       // Verifica que se navega a 'saved-tours'
       expect(find.byType(SavedToursScreen), findsOneWidget);

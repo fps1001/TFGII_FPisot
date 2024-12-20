@@ -22,7 +22,7 @@
     "adventure_tour": "Adventure Tour",
     "adventure_tour_description": "Grimbold can't stay still. They are in 30 different adventure groups and know the most vibrant places in every city.",
     "no_assistant_selected": "No assistant has been selected. Don't worry, suggestions will still consider your preferences.",
-     "number_of_sites": "How many sites would you like to visit?"
-  
-  }
-  
+    "your_transport_mode": "Select your transport mode",
+    "max_time": "Maximum time spent on the journey",
+    "number_of_sites": "How many sites would you like to visit?"
+}

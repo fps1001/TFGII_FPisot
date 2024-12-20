@@ -1,4 +1,5 @@
 // FILE: widgets/transport_mode_selector.dart
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project_app/helpers/icon_helpers.dart'; // Importar icon_helpers.dart
 
@@ -36,7 +37,7 @@ class TransportModeSelector extends StatelessWidget {
         const SizedBox(height: 20),
         // Título explicativo para el selector de modo de transporte
         Text(
-          'Selecciona tu modo de transporte',
+          'your_transport_mode'.tr(),
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 10),

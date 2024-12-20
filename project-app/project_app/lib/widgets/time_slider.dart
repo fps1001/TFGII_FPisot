@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 /// Un widget que permite seleccionar el tiempo máximo deseado para un trayecto.
@@ -37,7 +38,7 @@ class TimeSlider extends StatelessWidget {
         const SizedBox(height: 15),
         // Título explicativo para el control deslizante
         Text(
-          'Tiempo máximo invertido en el trayecto:',
+          'max_time'.tr(),
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 5),

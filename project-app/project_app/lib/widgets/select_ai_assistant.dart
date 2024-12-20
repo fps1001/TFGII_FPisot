@@ -27,18 +27,18 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
   /// Lista de asistentes turísticos con sus propiedades.
   final List<Map<String, dynamic>> assistants = [
     {
-      'title': 'family_tour'.tr(),
-      'description': 'family_tour_description'.tr(),
+      'title': 'family_tour', // Clave para el título
+      'description': 'family_tour_description', // Clave para la descripción
       'image': 'assets/images/family2.png',
     },
     {
-      'title': 'romantic_tour'.tr(),
-      'description': 'romantic_tour_description'.tr(),
+      'title': 'romantic_tour',
+      'description': 'romantic_tour_description',
       'image': 'assets/images/romantic2.png',
     },
     {
-      'title': 'adventure_tour'.tr(),
-      'description': 'adventure_tour_description'.tr(),
+      'title': 'adventure_tour',
+      'description': 'adventure_tour_description',
       'image': 'assets/images/adventure2.png',
     },
   ];
@@ -63,8 +63,7 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
               onTap: () {
                 setState(() {
                   if (selectedAssistant == index) {
-                    selectedAssistant =
-                        null; // Deselecciona si ya está seleccionado
+                    selectedAssistant = null; // Deselecciona si ya está seleccionado
                   } else {
                     selectedAssistant = index; // Selecciona el nuevo asistente
                   }
@@ -96,7 +95,7 @@ class _SelectAIAssistantState extends State<SelectAIAssistant> {
         // Descripción del asistente seleccionado
         Text(
           selectedAssistant != null
-              ? assistants[selectedAssistant!]['description']
+              ? (assistants[selectedAssistant!]['description'] as String).tr()
               : 'no_assistant_selected'.tr(),
           style: Theme.of(context).textTheme.bodyMedium,
           textAlign: TextAlign.center,
