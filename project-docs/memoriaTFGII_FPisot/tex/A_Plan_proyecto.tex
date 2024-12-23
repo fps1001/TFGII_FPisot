@@ -4,25 +4,30 @@
 El Plan de Proyecto Software es el documento clave que dirige el proceso de desarrollo de la aplicación móvil creada. Este apéndice tiene como objetivo detallar los aspectos críticos de la planificación y gestión del proyecto, asegurando una implementación eficiente y efectiva.
 La planificación temporal del proyecto se ha llevado a cabo con el \emph{uso de la metodología ágil} buscando dividir el desarrollo en tareas, sprints e hitos que producen un resultado iterativos y bien estructurado, lo que conlleva a una mayor flexibilidad y a la adaptación más efectiva frente los cambios. 
 
-A continuación, se determinará la viabilidad, que reflejará los \emph{recursos humanos y materiales}, así como los costes asociados necesarios para su valoración. La viabilidad incluirá una estimación de los fondos que se basarán en el salario de un trabajador de la imaginación, así como un análisis de los posibles riesgos y su mitigación. Los aspectos económicos y técnicos de la viabilidad son fundamentales, ya que de ellos depende de que el proyecto esté en los límites establecidos y cumpla con los objetivos propuestos.
+A continuación, se determinará la viabilidad, que reflejará los \emph{recursos humanos y materiales}, así como los costes asociados necesarios para su valoración. La viabilidad incluirá una estimación de los fondos que se basarán en el salario de un trabajador simulado, así como un análisis de los posibles riesgos y su mitigación. Los aspectos económicos y técnicos de la viabilidad son fundamentales, ya que de ellos depende de que el proyecto esté en los límites establecidos y cumpla con los objetivos propuestos.
 
 Este plan es esencial para la gestión del proyecto ya que sirve como una guía detallada, ayudando así a identificar y mitigar riesgos así como a la utilización eficaz de los recursos. Con el enfoque estructurado y ágil, proporcionado por este plan, el equipo de desarrollo podría entregar un producto de alta calidad que, además, cumplirá con el nivel de satisfacción alcanzado entre los usuarios o clientes. 
 \section{Planificación temporal}
  Como se ha mencionado anteriormente, la planificación temporal del proyecto se ha llevado a cabo con el uso de metodología ágil: se basa en la división del desarrollo en tareas, sprints e hitos que producen un resultado iterativo y bien estructurado. Esto conlleva una mayor flexibilidad y a la adaptación más efectiva frente a los cambios.
 
- Algunas herramientas utilizadas para la planificación temporal han sido GitHub y Zube. Ésta última ha permitido la organización de las tareas en tableros Kanban. El uso de GitHub ha permitido gestionar un control de versiones.
-
+ Algunas herramientas utilizadas para la planificación temporal han sido GitHub y Zube. Ésta última ha permitido la organización de las tareas en tableros Kanban o el uso de \textbf{métricas ágiles} con gráficos que sirven para evaluar el desarrollo del proyecto. Algunos de los artefactos más relevantes usados son los siguientes:
+ \begin{itemize}
+ 	\item{\textbf{Gráficos burnup / burndown:}} muestran a lo largo del tiempo de un sprint la evolución de tareas realizadas por el equipo de desarrollo. En la explicación de los sprints se pueden ver los gráficos asociados al mismo
+ \imagen{burnup-s6}{Gráfico Burnup del Sprint 6}{1}
+ \item{\textbf{Gráfico de velocidad: }} permite comprobar el trabajo realizado en los diferentes sprints de manera que resulte lo más constante posible.
+ \imagen{velocity}{Gráfico de velocidad de los sprints 1-10}
+\end{itemize}
  A continuación veremos como la planificación temporal se ha llevado a cabo en diferentes sprints, cómo se ha ido iterando en las diferentes partes del proyecto y cómo se han ido cumpliendo los hitos propuestos. Para ello se mostrarán diferentes diagramas basadas en métricas ágiles.
 
- Cada tarea se ha dividido en diferentes historias de usuario, que se han ido completando en cada sprint. Cada sprint ha tenido una duración de una o dos semanas, y se han ido completando las tareas propuestas en cada uno de ellos.
+ Cada tarea se ha dividido en diferentes historias de usuario, que se han ido completando en cada sprint. Cada sprint ha tenido una duración media de dos semanas, y se han ido completando las tareas propuestas en cada uno de ellos.
  Un ejemplo se puede observar en la siguiente figura ~\ref{fig:issue12}
  \imagen{issue12}{Tarea 12 mostrada en GitHub con la descripción, hito y etiquetas de la tarea a realizar.}
 
-Gracias al uso de la herramienta Zube, se ha podido llevar un control de las tareas a realizar, las tareas completadas y las tareas pendientes. Además, se ha podido llevar un control de los hitos propuestos y de las historias de usuario completadas en cada sprint. Un ejemplo de ello se puede observar en la siguiente figura ~\ref{fig:sprint1}
+Gracias también al uso de \textit{Zube}, se ha podido llevar un control de las tareas a realizar, las tareas completadas y las tareas pendientes. Además, se ha podido llevar un control de los hitos propuestos y de las historias de usuario completadas en cada sprint. Un ejemplo de ello se puede observar en la siguiente figura ~\ref{fig:sprint1}
 \imagen{sprint1}{Tablero Kanban de Zube con la gestión de tareas del Sprint 1.}
 
 \subsection{\textit{Hitos}}
-Los hitos o milestones son puntos de referencia que marcan el final de un conjunto de tareas. En este proyecto se han definido los siguientes hitos:
+Los \textit{hitos o milestones} son puntos de referencia que marcan el final de un conjunto de tareas. En este proyecto se han definido los siguientes hitos:
 
 \begin{itemize}
 
@@ -40,6 +45,8 @@ Los hitos o milestones son puntos de referencia que marcan el final de un conjun
     
     \item \textbf{Desarrollo de aplicación completo} Completado el 12 de noviembre de 2024. Se consideran todas las funcionalidades que debe tener la aplicación a presentar como completadas.
     
+    \item \textbf{Finalización \acrshort{tfg}:} Completado el 16 de enero de 2025. Se deja el proyecto en estado de entrega, completamente finalizado.
+    
 \end{itemize}
 
 \subsection{Organización en \textit{Sprints}}
@@ -47,65 +54,178 @@ Los hitos o milestones son puntos de referencia que marcan el final de un conjun
 Al comenzar este proyecto durante periodo no lectivo se realizaron los Sprint con variación de tiempo de una o dos semanas en función de la planificación personal. Una vez comenzado el curso y con la ayuda del tutor se realizaron reuniones que han servido para, siguiendo la metodología \textit{Agile}, revisar el Sprint anterior, planificar el siguiente y hacer una pequeña retrospectiva para mejorar el trabajo conjunto.
 
 
-\begin{itemize}
-    \item \textbf{Sprint 0 - Kick-off(22/07/2024 - 29/07/2024):} Después de las reuniones con el tutor, se establecen los objetivos del proyecto y se comienza a trabajar en la puesta en marcha del proyecto. Se establecen las herramientas a utilizar y se comienza a trabajar en la documentación del proyecto. 33 puntos de historia en 5 tareas.
+\subsubsection{Sprint 0 - Kick-off(22/07/2024 - 29/07/2024)}
+Después de las reuniones con el tutor, se establecen los objetivos del proyecto y se comienza a trabajar en la puesta en marcha del proyecto. Se establecen las herramientas a utilizar y se comienza a trabajar en la documentación del proyecto. 33 puntos de historia en 5 tareas:
+    \begin{enumerate}
+    	\item \textbf{Organización de repositorio.}
+    	\item \textbf{Configuración de herramientas y equipos.}
+    	\item \textbf{Trabajo en memoria I.}
+    	\item \textbf{Investigación previa sobre LLM.}
+    	\item \textbf{Determinación de ODS implicados.}
+    \end{enumerate}
     
-    ~\ref{fig:bd-kick-off sprint}
+    
     \imagen{bd-kick-off sprint}{Figura burndown del Sprint Kick-off.}
 
-    \item \textbf{Sprint 1 - Investigación LLM y desarrollo básico de aplicación con mapa (29/07/2024 - 05/08/2024):} Con las herramientas y una idea previa establecida, es el momento de empezar a desarrollar.
+\subsubsection{Sprint 1 - Investigación LLM y desarrollo básico de aplicación con mapa (29/07/2024 - 05/08/2024)} 
+Con las herramientas y una idea previa establecida, es el momento de empezar a desarrollar.
     
-
     Objetivos: seguir formándome en LLM y las opciones que pueda implementar en el prototipo de prompt.
     Empezar a desarrollar la aplicación móvil con las características básicas.
-    Aprender a documentar sprints, indicar elementos que tendré que documentar y aquellos que tenga claro ir documentando para hacer un avance significativo que pueda evaluar mi tutor.
-    ~\ref{fig:bd-s1}
-    \imagen{bd-s1}{Figura burndown del Sprint 1: Investigación LLM y desarrollo básico de aplicación con mapa.}
+    Aprender a documentar sprints, indicar qué elementos tendré que documentar y aquellos que tenga claro ir documentando para hacer un avance significativo que pueda evaluar mi tutor. 35 puntos de historia en 8 tareas:
     
-    \item \textbf{Sprint 2 - Implementación solución GIS (05/08/2024 - 12/08/2024):} A partir del concepto básico, se añaden pequeñas mejoras en los tres aspectos del proyecto.
+    \begin{enumerate}
+    	\item \textbf{Creación y organización proyecto base.}
+    	\item \textbf{Bloc permiso GPS.}
+    	\item \textbf{Bloc ubicación.}
+    	\item \textbf{Mapa base OSM.}
+    	\item \textbf{Intro, resumen y palabras clave.}
+    	\item \textbf{Prompt sencillo en cuaderno Jupyter.}
+    	\item \textbf{Probar modelo de ejemplo LangChain.dart.}
+    	\item \textbf{Documentación del Kick-off sprint.}
+    \end{enumerate}
+        
+    \imagen{bd-s1}{Figura burndown del Sprint 1.}
     
-    Objetivos: mejorar el prototipo de prompting del cuaderno Jupyter hasta incorporar un sistema RAG, incluir marcadores al mapa en cuanto al desarrollo y continuar con la documentación.
-    ~\ref{fig:bd-s2}
-    \imagen{bd-s2}{Figura burndown del Sprint 2: Implementación solución GIS.}
+\subsubsection{Sprint 2 - Implementación solución GIS (05/08/2024 - 12/08/2024):} 
+A partir del concepto básico, se añaden pequeñas mejoras en los tres aspectos del proyecto.
+    
+    Objetivos: mejorar el prototipo de prompting del cuaderno Jupyter hasta incorporar un sistema RAG, incluir marcadores al mapa en cuanto al desarrollo y continuar con la documentación. 26 puntos de historia en 6 tareas:
+
+	\begin{enumerate}
+		\item \textbf{Redacción de los objetivos del proyecto.}
+		\item \textbf{Representación de marcadores en mapa.}
+		\item \textbf{Inicio de Trabajos relacionados.}
+		\item \textbf{Mostrar ubicación de usuario en el mapa.}
+		\item \textbf{Wikivoyage como agente para RAG.}
+		\item \textbf{Ingeniería del Prompting (cont.).}
+	\end{enumerate}
+        
+    \imagen{bd-s2}{Figura burndown del Sprint 2.}
     
     \textit{Dificultades encontradas}: la documentación me hizo perder mucho tiempo debido a problemas con las librerías, después de mucho tiempo reinicié el proyecto desde la plantilla dada, insertando el texto, lo que solucionó el problema. En cuanto al diseño de la aplicación, el desarrollo fue lento al tener que evaluar diferentes opciones ya que la mayoría de fuentes utilizan mapas de Google, opción que se quería descartar.
  
 
-    \item \textbf{Sprint 3 - MPV(12/08/2024 - 22/08/2024):} Este sprint fue más largo que los anteriores para mejorar el resultado final ya que la intención era dejar el proyecto en un estado de revisión lo más completo posible para afrontar la reunión prevista para inicio de septiembre con el tutor del mismo. Al intentar desarrollar la tecnología de enrutado del usuario se comprendió lo que ya se intuía en el sprint anterior y es que basar el trabajo en servicios de Google iba a reportar en un desarrollo más fácil y un resultado más robusto y fiable como se justifica en la sección 5 de la memoria de este \acrshort{tfg}.
-~\ref{fig:bd-s3}
-\imagen{bd-s3}{Figura burndown del Sprint 3: MPV.}
+\subsubsection{Sprint 3 - MPV(12/08/2024 - 22/08/2024):} 
+Este sprint fue más largo que los anteriores para mejorar el resultado final ya que la intención era dejar el proyecto en un estado de revisión lo más completo posible para afrontar la reunión prevista para inicio de septiembre con el tutor del mismo. Al intentar desarrollar la tecnología de enrutado del usuario se comprendió lo que ya se intuía en el sprint anterior y es que basar el trabajo en servicios de Google iba a reportar en un desarrollo más fácil y un resultado más robusto y fiable como se justifica en la sección 5 de la memoria de este \acrshort{tfg}. 42 puntos de historia en 5 tareas:
+    \begin{enumerate}
+		\item \textbf{Obtención de marcadores POI.}
+		\item \textbf{Crear ruta entre dos puntos.}
+		\item \textbf{Trabajo inicial - Conceptos teóricos.}
+		\item \textbf{Agent RAG.}
+		\item \textbf{Adaptación a servicios Google.}
+	\end{enumerate}
+	\imagen{bd-s3}{Figura burndown del Sprint 3.}
     
-    \item \textbf{Sprint 4 - Servicios MapBox y LLM, preparación reunión inicio curso.(22/08/2024 - 02/09/2024):} El objetivo es mostrar la versión más completa de la aplicación, la documentación y ahondar en el uso de nuevas herramientas como Figma como herramienta de diseño de aplicaciones y LangFlow a la hora de utilizar otro modelo de prototipo.
-    ~\ref{fig:bd-s4}
-    \imagen{bd-s4}{Figura burndown del Sprint 4: Servicios MapBox y LLM, preparación reunión inicio curso.}
     
-\item \textbf{Sprint 5 - Aplicación con origen de datos LLM (Preparación y documentación) (04/09/2024 - 14/09/2024):} Después de la reunión con el tutor de inicio de septiembre y habiendo cumplido los objetivos de los primeros hitos se decide continuar intentando alcanzar el hito \ref{hito:prototipo_llm}. Para ello se prepara y documenta primero en este sprint el desarrollo necesario.
-~\ref{fig:bd-s5}
-\imagen{bd-s5}{Figura burndown del Sprint 5: Aplicación con origen de datos LLM (Preparación y documentación).}
+\subsubsection{Sprint 4 - Servicios MapBox y LLM, preparación reunión inicio curso.(22/08/2024 - 02/09/2024)}
+    El objetivo es mostrar la versión más completa de la aplicación, la documentación y ahondar en el uso de nuevas herramientas como Figma, una herramienta de diseño de aplicaciones y LangFlow a la hora de utilizar otro modelo de prototipo. 31 puntos de historia en 5 tareas:
+\begin{enumerate}
+	\item \textbf{Diseño de interfaz con Figma.}
+	\item \textbf{Uso de Mapbox como geocoding.}
+	\item \textbf{Marcadores POI y finalización MPV.}
+	\item \textbf{Documentación para Checkpoint 1.}
+	\item \textbf{LangFlow para Agent RAG.}
+\end{enumerate}
+    \imagen{bd-s4}{Figura burndown del Sprint 4.}
+    
+\subsubsection{Sprint 5 - Aplicación con origen de datos LLM (Preparación y documentación) (04/09/2024 - 14/09/2024)} 
+Después de la reunión con el tutor de inicio de septiembre y habiendo cumplido los objetivos de los primeros hitos se decide continuar intentando alcanzar el hito \ref{hito:prototipo_llm}. Para ello se prepara y documenta primero en este sprint el desarrollo necesario. 28 puntos de historia en 6 tareas:
+\begin{enumerate}
+	\item \textbf{Revisión documentación memoria - resumen.}
+	\item \textbf{Conceptos teóricos. Memoria.}
+	\item \textbf{Técnicas y Herramientas. Mem. C.4.}
+	\item \textbf{Modelo LLM en local.}
+	\item \textbf{Route Optimization dependientes del medio.}
+	\item \textbf{Generar icono y nombre de aplicación.}
+\end{enumerate}
+\imagen{bd-s5}{Figura burndown del Sprint 5.}
 
-\item \textbf{Sprint 6 - Desarrollo y Finalización prototipo google\_generative\_ai como LLM (18/09/2024-01/10/2024):} Habiendo encontrado una solución óptima al modelo LLM a utilizar se propone realizar un prototipo que implemente la interfaz de usuario y su conexión con el modelo LLM. En los diferentes apartados encontramos. Se trata de un sprint de prominente desarrollo de la aplicación. Se consiguió reestructurar todo el código centralizando labores de gestión del tour generado y sus \acrshort{pdi} manteniendo la modularidad del código.
-~\ref{fig:bd-s6}
-\imagen{bd-s6}{Figura burndown del Sprint 6:  Desarrollo y Finalización prototipo google\_generative\_ai como LLM.}
+\subsubsection{Sprint 6 - Desarrollo y Finalización prototipo google\_generative\_ai como LLM (18/09/2024-01/10/2024)}
+Habiendo encontrado una solución óptima al modelo LLM a utilizar se propone realizar un prototipo que implemente la interfaz de usuario y su conexión con el modelo LLM. En este sprint de gran avance en el desarrollo de la aplicación se consiguió reestructurar todo el código centralizando labores de gestión del tour generado y sus \acrshort{pdi} manteniendo la modularidad del código. 43 puntos de historia en 6 tareas:
+\begin{enumerate}
+	\item \textbf{Añadir tema a la aplicación.}
+	\item \textbf{Loading screen.}
+	\item \textbf{Modificar InfoWindow por Bottom Sheet.}
+	\item \textbf{Marcador básico de POI a marcador con imágenes.}
+	\item \textbf{Revisión documentación memoria v0.2.}
+	\item \textbf{Rehacer 3.3 Conceptos acerca de los modelos.}
+	\item \textbf{Estudiar guardado de rutas.}
+	\item \textbf{Reorganización de proyecto: Clase Eco City.}
+\end{enumerate}
+\imagen{bd-s6}{Figura burndown del Sprint 6.}
 	
-\item \textbf{S7 - Consolidación y Calidad (02/10/2024 - 22/10/2024)} Habiendo cumplido el hito \ref{hito:prototipo_llm} y teniendo una aplicación con muchas funcionalidades buscadas, durante este sprint se busca consolidar el código y dotarlo de una calidad y mantenimiento con herramientas de soporte como Sonar Cloud o Logger.
-~\ref{fig:bd-s7}
-\imagen{bd-s7}{Figura burndown del Sprint 7: Consolidación y Calidad.}
+\subsubsection{S7 - Consolidación y Calidad (02/10/2024 - 22/10/2024)} Habiendo cumplido el hito \ref{hito:prototipo_llm} y teniendo una aplicación con muchas funcionalidades implementadas, durante este sprint se busca consolidar el código y dotarlo de una calidad y mantenimiento con herramientas de soporte como Sonar Cloud o Logger. 39 puntos de historia en 9 tareas:
+\begin{enumerate}
+	\item \textbf{Establecer Requisitos.}
+	\item \textbf{Límite a la extensión del Eco City Tour.}
+	\item \textbf{Tour Screen: pantalla de resumen del tour.}
+	\item \textbf{Diagramas de paquetes/componentes.}
+	\item \textbf{Finalización prototipo Langflow.}
+	\item \textbf{Finalización prototipo Jupyter Notebook.}
+	\item \textbf{Instalación de Logger.}
+	\item \textbf{Integración de Sonar Cloud.}
+	\item \textbf{Convocatoria Prototipos Orientados al Mercado.}
+\end{enumerate}
+\imagen{bd-s7}{Figura burndown del Sprint 7.}
 
-\item \textbf{S8 - Cobertura de tests y guardado de rutas (23/10/2024 - 12/11/2024):} Se procede a implementar las últimas funcionalidades del desarrollo de la aplicación. Además, se busca que la integración con sonarcloud confirme que se trabaja con un standard de calidad para lo que se necesita la cobertura de tests y por último se retoma el trabajo de documentación. 
-\imagen{bd-s8}{Figura burndown del Sprint 8: Cobertura de tests y guardado de rutas.}
+\subsubsection{S8 - Cobertura de tests y guardado de rutas (23/10/2024 - 12/11/2024)}
+Se procede a implementar las últimas funcionalidades del desarrollo de la aplicación. Además, se busca que la integración con sonarcloud confirme que se trabaja con un standard de calidad para lo que se necesita la cobertura de tests y por último se retoma el trabajo de documentación. 29 puntos de historia en 7 tareas:
+\begin{enumerate}
+	\item \textbf{Configurar tarea de despliegue continuo Flutter.}
+	\item \textbf{Guardar Eco City Tour.}
+	\item \textbf{Corrección de diagramas.}
+	\item \textbf{Revisión de memoria/anexos.}
+	\item \textbf{Guardado de log compartido.}
+	\item \textbf{Investigación de opciones Google para base de datos.}
+	\item \textbf{Tests de aplicación / Cobertura.}
+\end{enumerate}
+\imagen{bd-s8}{Figura burndown del Sprint 8.}
 
-\item \textbf{S9 - Testing y selección de rol (13/11/2024 - 03/12/2024):} Se estudia la posibilidad de generar diferentes asistentes dándole al modelo distintos roles. Se pretende realizar el test que llevará la aplicación en este sprint. Además, tendrá se realizará el inicio de apartados de anexos en cuanto a documentación. 
-\imagen{bd-s9}{Figura burndown del Sprint 9: Testing y selección de rol.}
+\subsubsection{S9 - Testing y selección de perfil de asistente \acrshort{ia} (13/11/2024 - 03/12/2024)}
+En este sprint se exploró la posibilidad de generar diferentes perfiles de asistente, asignando al modelo roles específicos para personalizar las respuestas generadas. También se avanzó significativamente en la evaluación del código mediante la implementación de tests. Además, se inició la redacción de algunos apartados de los anexos relacionados con la documentación del proyecto. 56 puntos de historia distribuidos en 10 tareas:
+\begin{enumerate}
+	\item \textbf{Test: servicios, modelos, repositorios. Pruebas.}
+	\item \textbf{Anexo E - Documentación de usuario.}
+	\item \textbf{Anexo D - Documentación T. de programación.}
+	\item \textbf{Anexo A3 - Estudio de viabilidad.}
+	\item \textbf{Refinamiento final de prompting.}
+	\item \textbf{Limpieza de repositorio.}
+	\item \textbf{Test: gestor de estados Bloc.}
+	\item \textbf{Añadir selección de asistente AI.}
+	\item \textbf{Apéndice C.}
+	\item \textbf{Revisión final memoria.}
+\end{enumerate}
+\imagen{bd-s9}{Figura burndown del Sprint 9.}
 
-\end{itemize}
+\subsubsection{S10 - Wiki, internacionalización, anexos, workflow ci (16/12/2024 - 20/12/2024)}
+Se estudia la posibilidad de generar diferentes asistentes dándole al modelo distintos roles. Se pretende realizar el test que llevará la aplicación en este sprint. Además, tendrá se realizará el inicio de apartados de anexos en cuanto a documentación. 56 puntos de historia en 10 tareas:
+\begin{enumerate}
+	\item \textbf{Wiki.}
+	\item \textbf{Internacionalización.}
+	\item \textbf{Documentación de la programación (código).}
+	\item \textbf{Limpieza de repositorio.}
+	\item \textbf{Workflow Integración Continua.}
+	\item \textbf{Integración continua a manual de programador.}
+	\item \textbf{Mejoras en anexos.}
+	\item \textbf{Anexo de Diseño.}
+\end{enumerate}
+\imagen{bd-s10}{Figura burndown del Sprint 10.}
 
-\subsection{Métricas Ágiles}
-Gracias al uso de Zube se emplean fácilmente diferentes métricas ágiles que han sido vitales para la evaluación del desarrollo de la aplicación y su organización a través de los sprints citados. Algunos de los artefactos usados son los siguientes:
-\subsubsection{Gráficos burnup / burndown} 
-Muestran a lo largo del tiempo de un sprint la evolución de tareas realizadas por el equipo de desarrollo. En la explicación de los sprints se pueden ver los gráficos asociados al mismo
-\imagen{burnup-s6}{Gráfico Burnup del Sprint 6}{1}
-\subsubsection{Gráfico de velocidad} 
-Permite comprobar el trabajo realizado en los diferentes sprints de manera que resulte lo más constante posible.
+\subsubsection{S11 - Finalización \acrshort{tfg} (23/12/2024 - 09/01/2025)}
+Último sprint dedicado a finalizar las últimas funcionalidades, terminar la documentación y realizar los vídeos, en definitiva todos los elementos preparados para la entrega del \acrfull{tfg}. 39 puntos de historia en 7 tareas:
+\begin{enumerate}
+	\item \textbf{Revisión Anexo: planificación y análisis.}
+	\item \textbf{Internacionalización 2.}
+	\item \textbf{Mejora del README.md: Añadir insignias de herramientas utilizadas.}
+	\item \textbf{Video de presentación.}
+	\item \textbf{Video de demostración.}
+	\item \textbf{Revisión anexo de diseño y manual de usuario.}
+	\item \textbf{Adaptación de Memoria a la longitud permitida.}
+\end{enumerate}
+\imagen{bd-s10}{Figura burndown del Sprint 11.}
+\todo{CAMBIAR EL DIAGRAMA!}
+
 
 
 \section{Estudio de viabilidad}
@@ -175,28 +295,31 @@ Para el caso de Eco City Tours se supone que el desarrollo y el mayor volumen de
 \subsubsection{Conclusiones}
 \textbf{El desarrollo de la aplicación se estima en 4 meses} por el equipo auto gestionado por un solo desarrollador. No se tienen en cuenta alquileres de oficinas o co-working ya que se plantea la posibilidad de teletrabajar, pudiendo trabajar de manera deslocalizada ahorrando así costes. Teniendo en cuenta lo anteriormente citado obtenemos la siguiente tabla resumen:
 \tablaSmallSinColores
-{Costes totales de Eco City Tours} % Título de la tabla
+{Costes totales de \textit{Eco City Tours}} % Título de la tabla
 {lc} % Formato de las columnas (l: izquierda, c: centrado)
 {costes-totales} % Etiqueta para referencias cruzadas
 {%
 	\textbf{Concepto} & \textbf{Coste}  \\ % Cabecera
 }
 {%
-	Mano de obra & 8.000€ \\
+	Mano de obra & 8.000€ \\ 
 	Hardware & 580€  \\ 
-	Internet & 135€ \\
-	Sofware & 0€ \\ 
-	Servicios Google & 0€ \\
+	Internet & 135€ \\ 
+	Software & 0€ \\ 
+	Servicios Google & 0€ \\ 
+	Revisión y auditoría del tutor & 750€ \\ 
 	\midrule
-	\textbf{Total} & \textbf{8.715 €} \\ 
+	\textbf{Total} & \textbf{9.465 €} \\ 
 }
+
+Se ha incluido un coste estimado de 750 € por las tareas de \textbf{revisión y auditoría realizadas por el tutor}. Este coste considera una dedicación de 30 horas, remuneradas a un coste promedio de 25 €/hora, que incluye reuniones, revisiones parciales y finales del proyecto.
+
 
 Una vez analizado los costes devengados de la creación de la aplicación el beneficio de su explotación debe ser mayor al gasto ocasionado por su creación. Además, una vez publicada la aplicación en la \textit{Play Store} el beneficio obtenido por su explotación debe compensar el tiempo requerido por el personal en horas de mantenimiento de los posibles problemas que pueda experimentar como por ejemplo problemas por actualización de los componentes claves como modelos LLM, que puedan quedar obsoletos. El beneficio de la aplicación puede provenir de varias fuentes en función del modelo de explotación que se eligiese:
 \begin{itemize}
-	\item{Ingresos por descarga:} si la aplicación tiene un precio por descarga los ingresos serían el dinero obtenido menos una comisión por cada venta cobrada por Google de un 15\%. \cite{googleplay_commission}.
-	Un precio de lanzamiento razonable podría ser no superior a los 4 euros, donde se obtendría aproximadamente 3,40 euros como beneficio. Tras un periodo de prueba en función de las descargas, el precio por la misma se podría ajustar.
-	\item{Publicidad:} empresas o entidades colaboradoras podrían financiar el desarrollo con publicidad siempre que ésta no suponga una perdida de independencia en los resultados de los modelos, fomente el turismo ecológico y no sea invasiva ni perjudique la experiencia de usuario.
+	\item \textbf{Ingresos por descarga:} si la aplicación tiene un precio por descarga, los ingresos corresponderían al dinero obtenido menos una comisión del 15\% cobrada por Google por cada venta \cite{googleplay_commission}. Inicialmente, se propone un precio aproximado de lanzamiento de 5 euros, considerando que se obtendrían aproximadamente 4,40 euros como beneficio por descarga. Este precio se estima razonable para incentivar descargas durante la fase inicial. Tras un periodo de prueba, el precio podría ajustarse en función del número de descargas y del comportamiento de los usuarios. Los gastos derivados del uso de servicios externos, como peticiones a APIs, se compensarían con un equilibrio entre usuarios que realicen menos consultas y aquellos más demandantes, garantizando siempre un beneficio estimado en el modelo económico.
 	
+	\item{Publicidad:} empresas o entidades colaboradoras podrían financiar el desarrollo con publicidad siempre que ésta no suponga una perdida de independencia en los resultados de los modelos, fomente el turismo ecológico y no sea invasiva ni perjudique la experiencia de usuario.
 \end{itemize}
 
 \subsection{Viabilidad legal}
@@ -266,4 +389,4 @@ Para poder publicar la aplicación en el repositorio de aplicaciones Android hay
 	\item Desarrollar y publicar una política de privacidad clara para los usuarios.
 \end{enumerate}
 
-Respetando con un uso ético de la aplicación y cumpliendo con estos requisitos la viabilidad legal de Eco City Tours estaría cumplida y no supondría un impedimento para su ejecución.
+Respetando el uso ético de la aplicación y cumpliendo con estos requisitos la viabilidad legal de Eco City Tours estaría cumplida y no supondría un impedimento para su ejecución.

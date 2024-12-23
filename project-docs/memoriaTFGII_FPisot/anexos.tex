@@ -14,6 +14,8 @@
 \RequirePackage{xtab}
 \RequirePackage{multirow}
 
+\RequirePackage{todonotes}
+
 % Links
 \PassOptionsToPackage{hyphens}{url}\usepackage[colorlinks]{hyperref}
 \hypersetup{
@@ -36,6 +38,13 @@
 \newacronym{gps}{GPS}{\textit{Global Positioning System}}
 \newacronym{sig}{GIS}{\textit{Sistemas de Información Geográfica}}
 \newacronym{bloc}{BLoC}{\textit{Business Logic Component}}
+\newacronym{ia}{IA}{\textit{Inteligencia Artificial}}
+
+\newglossaryentry{eco-city-tour}
+{
+	name=Eco City Tour,
+	description={es una ruta turística compuesta por Puntos de Interés Turístico (PDI)}
+}
 
 \newcommand{\autor}{Fernando Pisot Serrano}
 
@@ -428,6 +437,8 @@
 \include{./tex/E_Manual_usuario}
 \include{./tex/F_ODS}
 
+\printnoidxglossary[type=\acronymtype]
+\printnoidxglossary[]
 
 \bibliographystyle{plain}
 \bibliography{bibliografiaAnexos}
