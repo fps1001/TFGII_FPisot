@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -51,7 +52,7 @@ class _AccessButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Es necesario habilitar el GPS para continuar',
+          'gps_required_message'.tr(),
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontSize: 18,
                 color: Theme.of(context).primaryColor, // Color del tema
@@ -70,9 +71,9 @@ class _AccessButton extends StatelessWidget {
             final gpsBloc = BlocProvider.of<GpsBloc>(context);
             gpsBloc.askGpsAccess();
           },
-          child: const Text(
-            'Solicitar acceso al GPS',
-            style: TextStyle(
+          child: Text(
+            'ask_gps_access'.tr(),
+            style: const TextStyle(
               color: Colors.white, // Texto en blanco
               fontWeight: FontWeight.w600, // Peso del texto
             ),
@@ -92,7 +93,7 @@ class _EnableGpsMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Debe habilitar el GPS para continuar',
+      'enable_gps_message'.tr(),
       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 20,

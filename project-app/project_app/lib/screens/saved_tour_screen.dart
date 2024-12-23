@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project_app/helpers/helpers.dart';
 import 'package:project_app/blocs/blocs.dart';
@@ -16,7 +17,7 @@ class SavedToursScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tus Eco City Tours Guardados'),
+        title: Text('saved_tours_title'.tr()),
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         leading: IconButton(
@@ -60,9 +61,10 @@ class SavedToursScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 8),
-                      Text('Distancia: ${formatDistance(tour.distance ?? 0)}'),
                       Text(
-                          'Duración: ${formatDuration((tour.duration ?? 0).toInt())}'),
+                          '${'distance'.tr()}: ${formatDistance(tour.distance ?? 0)}'),
+                      Text(
+                          '${'duration'.tr()}: ${formatDuration((tour.duration ?? 0).toInt())}'),
                       const SizedBox(height: 4),
                       Row(
                         children: tour.userPreferences.map((preference) {
@@ -127,7 +129,7 @@ class SavedToursScreen extends StatelessWidget {
                 size: 80, color: Theme.of(context).primaryColor),
             const SizedBox(height: 20),
             Text(
-              'No tienes tours guardados',
+              'saved_tours_empty_message'.tr(),
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -137,7 +139,7 @@ class SavedToursScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'Explora y guarda tus Eco City Tours favoritos para acceder a ellos aquí.',
+              'saved_tours_empty_submessage'.tr(),
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey[600],
@@ -147,9 +149,10 @@ class SavedToursScreen extends StatelessWidget {
             const SizedBox(height: 30),
             ElevatedButton.icon(
               icon: const Icon(Icons.search, color: Colors.white),
-              label: const Text(
-                'Explorar Tours',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              label: Text(
+                'explore_tours'.tr(),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
                 padding:
@@ -187,18 +190,17 @@ class SavedToursScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Eliminar Tour'),
-          content:
-              const Text('¿Estás seguro de que deseas eliminar este tour?'),
+          title: Text('delete_tour_title'.tr()),
+          content: Text('delete_tour_message'.tr()),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancelar'),
+              child: Text('cancel'.tr()),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child:
-                  const Text('Eliminar', style: TextStyle(color: Colors.red)),
+              child: Text('delete'.tr(),
+                  style: const TextStyle(color: Colors.red)),
             ),
           ],
         );
@@ -217,7 +219,7 @@ class SavedToursScreen extends StatelessWidget {
         log.e('Error al eliminar el tour con documentId $documentId: $e');
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Error al eliminar el tour')),
+            SnackBar(content: Text('delete_tour_error'.tr())),
           );
         }
       }

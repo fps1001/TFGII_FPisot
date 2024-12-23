@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_app/helpers/helpers.dart'; // Importar el archivo de helpers
@@ -24,8 +25,7 @@ class TourSummary extends StatelessWidget {
         if (state.ecoCityTour == null) {
           // Muestra un Snackbar y navega atrás cuando el tour es nulo.
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            CustomSnackbar.show(
-                context, 'Eco City Tour vacío, genera uno nuevo');
+            CustomSnackbar.show(context, 'empty_tour_message'.tr());
             Navigator.pop(context);
           });
           return const SizedBox.shrink();
@@ -36,16 +36,16 @@ class TourSummary extends StatelessWidget {
           appBar: AppBar(
             iconTheme: const IconThemeData(color: Colors.white), // Iconos en blanco
             centerTitle: true,
-            title: const Text(
-              'Resumen de tu Eco City Tour',
-              style: TextStyle(color: Colors.white),
+            title: Text(
+              'tour_summary_title'.tr(),
+              style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: Theme.of(context).primaryColor, // Color del AppBar
             actions: [
               // Botón para guardar el tour
               IconButton(
                 icon: const Icon(Icons.save_as_rounded),
-                tooltip: 'Guardar Eco City Tour',
+                tooltip: 'save_tour_tooltip'.tr(),
                 onPressed: () async {
                   // Abre un diálogo para solicitar el nombre del tour
                   final tourName = await showDialog<String>(
@@ -53,16 +53,16 @@ class TourSummary extends StatelessWidget {
                     builder: (BuildContext context) {
                       String inputText = '';
                       return AlertDialog(
-                        title: const Text('Nombre del Tour'),
+                        title: Text('save_tour_name'.tr()),
                         content: TextField(
                           onChanged: (value) => inputText = value,
-                          decoration: const InputDecoration(
-                              hintText: "Escribe un nombre"),
+                          decoration: InputDecoration(
+                              hintText: "save_tour_placeholder".tr()),
                         ),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () => Navigator.pop(context, inputText),
-                            child: const Text('Guardar'),
+                            child: Text('save_button'.tr()),
                           ),
                         ],
                       );
@@ -74,8 +74,7 @@ class TourSummary extends StatelessWidget {
                     await BlocProvider.of<TourBloc>(context)
                         .saveCurrentTour(tourName);
                     if (context.mounted) {
-                      CustomSnackbar.show(
-                          context, 'Ruta guardada exitosamente');
+                      CustomSnackbar.show(context, 'tour_saved_success'.tr());
                     }
                   }
                 },
@@ -111,14 +110,14 @@ class TourSummary extends StatelessWidget {
 
                             // Información de la distancia total
                             Text(
-                              'Distancia: ${formatDistance(state.ecoCityTour!.distance ?? 0)}',
+                              '${'distance'.tr()}: ${formatDistance(state.ecoCityTour!.distance ?? 0)}',
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(height: 4),
 
                             // Información de la duración total
                             Text(
-                              'Duración: ${formatDuration((state.ecoCityTour!.duration ?? 0).toInt())}',
+                              '${'duration'.tr()}: ${formatDuration((state.ecoCityTour!.duration ?? 0).toInt())}',
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(height: 4),
@@ -126,8 +125,8 @@ class TourSummary extends StatelessWidget {
                             // Información del medio de transporte
                             Row(
                               children: [
-                                const Text('Medio de transporte:',
-                                    style: TextStyle(fontSize: 16)),
+                                Text('${'transport_mode'.tr()}:',
+                                    style: const TextStyle(fontSize: 16)),
                                 const SizedBox(width: 8),
                                 Icon(
                                   transportIcons[state.ecoCityTour!.mode],

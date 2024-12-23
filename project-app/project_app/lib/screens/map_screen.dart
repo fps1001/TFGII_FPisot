@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:project_app/logger/logger.dart';
@@ -74,7 +75,7 @@ class _MapScreenState extends State<MapScreen> {
       child: BlocBuilder<TourBloc, TourState>(
         builder: (context, tourState) {
           return CustomAppBar(
-            title: 'Eco City Tour',
+            title: 'eco_city_tour_title'.tr(),
             tourState: tourState,
           );
         },
@@ -164,9 +165,9 @@ class _MapScreenState extends State<MapScreen> {
                   borderRadius: BorderRadius.circular(25.0),
                 ),
                 onPressed: _joinEcoCityTour,
-                child: const Text(
-                  'Unirme al Eco City Tour',
-                  style: TextStyle(
+                child: Text(
+                  'join_eco_city_tour'.tr(),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -193,13 +194,13 @@ class _MapScreenState extends State<MapScreen> {
                 size: 80, color: Theme.of(context).primaryColor),
             const SizedBox(height: 20),
             Text(
-              'Presentando nuevo Eco City Tour...',
+              'loading_eco_city_tour'.tr(),
               style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
             Text(
-              'Esperando la ubicación para mostrar el tour. Por favor, asegúrate de que el GPS está activado.',
+              'waiting_for_gps'.tr(),
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -226,14 +227,14 @@ class _MapScreenState extends State<MapScreen> {
     final lastKnownLocation = locationBloc.state.lastKnownLocation;
 
     if (lastKnownLocation == null) {
-      _showSnackbar('No se encontró la ubicación actual.');
+      _showSnackbar('no_location_found'.tr());
       return;
     }
 
     final newPoi = PointOfInterest(
       gps: lastKnownLocation,
-      name: 'Ubicación actual',
-      description: 'Este es mi lugar actual',
+      name: 'current_location'.tr(),
+      description: 'current_location_description'.tr(),
       url: null,
       imageUrl: null,
       rating: 5.0,
