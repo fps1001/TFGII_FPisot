@@ -10,7 +10,7 @@ import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/logger/logger.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/exceptions/exceptions.dart';
-import 'package:project_app/repositories/repositories.dart';
+import 'package:project_app/persistence_bd/repositories/repositories.dart';
 import 'package:project_app/services/services.dart';
 
 part 'tour_event.dart';

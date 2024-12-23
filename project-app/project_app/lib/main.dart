@@ -9,9 +9,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:project_app/blocs/blocs.dart';
-import 'package:project_app/datasets/datasets.dart';
+import 'package:project_app/persistence_bd/datasets/datasets.dart';
 import 'package:project_app/firebase_options.dart';
-import 'package:project_app/repositories/repositories.dart';
+import 'package:project_app/persistence_bd/repositories/repositories.dart';
 import 'package:project_app/router/app_router.dart';
 import 'package:project_app/services/services.dart';
 import 'package:project_app/themes/themes.dart';

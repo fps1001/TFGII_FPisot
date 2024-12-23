@@ -4,7 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:project_app/blocs/blocs.dart';
 
-import 'package:project_app/repositories/repositories.dart';
+import 'package:project_app/persistence_bd/repositories/repositories.dart';
 import 'package:project_app/services/services.dart';
 
 class MockOptimizationService extends Mock implements OptimizationService {}

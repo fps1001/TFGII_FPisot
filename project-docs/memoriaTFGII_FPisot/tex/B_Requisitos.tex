@@ -31,7 +31,7 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 	
 	\item \textbf{RF-5 Configuración de las preferencias del tour:} El usuario rellenará un formulario indicando el lugar que desea visitar, la cantidad de puntos de interés que quiere ver, sus preferencias de transporte (a pie o bicicleta), sus intereses, y el tiempo máximo que quiere dedicar a la ruta.
 	
-	\item \textbf{RF-6 Cálculo de información a través de un LLM:} La aplicación usará un servicio Gemini para generar los puntos de interés de acuerdo con las preferencias del usuario. Además, un servicio Google Places mejorará los datos proporcionando descripciones, fotos, URL, ratings y número de votos de los \acrshort{pdi}.
+	\item \textbf{RF-6 Cálculo de información a través de un LLM:} La aplicación usará un servicio Gemini para generar los puntos de interés de acuerdo con las propiedades de configuración de la ruta. Además, un servicio Google Places mejorará los datos proporcionando descripciones, fotos, URL, ratings y número de votos de los \acrshort{pdi}.
 	
 	\item \textbf{RF-7 Eliminación de \acrshort{pdi}:} El usuario podrá eliminar puntos de interés tanto desde la pantalla del mapa como desde el resumen de la ruta. Cada vez que un \acrshort{pdi} es eliminado o añadido, la ruta se recalcula automáticamente para ofrecer el trayecto más óptimo.
 	
@@ -127,7 +127,7 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 		\textbf{Nombre: } 			  & \textbf{Gemini-pro 1.5} \\
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & \autor \\
-		\textbf{Descripción}          & Servicio externo que proporciona una lista de puntos de interés (POI) basados en las preferencias del usuario. \\
+		\textbf{Descripción}          & Servicio externo que proporciona una lista de puntos de interés (POI) basados en las propiedades de configuración de la ruta. \\
 		\textbf{Tipo}                 & Sistema \\
 		\textbf{Objetivo}             & Suministrar información relevante sobre puntos de interés en función de los criterios del usuario. \\
 		\textbf{Responsabilidades}    & 
@@ -298,7 +298,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Actor}                & A01 Usuario (\ref{actor:usuario}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Requisitos asociados} & RF-5 \\
-		\textbf{Descripción}          & Configurar los parámetros necesarios para generar un Eco City Tour personalizado según las preferencias del usuario. \\
+		\textbf{Descripción}          & Configurar los parámetros necesarios para generar un Eco City Tour personalizado según las propiedades de configuración de la ruta. \\
 		\textbf{Precondición}         & El usuario accede a la pantalla de configuración. \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
@@ -341,14 +341,14 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 		\textbf{Actor}                & A03 (\ref{actor:gemini}), A04 (\ref{actor:google-places}), A05 (\ref{actor:google-directions}) \\
 		\textbf{Autor}                & \autor \\
 		\textbf{Requisitos asociados} & RF-6, RF-8 \\
-		\textbf{Descripción}          & Generar una ruta optimizada conectando los puntos de interés seleccionados en función de las preferencias del usuario. \\
+		\textbf{Descripción}          & Generar una ruta optimizada conectando los puntos de interés seleccionados en función de las propiedades de configuración de la ruta. \\
 		\textbf{Precondición}         & Los parámetros han sido configurados correctamente. \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
 			\item El usuario confirma la configuración de preferencias.
-			\item El sistema consulta un LLM para obtener \acrshort{pdi} basados en las preferencias del usuario.
+			\item El sistema consulta un LLM para obtener \acrshort{pdi} basados en las propiedades de configuración de la ruta.
 			\item El sistema envía los \acrshort{pdi} a Google Places para obtener información mejorada.
 			\item El sistema consulta un servicio de optimización de rutas para generar la ruta optimizada.
 		\end{enumerate}\\

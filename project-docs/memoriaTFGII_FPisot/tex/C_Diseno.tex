@@ -40,6 +40,120 @@ A continuación, se describen las entidades, sus atributos y las relaciones que 
 	\end{itemize}
 \end{itemize}
 
+\section{Diseño arquitectónico}
+
+El diseño de datos de la aplicación \textit{Eco City Tours} se fundamenta en una arquitectura modular que organiza las diferentes responsabilidades del sistema en paquetes específicos. A continuación, se presenta un diagrama de clases en la Figura~\ref{fig:clases} que detalla la estructura del sistema y sus relaciones. Este diagrama ilustra cómo interactúa la aplicación usando servicios, modelos y repositorios. 
+
+La organización en paquetes garantiza un diseño cohesivo, con bajo acoplamiento y alta cohesión, la extensibilidad del sistema coincidiendo también con cada carpeta dentro de la estructura del proyecto Flutter lo que garantiza también una fácil mantenibilidad.
+
+\imagen{clases}{Diagrama de clases de la aplicación}
+
+A continuación, se describen los paquetes y componentes principales representados en el diagrama de clases:
+
+\begin{itemize}
+	\item \textbf{Services}:
+	\begin{itemize}
+		\item \textbf{GeminiService}: Servicio encargado de interactuar con el modelo LLM \textit{Gemini} para obtener información sobre \acrlong{pdi} y generar recomendaciones personalizadas.
+		\item \textbf{PlacesService}: Proporciona datos relacionados con lugares de interés mediante la integración con la API de \textit{Google Places}.
+		\item \textbf{OptimizationService}: Se encarga de calcular rutas optimizadas entre puntos de interés, teniendo en cuenta las propiedades de configuración de la ruta.
+	\end{itemize}
+	
+	\item \textbf{google maps flutter}:
+	\begin{itemize}
+		\item Clase que administra la interacción con los mapas en la interfaz de usuario, permitiendo mostrar las rutas generadas.
+	\end{itemize}
+	
+	\item \textbf{models}: existen dos clases principales en las que se basa el diseño de la aplicación.
+	\begin{itemize}
+		\item \textbf{\acrlong{pdi}}: Clase que modela un \acrshort{pdi}, almacenando información relevante como nombre, ubicación y descripción. 
+		\item \textbf{EcoCityTour}: Clase que representa un tour turístico completo, que incluye una lista del modelo anterior y datos como duración, distancia y nombre del lugar donde se ha generado la ruta turística.
+	\end{itemize}
+	
+	\item \textbf{blocs}: este paquete gestionará la lógica del gestor de estados de la aplicación.
+	\begin{itemize}
+		\item \textbf{TourBloc}: Responsable de la gestión del estado relacionado con los tours, incluyendo la generación y modificación de rutas.
+		\item \textbf{MapBloc}: Administra el estado relacionado con la visualización en el mapa, como el trazado de rutas.
+		\item \textbf{LocationBloc}: Obtiene la información de la posición del usuario actual y la guarda si el stream de datos está activo.
+		\item \textbf{GpsBloc}: Gestiona si el dispositivo tiene el GPS activado y la aplicación tiene permisos para el uso de dicho sensor.
+	\end{itemize}
+	
+	\item \textbf{repositories}:
+	\begin{itemize}
+		\item \textbf{EcoCityTourRepository}: Implementa la lógica necesaria para, guardar y cargar información de un \textit{EcoCityTour}.
+	\end{itemize}
+	
+	\item \textbf{datasets}:
+	\begin{itemize}
+		\item \textbf{FirestoreDataset}: Clase que gestiona la persistencia de datos en la base de datos en este caso concreto de Firestore.
+	\end{itemize}
+\end{itemize}
+
+Con esta organización, el diseño asegura que cada componente tenga una responsabilidad clara, permitiendo la integración fluida de servicios externos, la manipulación eficiente de datos y la presentación interactiva de la información en la interfaz de usuario. 
+
+Cabe destacar que al ser modular cualquier modificación por ejemplo de un gestor de estado o un dataset diferente se facilita enormemente.
+
+
+El diseño arquitectónico de \textit{Eco City Tours} sigue un enfoque modular que organiza el sistema en tres capas principales: \textbf{Interfaz de usuario}, \textbf{Lógica de negocio} y \textbf{Servicios externos}. Esta separación garantiza la escalabilidad, mantenibilidad y claridad del sistema, facilitando futuras mejoras o adaptaciones.
+
+\begin{itemize}
+	\item \textbf{Interfaz de usuario}: Representa la capa con la que interactúa el usuario. Incluye componentes como \textit{MapScreen}, \textit{TourSummary} y \textit{TourSelectionScreen}, que se encargan de capturar las acciones del usuario y mostrar la información relevante en una interfaz intuitiva.
+	
+	\item \textbf{Lógica de negocio}: Se encarga de gestionar los procesos centrales de la aplicación. Los principales bloques funcionales son:
+	\begin{itemize}
+		\item \textit{MapBloc}: Gestiona el estado y las interacciones relacionadas con el mapa, como la visualización de las rutas o la actualización del mapa en tiempo real.
+		\item \textit{TourBloc}: Responsable de la generación y modificación de tours, así como de la interacción con los datos necesarios para personalizar las rutas.
+		\item \textit{LocationBloc}: En caso de tener activado el seguimiento de usuario, este bloc se encargará de almacenar cada nueva posición del usuario que será enviado al MapBloc para ser dibujado sobre el mapa.
+		\item \textit{GpsBloc}: Controla si la aplicación tiene permiso de uso de GPS y se encuentra activado. Si detecta en cualquier momento un cambio en el estado el stream de este bloc se activará enviando a una pantalla en la que el usuario tendrá que volver a conceder permisos o activar el GPS para poder continuar con el uso de la aplicación.
+	\end{itemize}
+	
+	\item \textbf{Servicios externos}: Contiene los módulos que interactúan con servicios de terceros para obtener información necesaria para el funcionamiento de la aplicación. Los servicios externos principales son:
+	\begin{itemize}
+		\item \textit{Servicio LLM}: Se utiliza para generar datos iniciales de puntos de interés turísticos basados en parámetros de configuración de la ruta.
+		\item \textit{Google Places}: Proporciona información enriquecida sobre los puntos de interés.
+		\item \textit{Optimizador de Rutas}: Calcula la mejor ruta posible basándose en criterios como sostenibilidad y tiempo.
+	\end{itemize}
+\end{itemize}
+
+Esta arquitectura asegura un sistema robusto y flexible, con componentes que tienen responsabilidades claramente definidas y un bajo acoplamiento entre ellos lo que permitiría un remplazo de uno de los componentes sin gran dificultad.
+
+\imagen{components-diagram}{Diagrama de componentes}
+
+\subsection{Patrón de diseño \acrfull{bloc}}
+El patrón de diseño \acrshort{bloc}~\cite{flutter_bloc} es fundamental en la arquitectura de la aplicación \textit{Eco City Tours}. Este patrón separa la lógica de negocio de la interfaz de usuario, facilitando el mantenimiento, la escalabilidad.
+
+En el contexto de Flutter, el patrón \acrlong{bloc} utiliza un enfoque basado en flujos o \textit{streams} y eventos (ver Fig.~\ref{fig:bloc-diagram}), permitiendo que los estados y eventos fluyan entre los componentes sin acoplar directamente la lógica de negocio con la interfaz gráfica. 
+
+La aplicación \textit{Eco City Tours} implementa este patrón de diseño a través de los componentes principales, cada uno con una funcionalidad clara y única.
+\begin{itemize}
+	\item \textbf{\textit{GpsBloc}}: Gestiona tanto los permisos de uso de GPS como su activación actual en el dispositivo donde esté funcionando la aplicación.
+	\item \textbf{\textit{LocationBloc}}: Gestiona la localización del usuario a través de un stream que guarda la posición GPS por la que va circulando.
+	\item \textbf{\textit{TourBloc}}: Gestiona toda la lógica relacionada con los tours, desde la generación y modificación de rutas hasta la interacción con los servicios externos como \textit{Servicio LLM} y \textit{Google Places}.
+	\item \textbf{\textit{MapBloc}}: Gestiona el estado y las interacciones del mapa, como la visualización de rutas generadas, la actualización de puntos de interés.
+\end{itemize}
+
+Un aspecto importante en la implementación del patrón \acrshort{bloc} en \textit{Eco City Tours} es el uso de la clase \texttt{Equatable}, que permite simplificar la comparación de estados y eventos. En Flutter, cada vez que un estado cambia, se debe notificar a la interfaz de usuario para que se actualice. La clase \texttt{Equatable} facilita este proceso al definir de manera eficiente si dos instancias de estado o evento son equivalentes, evitando notificaciones redundantes y mejorando el rendimiento del sistema.
+
+En el caso de \textit{Eco City Tours}, todos los \acrshort{bloc} usados extienden de \texttt{Equatable}, asegurando que la lógica de comparación sea precisa y que la interfaz de usuario solo se actualice cuando sea necesario. 
+
+\subsubsection{Principios clave del patrón \acrshort{bloc}}
+	El patrón \acrfull{bloc} sigue los siguientes principios:
+	\begin{itemize}
+		\item \textbf{Eventos y estados}: La interacción entre la interfaz de usuario y la lógica de negocio se realiza mediante el envío de eventos (\texttt{Event}) y la emisión de estados (\texttt{State}). Los eventos representan acciones realizadas por el usuario, mientras que los estados reflejan el resultado de procesar esos eventos.
+		\item \textbf{Flujos (\textit{Streams})}: El patrón utiliza \textit{streams} de datos reactivos para manejar la comunicación entre la interfaz de usuario y la lógica de negocio.
+		\item \textbf{Inmutabilidad}: Tanto los eventos como los estados son inmutables, lo que asegura un comportamiento predecible y simplifica el manejo del flujo de datos.
+	\end{itemize}
+	
+	\imagen{bloc-diagram}{Diagrama de interacción del patrón \acrshort{bloc} en la aplicación}
+
+\subsubsection{Ejemplo de implementación en \textit{Eco City Tours}}
+A continuación, se muestra un ejemplo simplificado de cómo se utiliza el patrón \acrshort{bloc} para gestionar la generación de un tour:
+\begin{itemize}
+	\item El usuario selecciona sus preferencias y dispara un evento \texttt{loadTourEvent()} desde la interfaz de usuario.
+	\item El \textit{TourBloc} recibe este evento, interactúa con los servicios externos (\textit{Servicio LLM} y \textit{Google Places}) para obtener y enriquecer los puntos de interés, y calcula una ruta optimizada.
+	\item El \textit{TourBloc} emite un nuevo estado (\texttt{TourLoadedState}) con la información del tour generado, que es recibido por el componente \textit{MapBloc}.
+	\item El \textit{MapBloc} utiliza esta información para actualizar el mapa, invocando el método \texttt{updateMap()}.
+\end{itemize}
+Como se puede ver la lógica del tour generado y su representación son dos partes diferenciadas aunque MapBloc dependa del contenido del TourBloc, su codificación no se recarga delegando responsabilidades.
 
 \section{Diseño procedimental}
 En esta sección se explicará el flujo de trabajo relacionado con las tareas más importantes de la aplicación, asociando cada proceso a sus respectivos \textbf{Casos de Uso (CU)} descritos en la subsección~\ref{subsec:casos-uso}.
@@ -49,9 +163,9 @@ La generación de un nuevo tour turístico una vez que el usuario ha definido su
 
 El proceso comienza con el evento \texttt{loadTourEvent()}, disparado por el usuario desde la pantalla de selección (\textit{TourSelectionScreen}). Este evento desencadena la siguiente secuencia de interacciones:
 \begin{enumerate}
-	\item El \textit{TourBloc} inicia la generación del tour solicitando a \textit{ServicioLLM} una lista inicial de \acrlong{pdi} basados en las preferencias del usuario.
+	\item El \textit{TourBloc} inicia la generación del tour solicitando a \textit{ServicioLLM} una lista inicial de \acrlong{pdi} basados en los parámetros de configuración de la ruta.
 	\item \textit{ServicioLLM} devuelve un conjunto de \acrlong{pdi}, que luego se enriquecen con información adicional obtenida a través de \textit{Google Places} mediante el método \texttt{searchPlacePOI}.
-	\item La información enriquecida de los \acrlong{pdi} es enviada a \textit{OptimizationService}, que calcula una ruta optimizada utilizando criterios de sostenibilidad y las preferencias del usuario. Esto se realiza a través del método \texttt{optimizedRoute()}.
+	\item La información enriquecida de los \acrlong{pdi} es enviada a \textit{OptimizationService}, que calcula una ruta optimizada utilizando criterios de sostenibilidad y los parámetros de configuración de la ruta. Esto se realiza a través del método \texttt{optimizedRoute()}.
 	\item La ruta optimizada es devuelta como \texttt{OptimizedRoute} y se envía al \textit{MapBloc}, que se encarga de gestionar la actualización del mapa en la interfaz de usuario.
 	\item Finalmente, el \textit{MapBloc} utiliza la ruta optimizada para invocar el método \texttt{updateMap()}, mostrando el tour generado en \textit{MapScreen} y permitiendo al usuario interactuar con los puntos de interés.
 \end{enumerate}
@@ -102,116 +216,3 @@ El flujo inicia cuando el usuario selecciona un tour desde la lista de tours gua
 La Figura~\ref{fig:load-tour-secuence} describe el diagrama de secuencia para este proceso.
 
 \imagen{load-tour-secuence}{Diagrama de secuencia - Cargar un Eco City Tour}
-
-
-
-\subsection{Diseño arquitectónico}
-
-El diseño de datos de la aplicación \textit{Eco City Tours} se fundamenta en una arquitectura modular que organiza las diferentes responsabilidades del sistema en paquetes específicos. A continuación, se presenta un diagrama de clases en la Figura~\ref{fig:clases} que detalla la estructura del sistema y sus relaciones. Este diagrama ilustra cómo interactúa la aplicación usando servicios, modelos y repositorios.
-
-La organización en paquetes garantiza un diseño cohesivo, con bajo acoplamiento y alta cohesión, la extensibilidad del sistema coincidiendo también con cada carpeta dentro de la estructura del proyecto Flutter lo que garantiza también una fácil mantenibilidad.
-
-\imagen{clases}{Diagrama de clases de la aplicación}
-
-A continuación, se describen los paquetes y componentes principales representados en el diagrama de clases:
-
-\begin{itemize}
-	\item \textbf{Services}:
-	\begin{itemize}
-		\item \textbf{GeminiService}: Servicio encargado de interactuar con el modelo LLM \textit{Gemini} para obtener información sobre \acrlong{pdi} y generar recomendaciones personalizadas.
-		\item \textbf{PlacesService}: Proporciona datos relacionados con lugares de interés mediante la integración con la API de \textit{Google Places}.
-		\item \textbf{OptimizationService}: Se encarga de calcular rutas optimizadas entre puntos de interés, teniendo en cuenta las preferencias del usuario y criterios sostenibles.
-	\end{itemize}
-	
-	\item \textbf{google maps flutter}:
-	\begin{itemize}
-		\item Clase que administra la interacción con los mapas en la interfaz de usuario, permitiendo mostrar las rutas generadas.
-	\end{itemize}
-	
-	\item \textbf{models}: existen dos clases principales en las que se basa el diseño de la aplicación.
-	\begin{itemize}
-		\item \textbf{\acrlong{pdi}}: Clase que modela un \acrshort{pdi}, almacenando información relevante como nombre, ubicación y descripción. 
-		\item \textbf{EcoCityTour}: Clase que representa un tour turístico completo, que incluye una lista del modelo anterior y datos como duración, distancia y nombre del lugar donde se ha generado la ruta turística.
-	\end{itemize}
-	
-	\item \textbf{blocs}: este paquete gestionará la lógica del gestor de estados de la aplicación.
-	\begin{itemize}
-		\item \textbf{TourBloc}: Responsable de la gestión del estado relacionado con los tours, incluyendo la generación y modificación de rutas.
-		\item \textbf{MapBloc}: Administra el estado relacionado con la visualización en el mapa, como el trazado de rutas.
-	\end{itemize}
-	
-	\item \textbf{repositories}:
-	\begin{itemize}
-		\item \textbf{EcoCityTourRepository}: Implementa la lógica necesaria para, guardar y cargar información de un \textit{EcoCityTour}.
-	\end{itemize}
-	
-	\item \textbf{datasets}:
-	\begin{itemize}
-		\item \textbf{FirestoreDataset}: Clase que gestiona la persistencia de datos en la base de datos en este caso concreto de Firestore.
-	\end{itemize}
-\end{itemize}
-
-Con esta organización, el diseño asegura que cada componente tenga una responsabilidad clara, permitiendo la integración fluida de servicios externos, la manipulación eficiente de datos y la presentación interactiva de la información en la interfaz de usuario. 
-
-Cabe destacar que al ser modular cualquier modificación por ejemplo de un gestor de estado o un dataset diferente se facilita enormemente.
-
-
-El diseño arquitectónico de \textit{Eco City Tours} sigue un enfoque modular que organiza el sistema en tres capas principales: \textbf{Interfaz de usuario}, \textbf{Lógica de negocio} y \textbf{Servicios externos}. Esta separación garantiza la escalabilidad, mantenibilidad y claridad del sistema, facilitando futuras mejoras o adaptaciones.
-
-\begin{itemize}
-	\item \textbf{Interfaz de usuario}: Representa la capa con la que interactúa el usuario. Incluye componentes como \textit{MapScreen}, \textit{TourSummary} y \textit{TourSelectionScreen}, que se encargan de capturar las acciones del usuario y mostrar la información relevante en una interfaz intuitiva.
-	
-	\item \textbf{Lógica de negocio}: Se encarga de gestionar los procesos centrales de la aplicación. Los principales bloques funcionales son:
-	\begin{itemize}
-		\item \textit{MapBloc}: Gestiona el estado y las interacciones relacionadas con el mapa, como la visualización de las rutas o la actualización del mapa en tiempo real.
-		\item \textit{TourBloc}: Responsable de la generación y modificación de tours, así como de la interacción con los datos necesarios para personalizar las rutas.
-	\end{itemize}
-	
-	\item \textbf{Servicios externos}: Contiene los módulos que interactúan con servicios de terceros para obtener información necesaria para el funcionamiento de la aplicación. Los servicios externos principales son:
-	\begin{itemize}
-		\item \textit{Servicio LLM}: Se utiliza para generar datos iniciales de puntos de interés turísticos basados en las preferencias del usuario.
-		\item \textit{Google Places}: Proporciona información enriquecida sobre los puntos de interés.
-		\item \textit{Optimizador de Rutas}: Calcula la mejor ruta posible basándose en criterios como sostenibilidad y tiempo.
-	\end{itemize}
-\end{itemize}
-
-Esta arquitectura asegura un sistema robusto y flexible, con componentes que tienen responsabilidades claramente definidas y un bajo acoplamiento entre ellos lo que permitiría un remplazo de uno de los componentes sin gran dificultad.
-
-\imagen{components-diagram}{Diagrama de componentes}
-
-\subsection{Patrón de diseño \acrfull{bloc}}
-El patrón de diseño \acrshort{bloc}~\cite{flutter_bloc} es fundamental en la arquitectura de la aplicación \textit{Eco City Tours}. Este patrón separa la lógica de negocio de la interfaz de usuario, facilitando el mantenimiento, la escalabilidad.
-
-En el contexto de Flutter, el patrón \acrlong{bloc} utiliza un enfoque basado en flujos o \textit{streams} y eventos (ver Fig.~\ref{fig:bloc-diagram}), permitiendo que los estados y eventos fluyan entre los componentes sin acoplar directamente la lógica de negocio con la interfaz gráfica. 
-
-La aplicación \textit{Eco City Tours} implementa este patrón de diseño a través de los componentes principales, cada uno con una funcionalidad clara y única.
-\begin{itemize}
-	\item \textbf{\textit{GpsBloc}}: Gestiona tanto los permisos de uso de GPS como su activación actual en el dispositivo donde esté funcionando la aplicación.
-	\item \textbf{\textit{LocationBloc}}: Gestiona la localización del usuario a través de un stream que guarda la posición GPS por la que va circulando.
-	\item \textbf{\textit{TourBloc}}: Gestiona toda la lógica relacionada con los tours, desde la generación y modificación de rutas hasta la interacción con los servicios externos como \textit{Servicio LLM} y \textit{Google Places}.
-	\item \textbf{\textit{MapBloc}}: Gestiona el estado y las interacciones del mapa, como la visualización de rutas generadas, la actualización de puntos de interés.
-\end{itemize}
-
-Un aspecto importante en la implementación del patrón \acrshort{bloc} en \textit{Eco City Tours} es el uso de la clase \texttt{Equatable}, que permite simplificar la comparación de estados y eventos. En Flutter, cada vez que un estado cambia, se debe notificar a la interfaz de usuario para que se actualice. La clase \texttt{Equatable} facilita este proceso al definir de manera eficiente si dos instancias de estado o evento son equivalentes, evitando notificaciones redundantes y mejorando el rendimiento del sistema.
-
-En el caso de \textit{Eco City Tours}, todos los \acrshort{bloc} usados extienden de \texttt{Equatable}, asegurando que la lógica de comparación sea precisa y que la interfaz de usuario solo se actualice cuando sea necesario. 
-
-\subsubsection{Principios clave del patrón \acrshort{bloc}}
-	El patrón \acrfull{bloc} sigue los siguientes principios:
-	\begin{itemize}
-		\item \textbf{Eventos y estados}: La interacción entre la interfaz de usuario y la lógica de negocio se realiza mediante el envío de eventos (\texttt{Event}) y la emisión de estados (\texttt{State}). Los eventos representan acciones realizadas por el usuario, mientras que los estados reflejan el resultado de procesar esos eventos.
-		\item \textbf{Flujos (\textit{Streams})}: El patrón utiliza \textit{streams} de datos reactivos para manejar la comunicación entre la interfaz de usuario y la lógica de negocio.
-		\item \textbf{Inmutabilidad}: Tanto los eventos como los estados son inmutables, lo que asegura un comportamiento predecible y simplifica el manejo del flujo de datos.
-	\end{itemize}
-	
-	\imagen{bloc-diagram}{Diagrama de interacción del patrón \acrshort{bloc} en la aplicación}
-
-\subsubsection{Ejemplo de implementación en \textit{Eco City Tours}}
-A continuación, se muestra un ejemplo simplificado de cómo se utiliza el patrón \acrshort{bloc} para gestionar la generación de un tour:
-\begin{itemize}
-	\item El usuario selecciona sus preferencias y dispara un evento \texttt{loadTourEvent()} desde la interfaz de usuario.
-	\item El \textit{TourBloc} recibe este evento, interactúa con los servicios externos (\textit{Servicio LLM} y \textit{Google Places}) para obtener y enriquecer los puntos de interés, y calcula una ruta optimizada.
-	\item El \textit{TourBloc} emite un nuevo estado (\texttt{TourLoadedState}) con la información del tour generado, que es recibido por el componente \textit{MapBloc}.
-	\item El \textit{MapBloc} utiliza esta información para actualizar el mapa, invocando el método \texttt{updateMap()}.
-\end{itemize}
-Como se puede ver la lógica del tour generado y su representación son dos partes diferenciadas aunque MapBloc dependa del contenido del TourBloc, su codificación no se recarga delegando responsabilidades.

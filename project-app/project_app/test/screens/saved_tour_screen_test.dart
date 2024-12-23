@@ -6,7 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/screens/screens.dart';
-import 'package:project_app/repositories/repositories.dart';
+import 'package:project_app/persistence_bd/repositories/repositories.dart';
 
 class MockTourBloc extends MockBloc<TourEvent, TourState> implements TourBloc {}
 
