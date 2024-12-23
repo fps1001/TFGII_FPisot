@@ -8,6 +8,12 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fps1001_TFGII_FPisot&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fps1001_TFGII_FPisot) 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fps1001_TFGII_FPisot&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fps1001_TFGII_FPisot) 
 
+
+[![GitHub issues](https://img.shields.io/github/issues-closed/fps1001/TFGII_FPisot)](https://github.com/fps1001/TFGII_FPisot/issues)
+[![Wiki](https://img.shields.io/badge/wiki-available-brightgreen)](https://github.com/fps1001/TFGII_FPisot/wiki)
+![GitHub PreRelease](https://img.shields.io/github/v/release/fps1001/TFGII_FPisot?include_prereleases&label=PreRelease)
+[![Workflow Status](https://github.com/fps1001/TFGII_FPisot/actions/workflows/main.yml/badge.svg)](https://github.com/fps1001/TFGII_FPisot/actions)
+[![Zube](https://img.shields.io/badge/zube-managed-blue?logo=zube)](https://zube.io/)
 ---
 
 Este repositorio contiene el código fuente de **Eco City Tours**, una aplicación móvil que propone rutas turísticas generadas con tecnologías GIS, enriquecidas mediante modelos de lenguaje (LLM). La aplicación promueve rutas no motorizadas optimizadas para ciclistas y peatones, contribuyendo a los Objetivos de Desarrollo Sostenible (ODS11).
