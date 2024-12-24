@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,7 +22,7 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
   final String apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'] ?? '';
 
   /// Crea una instancia de [SearchDestinationDelegate].
-  SearchDestinationDelegate() : super(searchFieldLabel: 'Buscar un lugar...');
+  SearchDestinationDelegate() : super(searchFieldLabel: 'search_place_hint'.tr());
 
   /// Construye las acciones disponibles en el AppBar del buscador.
   ///
@@ -75,7 +76,7 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (ScaffoldMessenger.of(context).mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackbar(msg: 'No se encontró ningún lugar.'),
+                CustomSnackbar(msg: 'no_place_found'.tr()),
               );
             }
             close(context, null); // Cierra el buscador
@@ -134,7 +135,7 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
 
     if (tourState.ecoCityTour == null || tourState.ecoCityTour!.city.isEmpty) {
       log.w('SearchDestinationDelegate: No se ha seleccionado ninguna ciudad');
-      return const Center(child: Text('No se ha seleccionado ninguna ciudad.'));
+      return Center(child: Text('no_city_selected'.tr()));
     }
 
     return _buildSearchResults(context, tourState.ecoCityTour!.city);
@@ -144,7 +145,7 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
   @override
   Widget buildSuggestions(BuildContext context) {
     log.d('SearchDestinationDelegate: Mostrando sugerencias de búsqueda.');
-    return const Center(
-        child: Text('Escribe el nombre de un lugar que quieras añadir.'));
+    return Center(
+        child: Text('search_suggestion_hint'.tr()));
   }
 }

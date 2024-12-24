@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -80,9 +81,9 @@ void main() {
 
       await tester.pumpWidget(createTestWidget(const SavedToursScreen()));
 
-      expect(find.text('No tienes tours guardados'), findsOneWidget);
+      expect(find.text('saved_tours_empty_message'.tr()), findsOneWidget);
       expect(
-        find.textContaining('Explora y guarda tus Eco City Tours favoritos'),
+        find.textContaining('saved_tours_empty_submessage'.tr()),
         findsOneWidget,
       );
       expect(find.byIcon(Icons.search), findsOneWidget);
@@ -189,7 +190,7 @@ void main() {
       await tester.tap(find.byIcon(Icons.delete));
       await tester.pump();
 
-      await tester.tap(find.text('Eliminar'));
+      await tester.tap(find.text('delete'.tr()));
       await tester.pumpAndSettle();
 
       verify(() => mockEcoCityTourRepository.deleteTour('1234')).called(1);

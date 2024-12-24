@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -37,7 +38,7 @@ void main() {
       await tester.pumpWidget(createTestWidget());
 
       // Verificar que el texto inicial está presente
-      expect(find.text('¿Quieres añadir algún lugar?'), findsOneWidget);
+      expect(find.text('add_poi_prompt'.tr()), findsOneWidget);
     });
 
     testWidgets('Abre SearchDelegate al hacer tap en la barra',
@@ -50,7 +51,7 @@ void main() {
 
       // Verifica que se abre un modal para el SearchDelegate
       expect(find.byType(ModalBarrier), findsOneWidget);
-      expect(find.text('Buscar un lugar...'), findsOneWidget);
+      expect(find.text('search_place_hint'.tr()), findsOneWidget);
     });
 
     testWidgets('Muestra un diseño adecuado', (WidgetTester tester) async {

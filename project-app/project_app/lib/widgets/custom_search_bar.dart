@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:project_app/delegates/delegates.dart';
 
@@ -44,9 +45,9 @@ class CustomSearchBar extends StatelessWidget {
               ],
             ),
             // Texto que invita al usuario a interactuar con la barra de búsqueda
-            child: const Text(
-              '¿Quieres añadir algún lugar?',
-              style: TextStyle(color: Colors.black87),
+            child: Text(
+              'add_poi_prompt'.tr(),
+              style: const TextStyle(color: Colors.black87),
             ),
           ),
         ),

@@ -54,5 +54,10 @@
   "save_button": "Guardar",
   "tour_saved_success": "Ruta guardada exitosamente",
   "city": "Ciudad",
-  "transport_mode": "Medio de transporte"
+  "transport_mode": "Medio de transporte",
+  "search_place_hint": "Buscar un lugar...",
+  "no_place_found": "No se encontró ningún lugar.",
+  "no_city_selected": "No se ha seleccionado ninguna ciudad.",
+  "search_suggestion_hint": "Escribe el nombre de un lugar para añadir.",
+  "add_poi_prompt": "¿Quieres añadir algún lugar?"
 }

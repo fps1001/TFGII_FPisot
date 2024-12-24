@@ -54,5 +54,10 @@
     "save_button": "Save",
     "tour_saved_success": "Route saved successfully",
     "city": "City",
-    "transport_mode": "Transport Mode"
+    "transport_mode": "Transport Mode",
+    "search_place_hint": "Search for a place...",
+    "no_place_found": "No places found.",
+    "no_city_selected": "No city has been selected.",
+    "search_suggestion_hint": "Type the name of a place to add.",
+    "add_poi_prompt": "Do you want to add a place?"
 }

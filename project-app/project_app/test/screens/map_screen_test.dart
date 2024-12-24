@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -127,8 +128,8 @@ void main() {
         ),
       );
 
-      expect(find.text('Presentando nuevo Eco City Tour...'), findsOneWidget);
-      expect(find.textContaining('Esperando la ubicación'), findsOneWidget);
+      expect(find.textContaining('loading_eco_city_tour'.tr()), findsOneWidget);
+      expect(find.textContaining('waiting_for_gps'.tr()), findsOneWidget);
     });
 
     testWidgets('Renderiza correctamente el mapa con ubicación', (WidgetTester tester) async {
@@ -148,7 +149,7 @@ void main() {
       );
 
       expect(find.byType(MapView), findsOneWidget);
-      expect(find.text('¿Quieres añadir algún lugar?'), findsOneWidget);
+      expect(find.text('add_poi_prompt'.tr()), findsOneWidget);
     });
 
   });

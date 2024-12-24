@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -48,7 +49,7 @@ void main() {
 
       // Permite que se ejecute el `addPostFrameCallback` para el Snackbar
       await tester.pump();
-      expect(find.text('Eco City Tour vacío, genera uno nuevo'), findsOneWidget);
+      expect(find.text('empty_tour_message'.tr()), findsOneWidget);
     });
 
     group('TourSummary Widget Tests', () {
@@ -99,8 +100,8 @@ void main() {
       expect(find.text('Ciudad: Ciudad de prueba'), findsOneWidget);
 
       // Ajusta el test para buscar "Distancia:" y "Duración:" sin valores específicos
-      expect(find.textContaining('Distancia:'), findsOneWidget); // Captura cualquier formato de distancia
-      expect(find.textContaining('Duración:'), findsOneWidget);  // Captura cualquier formato de duración
+      expect(find.textContaining('${'distance'.tr()}: '), findsOneWidget);
+      expect(find.textContaining('${'duration'.tr()}: '), findsOneWidget);
       expect(find.byIcon(Icons.directions_walk), findsOneWidget);
       expect(find.text('POI de prueba'), findsOneWidget);
     });
@@ -143,7 +144,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verifica que aparece el cuadro de diálogo para el nombre del tour
-      expect(find.text('Nombre del Tour'), findsOneWidget);
+      expect(find.text('save_tour_name'.tr()), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
     });
   });
