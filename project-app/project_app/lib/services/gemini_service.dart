@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -40,9 +41,8 @@ class GeminiService {
       return [];
     }
 
-    // Instrucción básica para el modelo
-    String baserol =
-        'Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo';
+    // Instrucción básica para el modelo desde internacionalización
+    String baserol = 'system_instruction'.tr();
 
     // Configuración del modelo generativo
     final model = GenerativeModel(
@@ -72,26 +72,14 @@ class GeminiService {
 
     // Configuración del mensaje al modelo
     final chat = model.startChat();
-    final message =
-        '''Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city.
-        Además, no sirve cualquier lugar, puesto que el tiempo que se tarde en viajar entre ellos no debe ser superior en ningún momento a $maxTime minutos $mode.
-        Elige lugares que conozcas bien y que no estén muy separados unos de otros.
-Cada objeto debe incluir:
-* nombre (string)
-* descripción (string)
-* coordenadas (array de dos números: latitud y longitud)
-
-
-**Ejemplo de objeto JSON:**
-```json
-{
-    "nombre": "Plaza Mayor",
-    "descripcion": "La Plaza Mayor de Salamanca, del siglo XVIII, es una de las más bellas plazas monumentales urbanas de Europa. Comenzó a construirse en 1729 a instancias del corregidor Rodrigo Caballero Llanes. El proyecto fue a cargo del arquitecto Alberto de Churriguera, al que siguió su sobrino Manuel de Lara Churriguera y fue finalizado por Andrés García de Quiñones en 1755. ...",
-    "coordenadas": [40.965027795465176, -5.664062074092496],
-}
-Ten en cuenta el tipo de cliente al que le ofreces información y los siguientes intereses del usuario: ${userPreferences.join(', ')}.  
-
-''';
+    // Mensaje al modelo usando textos internacionalizados
+    final message = 'generate_poi_message'.tr(namedArgs: {
+      'nPoi': nPoi.toString(),
+      'city': city,
+      'maxTime': maxTime.toString(),
+      'mode': mode,
+      'userPreferences': userPreferences.join(', '),
+    });
 
     final content = Content.text(message);
 

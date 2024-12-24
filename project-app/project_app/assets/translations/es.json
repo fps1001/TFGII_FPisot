@@ -59,5 +59,7 @@
   "no_place_found": "No se encontró ningún lugar.",
   "no_city_selected": "No se ha seleccionado ninguna ciudad.",
   "search_suggestion_hint": "Escribe el nombre de un lugar para añadir.",
-  "add_poi_prompt": "¿Quieres añadir algún lugar?"
+  "add_poi_prompt": "¿Quieres añadir algún lugar?",
+  "system_instruction": "Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo.",
+  "generate_poi_message": "Genera un array de {nPoi} objetos JSON, cada uno representando un punto de interés turístico diferente en {city}. Además, no sirve cualquier lugar, puesto que el tiempo que se tarde en viajar entre ellos no debe ser superior en ningún momento a {maxTime} minutos {mode}. Elige lugares que conozcas bien y que no estén muy separados unos de otros. Cada objeto debe incluir:\n* nombre (string)\n* descripción (string)\n* coordenadas (array de dos números: latitud y longitud)\n\n**Ejemplo de objeto JSON:**\n```json\n{\n    \"nombre\": \"Plaza Mayor\",\n    \"descripcion\": \"La Plaza Mayor de Salamanca, del siglo XVIII, es una de las más bellas plazas monumentales urbanas de Europa. ...\",\n    \"coordenadas\": [40.965027795465176, -5.664062074092496]\n}\nTen en cuenta el tipo de cliente al que le ofreces información y los siguientes intereses del usuario: {userPreferences}."
 }
