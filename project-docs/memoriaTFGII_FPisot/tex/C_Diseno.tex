@@ -15,19 +15,19 @@ A continuación, se describen las entidades, sus atributos y las relaciones que 
 	\begin{itemize}
 		\item \textbf{city}: Ciudad, pueblo o lugar en el que se realiza la ruta.
 		\item \textbf{mode}: Medio de transporte elegido por el usuario (a pie o bicicleta).
-		\item \textbf{duration}: Duración estimada del recorrido.
-		\item \textbf{distance}: Distancia total de la ruta.
-		\item \textbf{userPreferences}: Preferencias del usuario (naturaleza, museos, etc.).
+		\item \textbf{duration}: Duración estimada del recorrido en metros. Rango de valores permitidos (0-999 km.)
+		\item \textbf{distance}: Distancia total de la ruta en segundos. Rango de valores permitidos (0-24 horas).
+		\item \textbf{userPreferences}: Preferencias del usuario: Naturaleza, Museos, Gastronomía, Deportes, Compras e Historia.
 	\end{itemize}
 	
 	\item {\textbf{PointOfInterest}}: Representa un \acrlong{pdi} dentro de la ruta.
 	\begin{itemize}
 		\item \textbf{name}: Nombre del lugar.
-		\item \textbf{gps}: Coordenadas GPS del sitio (latitud y longitud).
+		\item \textbf{gps}: Coordenadas GPS del sitio (latitud y longitud medida en grados). Rango válido: -90º a 90º para latitud y -180º-180º para longitud.
 		\item \textbf{description}: Breve descripción del lugar.
 		\item \textbf{url}: Enlace a información adicional sobre el lugar.
 		\item \textbf{imageUrl}: URL de la imagen representativa del lugar.
-		\item \textbf{rating}: Calificación promedio del punto de interés.
+		\item \textbf{rating}: Calificación promedio del punto de interés. Valoraciones numéricas de 0 a 5 estrellas.
 	\end{itemize}
 \end{itemize}
 
@@ -42,11 +42,11 @@ A continuación, se describen las entidades, sus atributos y las relaciones que 
 
 \section{Diseño arquitectónico}
 
-El diseño de datos de la aplicación \textit{Eco City Tours} se fundamenta en una arquitectura modular que organiza las diferentes responsabilidades del sistema en paquetes específicos. A continuación, se presenta un diagrama de clases en la Figura~\ref{fig:clases} que detalla la estructura del sistema y sus relaciones. Este diagrama ilustra cómo interactúa la aplicación usando servicios, modelos y repositorios. 
+El diseño arquitectónico de la aplicación \textit{Eco City Tours} se fundamenta en una descomposición modular que distribuye las diferentes responsabilidades del sistema en paquetes específicos. A continuación, se presenta un diagrama de estático de paquetes y clases en la Figura~\ref{fig:clases} que describe la estructura del sistema y sus relaciones. Este diagrama ilustra cómo se relaciona el modelo de datos con la lógica de negocio (blocs) y el servicio de persistencia de los datos del modelo. Además, se describe cómo la lógica de negocios se apoya en servicios externos relacionados con la interacción con modelos de \acrshort{ia} y con interacción en mapas geográficos.
 
-La organización en paquetes garantiza un diseño cohesivo, con bajo acoplamiento y alta cohesión, la extensibilidad del sistema coincidiendo también con cada carpeta dentro de la estructura del proyecto Flutter lo que garantiza también una fácil mantenibilidad.
+Esta arquitectura propuesta basada en patrones de orientación a objetos bien conocidos\cite{gamma2002patrones} garantiza un diseño cohesivo, con bajo acoplamiento y alta cohesión, la extensibilidad del sistema coincidiendo también con cada carpeta dentro de la estructura del proyecto Flutter lo que garantiza también una fácil mantenibilidad.
 
-\imagen{clases}{Diagrama de clases de la aplicación}
+\imagen{clases}{Diagrama arquitectónico detallado de paquetes y clases de \textit{Eco City Tours}}
 
 A continuación, se describen los paquetes y componentes principales representados en el diagrama de clases:
 
@@ -156,12 +156,12 @@ A continuación, se muestra un ejemplo simplificado de cómo se utiliza el patr�
 Como se puede ver la lógica del tour generado y su representación son dos partes diferenciadas aunque MapBloc dependa del contenido del TourBloc, su codificación no se recarga delegando responsabilidades.
 
 \section{Diseño procedimental}
-En esta sección se explicará el flujo de trabajo relacionado con las tareas más importantes de la aplicación, asociando cada proceso a sus respectivos \textbf{Casos de Uso (CU)} descritos en la subsección~\ref{subsec:casos-uso}.
+En esta sección se explicará el flujo de trabajo relacionado con las tareas más importantes de la aplicación, asociando cada diseño procedimental a sus respectivos \textbf{Casos de Uso (CU)} descritos en la subsección~\ref{subsec:casos-uso}.
 
-\subsection{Carga de \textit{EcoCityTour} desde pantalla de selección de preferencias (CU01.1)}
+\subsection{Calcular de \textit{EcoCityTour} desde pantalla de selección de preferencias (CU01.1)}
 La generación de un nuevo tour turístico una vez que el usuario ha definido sus preferencias es el proceso fundamental que se muestra en la Figura~\ref{fig:secuence}, correspondiente al \textbf{CU01.1 Calcular Eco City Tour}.
 
-El proceso comienza con el evento \texttt{loadTourEvent()}, disparado por el usuario desde la pantalla de selección (\textit{TourSelectionScreen}). Este evento desencadena la siguiente secuencia de interacciones:
+El proceso comienza con el evento \texttt{loadTourEvent()}, disparado por el usuario desde la pantalla de selección (\textit{TourSelectionScreen}). Este evento desencadena la siguiente secuencia de llamadas asíncronas entre objetos:
 \begin{enumerate}
 	\item El \textit{TourBloc} inicia la generación del tour solicitando a \textit{ServicioLLM} una lista inicial de \acrlong{pdi} basados en los parámetros de configuración de la ruta.
 	\item \textit{ServicioLLM} devuelve un conjunto de \acrlong{pdi}, que luego se enriquecen con información adicional obtenida a través de \textit{Google Places} mediante el método \texttt{searchPlacePOI}.

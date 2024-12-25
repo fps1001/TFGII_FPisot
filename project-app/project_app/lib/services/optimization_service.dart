@@ -102,18 +102,49 @@ class OptimizationService {
         polilynePoints: polilynePoints,
       );
 
+      // Validaciones adicionales
+      if (distance <= 0 || duration <= 0) {
+        log.e(
+            'OptimizationService: Valores de distancia o duración no válidos');
+        throw AppException("Invalid distance or duration values");
+      }
+      if (distance > 1000000) {
+        // Por ejemplo, 1000 km como límite razonable
+        log.w('OptimizationService: Distancia mayor al rango esperado');
+      }
+      if (duration > 86400) {
+        // Por ejemplo, 24 horas como límite razonable
+        log.w('OptimizationService: Duración mayor al rango esperado');
+      }
       return ecoCityTour;
     } on DioException catch (e) {
       log.e(
           'OptimizationService: Error durante la solicitud a la API de Google Directions',
           error: e);
-      throw DioExceptions.handleDioError(e, url: url);
-    } catch (e, stackTrace) {
+      // Devuelve un EcoCityTour vacío con información básica
+      return EcoCityTour(
+        city: city,
+        pois: pois,
+        mode: mode,
+        userPreferences: userPreferences,
+        duration: 0,
+        distance: 0,
+        polilynePoints: [],
+      );
+    } catch (e, stackTrace) { // Captura cualquier otro error
       log.e(
           'OptimizationService: Error desconocido durante la optimización de la ruta',
           error: e,
           stackTrace: stackTrace);
-      throw AppException("An unknown error occurred", url: url);
+      return EcoCityTour(
+        city: city,
+        pois: pois,
+        mode: mode,
+        userPreferences: userPreferences,
+        duration: 0,
+        distance: 0,
+        polilynePoints: [],
+      );
     }
   }
 }
