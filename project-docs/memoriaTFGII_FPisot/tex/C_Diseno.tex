@@ -77,23 +77,19 @@ A continuación, se describen los paquetes y componentes principales representad
 		\item \textbf{GpsBloc}: Gestiona si el dispositivo tiene el GPS activado y la aplicación tiene permisos para el uso de dicho sensor.
 	\end{itemize}
 	
-	\item \textbf{repositories}:
+	\item \textbf{persistence\_bd}:
 	\begin{itemize}
-		\item \textbf{EcoCityTourRepository}: Implementa la lógica necesaria para, guardar y cargar información de un \textit{EcoCityTour}.
-	\end{itemize}
-	
-	\item \textbf{datasets}:
-	\begin{itemize}
-		\item \textbf{FirestoreDataset}: Clase que gestiona la persistencia de datos en la base de datos en este caso concreto de Firestore.
+		\item \textbf{Repositories: EcoCityTourRepository}: Implementa la lógica necesaria para, guardar y cargar información de un \textit{EcoCityTour}.
+		\item \textbf{Datasets: FirestoreDataset}: Clase que gestiona la persistencia de datos en la base de datos en este caso concreto de Firestore.
 	\end{itemize}
 \end{itemize}
 
 Con esta organización, el diseño asegura que cada componente tenga una responsabilidad clara, permitiendo la integración fluida de servicios externos, la manipulación eficiente de datos y la presentación interactiva de la información en la interfaz de usuario. 
 
-Cabe destacar que al ser modular cualquier modificación por ejemplo de un gestor de estado o un dataset diferente se facilita enormemente.
+La aplicación de patrones de diseño como estrategia y fábrica dan soporte a la extensibilidad en su futuro mantenimiento. Por ejemplo se pueden incluir mediante extensiones nuevos gestores de estado y nuevas bases de datos de almacenamiento.
 
 
-El diseño arquitectónico de \textit{Eco City Tours} sigue un enfoque modular que organiza el sistema en tres capas principales: \textbf{Interfaz de usuario}, \textbf{Lógica de negocio} y \textbf{Servicios externos}. Esta separación garantiza la escalabilidad, mantenibilidad y claridad del sistema, facilitando futuras mejoras o adaptaciones.
+El diseño arquitectónico de \textit{Eco City Tours} sigue la arquitectura de Modelo/Vista/Controlador que organiza el sistema en tres capas principales: \textbf{Interfaz de usuario}, \textbf{Lógica de negocio} y \textbf{Servicios externos}. Esta separación garantiza la escalabilidad, mantenibilidad y claridad del sistema, facilitando futuras mejoras o adaptaciones.
 
 \begin{itemize}
 	\item \textbf{Interfaz de usuario}: Representa la capa con la que interactúa el usuario. Incluye componentes como \textit{MapScreen}, \textit{TourSummary} y \textit{TourSelectionScreen}, que se encargan de capturar las acciones del usuario y mostrar la información relevante en una interfaz intuitiva.
@@ -131,7 +127,7 @@ La aplicación \textit{Eco City Tours} implementa este patrón de diseño a trav
 	\item \textbf{\textit{MapBloc}}: Gestiona el estado y las interacciones del mapa, como la visualización de rutas generadas, la actualización de puntos de interés.
 \end{itemize}
 
-Un aspecto importante en la implementación del patrón \acrshort{bloc} en \textit{Eco City Tours} es el uso de la clase \texttt{Equatable}, que permite simplificar la comparación de estados y eventos. En Flutter, cada vez que un estado cambia, se debe notificar a la interfaz de usuario para que se actualice. La clase \texttt{Equatable} facilita este proceso al definir de manera eficiente si dos instancias de estado o evento son equivalentes, evitando notificaciones redundantes y mejorando el rendimiento del sistema.
+Un aspecto importante en la implementación del patrón \acrshort{bloc} en \textit{Eco City Tours} es el uso de la clase \texttt{Equatable}, que permite simplificar la comparación de estados y eventos. En Flutter, cada vez que un estado cambia, se debe notificar a la interfaz de usuario para que se actualice. Esta interacción se alinea con el patrón de diseño Observador, definido en~\cite{gamma2002patrones}, establece una relación entre un sujeto (en este caso, el BLoC) y múltiples observadores (diferentes componentes de la interfaz de usuario), asegurando que estos últimos reaccionen a los cambios en el estado del primero. La clase \texttt{Equatable} facilita este proceso al definir de manera eficiente si dos instancias de estado o evento son equivalentes, evitando notificaciones redundantes y mejorando el rendimiento del sistema.
 
 En el caso de \textit{Eco City Tours}, todos los \acrshort{bloc} usados extienden de \texttt{Equatable}, asegurando que la lógica de comparación sea precisa y que la interfaz de usuario solo se actualice cuando sea necesario. 
 
@@ -140,10 +136,10 @@ En el caso de \textit{Eco City Tours}, todos los \acrshort{bloc} usados extiende
 	\begin{itemize}
 		\item \textbf{Eventos y estados}: La interacción entre la interfaz de usuario y la lógica de negocio se realiza mediante el envío de eventos (\texttt{Event}) y la emisión de estados (\texttt{State}). Los eventos representan acciones realizadas por el usuario, mientras que los estados reflejan el resultado de procesar esos eventos.
 		\item \textbf{Flujos (\textit{Streams})}: El patrón utiliza \textit{streams} de datos reactivos para manejar la comunicación entre la interfaz de usuario y la lógica de negocio.
-		\item \textbf{Inmutabilidad}: Tanto los eventos como los estados son inmutables, lo que asegura un comportamiento predecible y simplifica el manejo del flujo de datos.
+		\item \textbf{Inmutabilidad}: Tanto los eventos como los estados son inmutables, lo que asegura un comportamiento asíncrono predecible y simplifica el manejo del flujo de datos.
 	\end{itemize}
 	
-	\imagen{bloc-diagram}{Diagrama de interacción del patrón \acrshort{bloc} en la aplicación}
+	\imagen{bloc-diagram}{Diagrama de interacción asíncrona del patrón \acrshort{bloc} en la aplicación}
 
 \subsubsection{Ejemplo de implementación en \textit{Eco City Tours}}
 A continuación, se muestra un ejemplo simplificado de cómo se utiliza el patrón \acrshort{bloc} para gestionar la generación de un tour:
