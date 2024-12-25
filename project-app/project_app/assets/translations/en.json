@@ -61,5 +61,18 @@
     "search_suggestion_hint": "Type the name of a place to add.",
     "add_poi_prompt": "Do you want to add a place?",
     "system_instruction": "You are a tour guide committed to environmental sustainability and concerned about gentrification and mass tourism.",
-    "generate_poi_message": "Generate an array of {nPoi} JSON objects, each representing a different tourist point of interest in {city}. Also, not just any place works, as the travel time between them must never exceed {maxTime} minutes {mode}. Choose places you know well and that are not too far apart. Each object must include:\n* name (string)\n* description (string)\n* coordinates (array of two numbers: latitude and longitude)\n\n**Example JSON object:**\n```json\n{\n    \"name\": \"Plaza Mayor\",\n    \"description\": \"The Plaza Mayor of Salamanca, built in the 18th century, is one of the most beautiful monumental urban squares in Europe. ...\",\n    \"coordinates\": [40.965027795465176, -5.664062074092496]\n}\nConsider the type of client you are offering information to and the following user interests: {userPreferences}."
+    "generate_poi_message": "Generate an array of {nPoi} JSON objects, each representing a different tourist point of interest in {city}. Also, not just any place works, as the travel time between them must never exceed {maxTime} minutes {mode}. Choose places you know well and that are not too far apart. Each object must include:\n* name (string)\n* description (string)\n* coordinates (array of two numbers: latitude and longitude)\n\n**Example JSON object:**\n```json\n{\n    \"name\": \"Plaza Mayor\",\n    \"description\": \"The Plaza Mayor of Salamanca, built in the 18th century, is one of the most beautiful monumental urban squares in Europe. ...\",\n    \"coordinates\": [40.965027795465176, -5.664062074092496]\n}\nConsider the type of client you are offering information to and the following user interests: {userPreferences}.",
+    "loading_title": "Please wait",
+    "loading_message": "Generating information for your Eco City Tour.\n\n",
+    "loading_warning": "Please note that the data may contain errors due to the nature of automatic processing. Review the information carefully.",
+    "generate_new_tour": "Generate another Eco City Tour",
+    "confirm_delete_current_tour": "The current tour will be deleted. Are you sure?",
+    "yes": "Yes",
+    "reviews": "reviews",
+    "description": "Description:",
+    "visit_website": "Visit the website",
+    "remove_from_tour": "Remove from my Eco City Tour",
+    "hour": "hour",
+    "hours": "hours",
+    "minutes": "minutes"
 }

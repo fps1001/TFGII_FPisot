@@ -12,7 +12,7 @@ class SelectAIAssistant extends StatefulWidget {
   final ValueChanged<int?> onAssistantSelected;
 
   /// Crea una instancia de [SelectAIAssistant].
-  ///
+  /// 
   /// - [onAssistantSelected] es el callback para manejar la selección del asistente.
   const SelectAIAssistant({super.key, required this.onAssistantSelected});
 

@@ -13,9 +13,20 @@ Se ha intentado seguir las buenas prácticas de programación adquiridas en mi f
 	
 	\item \textbf{/project-prototype/}: dos prototipos de uso de modelos LLM con ejemplos de prompting y técnicas RAG, tanto en un cuaderno Python como en LangFlow así como las conclusiones tras su experimentación.
 	
-	\item \textbf{/project-app/}: se trata del proyecto Flutter creado a raíz del asistente de Visual Studio y que fue construido de manera incremental desde una aplicación vacía.
-	
-	
+	\item \textbf{/project-app/}: se trata del proyecto Flutter creado a raíz del asistente de Visual Studio y que fue construido de manera incremental desde una aplicación vacía. Se divide en las siguientes subcarpetas:
+	\begin{itemize}
+		\item \textbf{/android }: directorio generado automáticamente por Flutter para configurar y compilar la aplicación en la plataforma \textit{Android}.
+		\item \textbf{/test}: contiene las pruebas unitarias y de integración que verifican el correcto funcionamiento de los componentes, servicios y lógica del negocio.
+		\item \textbf{/assets}: incluye recursos estáticos como imágenes, fuentes o archivos de configuración de idioma que utiliza la aplicación.
+		\item \textbf{/lib}: contiene el código fuente principal de la aplicación, incluyendo los widgets de Flutter y la lógica del negocio. Dentro de esta carpeta destacan las siguientes subcarpetas:
+		\begin{itemize}
+			\item \textbf{/screens}: incluye las distintas pantallas que componen la interfaz de usuario de la aplicación.
+			\item \textbf{/widgets}: contiene componentes reutilizables que forman partes más pequeñas y específicas de la interfaz de usuario, como botones personalizados.
+			\item \textbf{/models}: define las clases fundamentales de datos utilizadas en la aplicación, como `\textit{EcoCityTour}` y `\textit{PointOfInterest}`.
+			\item \textbf{/services}: alberga los servicios responsables de interactuar con las APIs externas, como \textit{Google Maps}, \textit{Google Places} o el modelo \acrshort{llm} utilizado \textit{Gemini pro-1.5}.
+			\item \textbf{/blocs}: organiza la lógica del negocio bajo el patrón \acrfull{bloc}, permitiendo manejar el estado de forma eficiente.
+		\end{itemize}		
+	\end{itemize}
 \end{itemize}
 
 \section{Manual del programador}

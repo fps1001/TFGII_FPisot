@@ -100,7 +100,7 @@ class TourSummary extends StatelessWidget {
                           children: [
                             // Información de la ciudad
                             Text(
-                              'Ciudad: ${state.ecoCityTour!.city}',
+                              '${'city'.tr()}: ${state.ecoCityTour!.city}',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

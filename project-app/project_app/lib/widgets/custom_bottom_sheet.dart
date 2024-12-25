@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -103,7 +104,7 @@ class CustomBottomSheet extends StatelessWidget {
                   style: const TextStyle(fontSize: 16.0, color: Colors.black87),
                 ),
                 if (poi.userRatingsTotal != null)
-                  Text('  (${poi.userRatingsTotal} reseñas)'),
+                  Text('  (${poi.userRatingsTotal} ${'reviews'.tr()})'),
               ],
             ),
             const SizedBox(height: 10.0),
@@ -111,9 +112,9 @@ class CustomBottomSheet extends StatelessWidget {
 
           // Descripción del POI
           if (poi.description != null) ...[
-            const Text(
-              'Descripción:',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            Text(
+              'description'.tr(),
+              style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5.0),
             Text(
@@ -141,9 +142,9 @@ class CustomBottomSheet extends StatelessWidget {
                       error: e);
                 }
               },
-              child: const Text(
-                'Visita la página web',
-                style: TextStyle(
+              child: Text(
+                'visit_website'.tr(),
+                style: const TextStyle(
                   color: Colors.blue,
                   decoration: TextDecoration.underline,
                   fontSize: 16.0,
@@ -172,9 +173,9 @@ class CustomBottomSheet extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25.0),
                 ),
               ),
-              child: const Text(
-                'Eliminar de mi Eco City Tour',
-                style: TextStyle(
+              child: Text(
+                'remove_from_tour'.tr(),
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16.0,
                 ),

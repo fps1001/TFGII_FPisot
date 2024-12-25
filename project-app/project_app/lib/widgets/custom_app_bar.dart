@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -57,18 +58,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           final shouldReset = await showDialog<bool>(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('Generar otro Eco City Tour'),
-              content: const Text('Se borrará el tour actual. ¿Estás seguro?'),
+              title: Text('generate_new_tour'.tr()),
+              content: Text('confirm_delete_current_tour'.tr()),
               actions: [
                 TextButton(
                   onPressed: () =>
                       Navigator.of(context).pop(false), // Cerrar sin acción.
-                  child: const Text('Cancelar'),
+                  child: Text('cancel'.tr()),
                 ),
                 TextButton(
                   onPressed: () =>
                       Navigator.of(context).pop(true), // Confirmar acción.
-                  child: const Text('Sí'),
+                  child: Text('yes'.tr()),
                 ),
               ],
             ),

@@ -61,5 +61,18 @@
   "search_suggestion_hint": "Escribe el nombre de un lugar para añadir.",
   "add_poi_prompt": "¿Quieres añadir algún lugar?",
   "system_instruction": "Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo.",
-  "generate_poi_message": "Genera un array de {nPoi} objetos JSON, cada uno representando un punto de interés turístico diferente en {city}. Además, no sirve cualquier lugar, puesto que el tiempo que se tarde en viajar entre ellos no debe ser superior en ningún momento a {maxTime} minutos {mode}. Elige lugares que conozcas bien y que no estén muy separados unos de otros. Cada objeto debe incluir:\n* nombre (string)\n* descripción (string)\n* coordenadas (array de dos números: latitud y longitud)\n\n**Ejemplo de objeto JSON:**\n```json\n{\n    \"nombre\": \"Plaza Mayor\",\n    \"descripcion\": \"La Plaza Mayor de Salamanca, del siglo XVIII, es una de las más bellas plazas monumentales urbanas de Europa. ...\",\n    \"coordenadas\": [40.965027795465176, -5.664062074092496]\n}\nTen en cuenta el tipo de cliente al que le ofreces información y los siguientes intereses del usuario: {userPreferences}."
+  "generate_poi_message": "Genera un array de {nPoi} objetos JSON, cada uno representando un punto de interés turístico diferente en {city}. Además, no sirve cualquier lugar, puesto que el tiempo que se tarde en viajar entre ellos no debe ser superior en ningún momento a {maxTime} minutos {mode}. Elige lugares que conozcas bien y que no estén muy separados unos de otros. Cada objeto debe incluir:\n* nombre (string)\n* descripción (string)\n* coordenadas (array de dos números: latitud y longitud)\n\n**Ejemplo de objeto JSON:**\n```json\n{\n    \"nombre\": \"Plaza Mayor\",\n    \"descripcion\": \"La Plaza Mayor de Salamanca, del siglo XVIII, es una de las más bellas plazas monumentales urbanas de Europa. ...\",\n    \"coordenadas\": [40.965027795465176, -5.664062074092496]\n}\nTen en cuenta el tipo de cliente al que le ofreces información y los siguientes intereses del usuario: {userPreferences}.",
+  "loading_title": "Espere por favor",
+  "loading_message": "Generando información para tu Eco City Tour.\n\n",
+  "loading_warning": "Tenga en cuenta que los datos pueden contener errores debido a la naturaleza del procesamiento automático. Revise la información cuidadosamente.",
+  "generate_new_tour": "Generar otro Eco City Tour",
+  "confirm_delete_current_tour": "Se borrará el tour actual. ¿Estás seguro?",
+  "yes": "Sí",
+  "reviews": "reseñas",
+  "description": "Descripción:",
+  "visit_website": "Visita la página web",
+  "remove_from_tour": "Eliminar de mi Eco City Tour",
+  "hour": "hora",
+  "hours": "horas",
+  "minutes": "minutos"
 }

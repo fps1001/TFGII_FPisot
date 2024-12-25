@@ -103,7 +103,7 @@ class OptimizationService {
       );
 
       // Validaciones adicionales
-      if (distance <= 0 || duration <= 0) {
+      if (distance < 0 || duration < 0) {
         log.e(
             'OptimizationService: Valores de distancia o duración no válidos');
         throw AppException("Invalid distance or duration values");

@@ -84,7 +84,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                   'place_to_visit'.tr(),
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
                 TextField(
                   onChanged: (value) {
                     setState(() {
@@ -99,7 +99,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
 
                 // Número de sitios (Slider)
                 NumberOfSitesSlider(
@@ -112,7 +112,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                         'Número de sitios seleccionado: ${numberOfSites.round()}');
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
 
                 // Selección de asistente de IA
                 SelectAIAssistant(
@@ -124,7 +124,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                         'Asistente seleccionado: ${index ?? "Sin selección"}');
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
 
                 // Selector de modo de transporte
                 TransportModeSelector(
@@ -139,7 +139,7 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
                     log.i('Modo de transporte seleccionado: $selectedMode');
                   },
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 15),
 
                 // Preferencias del usuario (Chips)
                 Text(

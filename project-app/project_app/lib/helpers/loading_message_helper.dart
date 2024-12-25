@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 /// Clase que proporciona un mensaje de carga modal.
@@ -17,7 +18,7 @@ class LoadingMessageHelper {
         barrierDismissible: false, // Evita que el usuario cierre el diálogo
         builder: (context) => AlertDialog(
               title: Text(
-                'Espere por favor',
+                'loading_title'.tr(),
                 textAlign: TextAlign.center, // Centrar el título
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -34,7 +35,7 @@ class LoadingMessageHelper {
                       CrossAxisAlignment.center, // Centra horizontalmente
                   children: [
                     Text(
-                      'Generando información para tu Eco City Tour.\n\n',
+                      'loading_message'.tr(),
                       textAlign: TextAlign.center, // Centrar el texto
                       style: TextStyle(
                         fontSize: 16, // Ajusta el tamaño del texto
@@ -43,9 +44,7 @@ class LoadingMessageHelper {
                       ),
                     ),
                     Text(
-                      'Tenga en cuenta que los datos pueden contener errores '
-                      'debido a la naturaleza del procesamiento automático. '
-                      'Revise la información cuidadosamente.',
+                      'loading_warning'.tr(),
                       textAlign: TextAlign.center, // Centrar el texto
                       style: TextStyle(
                         fontSize: 14, // Ajusta el tamaño del texto

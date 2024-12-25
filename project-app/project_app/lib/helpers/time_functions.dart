@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 /// Convierte una duración en segundos a un formato de horas y minutos.
 ///
 /// - [seconds]: La duración en segundos.
@@ -9,9 +11,10 @@ String formatDuration(int seconds) {
   int minutes = (seconds % 3600) ~/ 60;
 
   if (hours > 0) {
-    return '$hours horas $minutes minutos';
+    return '$hours ${hours == 1 ? 'hour'.tr() : 'hours'.tr()} '
+        '$minutes ${'minutes'.tr()}';
   } else {
-    return '$minutes minutos';
+    return '$minutes ${'minutes'.tr()}';
   }
 }
 
@@ -24,9 +27,9 @@ String formatDuration(int seconds) {
 String formatDistance(double meters) {
   if (meters >= 1000) {
     double kilometers = meters / 1000;
-    return '${kilometers.toStringAsFixed(1)} km';
+    return '${kilometers.toStringAsFixed(1)} km.';
   } else {
-    return '${meters.round()} m';
+    return '${meters.round()} m.';
   }
 }
 
@@ -43,12 +46,12 @@ String formatTime(double minutes) {
   if (hours == 0) {
     return '${mins.round()}m'; // Solo minutos si es menos de una hora
   } else if (hours == 1 && mins == 0) {
-    return '1 hora'; // Exactamente una hora
+    return '1 ${'hour'.tr()}'; // Exactamente una hora
   } else if (hours == 1) {
-    return '1 hora ${mins.round()}m'; // Una hora con minutos
+    return '1 ${'hour'.tr()} ${mins.round()}m'; // Una hora con minutos
   } else if (mins == 0) {
-    return '$hours horas'; // Solo horas si no hay minutos
+    return '$hours ${'hours'.tr()}'; // Solo horas si no hay minutos
   } else {
-    return '$hours horas ${mins.round()}m'; // Horas y minutos
+    return '$hours ${'hours'.tr()} ${mins.round()}m'; // Horas y minutos
   }
 }
