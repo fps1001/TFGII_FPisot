@@ -42,11 +42,30 @@ A continuación, se describen las entidades, sus atributos y las relaciones que 
 
 \section{Diseño arquitectónico}
 
-El diseño arquitectónico de la aplicación \textit{Eco City Tours} se fundamenta en una descomposición modular que distribuye las diferentes responsabilidades del sistema en paquetes específicos. A continuación, se presenta un diagrama de estático de paquetes y clases en la Figura~\ref{fig:clases} que describe la estructura del sistema y sus relaciones. Este diagrama ilustra cómo se relaciona el modelo de datos con la lógica de negocio (blocs) y el servicio de persistencia de los datos del modelo. Además, se describe cómo la lógica de negocios se apoya en servicios externos relacionados con la interacción con modelos de \acrshort{ia} y con interacción en mapas geográficos.
+El diseño arquitectónico de la aplicación \textit{Eco City Tours} se basa en una estructura modular, organizada para garantizar una clara separación de responsabilidades, facilitando el desarrollo, mantenimiento y escalabilidad del sistema. 
 
-Esta arquitectura propuesta basada en patrones de orientación a objetos bien conocidos\cite{gamma2002patrones} garantiza un diseño cohesivo, con bajo acoplamiento y alta cohesión, la extensibilidad del sistema coincidiendo también con cada carpeta dentro de la estructura del proyecto Flutter lo que garantiza también una fácil mantenibilidad.
+La arquitectura a este nivel de abstracción se muestra en la Figura~\ref{fig:paquetes-dependencias} y está dividida en cinco capas funcionales principales: \textbf{Modelo}, \textbf{Interfaz de Usuario}, \textbf{Lógica de Negocio}, \textbf{Servicios Externos}, y \textbf{Persistencia}, cada una de las cuales agrupa componentes con responsabilidades específicas.
+
+
+\imagen{paquetes-dependencias}{Diagrama arquitectónico de paquetes y dependencias}
+
+Las responsabilidades de cada capa son las siguientes:
+
+\begin{itemize}
+	\item \textbf{Modelo}: Define las estructuras de datos principales utilizadas en el sistema, como los puntos de interés (\textit{PointOfInterest}) y los tours (\textit{EcoCityTour}).
+	\item \textbf{Interfaz de Usuario}: Contiene los componentes que permiten la interacción directa con el usuario, es decir, las pantallas que permiten configurar un tour y visualizarlo.
+	\item \textbf{Lógica de Negocio}: Gestiona el flujo de información entre la interfaz de usuario y los servicios externos, utilizando los gestores de estado basados en BLoC.
+	\item \textbf{Servicios Externos}: Incluye los servicios que interactúan con APIs externas, como Google Places, Gemini, y el servicio que calcula la ruta a seguir por el usuario.
+	\item \textbf{Persistencia}: Maneja el almacenamiento y recuperación de datos, integrándose con Firestore para guardar información relevante.
+\end{itemize}
+
+Desde una perspectiva más específica, el diagrama de clases (Figura~\ref{fig:clases}) ilustra la relación entre los paquetes principales y sus clases internas. Este nivel proporciona una visión más precisa de las interacciones entre los paquetes antes descritos.
 
 \imagen{clases}{Diagrama arquitectónico detallado de paquetes y clases de \textit{Eco City Tours}}
+
+Este diagrama ilustra cómo se relaciona el modelo de datos con la lógica de negocio (usando \acrshort{bloc}) y el servicio de persistencia de los datos del modelo. Además, se describe cómo la lógica de negocios se apoya en servicios externos relacionados con la interacción con modelos de \acrshort{ia} y con interacción en mapas geográficos.
+
+Esta arquitectura propuesta basada en patrones de orientación a objetos bien conocidos~\cite{gamma2002patrones} garantiza un diseño cohesivo, con bajo acoplamiento y alta cohesión, la extensibilidad del sistema coincidiendo también con cada carpeta dentro de la estructura del proyecto Flutter lo que garantiza también una fácil mantenibilidad.
 
 A continuación, se describen los paquetes y componentes principales representados en el diagrama de clases:
 
@@ -58,10 +77,11 @@ A continuación, se describen los paquetes y componentes principales representad
 		\item \textbf{OptimizationService}: Se encarga de calcular rutas optimizadas entre puntos de interés, teniendo en cuenta las propiedades de configuración de la ruta.
 	\end{itemize}
 	
-	\item \textbf{google maps flutter}:
-	\begin{itemize}
-		\item Clase que administra la interacción con los mapas en la interfaz de usuario, permitiendo mostrar las rutas generadas.
-	\end{itemize}
+\item \textbf{google\_maps\_flutter}:
+\begin{itemize}
+	\item Clase del paquete oficial de Flutter para administrar la interacción con los mapas de Google en la interfaz de usuario. Su función principal es permitir la visualización y gestión de las rutas generadas.
+\end{itemize}
+
 	
 	\item \textbf{models}: existen dos clases principales en las que se basa el diseño de la aplicación.
 	\begin{itemize}
@@ -84,35 +104,7 @@ A continuación, se describen los paquetes y componentes principales representad
 	\end{itemize}
 \end{itemize}
 
-Con esta organización, el diseño asegura que cada componente tenga una responsabilidad clara, permitiendo la integración fluida de servicios externos, la manipulación eficiente de datos y la presentación interactiva de la información en la interfaz de usuario. 
-
-La aplicación de patrones de diseño como estrategia y fábrica dan soporte a la extensibilidad en su futuro mantenimiento. Por ejemplo se pueden incluir mediante extensiones nuevos gestores de estado y nuevas bases de datos de almacenamiento.
-
-
-El diseño arquitectónico de \textit{Eco City Tours} sigue la arquitectura de Modelo/Vista/Controlador que organiza el sistema en tres capas principales: \textbf{Interfaz de usuario}, \textbf{Lógica de negocio} y \textbf{Servicios externos}. Esta separación garantiza la escalabilidad, mantenibilidad y claridad del sistema, facilitando futuras mejoras o adaptaciones.
-
-\begin{itemize}
-	\item \textbf{Interfaz de usuario}: Representa la capa con la que interactúa el usuario. Incluye componentes como \textit{MapScreen}, \textit{TourSummary} y \textit{TourSelectionScreen}, que se encargan de capturar las acciones del usuario y mostrar la información relevante en una interfaz intuitiva.
-	
-	\item \textbf{Lógica de negocio}: Se encarga de gestionar los procesos centrales de la aplicación. Los principales bloques funcionales son:
-	\begin{itemize}
-		\item \textit{MapBloc}: Gestiona el estado y las interacciones relacionadas con el mapa, como la visualización de las rutas o la actualización del mapa en tiempo real.
-		\item \textit{TourBloc}: Responsable de la generación y modificación de tours, así como de la interacción con los datos necesarios para personalizar las rutas.
-		\item \textit{LocationBloc}: En caso de tener activado el seguimiento de usuario, este bloc se encargará de almacenar cada nueva posición del usuario que será enviado al MapBloc para ser dibujado sobre el mapa.
-		\item \textit{GpsBloc}: Controla si la aplicación tiene permiso de uso de GPS y se encuentra activado. Si detecta en cualquier momento un cambio en el estado el stream de este bloc se activará enviando a una pantalla en la que el usuario tendrá que volver a conceder permisos o activar el GPS para poder continuar con el uso de la aplicación.
-	\end{itemize}
-	
-	\item \textbf{Servicios externos}: Contiene los módulos que interactúan con servicios de terceros para obtener información necesaria para el funcionamiento de la aplicación. Los servicios externos principales son:
-	\begin{itemize}
-		\item \textit{Servicio LLM}: Se utiliza para generar datos iniciales de puntos de interés turísticos basados en parámetros de configuración de la ruta.
-		\item \textit{Google Places}: Proporciona información enriquecida sobre los puntos de interés.
-		\item \textit{Optimizador de Rutas}: Calcula la mejor ruta posible basándose en criterios como sostenibilidad y tiempo.
-	\end{itemize}
-\end{itemize}
-
-Esta arquitectura asegura un sistema robusto y flexible, con componentes que tienen responsabilidades claramente definidas y un bajo acoplamiento entre ellos lo que permitiría un remplazo de uno de los componentes sin gran dificultad.
-
-\imagen{components-diagram}{Diagrama de componentes}
+Con esta organización, el sistema obtenido es flexible pero resulta dadas las pruebas realizadas muy robusto. La aplicación de patrones de diseño dan soporte a la extensibilidad en su futuro mantenimiento. Por ejemplo se pueden incluir mediante extensiones nuevos gestores de estado y nuevas bases de datos de almacenamiento.
 
 \subsection{Patrón de diseño \acrfull{bloc}}
 El patrón de diseño \acrshort{bloc}~\cite{flutter_bloc} es fundamental en la arquitectura de la aplicación \textit{Eco City Tours}. Este patrón separa la lógica de negocio de la interfaz de usuario, facilitando el mantenimiento, la escalabilidad.

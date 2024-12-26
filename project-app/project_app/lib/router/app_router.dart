@@ -41,7 +41,7 @@ class AppRouter {
       GoRoute(
         path: '/tour-summary',
         name: 'tour-summary',
-        builder: (context, state) => const TourSummary(),
+        builder: (context, state) => const TourSummaryScreen(),
       ),
 
       // Ruta para la pantalla del mapa, recibe un [EcoCityTour] como parámetro
