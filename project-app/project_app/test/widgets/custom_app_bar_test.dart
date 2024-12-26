@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:project_app/blocs/blocs.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/widgets/custom_app_bar.dart';
+import '../test_helpers.dart'; // Importa el helper
 
 class MockTourBloc extends MockBloc<TourEvent, TourState> implements TourBloc {}
 
@@ -18,6 +20,7 @@ void main() {
   late MockTourBloc mockTourBloc;
 
   setUpAll(() {
+    setupTestEnvironment(); // Configura el entorno de pruebas
     registerFallbackValue(FakeTourEvent());
     registerFallbackValue(FakeBuildContext());
   });
@@ -127,12 +130,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verificar que se muestra el diálogo de confirmación
-      expect(find.text('Generar otro Eco City Tour'), findsOneWidget);
-      expect(find.text('Se borrará el tour actual. ¿Estás seguro?'),
-          findsOneWidget);
+      expect(find.text('generate_new_tour'.tr()), findsOneWidget);
+      expect(find.text('confirm_delete_current_tour'.tr()), findsOneWidget);
 
       // Tap en "Sí" para confirmar
-      await tester.tap(find.text('Sí'));
+      await tester.tap(find.text('yes'.tr()));
       await tester.pumpAndSettle();
 
       // Verificar que navega a la pantalla de selección de tours

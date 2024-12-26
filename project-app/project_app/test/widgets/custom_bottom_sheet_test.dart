@@ -9,14 +9,21 @@ import 'package:project_app/blocs/tour/tour_bloc.dart';
 import 'package:project_app/models/models.dart';
 import 'package:project_app/widgets/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../test_helpers.dart';
 
 class MockTourBloc extends MockBloc<TourEvent, TourState> implements TourBloc {}
 
 void main() {
   late MockTourBloc mockTourBloc;
 
-  setUp(() {
+  setUp(() async {
     mockTourBloc = MockTourBloc();
+    setupTestEnvironment(); // Inicializa el mock de shared_preferences
+    EasyLocalization.logger.enableLevels = [];
+    await EasyLocalization
+        .ensureInitialized(); // Inicializa `easy_localization`
   });
 
   tearDown(() {
@@ -24,11 +31,16 @@ void main() {
   });
 
   Widget createTestWidget(PointOfInterest poi) {
-    return BlocProvider<TourBloc>.value(
-      value: mockTourBloc,
-      child: MaterialApp(
-        home: Scaffold(
-          body: CustomBottomSheet(poi: poi),
+    return EasyLocalization(
+      path: 'assets/translations', // Ruta de tus archivos JSON
+      supportedLocales: const [Locale('en'), Locale('es')],
+      fallbackLocale: const Locale('en'),
+      child: BlocProvider<TourBloc>.value(
+        value: mockTourBloc,
+        child: MaterialApp(
+          home: Scaffold(
+            body: CustomBottomSheet(poi: poi),
+          ),
         ),
       ),
     );
@@ -92,7 +104,7 @@ void main() {
       // Verifica el texto del rating dinámicamente
       expect(
         find.byWidgetPredicate((widget) =>
-            widget is Text && widget.data?.contains('(200 reseñas)') == true),
+            widget is Text && widget.data?.contains('(200 reviews)') == true),
         findsOneWidget,
       );
     });
@@ -101,7 +113,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(testPoi));
 
-      expect(find.text('Descripción:'), findsOneWidget);
+      expect(find.text('description'.tr()), findsOneWidget);
       expect(find.text('This is a test POI.'), findsOneWidget);
     });
 
@@ -109,16 +121,16 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(testPoi));
 
-      expect(find.text('Visita la página web'), findsOneWidget);
+      expect(find.text('visit_website'.tr()), findsOneWidget);
     });
 
     testWidgets('Renderiza botón de eliminar POI y dispara evento al pulsarlo',
         (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(testPoi));
 
-      expect(find.text('Eliminar de mi Eco City Tour'), findsOneWidget);
+      expect(find.text('remove_from_tour'.tr()), findsOneWidget);
 
-      await tester.tap(find.text('Eliminar de mi Eco City Tour'));
+      await tester.tap(find.text('remove_from_tour'.tr()));
       await tester.pumpAndSettle();
 
       verify(() => mockTourBloc.add(OnRemovePoiEvent(poi: testPoi))).called(1);
@@ -155,7 +167,7 @@ void main() {
       );
       await tester.pumpWidget(createTestWidget(poiWithoutDescription));
 
-      expect(find.text('Descripción:'), findsNothing);
+      expect(find.text('description'.tr()), findsNothing);
     });
 
     testWidgets('No renderiza enlace si no está disponible',
@@ -166,7 +178,7 @@ void main() {
       );
       await tester.pumpWidget(createTestWidget(poiWithoutUrl));
 
-      expect(find.text('Visita la página web'), findsNothing);
+      expect(find.text('visit_website'.tr()), findsNothing);
     });
   });
 }

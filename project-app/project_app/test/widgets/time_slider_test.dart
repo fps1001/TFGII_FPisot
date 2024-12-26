@@ -1,23 +1,40 @@
-// FILE: test/widgets/time_slider_test.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:project_app/widgets/widgets.dart';
 import 'package:project_app/helpers/helpers.dart';
+import '../test_helpers.dart';
 
 void main() {
   group('TimeSlider Widget Tests', () {
+    setUp(() async {
+      setupTestEnvironment(); // Inicializa el mock de shared_preferences
+      await EasyLocalization.ensureInitialized();
+    });
+
+    Widget createTestableWidget(Widget child) {
+      return EasyLocalization(
+        path: 'assets/translations', // Ruta a tus archivos JSON
+        supportedLocales: const [Locale('en'), Locale('es')],
+        fallbackLocale: const Locale('en'),
+        child: MaterialApp(
+          home: Scaffold(
+            body: child,
+          ),
+        ),
+      );
+    }
+
     testWidgets('Displays correct initial value and labels',
         (WidgetTester tester) async {
       double sliderValue = 15.0;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TimeSlider(
-              maxTimeInMinutes: sliderValue,
-              onChanged: (value) => sliderValue = value,
-              formatTime: formatTime,
-            ),
+        createTestableWidget(
+          TimeSlider(
+            maxTimeInMinutes: sliderValue,
+            onChanged: (value) => sliderValue = value,
+            formatTime: formatTime,
           ),
         ),
       );
@@ -35,13 +52,11 @@ void main() {
       double sliderValue = 15.0;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TimeSlider(
-              maxTimeInMinutes: sliderValue,
-              onChanged: (value) => sliderValue = value,
-              formatTime: formatTime,
-            ),
+        createTestableWidget(
+          TimeSlider(
+            maxTimeInMinutes: sliderValue,
+            onChanged: (value) => sliderValue = value,
+            formatTime: formatTime,
           ),
         ),
       );
@@ -64,19 +79,17 @@ void main() {
       String? capturedLabel;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TimeSlider(
-              maxTimeInMinutes: sliderValue,
-              onChanged: (value) {
-                sliderValue = value;
-              },
-              formatTime: (minutes) {
-                final label = formatTime(minutes);
-                capturedLabel = label; // Capturamos el texto del label
-                return label;
-              },
-            ),
+        createTestableWidget(
+          TimeSlider(
+            maxTimeInMinutes: sliderValue,
+            onChanged: (value) {
+              sliderValue = value;
+            },
+            formatTime: (minutes) {
+              final label = formatTime(minutes);
+              capturedLabel = label; // Capturamos el texto del label
+              return label;
+            },
           ),
         ),
       );
@@ -89,7 +102,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verifica que el texto del label se haya actualizado correctamente
-      expect(capturedLabel, '1 hora 15m');
+      expect(capturedLabel, '1 hour 15m');
     });
   });
 }
