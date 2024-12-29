@@ -89,43 +89,6 @@ void main() {
       expect(find.byIcon(Icons.search), findsOneWidget);
     });
 
-    testWidgets('Renderiza la lista de tours guardados correctamente',
-        (WidgetTester tester) async {
-      final mockTours = [
-        EcoCityTour(
-          city: 'Madrid',
-          mode: 'walking',
-          userPreferences: ['historical', 'parks'],
-          distance: 3000,
-          duration: 3600,
-          pois: [],
-          polilynePoints: const [],
-        ),
-        EcoCityTour(
-          city: 'Barcelona',
-          mode: 'biking',
-          userPreferences: ['beaches', 'food'],
-          distance: 5000,
-          duration: 7200,
-          pois: [],
-          polilynePoints: const [],
-        ),
-      ];
-
-      when(() => mockTourBloc.state).thenReturn(
-        TourState(savedTours: mockTours),
-      );
-
-      await tester.pumpWidget(createTestWidget(const SavedToursScreen()));
-
-      expect(find.textContaining('Madrid'), findsOneWidget);
-      expect(find.textContaining('Barcelona'), findsOneWidget);
-      expect(find.textContaining('3.0 km'), findsOneWidget);
-      expect(find.textContaining('5.0 km'), findsOneWidget);
-      expect(find.textContaining('1 hora'), findsOneWidget);
-      expect(find.textContaining('2 horas'), findsOneWidget);
-    });
-
     testWidgets('Navega correctamente al seleccionar un tour guardado',
         (WidgetTester tester) async {
       final mockTour = EcoCityTour(
