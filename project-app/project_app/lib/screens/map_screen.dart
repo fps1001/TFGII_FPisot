@@ -94,25 +94,34 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  /// Construye la vista principal del mapa.
-  Widget _buildMapView(LocationState locationState) {
-    return BlocBuilder<MapBloc, MapState>(
-      builder: (context, mapState) {
-        return Stack(
-          children: [
-            MapView(
-              initialPosition: locationState.lastKnownLocation!,
-              polylines: mapState.polylines.values.toSet(),
-              markers: mapState.markers.values.toSet(),
-            ),
-            _buildSearchBar(),
-            _buildMapButtons(),
-            _buildJoinTourButton(),
-          ],
-        );
-      },
-    );
-  }
+Widget _buildMapView(LocationState locationState) {
+  return BlocBuilder<MapBloc, MapState>(
+    builder: (context, mapState) {
+      final tourState = context.watch<TourBloc>().state;
+      
+      // Determinar la posición inicial del mapa
+      final initialPosition = (tourState.ecoCityTour != null &&
+              tourState.ecoCityTour!.pois.isNotEmpty)
+          ? tourState.ecoCityTour!.pois.first.gps
+          : locationState.lastKnownLocation;
+
+      return Stack(
+        children: [
+          MapView(
+            initialPosition: initialPosition!,
+            polylines: mapState.polylines.values.toSet(),
+            markers: mapState.markers.values.toSet(),
+          ),
+          _buildSearchBar(),
+          _buildMapButtons(),
+          _buildJoinTourButton(),
+        ],
+      );
+    },
+  );
+}
+
+
 
   /// Construye la barra de búsqueda en el mapa.
   Widget _buildSearchBar() {
