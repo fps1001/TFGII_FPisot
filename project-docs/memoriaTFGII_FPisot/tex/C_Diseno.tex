@@ -107,7 +107,18 @@ A continuación, se describen los paquetes y componentes principales representad
 Con esta organización, el sistema obtenido es flexible pero resulta dadas las pruebas realizadas muy robusto. La aplicación de patrones de diseño dan soporte a la extensibilidad en su futuro mantenimiento. Por ejemplo se pueden incluir mediante extensiones nuevos gestores de estado y nuevas bases de datos de almacenamiento.
 
 \subsection{Patrón de diseño \acrfull{bloc}}
-El patrón de diseño \acrshort{bloc}~\cite{flutter_bloc} es fundamental en la arquitectura de la aplicación \textit{Eco City Tours}. Este patrón separa la lógica de negocio de la interfaz de usuario, facilitando el mantenimiento, la escalabilidad.
+El patrón de diseño \acrshort{bloc}~\cite{flutter_bloc} es fundamental en la arquitectura de la aplicación \textit{Eco City Tours}. Este patrón se caracteriza por tener las siguientes propiedades:
+\begin{itemize}
+	
+	\item \textbf{Gestión clara del estado}: BLoC proporciona una manera estructurada de gestionar los diferentes estados de la aplicación. Cada cambio de estado es manejado a través de eventos, lo que permite una clara separación entre la lógica de negocio y la presentación visual.
+	
+	\item \textbf{Escalabilidad}: el uso del diseño reactivo orientado a eventos, característico del patrón BLoC, facilita la gestión del estado de la aplicación y permite que esta crezca en funcionalidad sin comprometer su rendimiento. Cada nueva funcionalidad puede ser controlada por un BLoC independiente, lo que asegura que el sistema se incremente de manera estructurada.
+	
+	\item \textbf{Mantenibilidad}: gracias a las extensiones de Visual Studio Code, es posible generar nuevos BLoCs fácilmente. Esto simplifica el desarrollo de nuevas funcionalidades. La clara separación de responsabilidades entre los BLoCs individuales contribuye a un código modular y fácilmente mantenible.
+	
+	\item \textbf{Reutilización de lógica}: Uno de los beneficios clave de BLoC es que la lógica de negocio se puede reutilizar fácilmente en diferentes partes de la aplicación. Esto facilita la implementación de componentes que comparten comportamientos similares sin duplicar código. Para lograrlo, se utiliza el \textit{BLoCProvider}, un widget que comparte el BLoC y permite que los widgets hijos accedan a su lógica de estado. De esta manera, cualquier widget dentro del contexto del BLoCProvider puede interactuar con el BLoC correspondiente.
+	
+\end{itemize}
 
 En el contexto de Flutter, el patrón \acrlong{bloc} utiliza un enfoque basado en flujos o \textit{streams} y eventos (ver Fig.~\ref{fig:bloc-diagram}), permitiendo que los estados y eventos fluyan entre los componentes sin acoplar directamente la lógica de negocio con la interfaz gráfica. 
 
@@ -132,16 +143,50 @@ En el caso de \textit{Eco City Tours}, todos los \acrshort{bloc} usados extiende
 	\end{itemize}
 	
 	\imagen{bloc-diagram}{Diagrama de interacción asíncrona del patrón \acrshort{bloc} en la aplicación}
+\subsubsection{Ejemplo de uso de \acrshort{bloc} en \textit{Eco City Tours}}
+El \acrshort{bloc} ubicado en \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-app/project_app/lib/blocs/gps/gps_bloc.dart}{gps\_bloc.dart} gestiona el permiso de uso del GPS de la aplicación y la activación del sensor GPS del móvil. 
+Se aplica el patrón de diseño Observador, estudiado en la asignatura \textit{Diseño y Mantenimiento del Software}, que es uno de los patrones fundamentales descritos por Gamma et al.~\cite{gamma2002}.
+El \acrshort{bloc} actúa como el Sujeto del patrón Observador, gestionando el estado de si el GPS está activado y si los permisos de ubicación han sido concedidos.
 
-\subsubsection{Ejemplo de implementación en \textit{Eco City Tours}}
-A continuación, se muestra un ejemplo simplificado de cómo se utiliza el patrón \acrshort{bloc} para gestionar la generación de un tour:
-\begin{itemize}
-	\item El usuario selecciona sus preferencias y dispara un evento \texttt{loadTourEvent()} desde la interfaz de usuario.
-	\item El \textit{TourBloc} recibe este evento, interactúa con los servicios externos (\textit{Servicio LLM} y \textit{Google Places}) para obtener y enriquecer los puntos de interés, y calcula una ruta optimizada.
-	\item El \textit{TourBloc} emite un nuevo estado (\texttt{TourLoadedState}) con la información del tour generado, que es recibido por el componente \textit{MapBloc}.
-	\item El \textit{MapBloc} utiliza esta información para actualizar el mapa, invocando el método \texttt{updateMap()}.
-\end{itemize}
-Como se puede ver la lógica del tour generado y su representación son dos partes diferenciadas aunque MapBloc dependa del contenido del TourBloc, su codificación no se recarga delegando responsabilidades.
+\begin{figure}[htbp] % Usamos figure para el flotador
+	\centering
+	\begin{lstlisting}[caption={Definición de variables de control en el BLoC}]
+		// Indicates whether GPS is enabled
+		final bool isGpsEnabled;
+		
+		// Indicates whether the app has permission to access GPS
+		final bool isGpsPermissionGranted;
+		
+		// Getter for the correct state of permissions and active GPS.
+		bool get isAllReady =>
+		isGpsEnabled &&
+		isGpsPermissionGranted;
+	\end{lstlisting}
+\end{figure}
+Los widgets que dependen de esta información, como los mapas o botones de la interfaz de usuario, actúan como Observadores. Cada vez que el estado del \acrshort{bloc} cambia, estos widgets son notificados y se actualizan automáticamente, permitiendo que la interfaz reaccione en tiempo real a los cambios en el estado del GPS o los permisos.
+Cada vez que el estado del GPS o de los permisos cambia, se dispara un evento \textit{OnGpsAndPermissionEvent}, que actualiza el estado y notifica a los widgets correspondientes. Esto permite que la interfaz de usuario reaccione dinámicamente y muestre la información correcta según el estado actual.
+
+\begin{lstlisting}[caption={Carga en función del estado}]
+	class LoadingScreen extends StatelessWidget {
+		const LoadingScreen({super.key});
+		
+		@override
+		Widget build(BuildContext context) {
+			return Scaffold(
+			body: BlocBuilder<GpsBloc, GpsState>(
+			builder: (context, state) {
+				return state.isAllReady 
+				// If GPS and permissions are ready, show the map; otherwise, show the GPS access screen
+				? const MapScreen()
+				: const GpsAccessScreen();
+			},
+			),
+			);
+		}
+	}
+\end{lstlisting}	
+Este ejemplo muestra la comunicación entre lógica de control e interfaz gráfica usando el patrón Observador con BLoC.
+
 
 \section{Diseño procedimental}
 En esta sección se explicará el flujo de trabajo relacionado con las tareas más importantes de la aplicación, asociando cada diseño procedimental a sus respectivos \textbf{Casos de Uso (CU)} descritos en la subsección~\ref{subsec:casos-uso}.

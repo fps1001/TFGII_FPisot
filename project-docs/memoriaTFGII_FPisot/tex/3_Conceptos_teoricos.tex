@@ -33,21 +33,7 @@ En este capítulo se describen los conceptos necesarios para comprender el funci
 		\item \textbf{ODS 7}: \textit{Energía asequible y no contaminante}: Promueve el acceso universal a energía moderna, asequible, confiable y sostenible, lo que implica la expansión de las energías renovables y la mejora en la eficiencia energética. Este objetivo es clave para reducir las emisiones de carbono y combatir el cambio climático.
 		
 	\end{itemize}
-	
-	\subsection{ODS y tecnología GIS en la planificación urbana}
-	El uso de tecnologías como los Sistemas de Información Geográfica (GIS) desempeña un papel crucial en la implementación y seguimiento de los ODS, especialmente en el ámbito urbano. Los GIS permiten en el campo de la planificación urbana:
-	\begin{itemize}
-		\item \textbf{Monitorización del desarrollo urbano}: Ayudan a analizar cómo crecen las ciudades y qué impacto tienen en el medio ambiente, lo cual es vital para cumplir con las metas de ciudades sostenibles.
 		
-		\item \textbf{Optimización de rutas sostenibles}: Facilitan la creación de rutas para peatones y ciclistas que minimicen el uso de vehículos motorizados, contribuyendo a la reducción de emisiones de gases de efecto invernadero.
-		
-		\item \textbf{Evaluación de riesgos ambientales}: Permiten identificar áreas vulnerables a riesgos naturales, como inundaciones o deslizamientos de tierra, y planificar medidas de adaptación al cambio climático.
-		
-		\item \textbf{Gestión de la masificación turística}: Herramientas diagnósticas como el \acrfull{sica}, una plataforma dependiente del Ministerio de Transportes, Movilidad y Agenda Urbana~\cite{sica_mapa_ruido}, pueden ayudar a identificar zonas de masificación turística. Al combinar estos datos con otras fuentes como la ubicación de personas a través de sus dispositivos móviles, es posible diseñar alternativas o implementar restricciones que redistribuyan el flujo de turistas, minimizando su impacto negativo en el entorno local.
- 
-		
-	\end{itemize}
-	
 
 \section{Modelos de lenguaje a gran escala (LLM)}
 Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que ha sido entrenada para realizar tareas de \acrfull{nlp}. Estas inteligencias artificiales son entrenadas con ingentes cantidades de datos que los hacen capaces de comprender peticiones y responder a éstas en los mismos términos de lenguaje, generando una comunicación entre el usuario y la máquina.
@@ -66,35 +52,23 @@ Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que
 	\begin{lstlisting}[language=Python, caption={Ejemplo de uso de \textit{few-shot} y \textit{tool-calling} para obtener puntos de interés turísticos}]
 		# Un ejemplo de respuesta que queremos obtener seria la siguiente:
 		plantilla_salida = """[{
-			"nombre": "Sagrada Familia", 
-			"gps": "41.4036, 2.1744", 
+			"nombre": "Sagrada Familia", "gps": "41.4036, 2.1744", 
 			"descripcion": "Basilica catolica disenada por Gaudi." 
 		},
 		{
-			"nombre": "Parc Guell", 
-			"gps": "41.4145, 2.1527", 
+			"nombre": "Parc Guell", "gps": "41.4145, 2.1527", 
 			"descripcion": "Parque disenado por Gaudi."
 		}]"""
 		
 		ciudad = "Salamanca"
 		complete_and_print(f"""Tu rol es un guia turistico comprometido con el medio ambiente preocupado por la gentrificacion de las ciudades y el turismo masivo. 
-		Dime 3 sitios para visitar en {ciudad}. Quiero que la respuesta consista SOLO en los lugares de interes de este lugar, siguiendo el ejemplo de la {plantilla_salida}. Insisto en que no quiero que me des informacion adicional.""")
-		
-		# Resultado esperado:
+		Dime 3 sitios para visitar en {ciudad}. Quiero que la respuesta consista SOLO en los lugares de interes de este lugar, siguiendo el ejemplo de la {plantilla_salida}. Insisto en que no quiero que me des informacion adicional.""") # Resultado esperado:
 		[{
 			"nombre": "Catedral Vieja de Salamanca", 
 			"gps": "40.9708, -5.6619", 
 			"descripcion": "Edificio gotico del siglo XIII."
 		},
-		{
-			"nombre": "Puente de San Esteban", 
-			"gps": "40.9713, -5.6624", 
-			"descripcion": "Puente medieval que cruza el rio Tormes."
-		},
-		{
-			"nombre": "Jardines de la Alamedilla", 
-			"gps": "40.9694, -5.6632", 
-			"descripcion": "Jardin barroco en el corazon de la ciudad."
+		...
 		}]
 	\end{lstlisting}
 	
@@ -108,11 +82,11 @@ Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que
 		\item \gls{embeddings}: consiste en transformar la información facilitada y representarla en vectores de n dimensiones. Para ello se usa comúnmente otro modelo entrenado para transformar la información en vectores.
 		En la Figura~\ref{fig:langflow_rag_embeddings_gray} se puede ver cómo la información de Wikipedia API~\cite{wikimedia_api} se prepara para guardarse en una base de datos vectorial Astra DB~\cite{datastax_astra} para ello usa el modelo Ollama Embeddings
 		
-		\imagen{langflow_rag_embeddings_gray}{Preparación de la información de un RAG mostrada en la herramienta Langflow}{1}
+		\imagen{langflow_rag_embeddings_gray}{Preparación de la información de un RAG mostrada en la herramienta Langflow}{0.8}
 		
 		\item \textbf{RAG}: con la información ampliada ya vectorizada en una base de datos, el usuario genera una entrada o prompt al modelo. Como se ve en la Figura~\ref{fig:langflow_rag_retrieval_gray} el \acrshort{llm} OpenAI en este caso selecciona la información más afín de los datos aportados para generar así un prompt ampliado o mejorado que será facilitado al modelo para un procesamiento de información habitual, consiguiendo así un mejor resultado.
 		
-		\imagen{langflow_rag_retrieval_gray}{Chat Output a través de la salida de un RAG}{1}
+		\imagen{langflow_rag_retrieval_gray}{Chat Output a través de la salida de un RAG}{0.8}
 	\end{enumerate}
 		
 	\subsection{Agentes}
@@ -129,25 +103,13 @@ Los modelos de lenguaje a gran escala son un tipo de inteligencia artificial que
 \section{Agilidad y método SCRUM}
 La gestión ágil de proyectos de desarrollo de software tiene como pilares fundamentales la flexibilidad, la colaboración y la entrega continua de valor al cliente~\cite{agile_alliance}. La agilidad se basa en la idea de ciclos de trabajo cortos e iterativos denominados \textbf{sprints}, donde se produce software funcional al final de cada iteración.
 
-El Manifiesto Ágil (2001) establece cuatro valores fundamentales:
-\begin{itemize}
-\item Individuos e interacciones sobre procesos y herramientas.
-\item Software funcional sobre documentación exhaustiva.
-\item Colaboración con el cliente sobre negociación de contratos.
-\item Respuesta ante el cambio sobre seguir un plan.
-\end{itemize}
-
 \textbf{SCRUM} es un marco de trabajo ágil que facilita la auto-organización del equipo, promueve la transparencia y mejora la capacidad de adaptación del proyecto.
 
 Este enfoque es particularmente valioso en el desarrollo de \textit{Eco City Tours}, iterando rápidamente sobre incrementos funcionales de la aplicación, validando con pruebas de usuario con prototipos funcionales y ajustando el desarrollo a las necesidades que surgían durante el proceso. El tutor ha jugado los tres roles definidos en SCRUM: usuario para validar los incrementos funcionales, equipo cuando revisa contenido de las tareas y SCRUM master para ayudar ha aplicar la agilidad. El rol principal del estudiante y autor de trabajo es el de equipo. Ambos participantes se han reunido para:
-
 \begin{itemize}
 	\item \textbf{Planificación de Sprint}: consiste en la creación y asignación de tareas que se realizarán durante el período de tiempo en que consiste el sprint. En este \acrshort{tfg} la duración de los sprints ha sido entre dos y tres semanas. A cada tarea se le asigna unos puntos de historia que reflejan el tiempo planificado para realizar dicha tarea. También se planifican etiquetas e hitos para los que las diferentes tareas ayudan a lograr.
 	\item \textbf{Sprint review y sprint retrospective}: después de cada sprint y con la ayuda del tutor del \acrshort{tfg}, se presenta el incremento funcional y se revisan las tareas realizadas durante el sprint. Además, estas reuniones incluyen una evaluación continua de la calidad del desarrollo y los procesos asociados.
 	\item \textbf{Integración continua con pruebas y compilación}: como parte del enfoque de calidad continua, se integraron prácticas de \acrfull{ci} durante el ciclo de desarrollo. Estas prácticas incluyen la \textbf{automatización de pruebas y la compilación del software} utilizando GitHub Actions. En particular, se ejecutaron flujos de trabajo que realizan análisis automatizados del código con SonarCloud~\cite{sonarcloud}, garantizando la detección temprana de errores y problemas de estilo o rendimiento en el código como se muestra en la figura~\ref{fig:sonarcloud}. Esto asegura que cada incremento funcional presentado en la \textit{sprint review} sea estable y cumpla con los estándares de calidad establecidos.
-	\imagen{sonarcloud}{Resumen de la compilación del proyecto en SonarCloud}{1}
-	
-	La combinación de la sprint review con prácticas de integración y calidad continua refuerza el principio ágil de entrega de valor constante y garantiza que el software presentado al finalizar cada sprint sea de calidad, estable y funcional.
 	\end{itemize}
-
-El uso de la metodología ágil y el marco SCRUM fue esencial para el éxito del desarrollo de \textit{Eco City Tours}. La agilidad permitió una colaboración constante y una entrega continua de valor, mientras que SCRUM proporcionó la estructura necesaria para gestionar eficazmente el trabajo, resolver problemas y optimizar el proceso de desarrollo en cada iteración.
+\imagen{sonarcloud}{Resumen de la compilación del proyecto en SonarCloud}{1}
+La combinación de la sprint review con prácticas de integración y calidad continua refuerza el principio ágil de entrega de valor constante y garantiza que el software presentado al finalizar cada sprint sea de calidad, estable y funcional. El uso de la metodología ágil y el marco SCRUM fue esencial para el éxito del desarrollo de \textit{Eco City Tours}. La agilidad permitió una colaboración constante y una entrega continua de valor, mientras que SCRUM proporcionó la estructura necesaria para gestionar eficazmente el trabajo, resolver problemas y optimizar el proceso de desarrollo en cada iteración.

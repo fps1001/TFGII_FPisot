@@ -8,7 +8,6 @@ El siguiente capítulo presenta las técnicas y herramientas usadas a lo largo d
 	LM Studio~\cite{lmstudio_ai} es una aplicación enfocada en el despliegue de modelos de lenguaje. Su principal objetivo es facilitar la experimentación con \acrlong{llm} ofreciendo un entorno completo y que integra funcionalidades en el procesamiento de lenguaje natural.
 	Estas son algunas de las más destacadas:
 	
-	
 	\begin{itemize}
 		
 		\item \textbf{Búsqueda y despliegue de modelos en local}: a través de un buscador intuitivo, los usuarios pueden seleccionar, descargar y desplegar cualquier modelo disponible en plataformas como Hugging Face, facilitando su uso local.
@@ -43,62 +42,16 @@ Se utilizó el framework Flutter~\cite{flutter} para desarrollar \textit{Eco Cit
 	Un aspecto fundamental en una aplicación móvil reactiva es la gestión del estado, cuyo propósito es automatizar la actualización de las vistas cuando los valores de la lógica de control cambian. Flutter ofrece diversos gestores de estado, como \textit{Provider, Cubit, GetX}, entre otros. Sin embargo, BLoC destaca como un paquete \textbf{Flutter Favorite}~\cite{bloc_package}, lo que lo sitúa como una opción preferida debido a su soporte activo, calidad de código, seguridad y frecuencia de actualizaciones.
 	
 	Entre todos los gestores aprendidos durante mi formación, BLoC resultó ser una opción muy robusta. Una vez comprendida su sintaxis, se aprecia su facilidad de uso y la modularidad de sus elementos, que se estructuran en eventos, estados y definiciones de BLoCs.
+	\subsubsection{Ejemplo de implementación en \textit{Eco City Tours}}
+	A continuación, se muestra un ejemplo simplificado de cómo se utiliza el patrón \acrshort{bloc} para gestionar la generación de un tour:
 	\begin{itemize}
-		
-		\item \textbf{Gestión clara del estado}: BLoC proporciona una manera estructurada de gestionar los diferentes estados de la aplicación. Cada cambio de estado es manejado a través de eventos, lo que permite una clara separación entre la lógica de negocio y la presentación visual.
-		
-		\item \textbf{Escalabilidad}: el uso del diseño reactivo orientado a eventos, característico del patrón BLoC, facilita la gestión del estado de la aplicación y permite que esta crezca en funcionalidad sin comprometer su rendimiento. Cada nueva funcionalidad puede ser controlada por un BLoC independiente, lo que asegura que el sistema se incremente de manera estructurada.
-
-		\item \textbf{Mantenibilidad}: gracias a las extensiones de Visual Studio Code, es posible generar nuevos BLoCs fácilmente. Esto simplifica el desarrollo de nuevas funcionalidades. La clara separación de responsabilidades entre los BLoCs individuales contribuye a un código modular y fácilmente mantenible.
-				
-		\item \textbf{Reutilización de lógica}: Uno de los beneficios clave de BLoC es que la lógica de negocio se puede reutilizar fácilmente en diferentes partes de la aplicación. Esto facilita la implementación de componentes que comparten comportamientos similares sin duplicar código. Para lograrlo, se utiliza el \textit{BLoCProvider}, un widget que comparte el BLoC y permite que los widgets hijos accedan a su lógica de estado. De esta manera, cualquier widget dentro del contexto del BLoCProvider puede interactuar con el BLoC correspondiente.
-						
+		\item El usuario selecciona sus preferencias y dispara un evento \texttt{loadTourEvent()} desde la interfaz de usuario.
+		\item El \textit{TourBloc} recibe este evento, interactúa con los servicios externos (\textit{Servicio LLM} y \textit{Google Places}) para obtener y enriquecer los puntos de interés, y calcula una ruta optimizada.
+		\item El \textit{TourBloc} emite un nuevo estado (\texttt{TourLoadedState}) con la información del tour generado, que es recibido por el componente \textit{MapBloc}.
+		\item El \textit{MapBloc} utiliza esta información para actualizar el mapa, invocando el método \texttt{updateMap()}.
 	\end{itemize}
-	
-	\subsubsection{Ejemplo de uso de \acrshort{bloc} en \textit{Eco City Tours}}
-	El \acrshort{bloc} ubicado en \href{https://github.com/fps1001/TFGII_FPisot/tree/main/project-app/project_app/lib/blocs/gps/gps_bloc.dart}{gps\_bloc.dart} gestiona el permiso de uso del GPS de la aplicación y la activación del sensor GPS del móvil. 
-	Se aplica el patrón de diseño Observador, estudiado en la asignatura \textit{Diseño y Mantenimiento del Software}, que es uno de los patrones fundamentales descritos por Gamma et al.~\cite{gamma2002}.
-	El \acrshort{bloc} actúa como el Sujeto del patrón Observador, gestionando el estado de si el GPS está activado y si los permisos de ubicación han sido concedidos.
-	
-	\begin{figure}[htbp] % Usamos figure para el flotador
-		\centering
-		\begin{lstlisting}[caption={Definición de variables de control en el BLoC}]
-			// Indicates whether GPS is enabled
-			final bool isGpsEnabled;
-			
-			// Indicates whether the app has permission to access GPS
-			final bool isGpsPermissionGranted;
-			
-			// Getter for the correct state of permissions and active GPS.
-			bool get isAllReady =>
-			isGpsEnabled &&
-			isGpsPermissionGranted;
-		\end{lstlisting}
-	\end{figure}
-	Los widgets que dependen de esta información, como los mapas o botones de la interfaz de usuario, actúan como Observadores. Cada vez que el estado del \acrshort{bloc} cambia, estos widgets son notificados y se actualizan automáticamente, permitiendo que la interfaz reaccione en tiempo real a los cambios en el estado del GPS o los permisos.
-	Cada vez que el estado del GPS o de los permisos cambia, se dispara un evento \textit{OnGpsAndPermissionEvent}, que actualiza el estado y notifica a los widgets correspondientes. Esto permite que la interfaz de usuario reaccione dinámicamente y muestre la información correcta según el estado actual.
-	
-	\begin{lstlisting}[caption={Carga en función del estado}]
-	class LoadingScreen extends StatelessWidget {
-		const LoadingScreen({super.key});
+	Como se puede ver la lógica del tour generado y su representación son dos partes diferenciadas aunque MapBloc dependa del contenido del TourBloc, su codificación no se recarga delegando responsabilidades.
 		
-		@override
-		Widget build(BuildContext context) {
-			return Scaffold(
-			body: BlocBuilder<GpsBloc, GpsState>(
-			builder: (context, state) {
-				return state.isAllReady 
-				// If GPS and permissions are ready, show the map; otherwise, show the GPS access screen
-				? const MapScreen()
-				: const GpsAccessScreen();
-			},
-			),
-			);
-		}
-	}
-	\end{lstlisting}	
-	Este ejemplo muestra la comunicación entre lógica de control e interfaz gráfica usando el patrón Observador con BLoC.
-	
 	\subsection{Extensiones de Visual Studio Code más destacadas}
 		Se citan a continuación brevemente algunas de las extensiones que facilitaron el desarrollo de la aplicación aumentando la producción:
 		\begin{itemize}
@@ -122,7 +75,7 @@ Se utilizó el framework Flutter~\cite{flutter} para desarrollar \textit{Eco Cit
 	\textbf{Expectativas vs Realidad.}\\
 	Es responsabilidad del programador mantener el control total sobre su código. Aunque en ocasiones Copilot acierta completamente, solucionando problemas de forma eficiente, también puede provocar inconsistencias si se aplican sugerencias sin la supervisión adecuada. En algunos casos, las sugerencias automáticas pueden alterar partes del código que no estaban relacionadas con el problema original, introduciendo nuevos errores.
 	
-	\imagen{copilot_real}{Código real a utilizar en vez de propuesta Copilot}{1}
+	\imagen{copilot_real}{Código real a utilizar en vez de propuesta Copilot}{0.5}
 	Evidentemente es una tecnología en evolución que irá mejorando pero sirva de ejemplo la Figura~\ref{fig:copilot_real} para ilustrar el código real usado de apenas unas líneas frente a la propuesta de Copilot de la Figura~\ref{fig:copilot}.
 	
 	En resumen, por el momento Copilot resulta muy útil en escenarios donde se trabaja con patrones de código comunes o tareas repetitivas, pero es menos efectivo cuando se trata de resolver problemas más específicos. Aunque no representa un cambio en el paradigma de la programación, sí puede convertirse en una herramienta habitual que, con el tiempo, aumente la productividad del desarrollador.
@@ -141,34 +94,15 @@ Se utilizó el framework Flutter~\cite{flutter} para desarrollar \textit{Eco Cit
 		\item \textbf{Documentación y wikis}: GitHub permite mantener documentación clara y estructurada directamente en el repositorio, facilitando la creación de archivos README para proporcionar información detallada sobre el proyecto.
 		
 		\item \textbf{Gestión de tareas y entrega de releases}: GitHub facilita la planificación y el seguimiento del progreso del proyecto mediante el uso de issues y milestones. Estas herramientas permiten gestionar tareas asignándoles prioridades y etiquetas, lo que proporciona una vista clara del flujo de trabajo. GitHub ofrece también una funcionalidad de releases que permite empaquetar y distribuir versiones finales o intermedias del software de forma eficiente, asegurando una entrega organizada y documentada.
-		
-		
 	\end{itemize}
-	Al trabajar desde diferentes equipos GitHub fue especialmente útil en el desarrollo del proyecto: se utilizó la integración de Visual Studio Code con Github para los cambios en la programación de la aplicación y los prototipos en cuadernos Jupyter y se usó la extensión Git Graph (ver Fig.~\ref{fig:git_graph}) para comprobar el funcionamiento y navegación a través de los commits cuando fue necesario. Para realizar commits en los cambios de la documentación se usó GitHub Desktop una vez realizados los cambios con la \acrshort{ide} TeXstudio.
-		\imagen{git_graph}{Uso de GitHub con la extensión de VSCode Git Graph}{1}
 	
 	\subsection{Zube}
-	Zube~\cite{zube} es una plataforma de gestión de proyectos con un enfoque colaborativo durante el seguimiento del desarrollo del mismo. Las características principales son:
-	\begin{itemize}
-		
-		\item Versión gratuita: Zube ofrece un plan gratuito que cubre las necesidades básicas de gestión de proyectos autogestionados.
-		
-		\item Conexión con GitHub: su integración con el repositorio del proyecto para su seguimiento es una condición indispensable. Además, La sincronización es inmediata lo que produce por ejemplo que al crear una tarea, inmediatamente esté disponible para su gestión desde Zube.
-		
-		\item Tableros Kanban: se facilita la visualización del flujo de trabajo. Las tarjetas de tareas pueden moverse fácilmente entre columnas como \textit{Pendiente, En progreso y Completado}, lo que permite un seguimiento claro y eficaz del estado de cada tarea.
-		
-		\item Herramientas gráficas para control de los sprints: otra manera de consultar el flujo de trabajo durante los sprints con gráficos burndown, burnup, throughput o de velocidad.
-	 
-	\end{itemize}
+	Zube~\cite{zube} es una plataforma de gestión de proyectos con un enfoque colaborativo durante el seguimiento del desarrollo del mismo. Las características principales son su integración con Github, los tableros Kanban que facilitan la planificación de los sprints y herramientas gráficas para el análisis del trabajo tanto producido como por realizar.
 	
 	El uso de esta aplicación fue vital a lo largo del proyecto, ya que se utilizó principalmente para el control de sprints y sus tareas en el panel Kanban y la asignación con puntos de historia. La integración con GitHub permitió un flujo de trabajo eficiente, manteniendo el código fuente y la gestión de tareas en perfecta sincronización, lo que favoreció un desarrollo ágil y organizado. 
 	
 	\subsection{TeXstudio}
-	Para la elaboración de la documentación de este \acrshort{tfg}, se ha optado por utilizar TeXstudio, un \acrfull{ide} especializado en la edición de textos en LaTeX. Esta herramienta facilita la redacción de trabajos académicos y científicos mediante características como el resaltado de sintaxis, corrección ortográfica y semántica en tiempo real, y la posibilidad de compilar el documento durante su edición, lo que permite visualizar el resultado final en formato PDF de manera inmediata.
-	
-	TeXstudio es una herramienta multiplataforma, y se seleccionó por encima de otras alternativas debido a su facilidad de uso, interfaz intuitiva, y la consola de errores integrada, que simplifica la detección de fallos en la secuencia de comandos LaTeX.
-	
-	Una de las características más destacadas es la funcionalidad de \textbf{compilación automática al editar}, la cual permite previsualizar continuamente el documento mientras se trabaja, lo que mejora la productividad al ofrecer un resultado inmediato sobre los cambios realizados.
+	Para la elaboración de la documentación de este \acrshort{tfg}, se ha optado por utilizar TeXstudio una herramienta multiplataforma, un \acrfull{ide} especializado en la edición de textos en LaTeX. Esta herramienta facilita la redacción de trabajos académicos y científicos mediante características como el resaltado de sintaxis, corrección ortográfica y semántica en tiempo real y la funcionalidad de \textbf{compilación automática al editar}, la cual permite previsualizar continuamente el documento mientras se trabaja, lo que mejora la productividad al ofrecer un resultado inmediato sobre los cambios realizados.
 	
 	
 	
