@@ -15,8 +15,10 @@ part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
   GoogleMapController? _mapController; // Controlador del mapa
-  final LocationBloc locationBloc; // Bloc de ubicación para obtener la posición del usuario
-  StreamSubscription<LocationState>? locationSubscription; // Suscripción al estado de ubicación
+  final LocationBloc
+      locationBloc; // Bloc de ubicación para obtener la posición del usuario
+  StreamSubscription<LocationState>?
+      locationSubscription; // Suscripción al estado de ubicación
 
   LatLng? mapCenter; // Coordenadas del centro del mapa
 
@@ -27,8 +29,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OnStopFollowingUserEvent>(
         (event, emit) => emit(state.copyWith(isFollowingUser: false)));
     on<OnUpdateUserPolylinesEvent>(_onPolylineNewPoint);
-    on<OnDisplayPolylinesEvent>((event, emit) => emit(
-        state.copyWith(polylines: event.polylines, markers: event.markers)));
+    on<OnDisplayPolylinesEvent>((event, emit) {
+      final currentPolylines = Map<String, Polyline>.from(event.polylines);
+
+      // Si showUserRoute está desactivado, eliminar 'myRoute'
+      if (!state.showUserRoute && currentPolylines.containsKey('myRoute')) {
+        log.i(
+            'Eliminando polilínea myRoute porque showUserRoute está desactivado.');
+        currentPolylines.remove('myRoute');
+      }
+
+      emit(state.copyWith(polylines: currentPolylines, markers: event.markers));
+    });
+
     on<OnToggleShowUserRouteEvent>((event, emit) =>
         emit(state.copyWith(showUserRoute: !state.showUserRoute)));
     on<OnRemovePoiMarkerEvent>(_onRemovePoiMarker);
@@ -45,11 +58,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
       if (!state.isFollowingUser) return;
       if (locationState.lastKnownLocation == null) return;
+
+      moveCamera(locationState.lastKnownLocation!); // Si llega aquí es que tiene que seguir al usuario (ponerlo en el centro del mapa)
     });
   }
 
   // Inicializa el mapa con el controlador y el contexto
-  Future<void> _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) async {
+  Future<void> _onInitMap(
+      OnMapInitializedEvent event, Emitter<MapState> emit) async {
     _mapController = event.mapController;
     log.i('Mapa inicializado. Controlador del mapa establecido.');
     emit(state.copyWith(isMapInitialized: true, mapContext: event.mapContext));
@@ -58,7 +74,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   // Mueve la cámara a una ubicación específica
   Future<void> moveCamera(LatLng latLng) async {
     if (_mapController == null) {
-      log.w('El controlador del mapa aún no está listo.');
+      log.i('El controlador del mapa aún no está listo.');
       return;
     }
     log.i('Moviendo cámara a la posición: $latLng');
@@ -79,6 +95,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   void _onPolylineNewPoint(
       OnUpdateUserPolylinesEvent event, Emitter<MapState> emit) {
     log.i('Añadiendo nuevo punto a la polilínea.');
+
+    if (!state.showUserRoute) {
+      log.i('showUserRoute está desactivado. No se agrega la polilínea.');
+      return; // No hacer nada si showUserRoute está desactivado
+    }
+
     final myRoute = Polyline(
       polylineId: const PolylineId('myRoute'),
       points: event.userLocations,
@@ -87,14 +109,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,
     );
+
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines['myRoute'] = myRoute;
+
     emit(state.copyWith(polylines: currentPolylines));
   }
 
   // Dibuja un EcoCityTour en el mapa, añadiendo polilíneas y marcadores
   Future<void> drawEcoCityTour(EcoCityTour tour) async {
     log.i('Dibujando EcoCityTour en el mapa: ${tour.name}');
+
+    // Crear la polilínea del tour
     final myRoute = Polyline(
       polylineId: const PolylineId('route'),
       color: Colors.teal,
@@ -127,8 +153,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
-    final currentMarkers = Map<String, Marker>.from(state.markers);
+
+    // Añadir la polilínea del tour
     currentPolylines['route'] = myRoute;
+
+    // Si showUserRoute está activo, incluir la polilínea del usuario
+    if (state.showUserRoute && state.polylines['myRoute'] != null) {
+      currentPolylines['myRoute'] = state.polylines['myRoute']!;
+    }
+
+    final currentMarkers = Map<String, Marker>.from(state.markers);
     currentMarkers.addAll(poiMarkers);
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));

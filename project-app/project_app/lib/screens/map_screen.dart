@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:project_app/logger/logger.dart';
 
 import 'package:project_app/blocs/blocs.dart';
@@ -98,18 +99,24 @@ Widget _buildMapView(LocationState locationState) {
   return BlocBuilder<MapBloc, MapState>(
     builder: (context, mapState) {
       final tourState = context.watch<TourBloc>().state;
-      
+
       // Determinar la posición inicial del mapa
       final initialPosition = (tourState.ecoCityTour != null &&
               tourState.ecoCityTour!.pois.isNotEmpty)
           ? tourState.ecoCityTour!.pois.first.gps
           : locationState.lastKnownLocation;
 
+      // Filtrar las polilíneas según el estado de showUserRoute
+      Map<String, Polyline> filteredPolylines = Map.from(mapState.polylines);
+      if (!mapState.showUserRoute) {
+        filteredPolylines.removeWhere((key, _) => key == 'myRoute');
+      }
+
       return Stack(
         children: [
           MapView(
             initialPosition: initialPosition!,
-            polylines: mapState.polylines.values.toSet(),
+            polylines: filteredPolylines.values.toSet(), // Usa polilíneas filtradas
             markers: mapState.markers.values.toSet(),
           ),
           _buildSearchBar(),
@@ -120,6 +127,7 @@ Widget _buildMapView(LocationState locationState) {
     },
   );
 }
+
 
 
 
