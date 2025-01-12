@@ -33,8 +33,9 @@ class SearchDestinationDelegate extends SearchDelegate<PointOfInterest?> {
       IconButton(
         icon: const Icon(Icons.clear),
         onPressed: () {
-          log.d('SearchDestinationDelegate: Buscador limpiado');
-          query = ''; // Limpia la búsqueda
+          // Cambio la función de limpiar el texto a que cierre el buscador
+        log.d('SearchDestinationDelegate: Volviendo atrás desde el buscador');
+        close(context, null); // Cierra el buscador
         },
       ),
     ];

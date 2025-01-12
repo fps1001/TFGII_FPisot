@@ -88,6 +88,7 @@ flutter:
     - assets/translations/
     - assets/flags/gb.svg
     - assets/flags/es.svg
+    - assets/location_troll_bg2.png
 
 #dart run flutter_native_splash:create --path=path/to/my/file.yaml
 #dart run flutter_native_splash:create --path=pubspec.yaml

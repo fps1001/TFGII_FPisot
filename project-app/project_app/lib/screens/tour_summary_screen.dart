@@ -141,6 +141,30 @@ class TourSummaryScreen extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 8),
+                            // Gustos del usuario (íconos pequeños)
+                            if (state.ecoCityTour!.userPreferences.isNotEmpty)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: state.ecoCityTour!.userPreferences
+                                    .map((preference) {
+                                  final prefIconData =
+                                      userPreferences[preference];
+                                  if (prefIconData != null) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: Icon(
+                                        prefIconData['icon'],
+                                        color: prefIconData['color'],
+                                        size: 24, // Tamaño pequeño
+                                      ),
+                                    );
+                                  } else {
+                                    return const SizedBox.shrink();
+                                  }
+                                }).toList(),
+                              ),
+                            const SizedBox(height: 8),
                           ],
                         ),
                       ),
