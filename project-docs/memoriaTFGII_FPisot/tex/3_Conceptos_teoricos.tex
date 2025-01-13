@@ -13,9 +13,9 @@ En este capítulo se describen los conceptos necesarios para comprender el funci
 	\begin{itemize}
 		\item \textbf{Servicio de mapas}: con Google como proveedor~\cite{google_maps} se usa este servicio para proveer a la aplicación de un mapa para mostrar de fondo así como marcadores y polilíneas de rutas.
 		
-		\item \textbf{Servicio de geocodificación}: sirve para obtener las coordenadas GPS de un \acrlong{pdi}. Se ha utilizado este servicio con el proveedor \textit{Google Directions}.
+		\item \textbf{Servicio de geocodificación}: sirve para obtener las coordenadas GPS de los \acrlong{pdi}. Se ha utilizado este servicio con el proveedor \textit{Google Directions}.
 		
-		\item \textbf{Servicio de navegación y de optimización de rutas}: el servicio de navegación~\cite{mapbox_directions} nos proporciona una ruta entre dos \acrlong{pdi} y el servicio de optimización permite generar una ruta que sea la más corta entre múltiples \acrshort{pdi} en el mapa. El proveedor de este servicio es MapBox~\cite{mapbox_optimization}.De esta manera se soluciona este problema popularmente conocido como \textit{el problema del viajante}~\cite{ubu_algoritmia} dando el recorrido más corto posible para el medio de transporte elegido en la petición al servicio.
+		\item \textbf{Servicio de navegación y de optimización de rutas}: el servicio de navegación~\cite{mapbox_directions} nos proporciona una ruta entre dos \acrlong{pdi} y el servicio de optimización permite generar una ruta que sea la más corta entre múltiples \acrshort{pdi} en el mapa. El proveedor de este servicio inicialmente fue MapBox~\cite{mapbox_optimization} cumpliendo su función perfectamente, aunque se sustituyó finalmente por el servicio equivalente de Google para mantener un ecosistema uniforme. Estos servicios solucionan el popularmente conocido como \textit{el problema del viajante}~\cite{ubu_algoritmia} dando el recorrido más corto posible para el medio de transporte elegido en la petición al servicio.
 		
 	\end{itemize}
 	

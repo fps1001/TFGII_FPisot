@@ -148,25 +148,24 @@ El \acrshort{bloc} ubicado en \href{https://github.com/fps1001/TFGII_FPisot/tree
 Se aplica el patrón de diseño Observador, estudiado en la asignatura \textit{Diseño y Mantenimiento del Software}, que es uno de los patrones fundamentales descritos por Gamma et al.~\cite{gamma2002}.
 El \acrshort{bloc} actúa como el Sujeto del patrón Observador, gestionando el estado de si el GPS está activado y si los permisos de ubicación han sido concedidos.
 
-\begin{figure}[htbp] % Usamos figure para el flotador
-	\centering
-	\begin{lstlisting}[caption={Definición de variables de control en el BLoC}]
-		// Indicates whether GPS is enabled
-		final bool isGpsEnabled;
-		
-		// Indicates whether the app has permission to access GPS
-		final bool isGpsPermissionGranted;
-		
-		// Getter for the correct state of permissions and active GPS.
-		bool get isAllReady =>
-		isGpsEnabled &&
-		isGpsPermissionGranted;
-	\end{lstlisting}
-\end{figure}
+\begin{lstlisting}[language=Java, captionpos=b, frame=single, basicstyle=\ttfamily\footnotesize, caption={Definición de variables de control en el BLoC}, label={lst:bloc-variables}]
+	// Indicates whether GPS is enabled
+	final bool isGpsEnabled;
+	
+	// Indicates whether the app has permission to GPS
+	final bool isGpsPermissionGranted;
+	
+	// Getter for state of permissions and GPS.
+	bool get isAllReady =>
+	isGpsEnabled &&
+	isGpsPermissionGranted;
+\end{lstlisting}
+
+
 Los widgets que dependen de esta información, como los mapas o botones de la interfaz de usuario, actúan como Observadores. Cada vez que el estado del \acrshort{bloc} cambia, estos widgets son notificados y se actualizan automáticamente, permitiendo que la interfaz reaccione en tiempo real a los cambios en el estado del GPS o los permisos.
 Cada vez que el estado del GPS o de los permisos cambia, se dispara un evento \textit{OnGpsAndPermissionEvent}, que actualiza el estado y notifica a los widgets correspondientes. Esto permite que la interfaz de usuario reaccione dinámicamente y muestre la información correcta según el estado actual.
 
-\begin{lstlisting}[caption={Carga en función del estado}]
+\begin{lstlisting}[language=Java, captionpos=b, frame=single, basicstyle=\ttfamily\footnotesize, caption={Carga en función del estado}, label={lst:loading-screen}]
 	class LoadingScreen extends StatelessWidget {
 		const LoadingScreen({super.key});
 		
@@ -175,16 +174,20 @@ Cada vez que el estado del GPS o de los permisos cambia, se dispara un evento \t
 			return Scaffold(
 			body: BlocBuilder<GpsBloc, GpsState>(
 			builder: (context, state) {
-				return state.isAllReady 
-				// If GPS and permissions are ready, show the map; otherwise, show the GPS access screen
-				? const MapScreen()
-				: const GpsAccessScreen();
-			},
+				return state.isAllReady
+				// Show map if GPS is ready
+				? const MapScreen()  
+				// Otherwise, show GPS access
+				: const GpsAccessScreen(); 
+				},
 			),
 			);
 		}
 	}
-\end{lstlisting}	
+\end{lstlisting}
+
+
+	
 Este ejemplo muestra la comunicación entre lógica de control e interfaz gráfica usando el patrón Observador con BLoC.
 
 

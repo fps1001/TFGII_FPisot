@@ -34,7 +34,7 @@ A la hora de obtener información que procesar por el método \acrshort{rag} se 
 
 \subsection{Descarte del modelo local con \acrshort{rag} en favor de la versión Pro de Gemini}
 
-En este proyecto, se ha realizado un prototipo con Langflow, que se puede consultar en el archivo \href{https://github.com/fps1001/TFGII_FPisot/blob/main/project-prototypes/Langflow_explanation.md}{Langflow Explanation} para más detalles. En este prototipo se 
+En este proyecto, se ha realizado un prototipo con Langflow, que se puede consultar en el archivo \href{https://github.com/fps1001/TFGII_FPisot/blob/main/project-prototypes/Langflow_explanation.md}{Langflow\_explanation.md} para más detalles. En este prototipo se 
 demostró que un \acrshort{rag} alimentado con búsquedas en Internet no era apropiado por la rapidez que una petición que un dispositivo móvil requiere. El proceso de vectorización se demora muchos minutos y ese proceso se ha de hacer para cada generación de tour, con lo que no resulta sostenible. A pesar de mejorar la información con Google Places, la descripción a veces podía estar alucinada. 
 
 Se evaluó la posibilidad de utilizar resúmenes de servicios como Wikivoyage o Wikipedia. Sin embargo, el éxito de las consultas dependía de que el nombre del \acrshort{pdi} coincidiera exactamente con el registrado en la base de datos, lo cual rara vez ocurría. Por ejemplo, el \textit{Arco de San Esteban} en Burgos también es conocido como la \textit{Puerta de San Esteban}, lo que generaba inconsistencias, si incluías la ciudad en la búsqueda se perdía la coincidencia y por lo tanto los \acrlong{pdi} nunca se actualizaban. Además, otras fuentes alternativas a Google Places no proporcionaban descripciones satisfactorias a través de sus API.
