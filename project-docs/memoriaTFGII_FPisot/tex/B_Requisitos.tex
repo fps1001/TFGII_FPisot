@@ -11,7 +11,7 @@ La misión fundamental de este proyecto persigue conseguir los siguientes propó
 	
 	\item \textbf{Optimización de experiencias turísticas personalizadas:} Ofrecer a los usuarios rutas personalizadas que se ajusten a sus intereses y preferencias, proporcionando información detallada y relevante sobre los puntos de interés seleccionados.
 	
-	\item \textbf{Promover el uso de tecnologías inteligentes en el turismo:} Utilizar tecnologías avanzadas como servicios GIS, Google Places y LLM para mejorar la experiencia del usuario, facilitando la generación automática de rutas y la obtención de información actualizada sobre los destinos turísticos.
+	\item \textbf{Promover el uso de tecnologías inteligentes en el turismo:} Utilizar tecnologías avanzadas como servicios GIS, \gls{gps} y LLM para mejorar la experiencia del usuario, facilitando la generación automática de rutas y la obtención de información actualizada sobre los destinos turísticos.
 	
 	\item \textbf{Mejorar la accesibilidad a la información turística:} Proporcionar una plataforma fácil de usar que permita a los usuarios acceder rápidamente a descripciones, fotos y otros datos sobre los puntos de interés, mejorando su experiencia de exploración.
 	
@@ -350,7 +350,7 @@ Este caso de uso es fundamental, ya que sin el permiso de GPS o la activación d
 			\item El usuario confirma la configuración de preferencias.
 			\item El sistema consulta un LLM para obtener \acrshort{pdi} basados en las propiedades de configuración de la ruta.
 			\item El sistema envía los \acrshort{pdi} a Google Places para obtener información mejorada.
-			\item El sistema consulta un servicio de optimización de rutas para generar la ruta optimizada.
+			\item El sistema consulta un servicio de \gls{route-optimization} para generar la ruta optimizada.
 		\end{enumerate}\\
 		\textbf{Postcondición}        & La ruta optimizada es calculada y lista para ser visualizada. \\
 		\textbf{Excepciones}          & 
