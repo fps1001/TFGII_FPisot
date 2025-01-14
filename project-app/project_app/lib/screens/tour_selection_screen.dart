@@ -62,172 +62,184 @@ class TourSelectionScreenState extends State<TourSelectionScreen> {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return PopScope(
-      canPop: false, // Desactiva el botón de retroceso
-      child: Scaffold(
-        appBar: const CustomSelectionAppBar(),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context)
-              .unfocus(), // Oculta el teclado al tocar fuera
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(
-              left: 20.0,
-              right: 20.0,
-              top: 20.0,
-              bottom: bottomInset, // Ajusta para el teclado
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Selección de lugar
-                Text(
-                  'place_to_visit'.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall,
+    return BlocListener<GpsBloc, GpsState>(
+        listener: (context, state) {
+          if (!state.isGpsEnabled) {
+            // Si el GPS no está habilitado, redirige a la pantalla de acceso al GPS.
+            context.go('/gps-access');
+          } else if (!state.isGpsPermissionGranted) {
+            // Si los permisos no están concedidos, redirige a la pantalla de acceso al GPS.
+            context.go('/gps-access');
+          }
+        },
+        child: PopScope(
+          canPop: false, // Desactiva el botón de retroceso
+          child: Scaffold(
+            appBar: const CustomSelectionAppBar(),
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context)
+                  .unfocus(), // Oculta el teclado al tocar fuera
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  left: 20.0,
+                  right: 20.0,
+                  top: 20.0,
+                  bottom: bottomInset, // Ajusta para el teclado
                 ),
-                const SizedBox(height: 5),
-                TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      selectedPlace = value;
-                    });
-                    log.i('Lugar seleccionado: $selectedPlace');
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'enter_place'.tr(),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-
-                // Número de sitios (Slider)
-                NumberOfSitesSlider(
-                  numberOfSites: numberOfSites,
-                  onChanged: (value) {
-                    setState(() {
-                      numberOfSites = value;
-                    });
-                    log.i(
-                        'Número de sitios seleccionado: ${numberOfSites.round()}');
-                  },
-                ),
-                const SizedBox(height: 5),
-
-                // Selección de asistente de IA
-                SelectAIAssistant(
-                  onAssistantSelected: (index) {
-                    setState(() {
-                      selectedAssistant = index;
-                    });
-                    log.i(
-                        'Asistente seleccionado: ${index ?? "Sin selección"}');
-                  },
-                ),
-                const SizedBox(height: 5),
-
-                // Selector de modo de transporte
-                TransportModeSelector(
-                  isSelected: _isSelected,
-                  onPressed: (index) {
-                    setState(() {
-                      for (int i = 0; i < _isSelected.length; i++) {
-                        _isSelected[i] = i == index;
-                      }
-                      selectedMode = index == 0 ? 'walking' : 'cycling';
-                    });
-                    log.i('Modo de transporte seleccionado: $selectedMode');
-                  },
-                ),
-                const SizedBox(height: 15),
-
-                // Preferencias del usuario (Chips)
-                Text(
-                  'your_interests'.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 10),
-                Center(
-                  child: TagWrap(
-                    selectedPreferences: selectedPreferences,
-                    onTagSelected: _onTagSelected,
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Tiempo máximo para la ruta (Slider)
-                TimeSlider(
-                  maxTimeInMinutes: maxTimeInMinutes,
-                  onChanged: (value) {
-                    setState(() {
-                      maxTimeInMinutes = value;
-                    });
-                    log.i(
-                        'Tiempo máximo de ruta seleccionado: ${maxTimeInMinutes.round()} minutos');
-                  },
-                  formatTime: formatTime,
-                ),
-                const SizedBox(height: 20),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Botón para realizar un Eco-City Tour
-                    MaterialButton(
-                      minWidth: MediaQuery.of(context).size.width - 60,
-                      color: Theme.of(context).primaryColor,
-                      elevation: 0,
-                      height: 50, // Altura consistente
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      onPressed: _requestTour,
-                      child: Text(
-                        'eco_city_tour'.tr(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                    // Selección de lugar
+                    Text(
+                      'place_to_visit'.tr(),
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 5),
+                    TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          selectedPlace = value;
+                        });
+                        log.i('Lugar seleccionado: $selectedPlace');
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'enter_place'.tr(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20), // Espaciado entre los botones
+                    const SizedBox(height: 5),
 
-                    // Botón para cargar una ruta guardada
-                    MaterialButton(
-                      minWidth: MediaQuery.of(context).size.width - 60,
-                      color: Colors.grey[400],
-                      elevation: 0,
-                      height: 50, // Altura consistente
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
+                    // Número de sitios (Slider)
+                    NumberOfSitesSlider(
+                      numberOfSites: numberOfSites,
+                      onChanged: (value) {
+                        setState(() {
+                          numberOfSites = value;
+                        });
+                        log.i(
+                            'Número de sitios seleccionado: ${numberOfSites.round()}');
+                      },
+                    ),
+                    const SizedBox(height: 5),
+
+                    // Selección de asistente de IA
+                    SelectAIAssistant(
+                      onAssistantSelected: (index) {
+                        setState(() {
+                          selectedAssistant = index;
+                        });
+                        log.i(
+                            'Asistente seleccionado: ${index ?? "Sin selección"}');
+                      },
+                    ),
+                    const SizedBox(height: 5),
+
+                    // Selector de modo de transporte
+                    TransportModeSelector(
+                      isSelected: _isSelected,
+                      onPressed: (index) {
+                        setState(() {
+                          for (int i = 0; i < _isSelected.length; i++) {
+                            _isSelected[i] = i == index;
+                          }
+                          selectedMode = index == 0 ? 'walking' : 'cycling';
+                        });
+                        log.i('Modo de transporte seleccionado: $selectedMode');
+                      },
+                    ),
+                    const SizedBox(height: 15),
+
+                    // Preferencias del usuario (Chips)
+                    Text(
+                      'your_interests'.tr(),
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: TagWrap(
+                        selectedPreferences: selectedPreferences,
+                        onTagSelected: _onTagSelected,
                       ),
-                      onPressed: _loadSavedTours, // Nueva función
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.folder_open, color: Colors.white),
-                          const SizedBox(width: 10),
-                          Text(
-                            'load_saved_route'.tr(),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Tiempo máximo para la ruta (Slider)
+                    TimeSlider(
+                      maxTimeInMinutes: maxTimeInMinutes,
+                      onChanged: (value) {
+                        setState(() {
+                          maxTimeInMinutes = value;
+                        });
+                        log.i(
+                            'Tiempo máximo de ruta seleccionado: ${maxTimeInMinutes.round()} minutos');
+                      },
+                      formatTime: formatTime,
+                    ),
+                    const SizedBox(height: 20),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Botón para realizar un Eco-City Tour
+                        MaterialButton(
+                          minWidth: MediaQuery.of(context).size.width - 60,
+                          color: Theme.of(context).primaryColor,
+                          elevation: 0,
+                          height: 50, // Altura consistente
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          onPressed: _requestTour,
+                          child: Text(
+                            'eco_city_tour'.tr(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                            height: 20), // Espaciado entre los botones
+
+                        // Botón para cargar una ruta guardada
+                        MaterialButton(
+                          minWidth: MediaQuery.of(context).size.width - 60,
+                          color: Colors.green[300],
+                          elevation: 0,
+                          height: 50, // Altura consistente
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          onPressed: _loadSavedTours, // Nueva función
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.folder_open,
+                                  color: Colors.white),
+                              const SizedBox(width: 10),
+                              Text(
+                                'load_saved_route'.tr(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 40),
                   ],
                 ),
-                const SizedBox(height: 40),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   /// Lógica para cargar una ruta guardada.

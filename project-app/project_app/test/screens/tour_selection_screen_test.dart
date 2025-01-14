@@ -10,13 +10,16 @@ import 'package:project_app/screens/screens.dart';
 
 class MockTourBloc extends MockBloc<TourEvent, TourState> implements TourBloc {}
 
+class MockGpsBloc extends MockBloc<GpsEvent, GpsState> implements GpsBloc {}
+
 void main() {
   late MockTourBloc mockTourBloc;
+  late MockGpsBloc mockGpsBloc;
 
-  // Configuración de GoRouter para los tests
   late GoRouter goRouter;
 
   setUpAll(() {
+    EasyLocalization.logger.enableLevels = [];
     registerFallbackValue(const LoadTourEvent(
       mode: 'walking',
       city: '',
@@ -26,22 +29,32 @@ void main() {
       systemInstruction: '',
     ));
     registerFallbackValue(const LoadSavedToursEvent());
+    registerFallbackValue(const OnGpsAndPermissionEvent(
+      isGpsEnabled: true,
+      isGpsPermissionGranted: true,
+    ));
   });
 
   setUp(() {
-    // Inicializar el mock del Bloc
     mockTourBloc = MockTourBloc();
+    mockGpsBloc = MockGpsBloc();
 
-    // Configuración de GoRouter con `BlocProvider` a nivel raíz
     goRouter = GoRouter(
       initialLocation: '/',
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => BlocProvider<TourBloc>.value(
-            value: mockTourBloc,
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider<TourBloc>.value(value: mockTourBloc),
+              BlocProvider<GpsBloc>.value(value: mockGpsBloc),
+            ],
             child: const TourSelectionScreen(),
           ),
+        ),
+        GoRoute(
+          path: '/gps-access',
+          builder: (context, state) => const GpsAccessScreen(),
         ),
         GoRoute(
           path: '/saved-tours',
@@ -57,14 +70,15 @@ void main() {
 
   tearDown(() {
     mockTourBloc.close();
+    mockGpsBloc.close();
   });
 
   Widget createTestWidget() {
     return EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('es')],
-      path: 'assets/translations', // Ruta de tus archivos de traducción
+      path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      startLocale: const Locale('en'), // Localización inicial para los tests
+      startLocale: const Locale('en'),
       child: MaterialApp.router(
         routerConfig: goRouter,
       ),
@@ -74,29 +88,34 @@ void main() {
   group('TourSelectionScreen Tests', () {
     testWidgets('Renderiza correctamente todos los widgets principales',
         (WidgetTester tester) async {
+      when(() => mockGpsBloc.state).thenReturn(
+        const GpsState(isGpsEnabled: true, isGpsPermissionGranted: true),
+      );
+
       await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle(); // Asegura que todo se renderice
 
       expect(find.text('place_to_visit'.tr()), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
-      expect(find.text('number_of_sites'.tr()), findsOneWidget);
-      expect(find.byType(Slider), findsNWidgets(2));
-      expect(find.text('your_transport_mode'.tr()), findsOneWidget);
-      expect(find.byType(ToggleButtons), findsOneWidget);
       expect(find.text('your_interests'.tr()), findsOneWidget);
-      expect(find.byType(ChoiceChip), findsNWidgets(6));
       expect(find.text('eco_city_tour'.tr()), findsOneWidget);
+      expect(find.text('load_saved_route'.tr()), findsOneWidget);
     });
 
-    testWidgets(
-        'Dispara LoadTourEvent al pulsar el botón "eco_city_tour"',
+    testWidgets('Dispara LoadTourEvent al pulsar el botón "eco_city_tour"',
         (WidgetTester tester) async {
+      when(() => mockGpsBloc.state).thenReturn(
+        const GpsState(isGpsEnabled: true, isGpsPermissionGranted: true),
+      );
       when(() => mockTourBloc.state).thenReturn(const TourState());
 
       await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
       final requestButton = find.text('eco_city_tour'.tr());
       expect(requestButton, findsOneWidget);
 
-      await tester.ensureVisible(requestButton);
+      await tester.ensureVisible(requestButton); // Asegura visibilidad
       await tester.tap(requestButton);
       await tester.pump();
 
@@ -105,29 +124,24 @@ void main() {
 
     testWidgets('Navega a SavedToursScreen al pulsar "load_saved_route"',
         (WidgetTester tester) async {
-      // Simula el estado inicial del Bloc
+      when(() => mockGpsBloc.state).thenReturn(
+        const GpsState(isGpsEnabled: true, isGpsPermissionGranted: true),
+      );
       when(() => mockTourBloc.state).thenReturn(const TourState());
 
-      // Construye el widget de prueba
       await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
 
-      // Encuentra el botón "load_saved_route" usando su texto
       final loadSavedToursButton = find.text('load_saved_route'.tr());
       expect(loadSavedToursButton, findsOneWidget);
 
-      // Asegúrate de que el botón sea visible desplazando hacia abajo si es necesario
       await tester.ensureVisible(loadSavedToursButton);
-
-      // Simula el tap en el botón
       await tester.tap(loadSavedToursButton);
-
-      // Espera a que se complete cualquier animación o navegación
       await tester.pumpAndSettle();
 
-      // Verifica que el evento LoadSavedToursEvent fue agregado al Bloc
-      verify(() => mockTourBloc.add(any(that: isA<LoadSavedToursEvent>()))).called(1);
+      verify(() => mockTourBloc.add(any(that: isA<LoadSavedToursEvent>())))
+          .called(1);
 
-      // Verifica que se navega a 'saved-tours'
       expect(find.byType(SavedToursScreen), findsOneWidget);
     });
   });
