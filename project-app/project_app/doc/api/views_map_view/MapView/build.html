@@ -135,7 +135,7 @@ Widget build(BuildContext context) {
     &#47;&#47; Listener para eventos del puntero en el mapa
     child: Listener(
       &#47;&#47; Detiene el seguimiento del usuario al mover el mapa
-      onPointerMove: (event) =&gt; mapBloc.add(OnStopFollowingUserEvent()),
+      onPointerMove: (event) =&gt; mapBloc.add(const OnStopFollowingUserEvent()),
       child: GoogleMap(
         initialCameraPosition: initialCameraPosition,
         compassEnabled: false,

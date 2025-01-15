@@ -119,20 +119,15 @@ and</li>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
   return BlocListener&lt;GpsBloc, GpsState&gt;(
-    &#47;&#47;&#47; Escucha los cambios en el estado del [GpsBloc] para manejar la navegación.
     listener: (context, state) {
-      if (state.isAllReady) {
-        &#47;&#47; Si el GPS y los permisos están listos, redirige a la pantalla de selección de tours.
-        context.go(
-            &#39;&#47;tour-selection&#39;); &#47;&#47; Navega a la pantalla de selección de tours
+      if (state.isGpsEnabled &amp;&amp; state.isGpsPermissionGranted) {
+        context.go(&#39;&#47;tour-selection&#39;);
       } else {
-        &#47;&#47; Si no están listos, redirige a la pantalla de acceso al GPS.
-        context.go(&#39;&#47;gps-access&#39;); &#47;&#47; Navega a la pantalla de acceso al GPS
+        context.go(&#39;&#47;gps-access&#39;);
       }
     },
     child: const Scaffold(
       body: Center(
-        &#47;&#47;&#47; Muestra un indicador de carga mientras se verifica el estado.
         child: CircularProgressIndicator(),
       ),
     ),

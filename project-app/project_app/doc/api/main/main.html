@@ -82,6 +82,7 @@ autenticación anónima, y configura los blocs necesarios para la lógica de la 
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   &#47;&#47; Carga variables de entorno desde el archivo .env
   await dotenv.load(fileName: &quot;.env&quot;);
@@ -111,27 +112,32 @@ autenticación anónima, y configura los blocs necesarios para la lógica de la 
   final ecoCityTourRepository = EcoCityTourRepository(firestoreDataset);
 
   &#47;&#47; Ejecuta la aplicación con los blocs configurados
-  runApp(MultiBlocProvider(
-    providers: [
-      &#47;&#47; Bloc para manejar el estado del GPS
-      BlocProvider(create: (context) =&gt; GpsBloc()),
+  runApp(EasyLocalization(
+    supportedLocales: const [Locale(&#39;en&#39;), Locale(&#39;es&#39;)],
+    path: &#39;assets&#47;translations&#39;, &#47;&#47; Ruta a los archivos JSON
+    fallbackLocale: const Locale(&#39;es&#39;),
+    child: MultiBlocProvider(
+      providers: [
+        &#47;&#47; Bloc para manejar el estado del GPS
+        BlocProvider(create: (context) =&gt; GpsBloc()),
 
-      &#47;&#47; Bloc para manejar la ubicación del usuario
-      BlocProvider(create: (context) =&gt; LocationBloc()),
+        &#47;&#47; Bloc para manejar la ubicación del usuario
+        BlocProvider(create: (context) =&gt; LocationBloc()),
 
-      &#47;&#47; Bloc para la lógica del mapa, dependiente del Bloc de ubicación
-      BlocProvider(
-          create: (context) =&gt;
-              MapBloc(locationBloc: BlocProvider.of&lt;LocationBloc&gt;(context))),
+        &#47;&#47; Bloc para la lógica del mapa, dependiente del Bloc de ubicación
+        BlocProvider(
+            create: (context) =&gt;
+                MapBloc(locationBloc: BlocProvider.of&lt;LocationBloc&gt;(context))),
 
-      &#47;&#47; Bloc para manejar la lógica de tours, dependiente de otros blocs y repositorios
-      BlocProvider(
-          create: (context) =&gt; TourBloc(
-              optimizationService: OptimizationService(),
-              mapBloc: BlocProvider.of&lt;MapBloc&gt;(context),
-              ecoCityTourRepository: ecoCityTourRepository)),
-    ],
-    child: const ProjectApp(),
+        &#47;&#47; Bloc para manejar la lógica de tours, dependiente de otros blocs y repositorios
+        BlocProvider(
+            create: (context) =&gt; TourBloc(
+                optimizationService: OptimizationService(),
+                mapBloc: BlocProvider.of&lt;MapBloc&gt;(context),
+                ecoCityTourRepository: ecoCityTourRepository)),
+      ],
+      child: const ProjectApp(),
+    ),
   ));
 }</code></pre>
 </section>

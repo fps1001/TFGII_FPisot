@@ -61,6 +61,17 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p><a href="../blocs_map_map_bloc/MapBloc-class.html">MapBloc</a> gestiona el estado y la lógica relacionada con el mapa de la aplicación.</p>
+<p>Este bloc se encarga de:</p>
+<ul>
+<li>Dibujar polilíneas (rutas) y marcadores en el mapa.</li>
+<li>Controlar la cámara del mapa (movimientos y zoom).</li>
+<li>Seguir la ubicación del usuario.</li>
+<li>Mostrar y ocultar rutas.</li>
+<li>Administrar eventos relacionados con el mapa.</li>
+</ul>
+</section>
 
 
     <section>
@@ -96,7 +107,7 @@
           <span class="name"><a href="../blocs_map_map_bloc/MapBloc/MapBloc.html">MapBloc</a></span><span class="signature">({<span class="parameter" id="-param-locationBloc"><span>required</span> <span class="type-annotation"><a href="../blocs_location_location_bloc/LocationBloc-class.html">LocationBloc</a></span> <span class="parameter-name">locationBloc</span></span>})</span>
         </dt>
         <dd>
-          
+          Constructor del <a href="../blocs_map_map_bloc/MapBloc-class.html">MapBloc</a>.
         </dd>
     </dl>
   </section>
@@ -137,7 +148,7 @@
 
 </dt>
 <dd>
-  
+  Bloc de ubicación para obtener datos de la posición del usuario.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -149,7 +160,7 @@
 
 </dt>
 <dd>
-  
+  Suscripción para escuchar los cambios de estado del <a href="../blocs_location_location_bloc/LocationBloc-class.html">LocationBloc</a>.
   <div class="features"><span class="feature">getter/setter pair</span></div>
 
 </dd>
@@ -161,7 +172,7 @@
 
 </dt>
 <dd>
-  
+  Coordenadas actuales del centro del mapa.
   <div class="features"><span class="feature">getter/setter pair</span></div>
 
 </dd>
@@ -263,7 +274,7 @@ processed, the <a href="https://pub.dev/documentation/bloc/8.1.4/bloc/Bloc-class
 
 </dt>
 <dd>
-  
+  Dibuja un EcoCityTour en el mapa, añadiendo polilíneas y marcadores.
   
 
 </dd>
@@ -291,7 +302,7 @@ should be used instead.</strong>
 
 </dt>
 <dd>
-  
+  Mueve la cámara del mapa a una ubicación específica.
   
 
 </dd>
@@ -389,7 +400,7 @@ and a new state is <code>emitted</code> from a corresponding <a href="https://pu
 
 </dt>
 <dd>
-  
+  Muestra los detalles de un punto de interés en un BottomSheet.
   
 
 </dd>

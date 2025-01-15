@@ -64,15 +64,14 @@
       
       <span class="name ">TourBloc</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-mapBloc"><span>required</span> <span class="type-annotation"><a href="../../blocs_map_map_bloc/MapBloc-class.html">MapBloc</a></span> <span class="parameter-name">mapBloc</span>, </span></li>
 <li><span class="parameter" id="-param-optimizationService"><span>required</span> <span class="type-annotation"><a href="../../services_optimization_service/OptimizationService-class.html">OptimizationService</a></span> <span class="parameter-name">optimizationService</span>, </span></li>
-<li><span class="parameter" id="-param-ecoCityTourRepository"><span>required</span> <span class="type-annotation"><a href="../../repositories_eco_city_tour_repository/EcoCityTourRepository-class.html">EcoCityTourRepository</a></span> <span class="parameter-name">ecoCityTourRepository</span>, </span></li>
+<li><span class="parameter" id="-param-ecoCityTourRepository"><span>required</span> <span class="type-annotation"><a href="../../persistence_bd_repositories_eco_city_tour_repository/EcoCityTourRepository-class.html">EcoCityTourRepository</a></span> <span class="parameter-name">ecoCityTourRepository</span>, </span></li>
 </ol>})
     </section>
 
     
 <section class="desc markdown">
   <p>Constructor de <a href="../../blocs_tour_tour_bloc/TourBloc-class.html">TourBloc</a>.</p>
-<p>Requiere instancias de <a href="../../blocs_map_map_bloc/MapBloc-class.html">MapBloc</a>, <a href="../../services_optimization_service/OptimizationService-class.html">OptimizationService</a>, y
-<a href="../../repositories_eco_city_tour_repository/EcoCityTourRepository-class.html">EcoCityTourRepository</a>.</p>
+<p>Requiere instancias de <a href="../../services_optimization_service/OptimizationService-class.html">OptimizationService</a>, <a href="../../blocs_map_map_bloc/MapBloc-class.html">MapBloc</a> y <a href="../../persistence_bd_repositories_eco_city_tour_repository/EcoCityTourRepository-class.html">EcoCityTourRepository</a>.</p>
 </section>
 
 
@@ -84,19 +83,18 @@
   required this.optimizationService,
   required this.ecoCityTourRepository,
 }) : super(const TourState()) {
-  &#47;&#47; Manejadores de eventos a continuación
-  on&lt;LoadTourEvent&gt;(_onLoadTour);
-  on&lt;OnRemovePoiEvent&gt;(_onRemovePoi);
-  on&lt;OnAddPoiEvent&gt;(_onAddPoi);
-  on&lt;OnJoinTourEvent&gt;(_onJoinTour);
-  &#47;&#47; Reset de Tour. Emite estado con EcoCityTour y POI&#39;s a null.
+  &#47;&#47; Manejar los eventos que se pueden emitir al TourBloc
+  on&lt;LoadTourEvent&gt;(_onLoadTour); &#47;&#47; Cargar un nuevo tour
+  on&lt;OnRemovePoiEvent&gt;(_onRemovePoi); &#47;&#47; Eliminar un POI del tour
+  on&lt;OnAddPoiEvent&gt;(_onAddPoi); &#47;&#47; Añadir un POI al tour
+  on&lt;OnJoinTourEvent&gt;(_onJoinTour); &#47;&#47; Unirse al tour
   on&lt;ResetTourEvent&gt;((event, emit) {
+    &#47;&#47; Resetear el tour actual
     emit(state.copyWith(ecoCityTour: null, isJoined: false));
-    mapBloc.add(const OnClearMapEvent()); &#47;&#47; Limpia el mapa al resetear el tour
+    mapBloc.add(const OnClearMapEvent()); &#47;&#47; Limpia el mapa
   });
-  on&lt;LoadSavedToursEvent&gt;(_onLoadSavedTours);
-  on&lt;LoadTourFromSavedEvent&gt;(_onLoadTourFromSaved);
-
+  on&lt;LoadSavedToursEvent&gt;(_onLoadSavedTours); &#47;&#47; Cargar tours guardados
+  on&lt;LoadTourFromSavedEvent&gt;(_onLoadTourFromSaved); &#47;&#47; Cargar un tour guardado
 }</code></pre>
 </section>
 

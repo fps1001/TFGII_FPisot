@@ -163,18 +163,49 @@ Lanza <a href="../../exceptions_app_exception/AppException-class.html">AppExcept
       polilynePoints: polilynePoints,
     );
 
+    &#47;&#47; Validaciones adicionales
+    if (distance &lt; 0 || duration &lt; 0) {
+      log.e(
+          &#39;OptimizationService: Valores de distancia o duración no válidos&#39;);
+      throw AppException(&quot;Invalid distance or duration values&quot;);
+    }
+    if (distance &gt; 1000000) {
+      &#47;&#47; Por ejemplo, 1000 km como límite razonable
+      log.w(&#39;OptimizationService: Distancia mayor al rango esperado&#39;);
+    }
+    if (duration &gt; 86400) {
+      &#47;&#47; Por ejemplo, 24 horas como límite razonable
+      log.w(&#39;OptimizationService: Duración mayor al rango esperado&#39;);
+    }
     return ecoCityTour;
   } on DioException catch (e) {
     log.e(
         &#39;OptimizationService: Error durante la solicitud a la API de Google Directions&#39;,
         error: e);
-    throw DioExceptions.handleDioError(e, url: url);
-  } catch (e, stackTrace) {
+    &#47;&#47; Devuelve un EcoCityTour vacío con información básica
+    return EcoCityTour(
+      city: city,
+      pois: pois,
+      mode: mode,
+      userPreferences: userPreferences,
+      duration: 0,
+      distance: 0,
+      polilynePoints: [],
+    );
+  } catch (e, stackTrace) { &#47;&#47; Captura cualquier otro error
     log.e(
         &#39;OptimizationService: Error desconocido durante la optimización de la ruta&#39;,
         error: e,
         stackTrace: stackTrace);
-    throw AppException(&quot;An unknown error occurred&quot;, url: url);
+    return EcoCityTour(
+      city: city,
+      pois: pois,
+      mode: mode,
+      userPreferences: userPreferences,
+      duration: 0,
+      distance: 0,
+      polilynePoints: [],
+    );
   }
 }</code></pre>
 </section>

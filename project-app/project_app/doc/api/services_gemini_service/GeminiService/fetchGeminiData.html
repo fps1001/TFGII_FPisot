@@ -112,9 +112,8 @@
     return [];
   }
 
-  &#47;&#47; Instrucción básica para el modelo
-  String baserol =
-      &#39;Eres un guía turístico comprometido con el medio ambiente preocupado por la gentrificación de las ciudades y el turismo masivo&#39;;
+  &#47;&#47; Instrucción básica para el modelo desde internacionalización
+  String baserol = &#39;system_instruction&#39;.tr();
 
   &#47;&#47; Configuración del modelo generativo
   final model = GenerativeModel(
@@ -144,26 +143,14 @@
 
   &#47;&#47; Configuración del mensaje al modelo
   final chat = model.startChat();
-  final message =
-      &#39;&#39;&#39;Genera un array de $nPoi objetos JSON, cada uno representando un punto de interés turístico diferente en $city.
-      Además, no sirve cualquier lugar, puesto que el tiempo que se tarde en viajar entre ellos no debe ser superior en ningún momento a $maxTime minutos $mode.
-      Elige lugares que conozcas bien y que no estén muy separados unos de otros.
-Cada objeto debe incluir:
-* nombre (string)
-* descripción (string)
-* coordenadas (array de dos números: latitud y longitud)
-
-
-**Ejemplo de objeto JSON:**
-```json
-{
-  &quot;nombre&quot;: &quot;Plaza Mayor&quot;,
-  &quot;descripcion&quot;: &quot;La Plaza Mayor de Salamanca, del siglo XVIII, es una de las más bellas plazas monumentales urbanas de Europa. Comenzó a construirse en 1729 a instancias del corregidor Rodrigo Caballero Llanes. El proyecto fue a cargo del arquitecto Alberto de Churriguera, al que siguió su sobrino Manuel de Lara Churriguera y fue finalizado por Andrés García de Quiñones en 1755. ...&quot;,
-  &quot;coordenadas&quot;: [40.965027795465176, -5.664062074092496],
-}
-Ten en cuenta el tipo de cliente al que le ofreces información y los siguientes intereses del usuario: ${userPreferences.join(&#39;, &#39;)}.
-
-&#39;&#39;&#39;;
+  &#47;&#47; Mensaje al modelo usando textos internacionalizados
+  final message = &#39;generate_poi_message&#39;.tr(namedArgs: {
+    &#39;nPoi&#39;: nPoi.toString(),
+    &#39;city&#39;: city,
+    &#39;maxTime&#39;: maxTime.toString(),
+    &#39;mode&#39;: mode,
+    &#39;userPreferences&#39;: userPreferences.join(&#39;, &#39;),
+  });
 
   final content = Content.text(message);
 

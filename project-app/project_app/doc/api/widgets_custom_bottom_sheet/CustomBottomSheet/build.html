@@ -194,7 +194,7 @@ Widget build(BuildContext context) {
                 style: const TextStyle(fontSize: 16.0, color: Colors.black87),
               ),
               if (poi.userRatingsTotal != null)
-                Text(&#39;  (${poi.userRatingsTotal} reseñas)&#39;),
+                Text(&#39;  (${poi.userRatingsTotal} ${&#39;reviews&#39;.tr()})&#39;),
             ],
           ),
           const SizedBox(height: 10.0),
@@ -202,9 +202,9 @@ Widget build(BuildContext context) {
 
         &#47;&#47; Descripción del POI
         if (poi.description != null) ...[
-          const Text(
-            &#39;Descripción:&#39;,
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          Text(
+            &#39;description&#39;.tr(),
+            style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 5.0),
           Text(
@@ -232,9 +232,9 @@ Widget build(BuildContext context) {
                     error: e);
               }
             },
-            child: const Text(
-              &#39;Visita la página web&#39;,
-              style: TextStyle(
+            child: Text(
+              &#39;visit_website&#39;.tr(),
+              style: const TextStyle(
                 color: Colors.blue,
                 decoration: TextDecoration.underline,
                 fontSize: 16.0,
@@ -263,9 +263,9 @@ Widget build(BuildContext context) {
                 borderRadius: BorderRadius.circular(25.0),
               ),
             ),
-            child: const Text(
-              &#39;Eliminar de mi Eco City Tour&#39;,
-              style: TextStyle(
+            child: Text(
+              &#39;remove_from_tour&#39;.tr(),
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
               ),

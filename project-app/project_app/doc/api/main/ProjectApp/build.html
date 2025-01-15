@@ -120,8 +120,11 @@ and</li>
 Widget build(BuildContext context) {
   return MaterialApp.router(
     debugShowCheckedModeBanner: false,
-    title: &#39;Eco-City Tour&#39;,
+    title: &#39;Eco City Tours&#39;,
     theme: AppTheme.lightTheme, &#47;&#47; Tema de la aplicación
+    locale: context.locale, &#47;&#47; Configura el idioma actual
+    supportedLocales: context.supportedLocales,
+    localizationsDelegates: context.localizationDelegates,
     routerConfig: AppRouter.router, &#47;&#47; Configuración de rutas
   );
 }</code></pre>

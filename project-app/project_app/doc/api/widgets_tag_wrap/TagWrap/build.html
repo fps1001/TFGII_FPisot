@@ -123,7 +123,6 @@ Widget build(BuildContext context) {
     runSpacing: 8.0, &#47;&#47; Espaciado vertical entre filas
     alignment: WrapAlignment.center, &#47;&#47; Alineación centrada
     children: userPreferences.keys.map((String key) {
-      final preference = userPreferences[key];
       final bool isSelected = selectedPreferences[key] ?? false;
 
       return ChoiceChip(
@@ -132,14 +131,14 @@ Widget build(BuildContext context) {
           children: [
             &#47;&#47; Ícono de la etiqueta
             Icon(
-              preference?[&#39;icon&#39;],
+              userPreferences[key]?[&#39;icon&#39;],
               size: 20.0,
               color: isSelected ? Colors.white : Colors.black54,
             ),
             const SizedBox(width: 6.0),
             &#47;&#47; Texto de la etiqueta
             Text(
-              key,
+              key.tr(),
               style: TextStyle(
                 color: isSelected ? Colors.white : Colors.black87,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -151,13 +150,16 @@ Widget build(BuildContext context) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.0),
           side: BorderSide(
-            color: isSelected ? preference![&#39;color&#39;] : Colors.grey.shade400,
+            color: isSelected
+                ? userPreferences[key]![&#39;color&#39;]
+                : Colors.grey.shade400,
           ),
         ),
-        selectedColor: preference![&#39;color&#39;], &#47;&#47; Color cuando está seleccionado
+        selectedColor:
+            userPreferences[key]![&#39;color&#39;], &#47;&#47; Color cuando está seleccionado
         backgroundColor: isSelected
-            ? preference[&#39;color&#39;]
-            : preference[&#39;color&#39;]!
+            ? userPreferences[key]![&#39;color&#39;]
+            : userPreferences[key]![&#39;color&#39;]!
                 .withOpacity(0.1), &#47;&#47; Fondo cuando no está seleccionado
         elevation: isSelected ? 4.0 : 1.0, &#47;&#47; Sombra según el estado
         shadowColor: Colors.grey.shade300, &#47;&#47; Color de la sombra

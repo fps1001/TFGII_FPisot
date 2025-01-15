@@ -71,6 +71,12 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Dibuja un EcoCityTour en el mapa, añadiendo polilíneas y marcadores.</p>
+<ul>
+<li><code>tour</code>: Contiene los puntos de interés y la ruta del tour.</li>
+</ul>
+</section>
 
 
     
@@ -78,6 +84,8 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; drawEcoCityTour(EcoCityTour tour) async {
   log.i(&#39;Dibujando EcoCityTour en el mapa: ${tour.name}&#39;);
+
+  &#47;&#47; Crear la polilínea del tour.
   final myRoute = Polyline(
     polylineId: const PolylineId(&#39;route&#39;),
     color: Colors.teal,
@@ -110,8 +118,16 @@
   }
 
   final currentPolylines = Map&lt;String, Polyline&gt;.from(state.polylines);
-  final currentMarkers = Map&lt;String, Marker&gt;.from(state.markers);
+
+  &#47;&#47; Añadir la polilínea del tour.
   currentPolylines[&#39;route&#39;] = myRoute;
+
+  &#47;&#47; Incluir la polilínea del usuario si está activa.
+  if (state.showUserRoute &amp;&amp; state.polylines[&#39;myRoute&#39;] != null) {
+    currentPolylines[&#39;myRoute&#39;] = state.polylines[&#39;myRoute&#39;]!;
+  }
+
+  final currentMarkers = Map&lt;String, Marker&gt;.from(state.markers);
   currentMarkers.addAll(poiMarkers);
 
   add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));

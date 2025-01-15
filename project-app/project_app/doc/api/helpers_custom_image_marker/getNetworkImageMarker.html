@@ -91,15 +91,15 @@ Si ocurre un error, retorna un marcador predeterminado.</p>
     if (!uri.isAbsolute) {
       log.w(
           &#39;getNetworkImageMarker: URL inválida, usando marcador predeterminado.&#39;);
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+      return await getCustomMarker(); &#47;&#47; Usa la imagen local como marcador predeterminado
     }
 
     final response = await Dio()
         .get(imageUrl, options: Options(responseType: ResponseType.bytes));
     if (response.statusCode != 200 || response.data == null) {
       log.e(
-          &#39;getNetworkImageMarker: Fallo al descargar imagen, usando marcador predeterminado.&#39;);
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+          &#39;getNetworkImageMarker: Fallo al descargar imagen, usando marcador local.&#39;);
+      return await getCustomMarker(); &#47;&#47; Usa la imagen local como marcador predeterminado
     }
 
     final codec = await ui.instantiateImageCodec(response.data,
@@ -112,9 +112,11 @@ Si ocurre un error, retorna un marcador predeterminado.</p>
         &#39;getNetworkImageMarker: Marcador con imagen de red creado con éxito.&#39;);
     return BitmapDescriptor.bytes(markerBytes);
   } catch (e, stackTrace) {
-    log.e(&#39;getNetworkImageMarker: Error al cargar imagen desde la red&#39;,
-        error: e, stackTrace: stackTrace);
-    return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    log.e(
+        &#39;getNetworkImageMarker: Error al cargar imagen desde la red, usando marcador local.&#39;,
+        error: e,
+        stackTrace: stackTrace);
+    return await getCustomMarker(); &#47;&#47; Usa la imagen local como marcador predeterminado
   }
 }</code></pre>
 </section>

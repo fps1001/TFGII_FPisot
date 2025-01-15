@@ -91,13 +91,13 @@ Por ejemplo, <code>90</code> retornará "1 hora 30m", y <code>45</code> retornar
   if (hours == 0) {
     return &#39;${mins.round()}m&#39;; &#47;&#47; Solo minutos si es menos de una hora
   } else if (hours == 1 &amp;&amp; mins == 0) {
-    return &#39;1 hora&#39;; &#47;&#47; Exactamente una hora
+    return &#39;1 ${&#39;hour&#39;.tr()}&#39;; &#47;&#47; Exactamente una hora
   } else if (hours == 1) {
-    return &#39;1 hora ${mins.round()}m&#39;; &#47;&#47; Una hora con minutos
+    return &#39;1 ${&#39;hour&#39;.tr()} ${mins.round()}m&#39;; &#47;&#47; Una hora con minutos
   } else if (mins == 0) {
-    return &#39;$hours horas&#39;; &#47;&#47; Solo horas si no hay minutos
+    return &#39;$hours ${&#39;hours&#39;.tr()}&#39;; &#47;&#47; Solo horas si no hay minutos
   } else {
-    return &#39;$hours horas ${mins.round()}m&#39;; &#47;&#47; Horas y minutos
+    return &#39;$hours ${&#39;hours&#39;.tr()} ${mins.round()}m&#39;; &#47;&#47; Horas y minutos
   }
 }</code></pre>
 </section>

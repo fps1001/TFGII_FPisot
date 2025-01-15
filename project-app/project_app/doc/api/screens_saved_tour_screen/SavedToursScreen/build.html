@@ -120,7 +120,7 @@ and</li>
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: const Text(&#39;Tus Eco City Tours Guardados&#39;),
+      title: Text(&#39;saved_tours_title&#39;.tr()),
       backgroundColor: Theme.of(context).primaryColor,
       iconTheme: const IconThemeData(color: Colors.white),
       leading: IconButton(
@@ -164,9 +164,10 @@ Widget build(BuildContext context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 8),
-                    Text(&#39;Distancia: ${formatDistance(tour.distance ?? 0)}&#39;),
                     Text(
-                        &#39;Duración: ${formatDuration((tour.duration ?? 0).toInt())}&#39;),
+                        &#39;${&#39;distance&#39;.tr()}: ${formatDistance(tour.distance ?? 0)}&#39;),
+                    Text(
+                        &#39;${&#39;duration&#39;.tr()}: ${formatDuration((tour.duration ?? 0).toInt())}&#39;),
                     const SizedBox(height: 4),
                     Row(
                       children: tour.userPreferences.map((preference) {

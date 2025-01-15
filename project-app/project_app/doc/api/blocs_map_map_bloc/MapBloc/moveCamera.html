@@ -71,6 +71,12 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Mueve la cámara del mapa a una ubicación específica.</p>
+<ul>
+<li><code>latLng</code>: Coordenadas a las que se moverá la cámara.</li>
+</ul>
+</section>
 
 
     
@@ -78,7 +84,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; moveCamera(LatLng latLng) async {
   if (_mapController == null) {
-    log.w(&#39;El controlador del mapa aún no está listo.&#39;);
+    log.i(&#39;El controlador del mapa aún no está listo.&#39;);
     return;
   }
   log.i(&#39;Moviendo cámara a la posición: $latLng&#39;);

@@ -89,9 +89,10 @@ Por ejemplo, <code>3600</code> retornará "1 hora", y <code>4500</code> retornar
   int minutes = (seconds % 3600) ~&#47; 60;
 
   if (hours &gt; 0) {
-    return &#39;$hours horas $minutes minutos&#39;;
+    return &#39;$hours ${hours == 1 ? &#39;hour&#39;.tr() : &#39;hours&#39;.tr()} &#39;
+        &#39;$minutes ${&#39;minutes&#39;.tr()}&#39;;
   } else {
-    return &#39;$minutes minutos&#39;;
+    return &#39;$minutes ${&#39;minutes&#39;.tr()}&#39;;
   }
 }</code></pre>
 </section>

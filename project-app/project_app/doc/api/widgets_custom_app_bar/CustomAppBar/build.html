@@ -146,18 +146,18 @@ Widget build(BuildContext context) {
         final shouldReset = await showDialog&lt;bool&gt;(
           context: context,
           builder: (context) =&gt; AlertDialog(
-            title: const Text(&#39;Generar otro Eco City Tour&#39;),
-            content: const Text(&#39;Se borrará el tour actual. ¿Estás seguro?&#39;),
+            title: Text(&#39;generate_new_tour&#39;.tr()),
+            content: Text(&#39;confirm_delete_current_tour&#39;.tr()),
             actions: [
               TextButton(
                 onPressed: () =&gt;
                     Navigator.of(context).pop(false), &#47;&#47; Cerrar sin acción.
-                child: const Text(&#39;Cancelar&#39;),
+                child: Text(&#39;cancel&#39;.tr()),
               ),
               TextButton(
                 onPressed: () =&gt;
                     Navigator.of(context).pop(true), &#47;&#47; Confirmar acción.
-                child: const Text(&#39;Sí&#39;),
+                child: Text(&#39;yes&#39;.tr()),
               ),
             ],
           ),

@@ -90,7 +90,7 @@ accidentalmente mientras se realiza una operación en segundo plano.</p>
       barrierDismissible: false, &#47;&#47; Evita que el usuario cierre el diálogo
       builder: (context) =&gt; AlertDialog(
             title: Text(
-              &#39;Espere por favor&#39;,
+              &#39;loading_title&#39;.tr(),
               textAlign: TextAlign.center, &#47;&#47; Centrar el título
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -107,7 +107,7 @@ accidentalmente mientras se realiza una operación en segundo plano.</p>
                     CrossAxisAlignment.center, &#47;&#47; Centra horizontalmente
                 children: [
                   Text(
-                    &#39;Generando información para tu Eco City Tour.\n\n&#39;,
+                    &#39;loading_message&#39;.tr(),
                     textAlign: TextAlign.center, &#47;&#47; Centrar el texto
                     style: TextStyle(
                       fontSize: 16, &#47;&#47; Ajusta el tamaño del texto
@@ -116,9 +116,7 @@ accidentalmente mientras se realiza una operación en segundo plano.</p>
                     ),
                   ),
                   Text(
-                    &#39;Tenga en cuenta que los datos pueden contener errores &#39;
-                    &#39;debido a la naturaleza del procesamiento automático. &#39;
-                    &#39;Revise la información cuidadosamente.&#39;,
+                    &#39;loading_warning&#39;.tr(),
                     textAlign: TextAlign.center, &#47;&#47; Centrar el texto
                     style: TextStyle(
                       fontSize: 14, &#47;&#47; Ajusta el tamaño del texto

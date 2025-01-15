@@ -67,27 +67,42 @@
     </section>
 
     
+<section class="desc markdown">
+  <p>Constructor del <a href="../../blocs_map_map_bloc/MapBloc-class.html">MapBloc</a>.</p>
+<p>Requiere un <a href="../../blocs_location_location_bloc/LocationBloc-class.html">LocationBloc</a> para obtener datos de la ubicación del usuario.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">MapBloc({required this.locationBloc}) : super(const MapState()) {
-  &#47;&#47; Manejar eventos del MapBloc
+  &#47;&#47; Manejo de eventos del MapBloc
   on&lt;OnMapInitializedEvent&gt;(_onInitMap);
   on&lt;OnStartFollowingUserEvent&gt;(_onStartFollowingUser);
   on&lt;OnStopFollowingUserEvent&gt;(
       (event, emit) =&gt; emit(state.copyWith(isFollowingUser: false)));
   on&lt;OnUpdateUserPolylinesEvent&gt;(_onPolylineNewPoint);
-  on&lt;OnDisplayPolylinesEvent&gt;((event, emit) =&gt; emit(
-      state.copyWith(polylines: event.polylines, markers: event.markers)));
+  on&lt;OnDisplayPolylinesEvent&gt;((event, emit) {
+    final currentPolylines = Map&lt;String, Polyline&gt;.from(event.polylines);
+
+    &#47;&#47; Si la ruta del usuario no debe mostrarse, eliminar &#39;myRoute&#39;
+    if (!state.showUserRoute &amp;&amp; currentPolylines.containsKey(&#39;myRoute&#39;)) {
+      log.i(
+          &#39;Eliminando polilínea myRoute porque showUserRoute está desactivado.&#39;);
+      currentPolylines.remove(&#39;myRoute&#39;);
+    }
+
+    emit(state.copyWith(polylines: currentPolylines, markers: event.markers));
+  });
+
   on&lt;OnToggleShowUserRouteEvent&gt;((event, emit) =&gt;
       emit(state.copyWith(showUserRoute: !state.showUserRoute)));
   on&lt;OnRemovePoiMarkerEvent&gt;(_onRemovePoiMarker);
   on&lt;OnAddPoiMarkerEvent&gt;(_onAddPoiMarker);
-  on&lt;OnClearMapEvent&gt;(_onClearMap); &#47;&#47; Maneja el evento de limpiar el mapa
+  on&lt;OnClearMapEvent&gt;(_onClearMap); &#47;&#47; Limpia todos los elementos del mapa.
 
-  &#47;&#47; Suscribirse al LocationBloc para obtener actualizaciones de ubicación
+  &#47;&#47; Escucha los cambios de ubicación en el LocationBloc
   locationSubscription = locationBloc.stream.listen((locationState) {
     if (locationState.lastKnownLocation != null) {
       log.i(
@@ -95,8 +110,12 @@
       add(OnUpdateUserPolylinesEvent(locationState.myLocationHistory));
     }
 
+    &#47;&#47; Si no se está siguiendo al usuario, no mover la cámara.
     if (!state.isFollowingUser) return;
     if (locationState.lastKnownLocation == null) return;
+
+    &#47;&#47; Mueve la cámara al usuario si se está siguiendo.
+    moveCamera(locationState.lastKnownLocation!);
   });
 }</code></pre>
 </section>

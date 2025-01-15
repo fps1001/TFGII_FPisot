@@ -91,8 +91,9 @@ List&lt;Widget&gt;? buildActions(BuildContext context) {
     IconButton(
       icon: const Icon(Icons.clear),
       onPressed: () {
-        log.d(&#39;SearchDestinationDelegate: Buscador limpiado&#39;);
-        query = &#39;&#39;; &#47;&#47; Limpia la búsqueda
+        &#47;&#47; Cambio la función de limpiar el texto a que cierre el buscador
+      log.d(&#39;SearchDestinationDelegate: Volviendo atrás desde el buscador&#39;);
+      close(context, null); &#47;&#47; Cierra el buscador
       },
     ),
   ];

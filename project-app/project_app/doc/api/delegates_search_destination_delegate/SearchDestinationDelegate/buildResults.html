@@ -90,7 +90,7 @@ Widget buildResults(BuildContext context) {
 
   if (tourState.ecoCityTour == null || tourState.ecoCityTour!.city.isEmpty) {
     log.w(&#39;SearchDestinationDelegate: No se ha seleccionado ninguna ciudad&#39;);
-    return const Center(child: Text(&#39;No se ha seleccionado ninguna ciudad.&#39;));
+    return Center(child: Text(&#39;no_city_selected&#39;.tr()));
   }
 
   return _buildSearchResults(context, tourState.ecoCityTour!.city);

@@ -62,10 +62,15 @@
 
     
 <section class="desc markdown">
-  <p><a href="../blocs_tour_tour_bloc/TourBloc-class.html">TourBloc</a> es el Bloc encargado de gestionar el estado de los tours.</p>
-<p>Gestiona la lógica relacionada con la creación, modificación, y visualización
-de tours turísticos, además de interactuar con servicios como Gemini, Google
-Places y un servicio de optimización de rutas.</p>
+  <p>Bloc encargado de gestionar el estado de los tours turísticos.</p>
+<p>Este Bloc se ocupa de:</p>
+<ul>
+<li>Crear, modificar y mostrar tours.</li>
+<li>Obtener puntos de interés (POIs) desde Gemini y Google Places.</li>
+<li>Optimizar rutas mediante un servicio externo.</li>
+<li>Guardar y cargar tours en el repositorio.</li>
+</ul>
+<p>Este Bloc depende de <a href="../blocs_map_map_bloc/MapBloc-class.html">MapBloc</a> para dibujar rutas y marcadores en el mapa.</p>
 </section>
 
 
@@ -99,7 +104,7 @@ Places y un servicio de optimización de rutas.</p>
 
     <dl class="constructor-summary-list">
         <dt id="TourBloc" class="callable">
-          <span class="name"><a href="../blocs_tour_tour_bloc/TourBloc/TourBloc.html">TourBloc</a></span><span class="signature">({<span class="parameter" id="-param-mapBloc"><span>required</span> <span class="type-annotation"><a href="../blocs_map_map_bloc/MapBloc-class.html">MapBloc</a></span> <span class="parameter-name">mapBloc</span>, </span><span class="parameter" id="-param-optimizationService"><span>required</span> <span class="type-annotation"><a href="../services_optimization_service/OptimizationService-class.html">OptimizationService</a></span> <span class="parameter-name">optimizationService</span>, </span><span class="parameter" id="-param-ecoCityTourRepository"><span>required</span> <span class="type-annotation"><a href="../repositories_eco_city_tour_repository/EcoCityTourRepository-class.html">EcoCityTourRepository</a></span> <span class="parameter-name">ecoCityTourRepository</span></span>})</span>
+          <span class="name"><a href="../blocs_tour_tour_bloc/TourBloc/TourBloc.html">TourBloc</a></span><span class="signature">({<span class="parameter" id="-param-mapBloc"><span>required</span> <span class="type-annotation"><a href="../blocs_map_map_bloc/MapBloc-class.html">MapBloc</a></span> <span class="parameter-name">mapBloc</span>, </span><span class="parameter" id="-param-optimizationService"><span>required</span> <span class="type-annotation"><a href="../services_optimization_service/OptimizationService-class.html">OptimizationService</a></span> <span class="parameter-name">optimizationService</span>, </span><span class="parameter" id="-param-ecoCityTourRepository"><span>required</span> <span class="type-annotation"><a href="../persistence_bd_repositories_eco_city_tour_repository/EcoCityTourRepository-class.html">EcoCityTourRepository</a></span> <span class="parameter-name">ecoCityTourRepository</span></span>})</span>
         </dt>
         <dd>
           Constructor de <a href="../blocs_tour_tour_bloc/TourBloc-class.html">TourBloc</a>.
@@ -114,12 +119,12 @@ Places y un servicio de optimización de rutas.</p>
     <dl class="properties">
         <dt id="ecoCityTourRepository" class="property">
   <span class="name"><a href="../blocs_tour_tour_bloc/TourBloc/ecoCityTourRepository.html">ecoCityTourRepository</a></span>
-  <span class="signature">&#8594; <a href="../repositories_eco_city_tour_repository/EcoCityTourRepository-class.html">EcoCityTourRepository</a></span>
+  <span class="signature">&#8594; <a href="../persistence_bd_repositories_eco_city_tour_repository/EcoCityTourRepository-class.html">EcoCityTourRepository</a></span>
   
 
 </dt>
 <dd>
-  Repositorio utilizado para la carga y guardado de tours.
+  Repositorio utilizado para guardar y cargar tours en persistencia.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -155,7 +160,7 @@ Places y un servicio de optimización de rutas.</p>
 
 </dt>
 <dd>
-  Bloc utilizado para gestionar los marcadores y rutas en el mapa.
+  Bloc encargado de gestionar el mapa y los marcadores.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -369,7 +374,7 @@ and a new state is <code>emitted</code> from a corresponding <a href="https://pu
 
 </dt>
 <dd>
-  Guarda el tour actual en el repositorio con el nombre proporcionado.
+  Guarda el tour actual en el repositorio.
   
 
 </dd>
